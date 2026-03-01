@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { DeBlurText } from '../components/DeBlurText';
 import { TextReveal } from '../components/TextReveal';
@@ -15,14 +15,34 @@ export const About = () => {
     { year: '2024', event: 'Global expansion of visual engineering.', img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1000' },
   ];
 
+  // targetRef wraps the tall outer div that creates vertical scroll space.
+  // trackRef is on the motion div whose natural scrollWidth we measure to
+  // determine exactly how far horizontally the content needs to travel.
   const targetRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [scrollDistance, setScrollDistance] = useState(0);
+
+  useEffect(() => {
+    const measure = () => {
+      if (trackRef.current) {
+        setScrollDistance(trackRef.current.scrollWidth - window.innerWidth);
+      }
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
+  // offset: ["start start", "end end"] means progress goes from 0 (top of
+  // outer div at viewport top) to 1 (bottom of outer div at viewport bottom).
   const { scrollYProgress } = useScroll({
     target: targetRef,
+    offset: ['start start', 'end end'],
   });
 
-  // Calculate the horizontal scroll distance based on the content width
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+  // Translate the track by exactly the horizontal overflow so the last item
+  // lands flush with the right edge of the viewport.
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollDistance]);
 
   return (
     <div className="pt-40">
@@ -61,9 +81,17 @@ export const About = () => {
       </div>
 
       {/* Horizontal Timeline Section */}
-      <div ref={targetRef} className="relative h-[600vh]">
+      {/* Height = 100vh (to keep the sticky panel on screen) + however many
+          pixels the track needs to scroll horizontally. This gives the user
+          exactly the right amount of vertical scroll to traverse the whole
+          timeline before the page continues downward. */}
+      <div
+        ref={targetRef}
+        style={{ height: scrollDistance ? `calc(100vh + ${scrollDistance}px)` : '600vh' }}
+        className="relative"
+      >
         <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-          <motion.div style={{ x }} className="flex gap-24 px-8">
+          <motion.div ref={trackRef} style={{ x }} className="flex gap-24 px-8">
             {timeline.map((item, i) => (
               <div key={item.year} className="w-[85vw] md:w-[45vw] flex-shrink-0">
                 <div className="relative aspect-[16/10] overflow-hidden group">
