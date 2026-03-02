@@ -45,12 +45,12 @@ export const AsymmetricalSection = ({
       )}>
         {/* Image — overflow-hidden on the image container only (prevents parallax gray reveal).
             Section itself has no overflow-hidden so titles are never clipped. */}
-        <div className={cn("w-full relative aspect-[16/10] overflow-hidden bg-black", imageWidth)}>
+        <div className={cn("w-full relative aspect-[16/10] overflow-hidden", imageWidth)}>
           <motion.img
-            style={{ y, scale }}
+            style={{ y, scale, height: 'calc(100% + 200px)', top: '-100px' }}
             src={img}
             alt={title}
-            className="w-full h-full object-cover"
+            className="absolute w-full object-cover"
             referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-black/10" />
