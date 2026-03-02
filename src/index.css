@@ -89,6 +89,13 @@ button, .card, .project-card, .btn, .rounded-full, .rounded-xl, .rounded-2xl {
   text-transform: uppercase;
   line-height: 0.85;
   letter-spacing: -0.02em;
+  transition: opacity 0.4s ease;
+}
+
+/* Subtle hover on all title/heading containers */
+h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover,
+.massive-text:hover {
+  opacity: 0.72;
 }
 
 .de-blur-text {

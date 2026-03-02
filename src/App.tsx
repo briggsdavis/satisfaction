@@ -4,7 +4,7 @@ import { Navbar } from './components/Navbar';
 import { CustomCursor } from './components/CustomCursor';
 import { ColumnWipe } from './components/ColumnWipe';
 import { SmoothScroll } from './components/SmoothScroll';
-import { Hero, ProjectShowcase, BrandMarquee, ServiceTrinity } from './pages/Home';
+import { Hero, IntroText, FeaturedProjects, ValuePropositions, ServiceTrinity } from './pages/Home';
 import { About } from './pages/About';
 import { Services } from './pages/Services';
 import { Portfolio } from './pages/Portfolio';
@@ -16,8 +16,9 @@ import { DynamicBackground } from './components/DynamicBackground';
 const Home = () => (
   <>
     <Hero />
-    <ProjectShowcase />
-    <BrandMarquee />
+    <IntroText />
+    <FeaturedProjects />
+    <ValuePropositions />
     <ServiceTrinity />
   </>
 );
