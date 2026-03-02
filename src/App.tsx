@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Navbar } from './components/Navbar';
 import { CustomCursor } from './components/CustomCursor';
@@ -21,6 +21,54 @@ const Home = () => (
     <ServiceTrinity />
   </>
 );
+
+const scrollToSection = (id: string) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  // Walk up offsetParents to compute el's distance from the SmoothScroll fixed div,
+  // which equals the native scrollY needed to bring the section to the viewport top.
+  let top = 0;
+  let current: HTMLElement | null = el;
+  while (current) {
+    top += current.offsetTop;
+    const parent = current.offsetParent as HTMLElement | null;
+    if (!parent) break;
+    if (window.getComputedStyle(parent).position === 'fixed') break;
+    current = parent;
+  }
+  window.scrollTo({ top, behavior: 'smooth' });
+};
+
+const ServicesSidebar = () => {
+  const location = useLocation();
+  if (location.pathname !== '/services') return null;
+
+  const links = [
+    { label: 'A', id: 'service-a', title: 'Videography' },
+    { label: 'B', id: 'service-b', title: 'Photography' },
+    { label: 'C', id: 'service-c', title: 'Graphic Design' },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      className="fixed right-6 top-1/2 -translate-y-1/2 z-[100] flex flex-col gap-4"
+    >
+      {links.map(({ label, id, title }) => (
+        <button
+          key={id}
+          onClick={() => scrollToSection(id)}
+          title={title}
+          className="w-8 h-8 flex items-center justify-center text-[10px] uppercase font-bold tracking-widest border border-current/20 bg-black/40 backdrop-blur-sm hover:bg-white hover:text-black transition-all duration-200"
+        >
+          {label}
+        </button>
+      ))}
+    </motion.div>
+  );
+};
 
 export default function App() {
   const { scrollYProgress } = useScroll();
@@ -49,6 +97,7 @@ export default function App() {
         ))}
 
         <Navbar />
+        <ServicesSidebar />
 
         <ColumnWipe>
           <SmoothScroll>

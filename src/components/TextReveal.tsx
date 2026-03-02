@@ -8,16 +8,24 @@ interface TextRevealProps {
   as?: 'h1' | 'h2' | 'h3' | 'p' | 'span';
   delay?: number;
   nowrap?: boolean;
+  stagger?: number;
 }
 
-export const TextReveal = ({ text, className, as: Component = 'p', delay = 0, nowrap = false }: TextRevealProps) => {
+export const TextReveal = ({
+  text,
+  className,
+  as: Component = 'p',
+  delay = 0,
+  nowrap = false,
+  stagger = 0.01,
+}: TextRevealProps) => {
   const characters = text.split('');
 
   const container = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
-      transition: { staggerChildren: 0.01, delayChildren: 0.02 * i + delay },
+      transition: { staggerChildren: stagger, delayChildren: 0.02 * i + delay },
     }),
   };
 
@@ -25,20 +33,12 @@ export const TextReveal = ({ text, className, as: Component = 'p', delay = 0, no
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-      },
+      transition: { type: "spring", damping: 12, stiffness: 100 },
     },
     hidden: {
       opacity: 0,
       y: 20,
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-      },
+      transition: { type: "spring", damping: 12, stiffness: 100 },
     },
   };
 

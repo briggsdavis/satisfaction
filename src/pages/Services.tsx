@@ -6,9 +6,9 @@ import { useDynamicText } from '../components/DynamicBackground';
 
 export const Services = () => {
   const services = [
-    { title: 'VIDEOGRAPHY', desc: 'Cinematic industrial storytelling with mechanical precision.' },
-    { title: 'PHOTOGRAPHY', desc: 'Capturing the weighted essence of brutalist structures.' },
-    { title: 'GRAPHIC DESIGN', desc: 'Spatial logic applied to visual communication systems.' },
+    { id: 'service-a', title: 'VIDEOGRAPHY', desc: 'Cinematic storytelling from documentary portraits to brand films — crafted with a director\'s eye and a photographer\'s instinct for light.' },
+    { id: 'service-b', title: 'PHOTOGRAPHY', desc: 'Editorial, commercial, and fine-art photography that captures the decisive moment — authentic, precise, and deeply considered.' },
+    { id: 'service-c', title: 'GRAPHIC DESIGN', desc: 'Visual identity systems, art direction, and typographic design that give brands a distinctive, lasting presence.' },
   ];
 
   const { textColor, textColorMuted } = useDynamicText();
@@ -25,7 +25,8 @@ export const Services = () => {
         {services.map((service, i) => (
           <section
             key={service.title}
-            className="relative h-screen flex flex-col justify-center border-t border-white/10 overflow-hidden group"
+            id={service.id}
+            className="relative h-screen flex flex-col justify-center border-t border-white/10 group"
           >
             <div className="absolute inset-0 z-0 bg-neon-pink opacity-0 group-hover:opacity-5 transition-opacity duration-700" />
 

@@ -8,13 +8,13 @@ import { useDynamicText } from '../components/DynamicBackground';
 
 export const About = () => {
   const timeline = [
-    { year: '2018', event: 'Founded Colebank Studio in Berlin.', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000' },
-    { year: '2019', event: 'First major industrial project in Hamburg.', img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1000' },
-    { year: '2020', event: 'Shifted focus to Industrial Brutalism.', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000' },
-    { year: '2021', event: 'Collaborated with global tech giants.', img: 'https://images.unsplash.com/photo-1518005020250-675f0f0fd13b?auto=format&fit=crop&q=80&w=1000' },
-    { year: '2022', event: 'Awarded "Design of the Year" for Iron Pulse.', img: 'https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?auto=format&fit=crop&q=80&w=1000' },
-    { year: '2023', event: 'Exhibited at the Berlin Design Week.', img: 'https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&q=80&w=1000' },
-    { year: '2024', event: 'Global expansion of visual engineering.', img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1000' },
+    { year: '2018', event: 'Opened Colebank Studio in Berlin.', img: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=1000' },
+    { year: '2019', event: 'First major editorial campaign for VOGUE Deutschland.', img: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1000' },
+    { year: '2020', event: 'Documentary series "Faces of Europe" premiered online.', img: 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&q=80&w=1000' },
+    { year: '2021', event: 'Commercial work for global fashion and technology brands.', img: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=1000' },
+    { year: '2022', event: 'Awarded "Photographer of the Year" at Berlin Photo Week.', img: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1000' },
+    { year: '2023', event: 'Exhibited at Paris Photo and Berlin Gallery Weekend.', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1000' },
+    { year: '2024', event: 'Expanded into motion: short-form and documentary film.', img: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&q=80&w=1000' },
   ];
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -75,18 +75,20 @@ export const About = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mt-24">
           <div className="space-y-8">
+            {/* stagger={0.003} makes the character animation significantly faster */}
             <TextReveal
               as="p"
-              text="Devon Colebank is a visionary visual engineer whose work exists at the intersection of industrial architecture and digital precision. With over a decade of experience in Berlin's creative scene, he has pioneered a style known as 'Industrial Brutalism'—a design philosophy that celebrates raw materials, structural honesty, and high-impact spatial logic."
+              text="Devon Colebank is a Berlin-based photographer and visual storyteller with a decade of capturing light, motion, and human expression. His work spans editorial portrait sessions and sweeping landscape panoramas to high-end commercial campaigns and intimate documentary films—always guided by an instinct for the decisive moment and a commitment to authenticity."
               className="text-2xl font-light leading-relaxed"
+              stagger={0.003}
             />
           </div>
           <div className="space-y-8 leading-relaxed">
             <motion.p style={{ color: textColorMuted }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+              Rooted in Berlin's vibrant creative scene, Devon brings a rare combination of technical precision and artistic intuition to every frame. Whether shooting for major editorial outlets or crafting bespoke visual identities, his aesthetic is defined by honesty, texture, and the quiet power of a well-composed image.
             </motion.p>
             <motion.p style={{ color: textColorMuted }}>
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.
+              Beyond still photography, Devon's motion work—spanning short documentary films, brand films, and experimental video—has earned international recognition and cemented his reputation as a versatile, boundary-pushing visual artist.
             </motion.p>
             <div className="pt-8 flex gap-12">
               <div>
@@ -95,7 +97,7 @@ export const About = () => {
               </div>
               <div>
                 <h4 className="text-neon-pink text-[10px] uppercase tracking-widest font-bold mb-2">Focus</h4>
-                <p>Visual Engineering</p>
+                <p>Photography & Film</p>
               </div>
             </div>
           </div>
@@ -127,7 +129,7 @@ export const About = () => {
                 <div className="mt-12 pr-12">
                   <TextReveal text={item.event} className="text-4xl font-bold uppercase tracking-tight" />
                   <motion.p style={{ color: textColorMuted }} className="mt-6 text-lg leading-relaxed max-w-md">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+                    Each milestone represents a new chapter in the ongoing pursuit of authentic visual storytelling—pushing craft, expanding vision.
                   </motion.p>
                 </div>
               </div>
@@ -137,16 +139,16 @@ export const About = () => {
       </div>
 
       <AsymmetricalSection
-        img="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&q=80&w=1200"
-        title="Structural Integrity"
-        subtitle="Past Projects"
+        img="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=1200"
+        title="Portrait Mastery"
+        subtitle="Editorial Photography"
         align="right"
       />
 
       <AsymmetricalSection
-        img="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=1200"
-        title="Digital Blueprint"
-        subtitle="Visual Engineering"
+        img="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1200"
+        title="Cinematic Vision"
+        subtitle="Documentary Film"
         align="left"
       />
     </motion.div>

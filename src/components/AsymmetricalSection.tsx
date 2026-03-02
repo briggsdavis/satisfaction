@@ -38,13 +38,14 @@ export const AsymmetricalSection = ({
   const { textColor, textColorMuted } = useDynamicText();
 
   return (
-    <section ref={ref} className={cn("py-48 px-8 overflow-hidden", className)}>
+    <section ref={ref} className={cn("py-48 px-8", className)}>
       <div className={cn(
         "flex flex-col gap-12 items-center max-w-7xl mx-auto",
         align === 'right' ? 'md:flex-row-reverse' : 'md:flex-row'
       )}>
-        {/* Image — sits inside the SmoothScroll stacking context (z-[2]), above column lines (z-[1]) */}
-        <div className={cn("w-full relative aspect-[16/10] overflow-hidden", imageWidth)}>
+        {/* Image — overflow-hidden on the image container only (prevents parallax gray reveal).
+            Section itself has no overflow-hidden so titles are never clipped. */}
+        <div className={cn("w-full relative aspect-[16/10] overflow-hidden bg-black", imageWidth)}>
           <motion.img
             style={{ y, scale }}
             src={img}

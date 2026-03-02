@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
-import { DeBlurText } from '../components/DeBlurText';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { TextReveal } from '../components/TextReveal';
 import { AsymmetricalSection } from '../components/AsymmetricalSection';
 import { useDynamicText } from '../components/DynamicBackground';
@@ -14,7 +14,7 @@ export const Hero = () => {
       <div className="absolute inset-0 z-0">
         <motion.div
           style={{ y: useTransform(scrollY, [0, 1000], [0, 200]) }}
-          className="w-full h-full bg-[url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-60"
+          className="w-full h-full bg-[url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent" />
       </div>
@@ -23,8 +23,8 @@ export const Hero = () => {
       <div className="relative z-10 text-center px-4 text-white">
         <motion.div style={{ y }}>
           <h1 className="text-[15vw] md:text-[12vw] massive-text leading-none flex flex-col items-center">
-            <TextReveal text="DEVON COLEB" className="text-white" />
-            <TextReveal text="ANK" className="text-neon-pink" delay={0.5} />
+            <TextReveal text="DEVON" className="text-white" />
+            <TextReveal text="COLEBANK" className="text-neon-pink" delay={0.5} />
           </h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -32,7 +32,7 @@ export const Hero = () => {
             transition={{ delay: 1.2, duration: 0.8 }}
             className="mt-8 text-xs uppercase tracking-[0.5em] font-medium text-white/60"
           >
-            Industrial Design & Visual Engineering
+            Photography & Visual Storytelling
           </motion.p>
         </motion.div>
       </div>
@@ -47,9 +47,9 @@ export const Hero = () => {
 
 export const ProjectShowcase = () => {
   const projects = [
-    { title: 'Kinetic Void', subtitle: 'Visual Engineering', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200', align: 'left' as const, width: 'md:w-2/5' },
-    { title: 'Digital Pulse', subtitle: 'Motion Design', img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1200', align: 'right' as const, width: 'md:w-4/5' },
-    { title: 'Spatial Logic', subtitle: 'Branding', img: 'https://images.unsplash.com/photo-1518005020250-675f0f0fd13b?auto=format&fit=crop&q=80&w=1200', align: 'left' as const, width: 'md:w-3/5' },
+    { title: 'Golden Hour', subtitle: 'Landscape Photography', img: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1200', align: 'left' as const, width: 'md:w-2/5' },
+    { title: 'Frame & Light', subtitle: 'Commercial Videography', img: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1200', align: 'right' as const, width: 'md:w-4/5' },
+    { title: 'Visual Identity', subtitle: 'Brand Design', img: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=1200', align: 'left' as const, width: 'md:w-3/5' },
   ];
 
   return (
@@ -100,6 +100,7 @@ export const ServiceTrinity = () => {
     { title: 'Graphic Design', video: 'https://assets.mixkit.co/videos/preview/mixkit-mechanical-parts-of-a-clock-4041-large.mp4' },
   ];
 
+  const [activeService, setActiveService] = useState<string | null>(null);
   const { textColor } = useDynamicText();
 
   return (
@@ -107,7 +108,8 @@ export const ServiceTrinity = () => {
       {services.map((service) => (
         <motion.div
           key={service.title}
-          className="relative flex-1 group overflow-hidden border-r border-white/10 last:border-r-0"
+          className="relative flex-1 group overflow-hidden border-r border-white/10 last:border-r-0 cursor-pointer"
+          onClick={() => setActiveService(activeService === service.title ? null : service.title)}
         >
           <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-30 transition-opacity duration-700">
             <video
@@ -119,7 +121,7 @@ export const ServiceTrinity = () => {
               src={service.video}
             />
           </div>
-          <div className="relative z-10 h-full flex items-center justify-center p-6">
+          <div className="relative z-10 h-full flex flex-col items-center justify-center p-6 gap-6">
             {/* nowrap + clamp font-size ensures "Graphic Design" stays on one line */}
             <motion.div style={{ color: textColor }} className="group-hover:scale-110 transition-transform duration-700">
               <TextReveal
@@ -128,6 +130,20 @@ export const ServiceTrinity = () => {
                 className="text-[clamp(2rem,_4vw,_4.5rem)] massive-text text-center"
               />
             </motion.div>
+            <AnimatePresence>
+              {activeService === service.title && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Link to="/services" className="btn-industrial inline-block">
+                    Explore Services
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </motion.div>
       ))}
