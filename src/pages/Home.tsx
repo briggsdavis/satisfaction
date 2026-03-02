@@ -46,6 +46,15 @@ export const Hero = () => {
 };
 
 // ─── Word-by-word scroll reveal ───────────────────────────────────────────────
+// whileInView lives on the parent <motion.p> so IntersectionObserver targets
+// the full paragraph (which IS in the layout flow and never clipped).
+// Child variants animate from within their overflow-hidden mask once the
+// parent enters the viewport.
+const wordVariant = {
+  hidden: { y: '115%' },
+  visible: { y: '0%', transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
+};
+
 const WordReveal = ({
   text,
   motionStyle,
@@ -56,27 +65,31 @@ const WordReveal = ({
   motionStyle?: any;
   className?: string;
   startDelay?: number;
-}) => (
-  <motion.p className={className} style={motionStyle}>
-    {text.split(' ').map((word, i) => (
-      <span key={i} className="inline-block overflow-hidden" style={{ marginRight: '0.3em' }}>
-        <motion.span
-          className="inline-block"
-          initial={{ y: '115%' }}
-          whileInView={{ y: '0%' }}
-          viewport={{ once: true, margin: '-30px' }}
-          transition={{
-            duration: 0.55,
-            delay: startDelay + i * 0.028,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        >
-          {word}
-        </motion.span>
-      </span>
-    ))}
-  </motion.p>
-);
+}) => {
+  const containerVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.028, delayChildren: startDelay } },
+  };
+
+  return (
+    <motion.p
+      className={className}
+      style={motionStyle}
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-40px' }}
+    >
+      {text.split(' ').map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden" style={{ marginRight: '0.3em' }}>
+          <motion.span className="inline-block" variants={wordVariant}>
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </motion.p>
+  );
+};
 
 // ─── Intro Text ───────────────────────────────────────────────────────────────
 export const IntroText = () => {
@@ -208,7 +221,7 @@ export const FeaturedProjects = () => {
   const { textColor } = useDynamicText();
 
   return (
-    <section style={{ color: textColor as any }}>
+    <motion.section style={{ color: textColor }}>
       <div className="px-8 md:px-16 pt-32 pb-12 border-t border-current/10">
         <TextReveal text="Featured" className="text-[9vw] massive-text" />
         <TextReveal text="Projects" className="text-[9vw] massive-text text-neon-pink" delay={0.15} />
@@ -223,7 +236,7 @@ export const FeaturedProjects = () => {
           See Portfolio
         </Link>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -439,8 +452,10 @@ const ServiceCard = ({
 };
 
 export const ServiceTrinity = () => {
+  const { textColor } = useDynamicText();
+
   return (
-    <section className="py-32 px-8 md:px-16 border-t border-current/10">
+    <motion.section style={{ color: textColor }} className="py-32 px-8 md:px-16 border-t border-current/10">
       <div className="max-w-7xl mx-auto">
         <div className="mb-20">
           <TextReveal text="Services" className="text-[13vw] massive-text" />
@@ -458,6 +473,6 @@ export const ServiceTrinity = () => {
           </Link>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };

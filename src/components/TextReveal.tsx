@@ -49,6 +49,7 @@ export const TextReveal = ({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
+      whileHover={{ y: -6, transition: { type: 'spring', stiffness: 380, damping: 22 } }}
       className={cn(className)}
     >
       {characters.map((char, index) => (
