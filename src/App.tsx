@@ -41,6 +41,35 @@ const scrollToSection = (id: string) => {
   window.scrollTo({ top, behavior: 'smooth' });
 };
 
+const ContactSidebar = () => {
+  const location = useLocation();
+  if (location.pathname !== '/contact') return null;
+
+  const links = [
+    { label: 'FAQ', id: 'contact-faq', title: 'Frequently Asked Questions' },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      className="fixed right-6 top-1/2 -translate-y-1/2 z-[100] flex flex-col gap-4"
+    >
+      {links.map(({ label, id, title }) => (
+        <button
+          key={id}
+          onClick={() => scrollToSection(id)}
+          title={title}
+          className="px-3 h-8 flex items-center justify-center text-[10px] uppercase font-bold tracking-widest border border-current/20 bg-black/40 backdrop-blur-sm hover:bg-white hover:text-black transition-all duration-200"
+        >
+          {label}
+        </button>
+      ))}
+    </motion.div>
+  );
+};
+
 const ServicesSidebar = () => {
   const location = useLocation();
   if (location.pathname !== '/services') return null;
@@ -101,6 +130,7 @@ export default function App() {
 
         <Navbar />
         <ServicesSidebar />
+        <ContactSidebar />
 
         <ColumnWipe>
           <SmoothScroll>

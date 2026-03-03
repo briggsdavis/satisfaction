@@ -91,7 +91,7 @@ export const Contact = () => {
       </div>
 
       {/* FAQ Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-24 border-t border-current/10 pt-24">
+      <div id="contact-faq" className="grid grid-cols-1 lg:grid-cols-3 gap-24 border-t border-current/10 pt-24">
         <div>
           <h2 className="text-8xl massive-text leading-none">FAQ</h2>
         </div>
