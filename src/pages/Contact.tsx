@@ -24,21 +24,6 @@ export const Contact = () => {
 
   return (
     <motion.div className="pt-40 px-8 pb-32 min-h-screen" style={{ color: textColor }}>
-      {/* FAQ nav sidebar — fixed to viewport, only present while Contact is mounted */}
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed right-6 top-1/2 -translate-y-1/2 z-[100] flex flex-col gap-4"
-      >
-        <button
-          onClick={() => scrollToSection('contact-faq')}
-          title="Frequently Asked Questions"
-          className="px-3 h-8 flex items-center justify-center text-[10px] text-white uppercase font-bold tracking-widest border border-white/20 bg-black/40 backdrop-blur-sm hover:bg-white hover:text-black transition-all duration-200"
-        >
-          FAQ
-        </button>
-      </motion.div>
       <div className="mb-32">
         <DeBlurText className="text-[12vw] leading-none">Contact</DeBlurText>
       </div>
