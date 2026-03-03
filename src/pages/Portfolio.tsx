@@ -52,7 +52,7 @@ export const Portfolio = () => {
 
   return (
     <LayoutGroup>
-      <div className="pt-40 px-8 pb-32 min-h-screen" style={{ color: textColor } as React.CSSProperties}>
+      <div className="pt-40 px-8 pb-32 min-h-screen" style={{ color: textColor } as unknown as React.CSSProperties}>
         <div className="text-center mb-24">
           <DeBlurText className="text-[12vw] leading-none">Portfolio</DeBlurText>
         </div>
