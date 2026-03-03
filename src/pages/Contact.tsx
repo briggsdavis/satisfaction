@@ -68,6 +68,14 @@ export const Contact = () => {
               <p className="text-2xl font-medium">+49 176 1234 5678</p>
             </div>
           </div>
+
+          <button
+            onClick={() => scrollToSection('contact-faq')}
+            className="btn-industrial flex items-center gap-3"
+          >
+            Frequently Asked Questions
+            <ChevronDown className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Inquiry Form */}
