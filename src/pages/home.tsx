@@ -16,11 +16,21 @@ export const Hero = () => {
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
   const y = useTransform(activeY, [0, 1000], [0, 120])
+  const bgY = useTransform(activeY, [0, 1000], [0, 200])
 
   return (
-    <section className="relative flex h-screen flex-col justify-end overflow-hidden bg-black pb-0">
-      {/* Top metadata bar */}
-      <div className="absolute top-0 left-0 right-0 flex items-start justify-between px-8 pt-32 pointer-events-none z-10">
+    <section className="relative flex h-screen flex-col overflow-hidden bg-black">
+      {/* Background hero image with parallax */}
+      <div className="absolute inset-0 z-0">
+        <motion.div
+          style={{ y: bgY }}
+          className="h-[120%] w-full bg-[url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-25 grayscale"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black" />
+      </div>
+
+      {/* Top metadata bar — in document flow so it never overlaps */}
+      <div className="relative z-10 flex items-start justify-between px-8 pt-28 pb-4">
         <div className="text-[9px] font-bold tracking-[0.35em] text-white/30 uppercase leading-relaxed">
           Creative Director<br />Brand Strategist
         </div>
@@ -29,9 +39,11 @@ export const Hero = () => {
         </div>
       </div>
 
+      {/* Flex spacer pushes headline to bottom */}
+      <div className="flex-1" />
+
       {/* Main stacked headline */}
       <motion.div style={{ y }} className="relative z-10">
-        {/* DEVON */}
         <div className="border-t border-white/20 px-6 py-2 md:px-8">
           <TextReveal
             text="DEVON"
@@ -39,7 +51,6 @@ export const Hero = () => {
           />
         </div>
 
-        {/* ↓ separator row */}
         <div className="border-t border-white/20 px-8 py-2 flex items-center gap-6">
           <span className="font-display text-[4vw] text-white/40 leading-none">↓</span>
           <span className="text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
@@ -47,7 +58,6 @@ export const Hero = () => {
           </span>
         </div>
 
-        {/* COLEBANK */}
         <div className="border-t border-white/20 px-6 py-2 md:px-8">
           <TextReveal
             text="COLEBANK"
@@ -56,7 +66,6 @@ export const Hero = () => {
           />
         </div>
 
-        {/* Bottom border */}
         <div className="border-t border-white/20" />
       </motion.div>
 
@@ -78,20 +87,23 @@ const STATEMENT_WORDS = ["SEVEN", "YEARS", "ONE", "GOAL."]
 
 export const WordStatement = () => (
   <section className="border-t border-white/10 bg-black overflow-hidden">
-    {STATEMENT_WORDS.map((word, i) => (
-      <motion.div
-        key={word}
-        className="border-b border-white/20 px-6 flex items-end"
-        initial={{ opacity: 0, x: -40 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <span className="massive-text text-[18vw] leading-[0.88] select-none">
-          {word}
-        </span>
-      </motion.div>
-    ))}
+    {STATEMENT_WORDS.map((word, i) => {
+      const isRight = i % 2 === 1
+      return (
+        <motion.div
+          key={word}
+          className={`border-b border-white/20 px-6 flex items-end ${isRight ? "justify-end" : "justify-start"}`}
+          initial={{ opacity: 0, x: isRight ? 40 : -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="massive-text text-[18vw] leading-[0.88] select-none">
+            {word}
+          </span>
+        </motion.div>
+      )
+    })}
 
     {/* Bottom metadata row — mimics the reference exactly */}
     <div className="flex items-start justify-between px-6 py-4">
@@ -115,24 +127,24 @@ const CIRCLE_RING_TEXT =
 
 export const CircleStatement = () => (
   <section className="flex items-center justify-center border-t border-white/10 bg-black py-32 px-4">
-    <div className="relative" style={{ width: "min(480px, 90vw)", height: "min(480px, 90vw)" }}>
+    <div className="relative" style={{ width: "min(640px, 92vw)", height: "min(640px, 92vw)" }}>
       {/* Rotating ring text via SVG */}
       <motion.svg
         className="absolute inset-0 w-full h-full"
-        viewBox="0 0 480 480"
+        viewBox="0 0 640 640"
         animate={{ rotate: 360 }}
-        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       >
         <defs>
           <path
             id="ring-path"
-            d="M 240 240 m -195 0 a 195 195 0 1 1 390 0 a 195 195 0 1 1 -390 0"
+            d="M 320 320 m -275 0 a 275 275 0 1 1 550 0 a 275 275 0 1 1 -550 0"
           />
         </defs>
         <text
           fill="white"
-          fontSize="11"
-          letterSpacing="3.5"
+          fontSize="11.5"
+          letterSpacing="4"
           fontFamily="Inter Variable, Inter, sans-serif"
           fontWeight="700"
           style={{ textTransform: "uppercase" }}
@@ -144,31 +156,30 @@ export const CircleStatement = () => (
       </motion.svg>
 
       {/* Static circle border */}
-      <div className="absolute inset-0 rounded-full border border-white/8" />
+      <div className="absolute inset-[6%] rounded-full border border-white/8" />
 
       {/* Top + bottom cross markers */}
-      <span className="absolute top-[4%] left-1/2 -translate-x-1/2 text-white/25 text-xs select-none">+</span>
-      <span className="absolute bottom-[4%] left-1/2 -translate-x-1/2 text-white/25 text-xs select-none">+</span>
+      <span className="absolute top-[8%] left-1/2 -translate-x-1/2 text-white/25 text-xs select-none">+</span>
+      <span className="absolute bottom-[8%] left-1/2 -translate-x-1/2 text-white/25 text-xs select-none">+</span>
+
+      {/* Small satellite labels */}
+      <div className="absolute top-[22%] left-1/2 -translate-x-1/2 text-center pointer-events-none">
+        <span className="font-mono text-[8px] font-bold tracking-[0.3em] text-white/25 uppercase">Devon Colebank</span>
+        <span className="massive-text block text-sm leading-none mt-1">FEEL?</span>
+      </div>
+      <div className="absolute bottom-[22%] left-1/2 -translate-x-1/2 text-center pointer-events-none">
+        <span className="massive-text block text-sm leading-none mb-1">FEEL?</span>
+        <span className="font-mono text-[8px] font-bold tracking-[0.3em] text-white/25 uppercase">Pittsburgh, PA</span>
+      </div>
 
       {/* Center content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-8">
-        {/* Small top label */}
-        <div className="font-mono text-[8px] font-bold tracking-[0.35em] text-white/30 uppercase">
-          Devon Colebank
-        </div>
-        {/* Small diamond separator */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center px-16">
         <span className="text-white/20 text-[10px] leading-none">◆</span>
-        {/* Main question */}
         <TextReveal
           text="WHAT DO YOU WANT PEOPLE TO FEEL?"
-          className="massive-text text-[5vw] leading-none md:text-[3.5vw]"
+          className="massive-text text-[4.5vw] leading-[0.95] md:text-[3vw]"
         />
-        {/* Small diamond separator */}
         <span className="text-white/20 text-[10px] leading-none">◆</span>
-        {/* Small bottom label */}
-        <div className="font-mono text-[8px] font-bold tracking-[0.35em] text-white/30 uppercase">
-          Pittsburgh, PA
-        </div>
       </div>
     </div>
   </section>
@@ -463,6 +474,9 @@ const FeaturedProjectCard = ({
             A focused exploration of form, light, and intention. Crafted with
             precision and purpose.
           </p>
+          <Link to="/portfolio" className="btn-industrial mt-2 inline-flex items-center gap-3">
+            View Project <span className="text-sm">→</span>
+          </Link>
         </div>
       </div>
     </section>
