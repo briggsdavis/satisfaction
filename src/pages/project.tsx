@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, X } from "lucide-react"
 import { AnimatePresence, motion, useScroll, useTransform } from "motion/react"
 import { useCallback, useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import { Link, useParams } from "react-router"
 import { TextReveal } from "../components/text-reveal"
 
@@ -467,18 +468,22 @@ export const ProjectPage = () => {
         </div>
       </div>
 
-      {/* ── Lightbox ── */}
-      <AnimatePresence>
-        {lightboxIndex !== null && (
-          <Lightbox
-            images={project.galleryImages}
-            index={lightboxIndex}
-            onClose={closeLightbox}
-            onPrev={prevImage}
-            onNext={nextImage}
-          />
+      {/* ── Lightbox — portaled to body to escape SmoothScroll transform context ── */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {lightboxIndex !== null && (
+              <Lightbox
+                images={project.galleryImages}
+                index={lightboxIndex}
+                onClose={closeLightbox}
+                onPrev={prevImage}
+                onNext={nextImage}
+              />
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
     </div>
   )
 }
