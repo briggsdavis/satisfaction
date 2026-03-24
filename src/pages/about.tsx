@@ -113,7 +113,7 @@ export const About = () => {
         <DeBlurText className="mb-8 text-[12vw] leading-none">
           Devon
           <br />
-          <span className="text-neon-pink">Colebank</span>
+          <span className="text-white/60">Colebank</span>
         </DeBlurText>
 
         <div className="mt-24 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-16">
@@ -143,13 +143,13 @@ export const About = () => {
             </p>
             <div className="flex gap-12 pt-8">
               <div>
-                <h4 className="text-neon-pink mb-2 text-[10px] font-bold tracking-widest uppercase">
+                <h4 className="text-white/60 mb-2 text-[10px] font-bold tracking-widest uppercase">
                   Location
                 </h4>
                 <p>Pittsburgh, PA</p>
               </div>
               <div>
-                <h4 className="text-neon-pink mb-2 text-[10px] font-bold tracking-widest uppercase">
+                <h4 className="text-white/60 mb-2 text-[10px] font-bold tracking-widest uppercase">
                   Focus
                 </h4>
                 <p>Creative Direction & Brand Strategy</p>
@@ -187,8 +187,8 @@ export const About = () => {
                 key={item.client}
                 className="w-[85vw] flex-shrink-0 md:w-[45vw]"
               >
-                <div className="border-neon-pink border-l-2 pl-8">
-                  <span className="text-neon-pink text-sm font-bold tracking-widest">
+                <div className="border-white/20 border-l-2 pl-8">
+                  <span className="text-white/60 text-sm font-bold tracking-widest">
                     {item.date}
                   </span>
                   <h4 className="massive-text mt-4 text-5xl font-black tracking-tight uppercase md:text-7xl">
@@ -199,7 +199,7 @@ export const About = () => {
                       {item.campaign}
                     </p>
                   )}
-                  <p className="text-neon-pink mt-6 text-xs font-bold tracking-widest uppercase">
+                  <p className="text-white/60 mt-6 text-xs font-bold tracking-widest uppercase">
                     {item.role}
                   </p>
                   <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">

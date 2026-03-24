@@ -7,22 +7,31 @@ import { SmoothScroll } from "./components/smooth-scroll"
 import { About } from "./pages/about"
 import { Contact } from "./pages/contact"
 import {
+  CircleStatement,
   FeaturedProjects,
   Hero,
   IntroText,
+  ScatteredStatement,
   ServiceTrinity,
+  Ticker,
   ValuePropositions,
+  WordStatement,
 } from "./pages/home"
 import { NotFound } from "./pages/not-found"
 import { Portfolio } from "./pages/portfolio"
+import { ProjectPage } from "./pages/project"
 import { Services } from "./pages/services"
 
 const Home = () => (
   <>
     <Hero />
+    <Ticker />
+    <WordStatement />
     <IntroText />
     <FeaturedProjects />
+    <CircleStatement />
     <ValuePropositions />
+    <ScatteredStatement />
     <ServiceTrinity />
   </>
 )
@@ -31,8 +40,6 @@ export default function App() {
   return (
     <Router>
       <CustomCursor />
-      <div className="industrial-grid pointer-events-none fixed inset-0 opacity-20" />
-
       {/* Column Lines — z-[1] keeps them above the background but below page content (z-[2]) */}
       {[...Array(7)].map((_, i) => (
         <div
@@ -51,6 +58,7 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/projects/:slug" element={<ProjectPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

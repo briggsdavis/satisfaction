@@ -58,38 +58,38 @@ export const Contact = () => {
       <div className="mb-48">
         <div className="grid grid-cols-2 gap-16">
           <div className="space-y-4">
-            <Mail className="text-neon-pink h-6 w-6" />
+            <Mail className="text-white/60 h-6 w-6" />
             <h4 className="text-[10px] font-bold tracking-widest uppercase opacity-40">
               Email
             </h4>
             <a
               href="mailto:devon@devoncolebank.com"
-              className="hover:text-neon-pink block text-2xl font-medium transition-colors"
+              className="hover:text-white/60 block text-2xl font-medium transition-colors"
             >
               devon@devoncolebank.com
             </a>
           </div>
           <div className="space-y-4">
-            <Phone className="text-neon-pink h-6 w-6" />
+            <Phone className="text-white/60 h-6 w-6" />
             <h4 className="text-[10px] font-bold tracking-widest uppercase opacity-40">
               Phone
             </h4>
             <a
               href="tel:+14125550123"
-              className="hover:text-neon-pink block text-2xl font-medium transition-colors"
+              className="hover:text-white/60 block text-2xl font-medium transition-colors"
             >
               +1 (412) 555-0123
             </a>
           </div>
           <div className="space-y-4">
-            <MapPin className="text-neon-pink h-6 w-6" />
+            <MapPin className="text-white/60 h-6 w-6" />
             <h4 className="text-[10px] font-bold tracking-widest uppercase opacity-40">
               Location
             </h4>
             <p className="text-2xl font-medium">Pittsburgh, Pennsylvania</p>
           </div>
           <div className="space-y-4">
-            <MessageSquare className="text-neon-pink h-6 w-6" />
+            <MessageSquare className="text-white/60 h-6 w-6" />
             <h4 className="text-[10px] font-bold tracking-widest uppercase opacity-40">
               Social
             </h4>
@@ -97,7 +97,7 @@ export const Contact = () => {
               href="https://www.instagram.com/devoncolebank/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-neon-pink block text-2xl font-medium transition-colors"
+              className="hover:text-white/60 block text-2xl font-medium transition-colors"
             >
               @devoncolebank
             </a>
@@ -119,7 +119,7 @@ export const Contact = () => {
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 className="group flex w-full items-center justify-between py-8 text-left"
               >
-                <span className="group-hover:text-neon-pink text-xl font-bold tracking-tight uppercase transition-colors">
+                <span className="group-hover:text-white/60 text-xl font-bold tracking-tight uppercase transition-colors">
                   {faq.q}
                 </span>
                 <ChevronDown

@@ -14,8 +14,6 @@ const SOCIAL_LINKS = [
 export const Footer = () => {
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-black px-8 pt-32 pb-12">
-      <div className="via-neon-pink/30 absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent to-transparent" />
-
       <div className="relative z-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:grid-cols-4 lg:gap-16">
         <div className="space-y-8">
           <h2 className="massive-text text-4xl leading-none md:text-6xl">
@@ -30,7 +28,7 @@ export const Footer = () => {
         </div>
 
         <div className="space-y-6">
-          <h4 className="text-neon-pink text-[10px] font-bold tracking-[0.3em] uppercase">
+          <h4 className="text-[10px] font-bold tracking-[0.3em] text-white/40 uppercase">
             Navigation
           </h4>
           <ul className="space-y-4">
@@ -39,7 +37,7 @@ export const Footer = () => {
                 <li key={item}>
                   <Link
                     to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                    className="hover:text-neon-pink text-xl font-medium transition-colors"
+                    className="text-xl font-medium transition-opacity hover:opacity-60"
                   >
                     {item}
                   </Link>
@@ -50,7 +48,7 @@ export const Footer = () => {
         </div>
 
         <div className="space-y-6">
-          <h4 className="text-neon-pink text-[10px] font-bold tracking-[0.3em] uppercase">
+          <h4 className="text-[10px] font-bold tracking-[0.3em] text-white/40 uppercase">
             Social
           </h4>
           <ul className="space-y-4">
@@ -60,7 +58,7 @@ export const Footer = () => {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-neon-pink text-xl font-medium transition-colors"
+                  className="text-xl font-medium transition-opacity hover:opacity-60"
                 >
                   {item.label}
                 </a>
@@ -70,7 +68,7 @@ export const Footer = () => {
         </div>
 
         <div className="space-y-6">
-          <h4 className="text-neon-pink text-[10px] font-bold tracking-[0.3em] uppercase">
+          <h4 className="text-[10px] font-bold tracking-[0.3em] text-white/40 uppercase">
             Contact
           </h4>
           <p className="text-xl font-medium">devon@devoncolebank.com</p>
@@ -81,7 +79,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="mt-32 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 md:flex-row">
+      <div className="mt-32 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 md:flex-row">
         <p className="text-[10px] tracking-widest text-white/20 uppercase">
           © {new Date().getFullYear()} Devon Colebank. All Rights Reserved
         </p>
@@ -99,7 +97,7 @@ export const Footer = () => {
             href="https://www.briggsdavis.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-neon-pink transition-colors"
+            className="transition-colors hover:text-white/60"
           >
             BriggsDavis
           </a>

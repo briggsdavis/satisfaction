@@ -139,8 +139,8 @@ const ToggleIcon = ({ isOpen }: { isOpen: boolean }) => (
     animate={{ rotate: isOpen ? 45 : 0 }}
     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
   >
-    <span className="bg-neon-pink absolute h-[1px] w-full" />
-    <span className="bg-neon-pink absolute h-full w-[1px]" />
+    <span className="bg-white/40 absolute h-[1px] w-full" />
+    <span className="bg-white/40 absolute h-full w-[1px]" />
   </motion.span>
 )
 
@@ -155,7 +155,7 @@ export const Services = () => {
         <DeBlurText className="text-[12vw] leading-none">
           Our
           <br />
-          <span className="text-neon-pink">Services</span>
+          <span className="text-white/60">Services</span>
         </DeBlurText>
       </div>
 
@@ -170,7 +170,7 @@ export const Services = () => {
               className="relative border-t border-current/10"
             >
               {/* Ambient neon glow on hover */}
-              <div className="bg-neon-pink pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-700 hover:opacity-[0.03]" />
+              <div className="bg-white/40 pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-700 hover:opacity-[0.03]" />
 
               <div className="relative z-10 px-8 py-24 md:py-32">
                 <TextReveal
@@ -194,13 +194,13 @@ export const Services = () => {
                   aria-expanded={isOpen}
                   className="group mt-12 flex cursor-pointer items-center gap-5"
                 >
-                  <span className="text-neon-pink text-[10px] font-bold tracking-[0.35em] uppercase">
+                  <span className="text-white/60 text-[10px] font-bold tracking-[0.35em] uppercase">
                     {isOpen ? "Close" : "Capabilities"}
                   </span>
 
                   {/* Animated connector line */}
                   <motion.span
-                    className="bg-neon-pink block h-[1px]"
+                    className="bg-white/40 block h-[1px]"
                     animate={{ width: isOpen ? "72px" : "32px" }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   />
@@ -227,7 +227,7 @@ export const Services = () => {
                       >
                         {/* Animated divider line — draws left to right */}
                         <motion.div
-                          className="bg-neon-pink/30 mb-10 h-[1px]"
+                          className="bg-white/40/30 mb-10 h-[1px]"
                           initial={{ scaleX: 0, originX: 0 }}
                           animate={{ scaleX: 1 }}
                           transition={{
@@ -269,7 +269,7 @@ export const Services = () => {
                             >
                               {service.stats.map((stat) => (
                                 <div key={stat.label}>
-                                  <div className="massive-text text-neon-pink text-5xl leading-none md:text-6xl">
+                                  <div className="massive-text text-white/60 text-5xl leading-none md:text-6xl">
                                     {stat.value}
                                   </div>
                                   <div className="mt-3 text-[10px] tracking-widest text-white/60 uppercase">
@@ -309,7 +309,7 @@ export const Services = () => {
                                 referrerPolicy="no-referrer"
                               />
                               {/* Subtle neon tint overlay */}
-                              <div className="bg-neon-pink/[0.06] pointer-events-none absolute inset-0 mix-blend-screen" />
+                              <div className="bg-white/40/[0.06] pointer-events-none absolute inset-0 mix-blend-screen" />
                             </motion.div>
                           </motion.div>
                         </div>

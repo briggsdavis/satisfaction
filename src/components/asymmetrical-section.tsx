@@ -70,7 +70,7 @@ export const AsymmetricalSection = ({
           <motion.span
             initial={{ opacity: 0, x: align === "left" ? 20 : -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            className="text-neon-pink block text-xs font-bold tracking-[0.4em] uppercase"
+            className="text-white/40 block text-xs font-bold tracking-[0.4em] uppercase"
           >
             {subtitle}
           </motion.span>

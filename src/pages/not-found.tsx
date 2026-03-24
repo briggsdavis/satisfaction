@@ -6,7 +6,7 @@ export const NotFound = () => {
     <div className="flex min-h-screen flex-col items-center justify-center px-8">
       <TextReveal
         text="404"
-        className="massive-text text-neon-pink text-[25vw] leading-none"
+        className="massive-text text-white text-[25vw] leading-none"
         immediate
       />
       <TextReveal

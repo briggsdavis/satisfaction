@@ -138,7 +138,7 @@ export const Portfolio = () => {
                     }}
                   />
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 p-8 text-center opacity-0 transition-opacity group-hover:opacity-100">
-                    <span className="text-neon-pink text-[10px] font-bold tracking-widest uppercase">
+                    <span className="text-white/60 text-[10px] font-bold tracking-widest uppercase">
                       {project.category}
                     </span>
                     <h3 className="massive-text mt-4 text-3xl text-white">
@@ -204,7 +204,7 @@ export const Portfolio = () => {
                         <motion.span
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
-                          className="text-neon-pink text-xs font-bold tracking-[0.3em] uppercase"
+                          className="text-white/60 text-xs font-bold tracking-[0.3em] uppercase"
                         >
                           {selectedProject.category}
                         </motion.span>
