@@ -177,7 +177,7 @@ export const CircleStatement = () => (
         <span className="text-white/20 text-[10px] leading-none">◆</span>
         <TextReveal
           text="WHAT DO YOU WANT PEOPLE TO FEEL?"
-          className="massive-text text-[4.5vw] leading-[0.95] md:text-[3vw]"
+          className="massive-text text-[4.5vw] leading-[0.95] md:text-[3vw] justify-center"
         />
         <span className="text-white/20 text-[10px] leading-none">◆</span>
       </div>
