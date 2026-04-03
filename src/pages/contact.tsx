@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react"
-import { useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import { TextReveal } from "../components/text-reveal"
 
 // ─── FAQ Data ─────────────────────────────────────────────────────────────────
@@ -302,6 +302,33 @@ const FaqItem = ({
   </div>
 )
 
+// ─── Blur-in wrapper ──────────────────────────────────────────────────────────
+const blurInVariants = {
+  hidden: { opacity: 0, filter: "blur(16px)", y: 20 },
+  visible: { opacity: 1, filter: "blur(0px)", y: 0 },
+}
+
+const BlurIn = ({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: React.ReactNode
+  delay?: number
+  className?: string
+}) => (
+  <motion.div
+    variants={blurInVariants}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-60px" }}
+    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay }}
+    className={className}
+  >
+    {children}
+  </motion.div>
+)
+
 // ─── Contact page ─────────────────────────────────────────────────────────────
 export const Contact = () => {
   const [openFaq, setOpenFaq] = useState<string | null>(null)
@@ -326,7 +353,7 @@ export const Contact = () => {
       {/* ── Form + contact details ────────────────────────────────────────── */}
       <section className="grid grid-cols-1 border-b border-white/10 lg:grid-cols-[1fr_2fr]">
         {/* Contact details sidebar */}
-        <div className="border-b border-white/10 px-8 py-12 lg:border-b-0 lg:border-r lg:px-12 lg:py-16">
+        <BlurIn delay={0.1} className="border-b border-white/10 px-8 py-12 lg:border-b-0 lg:border-r lg:px-12 lg:py-16">
           <p className="mb-10 text-[9px] font-bold tracking-[0.4em] uppercase text-white/30">
             Get In Touch
           </p>
@@ -374,10 +401,10 @@ export const Contact = () => {
               </a>
             </div>
           </div>
-        </div>
+        </BlurIn>
 
         {/* Form */}
-        <div className="px-8 py-12 lg:px-12 lg:py-16">
+        <BlurIn delay={0.2} className="px-8 py-12 lg:px-12 lg:py-16">
           <form
             onSubmit={(e) => e.preventDefault()}
             className="border-t border-white/[0.08]"
@@ -402,19 +429,21 @@ export const Contact = () => {
               </button>
             </div>
           </form>
-        </div>
+        </BlurIn>
       </section>
 
       {/* ── Jump-to-FAQ button ────────────────────────────────────────────── */}
       <section className="flex items-center justify-center border-b border-white/10 py-16">
-        <button onClick={scrollToFaq} className="btn-industrial">
-          View FAQ ↓
-        </button>
+        <BlurIn>
+          <button onClick={scrollToFaq} className="btn-industrial">
+            View FAQ ↓
+          </button>
+        </BlurIn>
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section ref={faqRef} id="faq" className="px-8 py-20 md:px-16">
-        <div className="mb-16">
+        <BlurIn className="mb-16">
           <span className="mb-4 block text-[9px] font-bold tracking-[0.4em] uppercase text-white/30">
             Frequently Asked
           </span>
@@ -422,11 +451,11 @@ export const Contact = () => {
             text="FAQ"
             className="massive-text text-[12vw] leading-none"
           />
-        </div>
+        </BlurIn>
 
         <div className="mx-auto max-w-4xl space-y-14">
           {FAQ_SECTIONS.map((section) => (
-            <div key={section.section}>
+            <BlurIn key={section.section}>
               <p className="mb-4 text-[9px] font-bold tracking-[0.35em] uppercase text-white/30 border-t border-white/10 pt-6">
                 {section.section}
               </p>
@@ -438,7 +467,7 @@ export const Contact = () => {
                   onToggle={() => toggleFaq(`${section.section}-${j}`)}
                 />
               ))}
-            </div>
+            </BlurIn>
           ))}
         </div>
       </section>
