@@ -15,7 +15,6 @@ import {
   ScatteredStatement,
   ServiceTrinity,
   StatsGrid,
-  Ticker,
   ValuePropositions,
   WordStatement,
 } from "./pages/home"
@@ -28,7 +27,6 @@ const Home = () => (
     <Hero />
     <StatsGrid />
     <BrandsCarousel />
-    <Ticker />
     <WordStatement />
     <IntroText />
     <FeaturedProjects />

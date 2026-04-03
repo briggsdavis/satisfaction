@@ -382,15 +382,15 @@ export const Contact = () => {
             onSubmit={(e) => e.preventDefault()}
             className="border-t border-white/[0.08]"
           >
-            <TextField label="Name" name="name" placeholder="Your full name" />
-            <TextField label="Company / Brand" name="company" placeholder="Who you're representing" />
-            <TextField label="Email" name="email" type="email" placeholder="your@email.com" />
-            <TextField label="Service" name="service" placeholder="e.g. Photography, Branding, Social Media" />
-            <TextField label="Budget Range" name="budget" placeholder="e.g. $5,000 – $10,000" />
+            <TextField label="Name" name="name" placeholder="" />
+            <TextField label="Company / Brand" name="company" placeholder="" />
+            <TextField label="Email" name="email" type="email" placeholder="" />
+            <TextField label="Service" name="service" placeholder="" />
+            <TextField label="Budget Range" name="budget" placeholder="" />
             <TextareaField
               label="Tell me about your project"
               name="message"
-              placeholder="What are you working on? What do you want people to feel?"
+              placeholder=""
             />
 
             <div className="flex items-center justify-between pt-8">

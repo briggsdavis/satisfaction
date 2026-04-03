@@ -226,10 +226,11 @@ const BRANDS = [
 export const BrandsCarousel = () => {
   const { scrollY } = useScroll()
   const scrollVelocity = useVelocity(scrollY)
-  const smoothVelocity = useSpring(scrollVelocity, { damping: 50, stiffness: 400 })
+  // Low stiffness = slow decay when scrolling stops → weighted momentum feel
+  const smoothVelocity = useSpring(scrollVelocity, { damping: 45, stiffness: 60 })
 
-  // Spring-animated skew: -12 when scrolling down (/), +12 when scrolling up (\)
-  const skewAngle = useSpring(-12, { stiffness: 80, damping: 30 })
+  // Fast skew transition on direction change
+  const skewAngle = useSpring(-12, { stiffness: 320, damping: 45 })
   const skewTransform = useTransform(skewAngle, (v) => `skewX(${v}deg)`)
 
   const baseX = useMotionValue(0)
