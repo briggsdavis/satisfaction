@@ -1,9 +1,12 @@
 import {
   motion,
   MotionValue,
+  useAnimationFrame,
   useMotionValue,
   useScroll,
+  useSpring,
   useTransform,
+  useVelocity,
 } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
@@ -227,6 +230,109 @@ export const StatsGrid = () => (
     </div>
   </section>
 )
+
+// ─── Brands Carousel ─────────────────────────────────────────────────────────
+const BRANDS = [
+  "Coors Light",
+  "Red Bull",
+  "Maker's Mark",
+  "Heinz",
+  "Under Armour",
+  "Patagonia",
+  "New Balance",
+  "Jack Daniel's",
+  "Vans",
+  "Levi's",
+  "Pittsburgh Steelers",
+  "ESPN",
+]
+
+export const BrandsCarousel = () => {
+  const { scrollY } = useScroll()
+  const scrollVelocity = useVelocity(scrollY)
+  const smoothVelocity = useSpring(scrollVelocity, { damping: 50, stiffness: 400 })
+
+  const baseX = useMotionValue(0)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const copyWidthRef = useRef(0)
+
+  useEffect(() => {
+    const measure = () => {
+      if (trackRef.current) {
+        copyWidthRef.current = trackRef.current.offsetWidth
+      }
+    }
+    requestAnimationFrame(measure)
+    window.addEventListener("resize", measure)
+    return () => window.removeEventListener("resize", measure)
+  }, [])
+
+  useAnimationFrame((_, delta) => {
+    const BASE_SPEED = 60 // px/s
+    const velocityBoost = Math.abs(smoothVelocity.get()) * 0.06
+    const speed = BASE_SPEED + velocityBoost
+    let next = baseX.get() - speed * (delta / 1000)
+    if (copyWidthRef.current > 0 && next < -copyWidthRef.current) {
+      next += copyWidthRef.current
+    }
+    baseX.set(next)
+  })
+
+  return (
+    <section className="border-t border-white/10 bg-black">
+      {/* Header */}
+      <div className="border-b border-white/10 px-8 py-10 md:px-16">
+        <p className="text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase mb-4">
+          Collaborations
+        </p>
+        <h2 className="text-2xl font-light leading-[1.25] md:text-3xl">
+          Brands &amp; creative teams<br />I&apos;ve collaborated with:
+        </h2>
+      </div>
+
+      {/* Scrolling track */}
+      <div className="overflow-hidden border-b border-white/10">
+        <motion.div style={{ x: baseX }} className="flex w-max">
+          {/* First copy — measured for wrap */}
+          <div ref={trackRef} className="flex">
+            {BRANDS.map((brand) => (
+              <div
+                key={brand}
+                className="relative flex items-center px-10 py-10 border-r border-white/10 shrink-0"
+              >
+                {/* diagonal rule */}
+                <div
+                  className="absolute inset-y-0 right-0 w-px bg-white/10 origin-top"
+                  style={{ transform: "skewX(-12deg)" }}
+                />
+                <span className="font-display text-xl tracking-wide text-white/35 uppercase whitespace-nowrap">
+                  {brand}
+                </span>
+              </div>
+            ))}
+          </div>
+          {/* Second copy — seamless loop */}
+          <div aria-hidden className="flex">
+            {BRANDS.map((brand) => (
+              <div
+                key={brand}
+                className="relative flex items-center px-10 py-10 border-r border-white/10 shrink-0"
+              >
+                <div
+                  className="absolute inset-y-0 right-0 w-px bg-white/10 origin-top"
+                  style={{ transform: "skewX(-12deg)" }}
+                />
+                <span className="font-display text-xl tracking-wide text-white/35 uppercase whitespace-nowrap">
+                  {brand}
+                </span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
 
 // ─── Word Statement (screenshot 1 — stacked words + dividers) ────────────────
 const STATEMENT_WORDS = ["SEVEN", "YEARS", "ONE", "GOAL."]

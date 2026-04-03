@@ -7,6 +7,7 @@ import { SmoothScroll } from "./components/smooth-scroll"
 import { About } from "./pages/about"
 import { Contact } from "./pages/contact"
 import {
+  BrandsCarousel,
   CircleStatement,
   FeaturedProjects,
   Hero,
@@ -27,6 +28,7 @@ const Home = () => (
   <>
     <Hero />
     <StatsGrid />
+    <BrandsCarousel />
     <Ticker />
     <WordStatement />
     <IntroText />
