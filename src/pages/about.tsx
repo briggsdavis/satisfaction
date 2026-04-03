@@ -4,6 +4,7 @@ import { AsymmetricalSection } from "../components/asymmetrical-section"
 import { DeBlurText } from "../components/de-blur-text"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
+import { ValuePropositions } from "./home"
 
 export const About = () => {
   const timeline = [
@@ -222,6 +223,8 @@ export const About = () => {
         subtitle="Documentary Film"
         align="left"
       />
+
+      <ValuePropositions />
     </div>
   )
 }

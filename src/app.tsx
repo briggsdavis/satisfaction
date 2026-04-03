@@ -9,11 +9,9 @@ import { Contact } from "./pages/contact"
 import {
   BrandsCarousel,
   CircleStatement,
-  FeaturedProjects,
   Hero,
   IntroText,
   ScatteredStatement,
-  ServiceTrinity,
   StatsGrid,
   ValuePropositions,
   WordStatement,
@@ -29,11 +27,8 @@ const Home = () => (
     <BrandsCarousel />
     <WordStatement />
     <IntroText />
-    <FeaturedProjects />
     <CircleStatement />
-    <ValuePropositions />
     <ScatteredStatement />
-    <ServiceTrinity />
   </>
 )
 

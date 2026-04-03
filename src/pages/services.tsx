@@ -15,7 +15,7 @@ const SERVICES = [
       "Location scouting + talent coordination",
     ],
     inverted: false,
-    minH: "min-h-[420px]",
+    minH: "min-h-[546px]",
   },
   {
     name: "Photography",
@@ -29,7 +29,7 @@ const SERVICES = [
       "Product photography (retail items, merch, packaged goods)",
     ],
     inverted: true,
-    minH: "min-h-[560px]",
+    minH: "min-h-[728px]",
   },
   {
     name: "Branding",
@@ -43,7 +43,7 @@ const SERVICES = [
       "Brand guidelines / brand book",
     ],
     inverted: true,
-    minH: "min-h-[320px]",
+    minH: "min-h-[416px]",
   },
   {
     name: "Visual Identity",
@@ -57,7 +57,7 @@ const SERVICES = [
       "Brand asset library",
     ],
     inverted: false,
-    minH: "min-h-[480px]",
+    minH: "min-h-[624px]",
   },
   {
     name: "Social Media",
@@ -71,7 +71,7 @@ const SERVICES = [
       "Community management (comments + DMs)",
     ],
     inverted: false,
-    minH: "min-h-[300px]",
+    minH: "min-h-[390px]",
   },
   {
     name: "Email Marketing",
@@ -85,7 +85,7 @@ const SERVICES = [
       "Performance reporting (open rates, CTR)",
     ],
     inverted: true,
-    minH: "min-h-[520px]",
+    minH: "min-h-[676px]",
   },
   {
     name: "Graphic Design",
@@ -99,7 +99,7 @@ const SERVICES = [
       "Monthly graphic drops + highlight covers",
     ],
     inverted: true,
-    minH: "min-h-[400px]",
+    minH: "min-h-[520px]",
   },
   {
     name: "Motion Graphics",
@@ -113,7 +113,7 @@ const SERVICES = [
       "Lower thirds + title sequences",
     ],
     inverted: false,
-    minH: "min-h-[580px]",
+    minH: "min-h-[754px]",
   },
 ]
 
@@ -128,7 +128,7 @@ const ServiceCell = ({
 
   return (
     <motion.div
-      className={`relative flex flex-col justify-between p-7 ${service.minH} ${
+      className={`relative flex flex-col justify-between border-b border-white/10 p-7 ${service.minH} ${
         service.inverted ? "bg-white text-black" : "bg-black text-white"
       }`}
       initial={{ opacity: 0, y: 24 }}
@@ -235,9 +235,9 @@ export const Services = () => (
     </section>
 
     {/* Asymmetric bento grid — 3 flex columns so cards stack flush */}
-    <div className="flex flex-col gap-px bg-white/10 md:flex-row">
+    <div className="flex flex-col divide-y divide-white/10 md:flex-row md:divide-x md:divide-y-0">
       {[0, 1, 2].map((col) => (
-        <div key={col} className="flex flex-1 flex-col gap-px bg-white/10">
+        <div key={col} className="flex flex-1 flex-col">
           {SERVICES.filter((_, i) => i % 3 === col).map((service, row) => (
             <ServiceCell key={service.name} service={service} index={col + row * 3} />
           ))}
