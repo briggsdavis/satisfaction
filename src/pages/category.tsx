@@ -36,28 +36,17 @@ const ProjectCard = ({
     {/* Permanent gradient from bottom */}
     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
 
-    {/* Bottom-left overlay */}
+    {/* Bottom-left overlay — identical pill language to portfolio cards */}
     <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-      {/* Two tag pills */}
-      <div className="mb-3 flex items-center gap-2">
-        <span className="bg-black/80 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white/65 backdrop-blur-sm">
-          {project.tags[0]}
+      <div className="flex items-center gap-2">
+        <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white backdrop-blur-sm">
+          <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-white/80" />
+          {project.title}
         </span>
-        <span className="bg-black/80 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white/65 backdrop-blur-sm">
-          {project.tags[1]}
+        <span className="bg-black/60 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white/45 backdrop-blur-sm">
+          {project.descriptor}
         </span>
       </div>
-
-      {/* Project title */}
-      <h3 className="mb-4 font-display text-3xl uppercase leading-[0.9] text-white md:text-4xl">
-        {project.title}
-      </h3>
-
-      {/* Descriptor pill — white, matches portfolio card style */}
-      <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 text-[9px] font-bold tracking-[0.22em] uppercase text-black">
-        <span className="h-[5px] w-[5px] shrink-0 rounded-full bg-black/40" />
-        {project.descriptor}
-      </span>
     </div>
 
     {/* Top-right CTA chip — appears on hover */}
