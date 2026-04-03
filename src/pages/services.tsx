@@ -234,10 +234,14 @@ export const Services = () => (
       />
     </section>
 
-    {/* Asymmetric bento grid */}
-    <div className="grid items-start gap-px bg-white/10 md:grid-cols-3">
-      {SERVICES.map((service, i) => (
-        <ServiceCell key={service.name} service={service} index={i} />
+    {/* Asymmetric bento grid — 3 flex columns so cards stack flush */}
+    <div className="flex flex-col gap-px bg-white/10 md:flex-row">
+      {[0, 1, 2].map((col) => (
+        <div key={col} className="flex flex-1 flex-col gap-px bg-white/10">
+          {SERVICES.filter((_, i) => i % 3 === col).map((service, row) => (
+            <ServiceCell key={service.name} service={service} index={col + row * 3} />
+          ))}
+        </div>
       ))}
     </div>
   </div>
