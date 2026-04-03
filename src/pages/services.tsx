@@ -1,70 +1,119 @@
-import { motion } from "motion/react"
-import { Link } from "react-router"
+import { AnimatePresence, motion } from "motion/react"
+import { useState } from "react"
 import { TextReveal } from "../components/text-reveal"
 
 const SERVICES = [
   {
     name: "Creative Direction",
     tag: "Strategy",
-    desc: "Shaping the visual language of your brand from concept to final execution.",
+    desc: "Full art direction and campaign concepting — from moodboards to shoot day.",
+    bullets: [
+      "Creative direction + art direction",
+      "Campaign concepting (menu drops, seasonal, events)",
+      "Shot lists + production planning",
+      "Moodboards + visual references",
+      "Location scouting + talent coordination",
+    ],
     inverted: false,
-    minH: "min-h-[400px]",
+    minH: "min-h-[420px]",
   },
   {
     name: "Photography",
     tag: "Photo",
-    desc: "Editorial, commercial, and event photography with an instinct for light.",
+    desc: "Food, lifestyle, and event photography built for brands that demand presence.",
+    bullets: [
+      "Food and beverage photography (hero dishes, menu items, action shots)",
+      "Lifestyle photography (guests, staff, ambiance, \"vibe\" shots)",
+      "Interior / hospitality photography",
+      "Event photography + recap coverage",
+      "Product photography (retail items, merch, packaged goods)",
+    ],
     inverted: true,
-    minH: "min-h-[540px]",   // tallest in row 1
+    minH: "min-h-[560px]",
   },
   {
     name: "Branding",
     tag: "Design",
-    desc: "Visual identity systems built to outlast trends and grow with you.",
+    desc: "Brand development and identity systems built to outlast trends and grow with you.",
+    bullets: [
+      "Branding development + refresh",
+      "Visual identity systems",
+      "Brand voice + messaging support",
+      "Logo suite (primary, secondary, icons, stacked marks)",
+      "Brand guidelines / brand book",
+    ],
     inverted: true,
-    minH: "min-h-[300px]",   // shortest in row 1 — Photography > Branding ✓
+    minH: "min-h-[320px]",
   },
   {
-    name: "Campaigns",
-    tag: "Production",
-    desc: "End-to-end campaign production for brands that mean business.",
+    name: "Visual Identity",
+    tag: "Design",
+    desc: "Cohesive visual systems — color, type, patterns, and a full brand asset library.",
+    bullets: [
+      "Visual identity systems",
+      "Color palette + typography system",
+      "Patterns / textures + iconography",
+      "Social media look + feel system",
+      "Brand asset library",
+    ],
     inverted: false,
-    minH: "min-h-[430px]",   // middle of row 2 — Campaigns > Production ✓
-  },
-  {
-    name: "Production",
-    tag: "Video / Film",
-    desc: "Full-service film and video production from brief to final cut.",
-    inverted: false,
-    minH: "min-h-[290px]",   // shortest in row 2
-  },
-  {
-    name: "Motion Graphics",
-    tag: "Video / Motion",
-    desc: "Animated content that moves — and moves people.",
-    inverted: true,
-    minH: "min-h-[570px]",   // tallest in row 2 — Motion Graphics > Campaigns > Production ✓
+    minH: "min-h-[480px]",
   },
   {
     name: "Social Media",
     tag: "Content",
-    desc: "Scroll-stopping content built for modern platforms and audiences.",
+    desc: "Full social media management — strategy, content, scheduling, and community.",
+    bullets: [
+      "Full social media management (IG, TikTok, FB, etc.)",
+      "Social strategy + monthly planning",
+      "Posting + scheduling",
+      "Caption writing + brand voice development",
+      "Community management (comments + DMs)",
+    ],
+    inverted: false,
+    minH: "min-h-[300px]",
+  },
+  {
+    name: "Email Marketing",
+    tag: "Email",
+    desc: "Email strategy, design, and campaigns that drive opens, clicks, and conversions.",
+    bullets: [
+      "Email strategy + campaign planning",
+      "Email design + copywriting",
+      "Template building + list growth support",
+      "Monthly email campaigns + promotional blasts",
+      "Performance reporting (open rates, CTR)",
+    ],
     inverted: true,
-    minH: "min-h-[350px]",
+    minH: "min-h-[520px]",
   },
   {
-    name: "Influencer / UGC",
-    tag: "Content",
-    desc: "Authentic creator-led content at the scale your brand needs.",
-    inverted: false,
-    minH: "min-h-[460px]",
+    name: "Graphic Design",
+    tag: "Design",
+    desc: "Full-service graphic design — print, digital, and everything in between.",
+    bullets: [
+      "Full-service graphic design + promotional design",
+      "Menu + insert design support",
+      "Print + in-house collateral (flyers, posters, table tents)",
+      "Digital assets (social graphics, headers, templates)",
+      "Monthly graphic drops + highlight covers",
+    ],
+    inverted: true,
+    minH: "min-h-[400px]",
   },
   {
-    name: "Event Launch Marketing",
-    tag: "Events",
-    desc: "Brand experiences that amplify your launch and live beyond the night.",
+    name: "Motion Graphics",
+    tag: "Video / Motion",
+    desc: "Animated content that moves — logo animation, kinetic type, and promo templates.",
+    bullets: [
+      "Logo animation (transparent + background versions)",
+      "Text + photo animation",
+      "Animated promo design + story templates",
+      "Kinetic typography promos",
+      "Lower thirds + title sequences",
+    ],
     inverted: false,
-    minH: "min-h-[380px]",
+    minH: "min-h-[580px]",
   },
 ]
 
@@ -74,57 +123,103 @@ const ServiceCell = ({
 }: {
   service: (typeof SERVICES)[0]
   index: number
-}) => (
-  <motion.div
-    className={`relative flex flex-col justify-between p-7 ${service.minH} ${
-      service.inverted ? "bg-white text-black" : "bg-black text-white"
-    }`}
-    initial={{ opacity: 0, y: 24 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-40px" }}
-    transition={{
-      duration: 0.6,
-      delay: (index % 3) * 0.1,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-    }}
-  >
-    {/* Top — tag + description */}
-    <div>
-      <span
-        className={`mb-4 block text-[9px] font-bold tracking-[0.35em] uppercase ${
-          service.inverted ? "text-black/35" : "text-white/30"
-        }`}
-      >
-        {service.tag}
-      </span>
-      <p
-        className={`text-sm leading-relaxed ${
-          service.inverted ? "text-black/60" : "text-white/55"
-        }`}
-      >
-        {service.desc}
-      </p>
-    </div>
+}) => {
+  const [isOpen, setIsOpen] = useState(false)
 
-    {/* Center — + */}
-    <Link
-      to="/contact"
-      className={`flex items-center justify-center py-8 text-7xl font-thin leading-none transition-opacity hover:opacity-60 ${
-        service.inverted ? "text-black/15" : "text-white/12"
+  return (
+    <motion.div
+      className={`relative flex flex-col justify-between p-7 ${service.minH} ${
+        service.inverted ? "bg-white text-black" : "bg-black text-white"
       }`}
-      aria-label={`Enquire about ${service.name}`}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{
+        duration: 0.6,
+        delay: (index % 3) * 0.1,
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+      }}
     >
-      +
-    </Link>
+      {/* Top — tag + description */}
+      <div>
+        <span
+          className={`mb-4 block text-[9px] font-bold tracking-[0.35em] uppercase ${
+            service.inverted ? "text-black/35" : "text-white/30"
+          }`}
+        >
+          {service.tag}
+        </span>
+        <p
+          className={`text-sm leading-relaxed ${
+            service.inverted ? "text-black/60" : "text-white/55"
+          }`}
+        >
+          {service.desc}
+        </p>
 
-    {/* Bottom — service name large */}
-    <div className="overflow-hidden">
-      <span className="block font-display text-[clamp(2rem,4.5vw,3.5rem)] uppercase leading-[0.85]">
-        {service.name}
-      </span>
-    </div>
-  </motion.div>
-)
+        {/* Expandable bullets */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.ul
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="pt-5 space-y-2">
+                {service.bullets.map((bullet, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.06, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className={`flex items-start gap-2 text-xs leading-relaxed list-none ${
+                      service.inverted ? "text-black/70" : "text-white/65"
+                    }`}
+                  >
+                    <span
+                      className={`mt-[3px] shrink-0 text-[10px] ${
+                        service.inverted ? "text-black/30" : "text-white/25"
+                      }`}
+                    >
+                      —
+                    </span>
+                    {bullet}
+                  </motion.li>
+                ))}
+              </div>
+            </motion.ul>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Center — expand toggle */}
+      <button
+        onClick={() => setIsOpen((v) => !v)}
+        className={`flex items-center justify-center py-8 text-7xl font-thin leading-none transition-opacity hover:opacity-60 ${
+          service.inverted ? "text-black/15" : "text-white/12"
+        }`}
+        aria-label={isOpen ? `Close ${service.name}` : `Expand ${service.name}`}
+      >
+        <motion.span
+          animate={{ rotate: isOpen ? 45 : 0 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="inline-block"
+        >
+          +
+        </motion.span>
+      </button>
+
+      {/* Bottom — service name large */}
+      <div className="overflow-hidden">
+        <span className="block font-display text-[clamp(2rem,4.5vw,3.5rem)] uppercase leading-[0.85]">
+          {service.name}
+        </span>
+      </div>
+    </motion.div>
+  )
+}
 
 export const Services = () => (
   <div className="pt-32">
