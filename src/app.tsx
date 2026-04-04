@@ -11,11 +11,10 @@ import {
   BrandsCarousel,
   CampaignStatement,
   CircleStatement,
+  FeaturedCascade,
   Hero,
-  IntroText,
-  ScatteredStatement,
   StatsGrid,
-  ValuePropositions,
+  WhatWeDoSection,
   WordStatement,
 } from "./pages/home"
 import { NotFound } from "./pages/not-found"
@@ -29,10 +28,10 @@ const Home = () => (
     <StatsGrid />
     <BrandsCarousel />
     <WordStatement />
+    <WhatWeDoSection />
     <CampaignStatement />
-    <IntroText />
+    <FeaturedCascade />
     <CircleStatement />
-    <ScatteredStatement />
   </>
 )
 

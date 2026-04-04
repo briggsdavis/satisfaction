@@ -399,6 +399,129 @@ export const WordStatement = () => (
   </section>
 )
 
+// ─── What We Do / Why We're Different (pinned cross-fade) ────────────────────
+export const WhatWeDoSection = () => {
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const [pinDistance, setPinDistance] = useState(0)
+
+  const smoothY = useSmoothScroll()
+  const fallbackY = useMotionValue(0)
+  const activeY = smoothY ?? fallbackY
+
+  const wrapperTopRef = useRef(0)
+  const pinDistanceRef = useRef(0)
+
+  useEffect(() => {
+    const measure = () => {
+      if (!wrapperRef.current) return
+      const rect = wrapperRef.current.getBoundingClientRect()
+      wrapperTopRef.current = rect.top + (smoothY?.get() ?? 0)
+      const dist = window.innerHeight
+      pinDistanceRef.current = dist
+      setPinDistance(dist)
+    }
+    requestAnimationFrame(measure)
+    window.addEventListener("resize", measure)
+    return () => window.removeEventListener("resize", measure)
+  }, [smoothY])
+
+  const pinY = useTransform(activeY, (y: number) => {
+    const T = wrapperTopRef.current
+    const D = pinDistanceRef.current
+    if (D === 0) return 0
+    if (y <= T) return 0
+    if (y >= T + D) return D
+    return y - T
+  })
+
+  const progress = useTransform(activeY, (y: number) => {
+    const T = wrapperTopRef.current
+    const D = pinDistanceRef.current
+    if (D === 0) return 0
+    if (y <= T) return 0
+    if (y >= T + D) return 1
+    return (y - T) / D
+  })
+
+  const panel1Opacity = useTransform(progress, [0, 0.45, 0.65], [1, 1, 0])
+  const panel1Y = useTransform(progress, [0.45, 0.65], ["0px", "-24px"])
+  const panel2Opacity = useTransform(progress, [0.45, 0.65, 1], [0, 1, 1])
+  const panel2Y = useTransform(progress, [0.45, 0.65], ["24px", "0px"])
+  const indicatorOpacity = useTransform(progress, [0.8, 1], [1, 0])
+
+  return (
+    <div
+      ref={wrapperRef}
+      style={{ height: `calc(${pinDistance}px + 100vh)` }}
+      className="relative border-t border-white/10"
+    >
+      <motion.div
+        style={{ y: pinY }}
+        className="relative h-screen overflow-hidden bg-black"
+      >
+        {/* Panel 1: What We Do */}
+        <motion.div
+          style={{ opacity: panel1Opacity, y: panel1Y }}
+          className="absolute inset-0 flex flex-col md:flex-row"
+        >
+          <div className="flex items-end border-b border-white/10 px-8 py-16 md:w-[42%] md:border-b-0 md:border-r md:px-16">
+            <TextReveal
+              text="What we do"
+              className="massive-text text-[8vw] leading-none"
+              immediate
+            />
+          </div>
+          <div className="flex flex-1 items-center px-8 py-12 md:px-16">
+            <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
+              Social Satisfaction is a creative agency specializing in bold brand transformations rooted in culture and storytelling. Founded by Devon Colebank, we work at the intersection of hospitality, lifestyle, and experiential marketing to evolve brands through striking visuals. By blending nostalgia with innovation, we create identities that feel both familiar and fresh for modern audiences.
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Panel 2: Why We're Different */}
+        <motion.div
+          style={{ opacity: panel2Opacity, y: panel2Y }}
+          className="absolute inset-0 flex flex-col md:flex-row"
+        >
+          <div className="flex items-end border-b border-white/10 px-8 py-16 md:w-[42%] md:border-b-0 md:border-r md:px-16">
+            <TextReveal
+              text="Why we're different"
+              className="massive-text text-[6.5vw] leading-none"
+              immediate
+            />
+          </div>
+          <div className="flex flex-1 flex-col justify-center gap-10 px-8 py-12 md:px-16">
+            <div className="space-y-3">
+              <p className="text-[10px] font-bold tracking-[0.35em] text-white/40 uppercase">
+                Full-Scale Creative Campaigns
+              </p>
+              <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
+                We go beyond content creation to build comprehensive, strategic campaigns. As a one-stop creative partner, we handle every stage from ideation and production to rollout and optimization. Our process ensures your marketing is cohesive, intentional, and designed for measurable impact.
+              </p>
+            </div>
+            <div className="space-y-3">
+              <p className="text-[10px] font-bold tracking-[0.35em] text-white/40 uppercase">
+                Results-Driven Execution
+              </p>
+              <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
+                We do not just deliver files. We create fully realized campaigns built to fill seats, drive reservations, and build brand loyalty. By aligning strategy with visual storytelling, we eliminate the need for multiple vendors and focus on driving real results for your business.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Scroll cue */}
+        <motion.div
+          style={{ opacity: indicatorOpacity }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-[0.4em] text-white/20 uppercase"
+        >
+          Scroll ↓
+        </motion.div>
+      </motion.div>
+    </div>
+  )
+}
+
 // ─── Campaign Statement (identical layout, "Campaigns Built To Perform.") ─────
 const CAMPAIGN_WORDS = ["CAMPAIGNS", "BUILT", "TO", "PERFORM."]
 
@@ -433,6 +556,85 @@ export const CampaignStatement = () => (
         {Array.from({ length: 4 }).map((_, i) => (
           <span key={i} className="block">Campaigns Built To Perform.</span>
         ))}
+      </div>
+    </div>
+  </section>
+)
+
+// ─── Featured Cascade (3 cascading parallax images → portfolio) ──────────────
+const CASCADE_IMGS = [
+  "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1200",
+  "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1200",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=1200",
+]
+
+const CascadeImg = ({ src, index }: { src: string; index: number }) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
+  const imgY = useTransform(scrollYProgress, [0, 1], [60, -60])
+
+  // Left tallest, middle shorter, right shortest — descending in both height and vertical position
+  const aspectRatios = ["aspect-[3/5]", "aspect-[3/4]", "aspect-[4/5]"]
+  const vertOffsets = [0, 80, 160] // px — cascades downward
+
+  return (
+    <motion.div
+      ref={ref}
+      className="relative min-w-0 flex-1"
+      style={{ marginTop: vertOffsets[index] }}
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-150px" }}
+      transition={{ duration: 0.9, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <Link to="/portfolio" className="block group">
+        <div className={`relative overflow-hidden ${aspectRatios[index]}`}>
+          <motion.img
+            style={{ y: imgY, height: "calc(100% + 120px)", top: "-60px" }}
+            src={src}
+            alt={`Featured project ${index + 1}`}
+            loading="lazy"
+            className="absolute w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-black/20 transition-colors duration-500 group-hover:bg-black/10" />
+        </div>
+      </Link>
+    </motion.div>
+  )
+}
+
+export const FeaturedCascade = () => (
+  <section className="border-t border-white/10 bg-black px-8 pt-32 pb-64 md:px-16">
+    <div className="mx-auto max-w-7xl">
+      {/* Header */}
+      <div className="mb-20 flex items-end justify-between">
+        <div>
+          <p className="mb-5 text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
+            Selected Work
+          </p>
+          <TextReveal text="Featured Projects" className="massive-text text-[6vw] leading-none" />
+        </div>
+        <Link
+          to="/portfolio"
+          className="btn-industrial hidden items-center gap-3 md:inline-flex"
+        >
+          View All <span className="text-sm">→</span>
+        </Link>
+      </div>
+
+      {/* Cascade */}
+      <div className="flex items-start gap-5 md:gap-8">
+        {CASCADE_IMGS.map((src, i) => (
+          <CascadeImg key={i} src={src} index={i} />
+        ))}
+      </div>
+
+      {/* Mobile CTA */}
+      <div className="mt-16 flex justify-center md:hidden">
+        <Link to="/portfolio" className="btn-industrial inline-flex items-center gap-3">
+          View All Projects <span className="text-sm">→</span>
+        </Link>
       </div>
     </div>
   </section>
