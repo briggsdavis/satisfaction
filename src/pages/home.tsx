@@ -95,7 +95,7 @@ type ServiceCardDef = {
   img: string
 }
 
-const SERVICES_ROW1: ServiceCardDef[] = [
+const ALL_SERVICES: ServiceCardDef[] = [
   {
     service: "Creative Direction",
     inverted: true,
@@ -126,9 +126,6 @@ const SERVICES_ROW1: ServiceCardDef[] = [
     delay: 0.24,
     img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=800",
   },
-]
-
-const SERVICES_ROW2: ServiceCardDef[] = [
   {
     service: "Emails",
     inverted: true,
@@ -155,7 +152,7 @@ const SERVICES_ROW2: ServiceCardDef[] = [
 const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
   <Link to="/services" className="group block">
     <motion.div
-      style={{ borderRadius: "1.25rem", rotate: card.rotate }}
+      style={{ borderRadius: 0, rotate: card.rotate }}
       className="relative aspect-[3/4] overflow-hidden"
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -219,22 +216,26 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
 )
 
 export const StatsGrid = () => (
-  <section className="bg-black px-6 py-16 md:px-12 overflow-hidden">
-    <p className="mb-10 text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
+  <section className="bg-black pt-16 pb-12 overflow-hidden">
+    <p className="mb-10 px-6 md:px-12 text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
       Our Services
     </p>
-    <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {SERVICES_ROW1.map((card, i) => (
-          <ServicesGridCard key={i} card={card} />
-        ))}
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {SERVICES_ROW2.map((card, i) => (
-          <ServicesGridCard key={i} card={card} />
+    {/* Horizontal scroll track — shows ~3.5 cards */}
+    <div
+      className="overflow-x-auto px-6 md:px-12 py-4"
+      style={{ touchAction: "pan-x", overflowY: "clip" }}
+    >
+      <div className="flex gap-4" style={{ width: "max-content" }}>
+        {ALL_SERVICES.map((card, i) => (
+          <div key={i} className="w-[72vw] md:w-[26vw] shrink-0">
+            <ServicesGridCard card={card} />
+          </div>
         ))}
       </div>
     </div>
+    <p className="mt-6 px-6 md:px-12 text-[9px] font-bold tracking-[0.35em] text-white/25 uppercase">
+      Scroll horizontally to see all services →
+    </p>
   </section>
 )
 
@@ -299,7 +300,7 @@ export const BrandsCarousel = () => {
   })
 
   return (
-    <section className="border-t border-white/10 bg-black">
+    <section className="border-t border-white/10 bg-black pb-20 md:pb-28">
       {/* Header */}
       <div className="border-b border-white/10 px-8 py-10 md:px-16">
         <p className="text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase mb-4">
@@ -317,13 +318,13 @@ export const BrandsCarousel = () => {
           <div ref={trackRef} className="flex h-full">
             {BRANDS.map((brand) => (
               <div key={brand} className="flex items-center h-full shrink-0">
-                {/* Brand name */}
-                <div className="flex items-center px-12 md:px-16 h-full">
+                {/* Brand name — fixed width so all items are equal size */}
+                <div className="flex items-center justify-center w-[220px] h-full">
                   <span className="font-display text-xl tracking-wide text-white/40 uppercase whitespace-nowrap">
                     {brand}
                   </span>
                 </div>
-                {/* // divider */}
+                {/* Divider */}
                 <motion.div
                   className="relative h-full w-9 shrink-0"
                   style={{ transform: skewTransform }}
@@ -338,7 +339,7 @@ export const BrandsCarousel = () => {
           <div aria-hidden className="flex h-full">
             {BRANDS.map((brand) => (
               <div key={brand} className="flex items-center h-full shrink-0">
-                <div className="flex items-center px-12 md:px-16 h-full">
+                <div className="flex items-center justify-center w-[220px] h-full">
                   <span className="font-display text-xl tracking-wide text-white/40 uppercase whitespace-nowrap">
                     {brand}
                   </span>
@@ -363,7 +364,7 @@ export const BrandsCarousel = () => {
 const STATEMENT_WORDS = ["MAKE", "THEM", "FEEL", "IT."]
 
 export const WordStatement = () => (
-  <section className="border-t border-white/10 bg-black overflow-hidden">
+  <section className="border-t border-white/10 bg-black overflow-hidden pb-20 md:pb-28">
     {STATEMENT_WORDS.map((word, i) => {
       const isRight = i % 2 === 1
       return (
