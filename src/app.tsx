@@ -1,3 +1,4 @@
+import React from "react"
 import { Route, BrowserRouter as Router, Routes } from "react-router"
 import { ColumnWipe } from "./components/column-wipe"
 import { CustomCursor } from "./components/custom-cursor"
@@ -44,7 +45,7 @@ export default function App() {
         <div
           key={i}
           className="column-line"
-          style={{ left: `${(100 / 6) * i}%` }}
+          style={{ left: `${(100 / 6) * i}%`, ['--sweep-delay' as string]: `${i * 0.75}s` } as React.CSSProperties}
         />
       ))}
 

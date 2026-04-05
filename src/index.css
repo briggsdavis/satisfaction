@@ -78,7 +78,24 @@
   }
 
   .column-line {
-    @apply pointer-events-none fixed inset-y-0 z-1 w-px bg-white/[0.06];
+    @apply pointer-events-none fixed inset-y-0 z-1 w-px bg-white/[0.06] overflow-hidden;
+  }
+
+  .column-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 25vh;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.18), transparent);
+    animation: column-sweep 6s ease-in-out infinite;
+    animation-delay: var(--sweep-delay, 0s);
+    top: -25vh;
+  }
+
+  @keyframes column-sweep {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(500vh); }
   }
 
   /* Horizontal rule divider between stacked headline words */

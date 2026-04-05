@@ -137,15 +137,7 @@ export const About = () => {
         </div>
       </div>
 
-      {/* Portfolio Timeline Section */}
-      <div className="mb-16 px-8">
-        <h2 className="text-[10px] font-bold tracking-widest text-white/40 uppercase">
-          PORTFOLIO
-        </h2>
-        <h3 className="mt-2 text-3xl font-bold tracking-tight uppercase md:text-5xl">
-          PAST PROJECTS & CLIENTS
-        </h3>
-      </div>
+      {/* Portfolio Timeline — header pinned inside scrolling section */}
       <div
         ref={wrapperRef}
         className="relative"
@@ -153,42 +145,111 @@ export const About = () => {
       >
         <motion.div
           style={{ y: pinY }}
-          className="flex h-screen items-center overflow-hidden"
+          className="flex h-screen flex-col overflow-hidden"
         >
-          <motion.div
-            ref={horizontalRef}
-            style={{ x }}
-            className="flex gap-24 px-8"
-          >
-            {timeline.map((item) => (
-              <div
-                key={item.client}
-                className="w-[85vw] flex-shrink-0 md:w-[45vw]"
-              >
-                <div className="border-white/20 border-l-2 pl-8">
-                  <span className="text-white/60 text-sm font-bold tracking-widest">
-                    {item.date}
-                  </span>
-                  <h4 className="massive-text mt-4 text-5xl font-black tracking-tight uppercase md:text-7xl">
-                    {item.client}
-                  </h4>
-                  {item.campaign && (
-                    <p className="mt-2 text-2xl font-bold tracking-tight uppercase md:text-3xl">
-                      {item.campaign}
+          {/* Header stays visible throughout the horizontal scroll */}
+          <div className="flex-shrink-0 border-b border-white/10 px-8 pb-6 pt-12">
+            <h2 className="text-[10px] font-bold tracking-widest text-white/40 uppercase">
+              PORTFOLIO
+            </h2>
+            <h3 className="mt-2 text-3xl font-bold tracking-tight uppercase md:text-5xl">
+              PAST PROJECTS & CLIENTS
+            </h3>
+          </div>
+          {/* Scrolling cards */}
+          <div className="flex flex-1 items-center overflow-hidden">
+            <motion.div
+              ref={horizontalRef}
+              style={{ x }}
+              className="flex gap-24 px-8"
+            >
+              {timeline.map((item) => (
+                <div
+                  key={item.client}
+                  className="w-[85vw] flex-shrink-0 md:w-[45vw]"
+                >
+                  <div className="border-white/20 border-l-2 pl-8">
+                    <span className="text-white/60 text-sm font-bold tracking-widest">
+                      {item.date}
+                    </span>
+                    <h4 className="massive-text mt-4 text-5xl font-black tracking-tight uppercase md:text-7xl">
+                      {item.client}
+                    </h4>
+                    {item.campaign && (
+                      <p className="mt-2 text-2xl font-bold tracking-tight uppercase md:text-3xl">
+                        {item.campaign}
+                      </p>
+                    )}
+                    <p className="text-white/60 mt-6 text-xs font-bold tracking-widest uppercase">
+                      {item.role}
                     </p>
-                  )}
-                  <p className="text-white/60 mt-6 text-xs font-bold tracking-widest uppercase">
-                    {item.role}
-                  </p>
-                  <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
-                    {item.description}
-                  </p>
+                    <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </motion.div>
       </div>
+
+      {/* Values Images — four staggered portrait images */}
+      {(() => {
+        const values = [
+          {
+            label: "BUSINESS VALUE",
+            img: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80&w=600",
+            offset: "mt-0",
+            delay: 0,
+          },
+          {
+            label: "CULTURE",
+            img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=600",
+            offset: "mt-20",
+            delay: 0.1,
+          },
+          {
+            label: "DYNAMICS",
+            img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=600",
+            offset: "mt-10",
+            delay: 0.2,
+          },
+          {
+            label: "CREATIVITY",
+            img: "https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&q=80&w=600",
+            offset: "mt-32",
+            delay: 0.3,
+          },
+        ]
+        return (
+          <div className="px-8 py-16 md:py-24">
+            <div className="flex items-start gap-3 md:gap-5">
+              {values.map(({ label, img, offset, delay }) => (
+                <motion.div
+                  key={label}
+                  className={`flex-1 ${offset}`}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <div className="aspect-[2/3] w-full overflow-hidden">
+                    <img
+                      src={img}
+                      alt={label}
+                      className="h-full w-full object-cover grayscale transition-all duration-700 hover:grayscale-0"
+                    />
+                  </div>
+                  <p className="mt-3 text-[10px] font-bold tracking-[0.3em] text-white/50 uppercase">
+                    {label}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )
+      })()}
 
       <AsymmetricalSection
         img="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=1200"
