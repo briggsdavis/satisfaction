@@ -35,7 +35,9 @@ export const DeBlurText = ({
       }}
       className={cn("will-change-[filter,opacity,transform]", className)}
     >
-      <Component className={noDisplay ? undefined : "massive-text"}>{children}</Component>
+      <Component className={noDisplay ? undefined : "massive-text"}>
+        {children}
+      </Component>
     </motion.div>
   )
 }

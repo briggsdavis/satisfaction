@@ -8,56 +8,83 @@ const marqueeText = Array(10)
   .join("  \u00B7  ")
   .concat("  \u00B7  ")
 
-const spanClass = "massive-text text-[11px] tracking-[0.25em] text-white/30 uppercase whitespace-nowrap"
+const spanClass =
+  "massive-text text-[11px] tracking-[0.25em] text-white/30 uppercase whitespace-nowrap"
 
-const BorderMarquee = ({ opacity }: { opacity: ReturnType<typeof useTransform<number, number>> }) => {
+const BorderMarquee = ({
+  opacity,
+}: {
+  opacity: ReturnType<typeof useTransform<number, number>>
+}) => {
   return (
-    <motion.div className="pointer-events-none absolute inset-0" style={{ opacity }}>
-
+    <motion.div
+      className="pointer-events-none absolute inset-0"
+      style={{ opacity }}
+    >
       {/* Bottom — horizontal, inset so corners don't overlap */}
-      <div className="absolute bottom-0 left-[28px] right-[28px] z-10 h-[28px] overflow-hidden">
+      <div className="absolute right-[28px] bottom-0 left-[28px] z-10 h-[28px] overflow-hidden">
         <motion.div
           className="flex"
           animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, repeatType: "loop", duration: 40, ease: "linear" }}
+          transition={{
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: 40,
+            ease: "linear",
+          }}
         >
           <span className={`${spanClass} leading-[28px]`}>{marqueeText}</span>
-          <span className={`${spanClass} leading-[28px]`} aria-hidden>{marqueeText}</span>
+          <span className={`${spanClass} leading-[28px]`} aria-hidden>
+            {marqueeText}
+          </span>
         </motion.div>
       </div>
 
       {/* Left — vertical, writing-mode on the outer div; flex (= row = inline axis = vertical stacking in vertical-rl) */}
       <div
-        className="absolute left-0 top-0 bottom-[28px] w-[28px] overflow-hidden"
+        className="absolute top-0 bottom-[28px] left-0 w-[28px] overflow-hidden"
         style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
       >
         <motion.div
           className="flex"
           animate={{ y: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, repeatType: "loop", duration: 40, ease: "linear" }}
+          transition={{
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: 40,
+            ease: "linear",
+          }}
           style={{ willChange: "transform" }}
         >
           <span className={spanClass}>{marqueeText}</span>
-          <span className={spanClass} aria-hidden>{marqueeText}</span>
+          <span className={spanClass} aria-hidden>
+            {marqueeText}
+          </span>
         </motion.div>
       </div>
 
       {/* Right — same but without rotation */}
       <div
-        className="absolute right-0 top-0 bottom-[28px] w-[28px] overflow-hidden"
+        className="absolute top-0 right-0 bottom-[28px] w-[28px] overflow-hidden"
         style={{ writingMode: "vertical-rl" }}
       >
         <motion.div
           className="flex"
           animate={{ y: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, repeatType: "loop", duration: 40, ease: "linear" }}
+          transition={{
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: 40,
+            ease: "linear",
+          }}
           style={{ willChange: "transform" }}
         >
           <span className={spanClass}>{marqueeText}</span>
-          <span className={spanClass} aria-hidden>{marqueeText}</span>
+          <span className={spanClass} aria-hidden>
+            {marqueeText}
+          </span>
         </motion.div>
       </div>
-
     </motion.div>
   )
 }
@@ -120,7 +147,7 @@ export const AboutHero = () => {
         <BorderMarquee opacity={bgOpacity} />
 
         <motion.h1
-          className="relative z-10 text-center text-[12vw] font-sans font-black uppercase tracking-tight text-white"
+          className="relative z-10 text-center font-sans text-[12vw] font-black tracking-tight text-white uppercase"
           style={{ scale, opacity: textOpacity }}
         >
           WHO WE ARE

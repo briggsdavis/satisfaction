@@ -34,11 +34,15 @@ export const Hero = () => {
 
       {/* Top metadata bar — in document flow so it never overlaps */}
       <div className="relative z-10 flex items-start justify-between px-8 pt-28 pb-4">
-        <div className="text-[9px] font-bold tracking-[0.35em] text-white/30 uppercase leading-relaxed">
-          Marketing Agency<br />Creative Production
+        <div className="text-[9px] leading-relaxed font-bold tracking-[0.35em] text-white/30 uppercase">
+          Marketing Agency
+          <br />
+          Creative Production
         </div>
-        <div className="text-[9px] font-bold tracking-[0.35em] text-white/30 uppercase leading-relaxed text-right">
-          Social Satisfaction<br />Full-Service Agency
+        <div className="text-right text-[9px] leading-relaxed font-bold tracking-[0.35em] text-white/30 uppercase">
+          Social Satisfaction
+          <br />
+          Full-Service Agency
         </div>
       </div>
 
@@ -54,8 +58,10 @@ export const Hero = () => {
           />
         </div>
 
-        <div className="border-t border-white/20 px-8 py-2 flex items-center gap-6">
-          <span className="font-display text-[4vw] text-white/40 leading-none">↓</span>
+        <div className="flex items-center gap-6 border-t border-white/20 px-8 py-2">
+          <span className="font-display text-[4vw] leading-none text-white/40">
+            ↓
+          </span>
           <span className="text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
             Strategy · Production · Creative Direction
           </span>
@@ -73,7 +79,7 @@ export const Hero = () => {
       </motion.div>
 
       {/* Bottom metadata */}
-      <div className="relative z-10 flex items-center justify-between px-8 py-4 border-t border-white/10">
+      <div className="relative z-10 flex items-center justify-between border-t border-white/10 px-8 py-4">
         <span className="text-[9px] font-bold tracking-[0.35em] text-white/20 uppercase">
           Marketing Agency
         </span>
@@ -202,11 +208,11 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
         {/* Bottom — service name + rule */}
         <div>
           <div
-            className={`w-full h-px mb-3 ${
+            className={`mb-3 h-px w-full ${
               card.inverted ? "bg-black/20" : "bg-white/25"
             }`}
           />
-          <p className="font-display text-xl md:text-2xl leading-tight uppercase">
+          <p className="font-display text-xl leading-tight uppercase md:text-2xl">
             {card.service}
           </p>
         </div>
@@ -216,24 +222,24 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
 )
 
 export const StatsGrid = () => (
-  <section className="bg-black pt-16 pb-12 overflow-hidden">
-    <p className="mb-10 px-6 md:px-12 text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
+  <section className="overflow-hidden bg-black pt-16 pb-12">
+    <p className="mb-10 px-6 text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase md:px-12">
       Our Services
     </p>
     {/* Horizontal scroll track — shows ~3.5 cards */}
     <div
-      className="overflow-x-auto px-6 md:px-12 py-4"
+      className="overflow-x-auto px-6 py-4 md:px-12"
       style={{ touchAction: "pan-x", overflowY: "clip" }}
     >
       <div className="flex gap-4" style={{ width: "max-content" }}>
         {ALL_SERVICES.map((card, i) => (
-          <div key={i} className="w-[72vw] md:w-[26vw] shrink-0">
+          <div key={i} className="w-[72vw] shrink-0 md:w-[26vw]">
             <ServicesGridCard card={card} />
           </div>
         ))}
       </div>
     </div>
-    <p className="mt-6 px-6 md:px-12 text-[9px] font-bold tracking-[0.35em] text-white/25 uppercase">
+    <p className="mt-6 px-6 text-[9px] font-bold tracking-[0.35em] text-white/25 uppercase md:px-12">
       Scroll horizontally to see all services →
     </p>
   </section>
@@ -259,7 +265,10 @@ export const BrandsCarousel = () => {
   const { scrollY } = useScroll()
   const scrollVelocity = useVelocity(scrollY)
   // Low stiffness = slow decay when scrolling stops → weighted momentum feel
-  const smoothVelocity = useSpring(scrollVelocity, { damping: 45, stiffness: 60 })
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 45,
+    stiffness: 60,
+  })
 
   // Fast skew transition on direction change
   const skewAngle = useSpring(-12, { stiffness: 320, damping: 45 })
@@ -303,24 +312,26 @@ export const BrandsCarousel = () => {
     <section className="border-t border-white/10 bg-black pb-20 md:pb-28">
       {/* Header */}
       <div className="border-b border-white/10 px-8 py-10 md:px-16">
-        <p className="text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase mb-4">
+        <p className="mb-4 text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
           Collaborations
         </p>
-        <h2 className="text-2xl font-light leading-[1.25] md:text-3xl">
-          Brands &amp; creative teams<br />we&apos;ve worked with:
+        <h2 className="text-2xl leading-[1.25] font-light md:text-3xl">
+          Brands &amp; creative teams
+          <br />
+          we&apos;ve worked with:
         </h2>
       </div>
 
       {/* Scrolling track */}
-      <div className="overflow-hidden border-b border-white/10 h-40">
+      <div className="h-40 overflow-hidden border-b border-white/10">
         <motion.div style={{ x: baseX }} className="flex h-full w-max">
           {/* First copy — measured for wrap */}
           <div ref={trackRef} className="flex h-full">
             {BRANDS.map((brand) => (
-              <div key={brand} className="flex items-center h-full shrink-0">
+              <div key={brand} className="flex h-full shrink-0 items-center">
                 {/* Brand name — fixed width so all items are equal size */}
-                <div className="flex items-center justify-center w-[220px] h-full">
-                  <span className="font-display text-xl tracking-wide text-white/40 uppercase whitespace-nowrap">
+                <div className="flex h-full w-[220px] items-center justify-center">
+                  <span className="font-display text-xl tracking-wide whitespace-nowrap text-white/40 uppercase">
                     {brand}
                   </span>
                 </div>
@@ -329,8 +340,14 @@ export const BrandsCarousel = () => {
                   className="relative h-full w-9 shrink-0"
                   style={{ transform: skewTransform }}
                 >
-                  <div className="absolute inset-y-0 w-px bg-white/[0.35]" style={{ left: "8px" }} />
-                  <div className="absolute inset-y-0 w-px bg-white/[0.35]" style={{ left: "24px" }} />
+                  <div
+                    className="absolute inset-y-0 w-px bg-white/[0.35]"
+                    style={{ left: "8px" }}
+                  />
+                  <div
+                    className="absolute inset-y-0 w-px bg-white/[0.35]"
+                    style={{ left: "24px" }}
+                  />
                 </motion.div>
               </div>
             ))}
@@ -338,9 +355,9 @@ export const BrandsCarousel = () => {
           {/* Second copy — seamless loop */}
           <div aria-hidden className="flex h-full">
             {BRANDS.map((brand) => (
-              <div key={brand} className="flex items-center h-full shrink-0">
-                <div className="flex items-center justify-center w-[220px] h-full">
-                  <span className="font-display text-xl tracking-wide text-white/40 uppercase whitespace-nowrap">
+              <div key={brand} className="flex h-full shrink-0 items-center">
+                <div className="flex h-full w-[220px] items-center justify-center">
+                  <span className="font-display text-xl tracking-wide whitespace-nowrap text-white/40 uppercase">
                     {brand}
                   </span>
                 </div>
@@ -348,8 +365,14 @@ export const BrandsCarousel = () => {
                   className="relative h-full w-9 shrink-0"
                   style={{ transform: skewTransform }}
                 >
-                  <div className="absolute inset-y-0 w-px bg-white/[0.35]" style={{ left: "8px" }} />
-                  <div className="absolute inset-y-0 w-px bg-white/[0.35]" style={{ left: "24px" }} />
+                  <div
+                    className="absolute inset-y-0 w-px bg-white/[0.35]"
+                    style={{ left: "8px" }}
+                  />
+                  <div
+                    className="absolute inset-y-0 w-px bg-white/[0.35]"
+                    style={{ left: "24px" }}
+                  />
                 </motion.div>
               </div>
             ))}
@@ -364,17 +387,21 @@ export const BrandsCarousel = () => {
 const STATEMENT_WORDS = ["MAKE", "THEM", "FEEL", "IT."]
 
 export const WordStatement = () => (
-  <section className="border-t border-white/10 bg-black overflow-hidden pb-20 md:pb-28">
+  <section className="overflow-hidden border-t border-white/10 bg-black pb-20 md:pb-28">
     {STATEMENT_WORDS.map((word, i) => {
       const isRight = i % 2 === 1
       return (
         <motion.div
           key={word}
-          className={`border-b border-white/20 px-6 flex items-end ${isRight ? "justify-end" : "justify-start"}`}
+          className={`flex items-end border-b border-white/20 px-6 ${isRight ? "justify-end" : "justify-start"}`}
           initial={{ opacity: 0, x: isRight ? 40 : -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-150px" }}
-          transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 0.7,
+            delay: i * 0.08,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           <span className="massive-text text-[18vw] leading-[0.88] select-none">
             {word}
@@ -385,14 +412,16 @@ export const WordStatement = () => (
 
     {/* Bottom metadata row */}
     <div className="flex items-start justify-between px-6 py-4">
-      <div className="font-mono text-[8px] font-bold tracking-widest text-white/20 uppercase leading-snug">
+      <div className="font-mono text-[8px] leading-snug font-bold tracking-widest text-white/20 uppercase">
         <span>Strategy · Production · Creative</span>
         <br />
         <span>Social Satisfaction</span>
       </div>
-      <div className="text-right font-mono text-[8px] font-bold tracking-widest text-white/20 uppercase leading-snug">
+      <div className="text-right font-mono text-[8px] leading-snug font-bold tracking-widest text-white/20 uppercase">
         {Array.from({ length: 4 }).map((_, i) => (
-          <span key={i} className="block">Make Them Feel It.</span>
+          <span key={i} className="block">
+            Make Them Feel It.
+          </span>
         ))}
       </div>
     </div>
@@ -464,7 +493,7 @@ export const WhatWeDoSection = () => {
           style={{ opacity: panel1Opacity, y: panel1Y }}
           className="absolute inset-0 flex flex-col md:flex-row"
         >
-          <div className="flex items-end border-b border-white/10 px-8 py-16 md:w-[42%] md:border-b-0 md:border-r md:px-16">
+          <div className="flex items-end border-b border-white/10 px-8 py-16 md:w-[42%] md:border-r md:border-b-0 md:px-16">
             <TextReveal
               text="What we do"
               className="massive-text text-[8vw] leading-none"
@@ -473,7 +502,12 @@ export const WhatWeDoSection = () => {
           </div>
           <div className="flex flex-1 items-center px-8 py-12 md:px-16">
             <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
-              Social Satisfaction is a creative agency specializing in bold brand transformations rooted in culture and storytelling. Founded by Devon Colebank, we work at the intersection of hospitality, lifestyle, and experiential marketing to evolve brands through striking visuals. By blending nostalgia with innovation, we create identities that feel both familiar and fresh for modern audiences.
+              Social Satisfaction is a creative agency specializing in bold
+              brand transformations rooted in culture and storytelling. Founded
+              by Devon Colebank, we work at the intersection of hospitality,
+              lifestyle, and experiential marketing to evolve brands through
+              striking visuals. By blending nostalgia with innovation, we create
+              identities that feel both familiar and fresh for modern audiences.
             </p>
           </div>
         </motion.div>
@@ -483,7 +517,7 @@ export const WhatWeDoSection = () => {
           style={{ opacity: panel2Opacity, y: panel2Y }}
           className="absolute inset-0 flex flex-col md:flex-row"
         >
-          <div className="flex items-end border-b border-white/10 px-8 py-16 md:w-[42%] md:border-b-0 md:border-r md:px-16">
+          <div className="flex items-end border-b border-white/10 px-8 py-16 md:w-[42%] md:border-r md:border-b-0 md:px-16">
             <TextReveal
               text="Why we're different"
               className="massive-text text-[6.5vw] leading-none"
@@ -496,7 +530,11 @@ export const WhatWeDoSection = () => {
                 Full-Scale Creative Campaigns
               </p>
               <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
-                We go beyond content creation to build comprehensive, strategic campaigns. As a one-stop creative partner, we handle every stage from ideation and production to rollout and optimization. Our process ensures your marketing is cohesive, intentional, and designed for measurable impact.
+                We go beyond content creation to build comprehensive, strategic
+                campaigns. As a one-stop creative partner, we handle every stage
+                from ideation and production to rollout and optimization. Our
+                process ensures your marketing is cohesive, intentional, and
+                designed for measurable impact.
               </p>
             </div>
             <div className="space-y-3">
@@ -504,7 +542,11 @@ export const WhatWeDoSection = () => {
                 Results-Driven Execution
               </p>
               <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
-                We do not just deliver files. We create fully realized campaigns built to fill seats, drive reservations, and build brand loyalty. By aligning strategy with visual storytelling, we eliminate the need for multiple vendors and focus on driving real results for your business.
+                We do not just deliver files. We create fully realized campaigns
+                built to fill seats, drive reservations, and build brand
+                loyalty. By aligning strategy with visual storytelling, we
+                eliminate the need for multiple vendors and focus on driving
+                real results for your business.
               </p>
             </div>
           </div>
@@ -526,17 +568,21 @@ export const WhatWeDoSection = () => {
 const CAMPAIGN_WORDS = ["CAMPAIGNS", "BUILT", "TO", "PERFORM."]
 
 export const CampaignStatement = () => (
-  <section className="border-t border-white/10 bg-black overflow-hidden pb-20 md:pb-28">
+  <section className="overflow-hidden border-t border-white/10 bg-black pb-20 md:pb-28">
     {CAMPAIGN_WORDS.map((word, i) => {
       const isRight = i % 2 === 1
       return (
         <motion.div
           key={word}
-          className={`border-b border-white/20 px-6 flex items-end ${isRight ? "justify-end" : "justify-start"}`}
+          className={`flex items-end border-b border-white/20 px-6 ${isRight ? "justify-end" : "justify-start"}`}
           initial={{ opacity: 0, x: isRight ? 40 : -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-150px" }}
-          transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 0.7,
+            delay: i * 0.08,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           <span className="massive-text text-[18vw] leading-[0.88] select-none">
             {word}
@@ -547,14 +593,16 @@ export const CampaignStatement = () => (
 
     {/* Bottom metadata row */}
     <div className="flex items-start justify-between px-6 py-4">
-      <div className="font-mono text-[8px] font-bold tracking-widest text-white/20 uppercase leading-snug">
+      <div className="font-mono text-[8px] leading-snug font-bold tracking-widest text-white/20 uppercase">
         <span>Strategy · Production · Creative</span>
         <br />
         <span>Social Satisfaction</span>
       </div>
-      <div className="text-right font-mono text-[8px] font-bold tracking-widest text-white/20 uppercase leading-snug">
+      <div className="text-right font-mono text-[8px] leading-snug font-bold tracking-widest text-white/20 uppercase">
         {Array.from({ length: 4 }).map((_, i) => (
-          <span key={i} className="block">Campaigns Built To Perform.</span>
+          <span key={i} className="block">
+            Campaigns Built To Perform.
+          </span>
         ))}
       </div>
     </div>
@@ -591,7 +639,10 @@ const CascadeImg = ({
   index: number
 }) => {
   const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  })
   const imgY = useTransform(scrollYProgress, [0, 1], [60, -60])
 
   const vertOffsets = [0, 80, 160] // px — cascades downward
@@ -604,9 +655,13 @@ const CascadeImg = ({
       initial={{ opacity: 0, y: 80 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-150px" }}
-      transition={{ duration: 0.9, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: 0.9,
+        delay: index * 0.15,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
-      <Link to="/portfolio" className="block group">
+      <Link to="/portfolio" className="group block">
         <div className="relative aspect-[3/4] overflow-hidden">
           <motion.img
             style={{ y: imgY, height: "calc(100% + 120px)", top: "-60px" }}
@@ -622,17 +677,17 @@ const CascadeImg = ({
           {/* Bottom overlay — title + tags */}
           <div className="absolute inset-x-0 bottom-0 p-5">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white backdrop-blur-sm">
+              <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-white uppercase backdrop-blur-sm">
                 <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-white/80" />
                 {item.title}
               </span>
-              <span className="bg-black/60 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white/45 backdrop-blur-sm">
+              <span className="bg-black/60 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-white/45 uppercase backdrop-blur-sm">
                 {item.descriptor}
               </span>
               {item.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="hidden border border-white/20 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white/40 backdrop-blur-sm sm:block"
+                  className="hidden border border-white/20 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-white/40 uppercase backdrop-blur-sm sm:block"
                 >
                   {tag}
                 </span>
@@ -641,8 +696,8 @@ const CascadeImg = ({
           </div>
 
           {/* Top-right "View Work" chip — hover only */}
-          <div className="absolute right-4 top-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <span className="block bg-white px-3 py-1.5 text-[9px] font-bold tracking-widest uppercase text-black">
+          <div className="absolute top-4 right-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <span className="block bg-white px-3 py-1.5 text-[9px] font-bold tracking-widest text-black uppercase">
               View Work →
             </span>
           </div>
@@ -660,7 +715,10 @@ export const FeaturedCascade = () => (
         <p className="mb-5 text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
           Selected Work
         </p>
-        <TextReveal text="Featured Projects" className="massive-text text-[6vw] leading-none" />
+        <TextReveal
+          text="Featured Projects"
+          className="massive-text text-[6vw] leading-none"
+        />
       </div>
       <Link
         to="/portfolio"
@@ -681,7 +739,10 @@ export const FeaturedCascade = () => (
 
     {/* Mobile CTA */}
     <div className="mt-16 flex justify-center px-8 md:hidden">
-      <Link to="/portfolio" className="btn-industrial inline-flex items-center gap-3">
+      <Link
+        to="/portfolio"
+        className="btn-industrial inline-flex items-center gap-3"
+      >
         View All Projects <span className="text-sm">→</span>
       </Link>
     </div>
@@ -693,11 +754,14 @@ const CIRCLE_RING_TEXT =
   "Creative Direction · Brand Strategy · Videography · Photography · Graphic Design · "
 
 export const CircleStatement = () => (
-  <section className="flex items-center justify-center border-t border-white/10 bg-black py-32 px-4">
-    <div className="relative" style={{ width: "min(640px, 92vw)", height: "min(640px, 92vw)" }}>
+  <section className="flex items-center justify-center border-t border-white/10 bg-black px-4 py-32">
+    <div
+      className="relative"
+      style={{ width: "min(640px, 92vw)", height: "min(640px, 92vw)" }}
+    >
       {/* Rotating ring text via SVG */}
       <motion.svg
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 h-full w-full"
         viewBox="0 0 640 640"
         animate={{ rotate: 360 }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
@@ -716,9 +780,7 @@ export const CircleStatement = () => (
           fontWeight="700"
           style={{ textTransform: "uppercase" }}
         >
-          <textPath href="#ring-path">
-            {(CIRCLE_RING_TEXT).repeat(4)}
-          </textPath>
+          <textPath href="#ring-path">{CIRCLE_RING_TEXT.repeat(4)}</textPath>
         </text>
       </motion.svg>
 
@@ -726,27 +788,39 @@ export const CircleStatement = () => (
       <div className="absolute inset-[6%] rounded-full border border-white/8" />
 
       {/* Top + bottom cross markers */}
-      <span className="absolute top-[8%] left-1/2 -translate-x-1/2 text-white/25 text-xs select-none">+</span>
-      <span className="absolute bottom-[8%] left-1/2 -translate-x-1/2 text-white/25 text-xs select-none">+</span>
+      <span className="absolute top-[8%] left-1/2 -translate-x-1/2 text-xs text-white/25 select-none">
+        +
+      </span>
+      <span className="absolute bottom-[8%] left-1/2 -translate-x-1/2 text-xs text-white/25 select-none">
+        +
+      </span>
 
       {/* Small satellite labels */}
-      <div className="absolute top-[22%] left-1/2 -translate-x-1/2 text-center pointer-events-none">
-        <span className="font-mono text-[8px] font-bold tracking-[0.3em] text-white/25 uppercase">Social Satisfaction</span>
-        <span className="massive-text block text-sm leading-none mt-1">FEEL?</span>
+      <div className="pointer-events-none absolute top-[22%] left-1/2 -translate-x-1/2 text-center">
+        <span className="font-mono text-[8px] font-bold tracking-[0.3em] text-white/25 uppercase">
+          Social Satisfaction
+        </span>
+        <span className="massive-text mt-1 block text-sm leading-none">
+          FEEL?
+        </span>
       </div>
-      <div className="absolute bottom-[22%] left-1/2 -translate-x-1/2 text-center pointer-events-none">
-        <span className="massive-text block text-sm leading-none mb-1">FEEL?</span>
-        <span className="font-mono text-[8px] font-bold tracking-[0.3em] text-white/25 uppercase">Marketing Agency</span>
+      <div className="pointer-events-none absolute bottom-[22%] left-1/2 -translate-x-1/2 text-center">
+        <span className="massive-text mb-1 block text-sm leading-none">
+          FEEL?
+        </span>
+        <span className="font-mono text-[8px] font-bold tracking-[0.3em] text-white/25 uppercase">
+          Marketing Agency
+        </span>
       </div>
 
       {/* Center content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center px-16">
-        <span className="text-white/20 text-[10px] leading-none">◆</span>
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-16 text-center">
+        <span className="text-[10px] leading-none text-white/20">◆</span>
         <TextReveal
           text="WHAT DO YOU WANT PEOPLE TO FEEL?"
-          className="massive-text text-[4.5vw] leading-[0.95] md:text-[3vw] justify-center"
+          className="massive-text justify-center text-[4.5vw] leading-[0.95] md:text-[3vw]"
         />
-        <span className="text-white/20 text-[10px] leading-none">◆</span>
+        <span className="text-[10px] leading-none text-white/20">◆</span>
       </div>
     </div>
   </section>
@@ -755,90 +829,120 @@ export const CircleStatement = () => (
 // ─── Scattered Statement (screenshots 3 & 4 — massive words + floating debris) ─
 export const ScatteredStatement = () => (
   <section className="relative overflow-hidden border-t border-white/10 bg-black">
-
     {/* ── ROW A: "BUILD" ── */}
     <div className="relative border-b border-white/15 px-6 pt-6 pb-0">
       {/* top-right stacked metadata */}
-      <div className="absolute right-6 top-6 text-right pointer-events-none z-10">
-        <span className="font-mono text-[8px] font-bold tracking-widest text-white/20 uppercase leading-relaxed block">
-          Build to last<br />Build to last
+      <div className="pointer-events-none absolute top-6 right-6 z-10 text-right">
+        <span className="block font-mono text-[8px] leading-relaxed font-bold tracking-widest text-white/20 uppercase">
+          Build to last
+          <br />
+          Build to last
         </span>
       </div>
-      <TextReveal text="BUILD" className="massive-text text-[22vw] leading-[0.88]" />
+      <TextReveal
+        text="BUILD"
+        className="massive-text text-[22vw] leading-[0.88]"
+      />
     </div>
 
     {/* ── MIDDLE DEBRIS ZONE A ── */}
     <div className="relative min-h-[28vw] border-b border-white/10">
       {/* top-left small labels */}
-      <div className="absolute left-6 top-5 flex gap-5 pointer-events-none">
-        <span className="font-mono text-[8px] font-bold tracking-widest text-white/18 uppercase">NO</span>
-        <span className="font-mono text-[8px] font-bold tracking-widest text-white/18 uppercase">NO</span>
+      <div className="pointer-events-none absolute top-5 left-6 flex gap-5">
+        <span className="font-mono text-[8px] font-bold tracking-widest text-white/18 uppercase">
+          NO
+        </span>
+        <span className="font-mono text-[8px] font-bold tracking-widest text-white/18 uppercase">
+          NO
+        </span>
       </div>
-      <span className="absolute right-[8%] top-5 font-mono text-[8px] font-bold tracking-widest text-white/18 uppercase pointer-events-none">NO</span>
+      <span className="pointer-events-none absolute top-5 right-[8%] font-mono text-[8px] font-bold tracking-widest text-white/18 uppercase">
+        NO
+      </span>
 
       {/* "BOLD." floating top-right */}
-      <span className="massive-text absolute right-6 top-8 text-[4vw] leading-none text-white/85 pointer-events-none">BOLD.</span>
+      <span className="massive-text pointer-events-none absolute top-8 right-6 text-[4vw] leading-none text-white/85">
+        BOLD.
+      </span>
 
       {/* Center: "Build with intention." + smiley */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-        <span className="text-[11px] font-bold tracking-[0.3em] text-white/50 uppercase block">
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+        <span className="block text-[11px] font-bold tracking-[0.3em] text-white/50 uppercase">
           Build with intention.
         </span>
-        <span className="mt-2 block text-white/30 text-lg">☺</span>
+        <span className="mt-2 block text-lg text-white/30">☺</span>
       </div>
 
       {/* "← ←" arrows — left-centre */}
-      <div className="absolute left-[36%] bottom-5 flex gap-3 pointer-events-none">
+      <div className="pointer-events-none absolute bottom-5 left-[36%] flex gap-3">
         <span className="font-mono text-xl text-white/55">←</span>
         <span className="font-mono text-xl text-white/55">←</span>
       </div>
 
       {/* Bottom-right: agency watermarks + NO SHORTCUTS */}
-      <div className="absolute right-6 bottom-5 text-right pointer-events-none">
-        <span className="font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase block">Social Satisfaction</span>
-        <span className="font-mono text-[12px] font-bold tracking-[0.2em] text-white/55 uppercase block mt-1">NO SHORTCUTS.</span>
-        <span className="font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase block mt-1">Social Satisfaction</span>
+      <div className="pointer-events-none absolute right-6 bottom-5 text-right">
+        <span className="block font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase">
+          Social Satisfaction
+        </span>
+        <span className="mt-1 block font-mono text-[12px] font-bold tracking-[0.2em] text-white/55 uppercase">
+          NO SHORTCUTS.
+        </span>
+        <span className="mt-1 block font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase">
+          Social Satisfaction
+        </span>
       </div>
 
       {/* Bottom-left: "NO STORY" */}
-      <span className="absolute bottom-5 left-6 font-mono text-[11px] font-bold tracking-[0.3em] text-white/40 uppercase pointer-events-none">
+      <span className="pointer-events-none absolute bottom-5 left-6 font-mono text-[11px] font-bold tracking-[0.3em] text-white/40 uppercase">
         NO STORY
       </span>
     </div>
 
     {/* ── ROW B: "WITH" ── */}
-    <div className="border-b border-white/15 px-6 pb-0 pt-0">
-      <TextReveal text="WITH" className="massive-text text-[22vw] leading-[0.88]" delay={0.1} />
+    <div className="border-b border-white/15 px-6 pt-0 pb-0">
+      <TextReveal
+        text="WITH"
+        className="massive-text text-[22vw] leading-[0.88]"
+        delay={0.1}
+      />
     </div>
 
     {/* ── MIDDLE DEBRIS ZONE B ── */}
     <div className="relative min-h-[22vw] border-b border-white/10">
       {/* "← ←" arrows — centre */}
-      <div className="absolute left-[38%] top-1/2 -translate-y-1/2 flex gap-3 pointer-events-none">
+      <div className="pointer-events-none absolute top-1/2 left-[38%] flex -translate-y-1/2 gap-3">
         <span className="font-mono text-xl text-white/50">←</span>
         <span className="font-mono text-xl text-white/50">←</span>
       </div>
 
       {/* top-right: "Social Satisfaction" */}
-      <span className="absolute right-6 top-5 font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase pointer-events-none">
+      <span className="pointer-events-none absolute top-5 right-6 font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase">
         Social Satisfaction
       </span>
 
       {/* "NO RISK." */}
-      <div className="absolute right-6 top-1/2 -translate-y-1/2 text-right pointer-events-none">
-        <span className="font-mono text-[14px] font-bold tracking-[0.2em] text-white/55 uppercase block">NO RISK.</span>
-        <span className="font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase block mt-1">Social Satisfaction</span>
+      <div className="pointer-events-none absolute top-1/2 right-6 -translate-y-1/2 text-right">
+        <span className="block font-mono text-[14px] font-bold tracking-[0.2em] text-white/55 uppercase">
+          NO RISK.
+        </span>
+        <span className="mt-1 block font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase">
+          Social Satisfaction
+        </span>
       </div>
 
       {/* "NO LIMITS." — bottom-left */}
-      <span className="absolute bottom-5 left-6 font-mono text-[11px] font-bold tracking-[0.3em] text-white/40 uppercase pointer-events-none">
+      <span className="pointer-events-none absolute bottom-5 left-6 font-mono text-[11px] font-bold tracking-[0.3em] text-white/40 uppercase">
         NO LIMITS.
       </span>
     </div>
 
     {/* ── ROW C: "PURPOSE." ── */}
-    <div className="px-6 pb-8 pt-0">
-      <TextReveal text="PURPOSE." className="massive-text text-[16vw] leading-[0.88]" delay={0.2} />
+    <div className="px-6 pt-0 pb-8">
+      <TextReveal
+        text="PURPOSE."
+        className="massive-text text-[16vw] leading-[0.88]"
+        delay={0.2}
+      />
     </div>
   </section>
 )
@@ -860,12 +964,12 @@ const TICKER_ITEMS = [
 ]
 
 export const Ticker = () => (
-  <div className="border-t border-b border-white/10 overflow-hidden py-3">
+  <div className="overflow-hidden border-t border-b border-white/10 py-3">
     <div className="marquee-track">
       {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
         <span
           key={i}
-          className="mx-6 text-[10px] font-bold tracking-[0.4em] text-white/40 uppercase whitespace-nowrap"
+          className="mx-6 text-[10px] font-bold tracking-[0.4em] whitespace-nowrap text-white/40 uppercase"
         >
           {item}
         </span>
@@ -998,10 +1102,7 @@ const FeaturedProjectCard = ({
   const isRight = project.align === "right"
 
   return (
-    <section
-      ref={ref}
-      className="border-t border-white/10 px-8 py-32 md:px-16"
-    >
+    <section ref={ref} className="border-t border-white/10 px-8 py-32 md:px-16">
       <div
         className={`mx-auto flex max-w-7xl flex-col items-center gap-12 ${
           isRight ? "md:flex-row-reverse" : "md:flex-row"
@@ -1041,7 +1142,10 @@ const FeaturedProjectCard = ({
             A focused exploration of form, light, and intention. Crafted with
             precision and purpose.
           </p>
-          <Link to="/portfolio" className="btn-industrial mt-2 inline-flex items-center gap-3">
+          <Link
+            to="/portfolio"
+            className="btn-industrial mt-2 inline-flex items-center gap-3"
+          >
             View Project <span className="text-sm">→</span>
           </Link>
         </div>
@@ -1058,7 +1162,7 @@ export const FeaturedProjects = () => {
         <div className="border-b border-white/10 pb-2">
           <TextReveal text="Featured" className="massive-text text-[9vw]" />
         </div>
-        <div className="border-b border-white/10 pb-2 pt-2">
+        <div className="border-b border-white/10 pt-2 pb-2">
           <TextReveal
             text="Projects"
             className="massive-text text-[9vw]"

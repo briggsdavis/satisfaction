@@ -30,7 +30,12 @@ const Home = () => (
       <div
         key={i}
         className="column-line"
-        style={{ left: `${(100 / 6) * i}%`, ['--sweep-delay' as string]: `${i * 0.75}s` } as React.CSSProperties}
+        style={
+          {
+            left: `${(100 / 6) * i}%`,
+            ["--sweep-delay" as string]: `${i * 0.75}s`,
+          } as React.CSSProperties
+        }
       />
     ))}
     <Hero />
@@ -59,7 +64,10 @@ export default function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/portfolio/:category" element={<CategoryPage />} />
-            <Route path="/portfolio/:category/:project" element={<ProjectPage />} />
+            <Route
+              path="/portfolio/:category/:project"
+              element={<ProjectPage />}
+            />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

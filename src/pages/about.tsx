@@ -1,22 +1,40 @@
-import { AnimatePresence, motion, useMotionValue, useScroll, useTransform } from "motion/react"
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useScroll,
+  useTransform,
+} from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
 import { AboutHero } from "../components/about-hero"
 import { useSmoothScroll } from "../components/smooth-scroll"
 
 // Splits text into sentences and blurs each in on scroll
-const BlurInLines = ({ text, className, align }: { text: string; className?: string; align?: string }) => {
+const BlurInLines = ({
+  text,
+  className,
+  align,
+}: {
+  text: string
+  className?: string
+  align?: string
+}) => {
   const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean)
   return (
     <div className={className}>
       {sentences.map((sentence, i) => (
         <motion.p
           key={i}
-          className={`mb-4 text-xl font-light leading-loose text-white/70 ${align ?? ""}`}
+          className={`mb-4 text-xl leading-loose font-light text-white/70 ${align ?? ""}`}
           initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
           whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 1, delay: i * 0.18, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 1,
+            delay: i * 0.18,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           {sentence}
         </motion.p>
@@ -107,11 +125,7 @@ const timeline = [
   },
 ]
 
-const ValueCard = ({
-  value,
-}: {
-  value: (typeof values)[0]
-}) => {
+const ValueCard = ({ value }: { value: (typeof values)[0] }) => {
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -129,7 +143,11 @@ const ValueCard = ({
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay: value.delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: 0.7,
+        delay: value.delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       onClick={() => setIsOpen((v) => !v)}
     >
       {/* Image with parallax */}
@@ -142,7 +160,7 @@ const ValueCard = ({
         />
         {/* Tag overlay */}
         <div className="absolute bottom-3 left-3 z-10">
-          <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white backdrop-blur-sm">
+          <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-white uppercase backdrop-blur-sm">
             <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-white/80" />
             {value.label}
           </span>
@@ -188,7 +206,10 @@ export const About = () => {
         wrapperTopRef.current = rect.top + (smoothY?.get() ?? 0)
       }
       if (horizontalRef.current) {
-        const dist = Math.max(0, horizontalRef.current.scrollWidth - window.innerWidth)
+        const dist = Math.max(
+          0,
+          horizontalRef.current.scrollWidth - window.innerWidth,
+        )
         scrollDistanceRef.current = dist
         setScrollDistance(dist)
       }
@@ -232,7 +253,9 @@ export const About = () => {
           <div className="mt-32 flex justify-end">
             <BlurInLines
               className="about-glow-text max-w-sm text-right"
-              text={'We replace \u201cshoot and share\u201d tactics with performance-driven campaigns. As an end-to-end partner, we manage everything from ideation to execution. This streamlined structure ensures every effort is intentional, cohesive, and designed to drive reservations.'}
+              text={
+                "We replace \u201cshoot and share\u201d tactics with performance-driven campaigns. As an end-to-end partner, we manage everything from ideation to execution. This streamlined structure ensures every effort is intentional, cohesive, and designed to drive reservations."
+              }
               align="text-right"
             />
           </div>
@@ -272,9 +295,12 @@ export const About = () => {
                 className="flex gap-24 px-8"
               >
                 {timeline.map((item) => (
-                  <div key={item.client} className="w-[85vw] flex-shrink-0 md:w-[45vw]">
-                    <div className="border-white/20 border-l-2 pl-8">
-                      <span className="text-white/60 text-sm font-bold tracking-widest">
+                  <div
+                    key={item.client}
+                    className="w-[85vw] flex-shrink-0 md:w-[45vw]"
+                  >
+                    <div className="border-l-2 border-white/20 pl-8">
+                      <span className="text-sm font-bold tracking-widest text-white/60">
                         {item.date}
                       </span>
                       <h4 className="massive-text mt-4 text-5xl font-black tracking-tight uppercase md:text-7xl">
@@ -285,7 +311,7 @@ export const About = () => {
                           {item.campaign}
                         </p>
                       )}
-                      <p className="text-white/60 mt-6 text-xs font-bold tracking-widest uppercase">
+                      <p className="mt-6 text-xs font-bold tracking-widest text-white/60 uppercase">
                         {item.role}
                       </p>
                       <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">

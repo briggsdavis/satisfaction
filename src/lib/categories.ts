@@ -59,7 +59,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Restaurant", "F&B"],
         descriptor: "Campaign Strategy",
         img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=1200",
-        description: "A full seasonal campaign built around a Pittsburgh restaurant's fall menu launch — concepted, shot, and rolled out across social and in-venue digital screens. From moodboard to final delivery, every frame was designed to create craving before a single dish hit the table.",
+        description:
+          "A full seasonal campaign built around a Pittsburgh restaurant's fall menu launch — concepted, shot, and rolled out across social and in-venue digital screens. From moodboard to final delivery, every frame was designed to create craving before a single dish hit the table.",
       },
       {
         slug: "summer-activation",
@@ -67,7 +68,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Beverage", "Seasonal"],
         descriptor: "Art Direction",
         img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=1200",
-        description: "Creative direction and art direction for a regional beverage brand's summer campaign, spanning product photography, lifestyle content, and social rollout. The brief was bold color, natural light, and energy — content that felt alive on every feed.",
+        description:
+          "Creative direction and art direction for a regional beverage brand's summer campaign, spanning product photography, lifestyle content, and social rollout. The brief was bold color, natural light, and energy — content that felt alive on every feed.",
       },
       {
         slug: "brand-rollout",
@@ -75,7 +77,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Retail", "Launch"],
         descriptor: "Visual Strategy",
         img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1200",
-        description: "Visual strategy and rollout direction for a retail brand entering a competitive market. We defined the visual language from scratch — styling, palette, shot structure, and platform-specific formats — delivering a launch suite that felt intentional from day one.",
+        description:
+          "Visual strategy and rollout direction for a retail brand entering a competitive market. We defined the visual language from scratch — styling, palette, shot structure, and platform-specific formats — delivering a launch suite that felt intentional from day one.",
       },
     ],
   },
@@ -111,7 +114,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Food", "Editorial"],
         descriptor: "Commercial",
         img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=1200",
-        description: "A full hero dish series for a multi-location restaurant group, delivering editorial-grade food photography styled and lit to stop the scroll. Shot in a single production day, the library covered signature dishes, seasonal specials, and lifestyle context across every format needed for web, ads, and press.",
+        description:
+          "A full hero dish series for a multi-location restaurant group, delivering editorial-grade food photography styled and lit to stop the scroll. Shot in a single production day, the library covered signature dishes, seasonal specials, and lifestyle context across every format needed for web, ads, and press.",
       },
       {
         slug: "interior-story",
@@ -119,7 +123,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Hospitality", "Lifestyle"],
         descriptor: "Editorial",
         img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=1200",
-        description: "An editorial photography project documenting a newly opened hospitality venue — capturing the architecture, ambiance, and energy that words alone can't convey. The resulting library became the foundation for their website, press kit, and opening week social campaign.",
+        description:
+          "An editorial photography project documenting a newly opened hospitality venue — capturing the architecture, ambiance, and energy that words alone can't convey. The resulting library became the foundation for their website, press kit, and opening week social campaign.",
       },
       {
         slug: "event-recap",
@@ -127,7 +132,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Events", "Social"],
         descriptor: "Event Coverage",
         img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=1200",
-        description: "Full event coverage for a sold-out dining experience, delivering both real-time social content and a polished post-event recap gallery. Fast turnaround, cinematic framing, and a focus on the authentic energy in the room — content that made people who weren't there wish they had been.",
+        description:
+          "Full event coverage for a sold-out dining experience, delivering both real-time social content and a polished post-event recap gallery. Fast turnaround, cinematic framing, and a focus on the authentic energy in the room — content that made people who weren't there wish they had been.",
       },
     ],
   },
@@ -163,7 +169,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Identity", "Logo"],
         descriptor: "Brand Identity",
         img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200",
-        description: "Complete brand identity development for Noire Collective, a luxury hospitality concept launching in Pittsburgh's East End. We built the full mark suite, typographic system, color palette, and brand guidelines from the ground up — a visual identity strong enough to carry the brand across every surface it would ever touch.",
+        description:
+          "Complete brand identity development for Noire Collective, a luxury hospitality concept launching in Pittsburgh's East End. We built the full mark suite, typographic system, color palette, and brand guidelines from the ground up — a visual identity strong enough to carry the brand across every surface it would ever touch.",
       },
       {
         slug: "gather-and-co",
@@ -171,7 +178,8 @@ export const CATEGORIES: Category[] = [
         tags: ["F&B", "Rebrand"],
         descriptor: "Visual System",
         img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=1200",
-        description: "A full rebrand for Gather & Co., a neighbourhood F&B concept that had outgrown its original identity. We rebuilt the visual system top-to-bottom: new logo suite, refreshed color palette, updated typography, and a social look-and-feel system the whole team could execute consistently without a designer in the room.",
+        description:
+          "A full rebrand for Gather & Co., a neighbourhood F&B concept that had outgrown its original identity. We rebuilt the visual system top-to-bottom: new logo suite, refreshed color palette, updated typography, and a social look-and-feel system the whole team could execute consistently without a designer in the room.",
       },
       {
         slug: "east-side-spirits",
@@ -179,7 +187,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Beverage", "Retail"],
         descriptor: "Brand Refresh",
         img: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=1200",
-        description: "Brand refresh for East Side Spirits, a craft beverage retailer repositioning for a premium audience. The project covered logo refinement, a new secondary mark system, updated packaging direction, and retail-ready brand guidelines — giving the team everything they needed to show up with confidence.",
+        description:
+          "Brand refresh for East Side Spirits, a craft beverage retailer repositioning for a premium audience. The project covered logo refinement, a new secondary mark system, updated packaging direction, and retail-ready brand guidelines — giving the team everything they needed to show up with confidence.",
       },
     ],
   },
@@ -196,7 +205,8 @@ export const CATEGORIES: Category[] = [
       "Paid social ads management + boosting strategy",
     ],
     overview: {
-      headline: "Launch content that builds anticipation and drives real action.",
+      headline:
+        "Launch content that builds anticipation and drives real action.",
       description:
         "Promotional design, rollout calendars, paid social strategy, and full launch kits — built around your business goals, not just aesthetics. Every campaign is engineered to create momentum and bring people through the door.",
       problem:
@@ -215,7 +225,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Launch", "F&B"],
         descriptor: "Launch Strategy",
         img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1200",
-        description: "Full grand opening campaign kit for a new F&B concept — covering pre-launch teaser content, opening week promotional graphics, digital screen assets, event collateral, and a coordinated social rollout calendar. Everything was designed to work together, build anticipation, and get people through the door opening night.",
+        description:
+          "Full grand opening campaign kit for a new F&B concept — covering pre-launch teaser content, opening week promotional graphics, digital screen assets, event collateral, and a coordinated social rollout calendar. Everything was designed to work together, build anticipation, and get people through the door opening night.",
       },
       {
         slug: "fall-promo-suite",
@@ -223,7 +234,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Seasonal", "Retail"],
         descriptor: "Campaign Rollout",
         img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200",
-        description: "A complete fall promotional suite for a multi-location retail brand, built to roll out across organic social, paid ads, email, and in-store digital screens. Designed for maximum reusability — one cohesive visual system that could flex across every channel without needing a custom asset for every placement.",
+        description:
+          "A complete fall promotional suite for a multi-location retail brand, built to roll out across organic social, paid ads, email, and in-store digital screens. Designed for maximum reusability — one cohesive visual system that could flex across every channel without needing a custom asset for every placement.",
       },
       {
         slug: "new-menu-reveal",
@@ -231,7 +243,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Restaurant", "Social"],
         descriptor: "Promo Design",
         img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=1200",
-        description: "Promotional design and social campaign for a restaurant's new menu reveal — driving awareness and anticipation in the week leading up to launch. The project included hero food photography direction, promo graphics, Reels content, and a structured posting plan that made the reveal feel like an event worth showing up for.",
+        description:
+          "Promotional design and social campaign for a restaurant's new menu reveal — driving awareness and anticipation in the week leading up to launch. The project included hero food photography direction, promo graphics, Reels content, and a structured posting plan that made the reveal feel like an event worth showing up for.",
       },
     ],
   },
@@ -245,7 +258,7 @@ export const CATEGORIES: Category[] = [
       "Cinematic brand films + commercials",
       "Website hero videos + homepage loops",
       "Professional editing, color correction, and audio cleanup",
-      "Serialized content (Interview series, \"Behind the Menu\")",
+      'Serialized content (Interview series, "Behind the Menu")',
     ],
     overview: {
       headline: "Video that carries the full weight of your brand's story.",
@@ -267,7 +280,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Series", "F&B"],
         descriptor: "Serialized Content",
         img: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1200",
-        description: "A serialized short-form video series for a chef-driven restaurant, taking audiences behind the scenes of the kitchen, sourcing, and the craft behind each dish. Produced monthly, the series built a loyal following, deepened brand trust, and gave the restaurant a consistent reason to show up in the feed every week.",
+        description:
+          "A serialized short-form video series for a chef-driven restaurant, taking audiences behind the scenes of the kitchen, sourcing, and the craft behind each dish. Produced monthly, the series built a loyal following, deepened brand trust, and gave the restaurant a consistent reason to show up in the feed every week.",
       },
       {
         slug: "brand-film",
@@ -275,7 +289,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Commercial", "Cinematic"],
         descriptor: "Brand Film",
         img: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=1200",
-        description: "A cinematic brand film produced for a hospitality group's website and paid social channels — shot over two days, fully color graded, and scored to carry the brand's story from the first frame. Built to anchor the homepage, run as a pre-roll ad, and serve as the definitive visual statement of what the brand stands for.",
+        description:
+          "A cinematic brand film produced for a hospitality group's website and paid social channels — shot over two days, fully color graded, and scored to carry the brand's story from the first frame. Built to anchor the homepage, run as a pre-roll ad, and serve as the definitive visual statement of what the brand stands for.",
       },
       {
         slug: "reel-pack",
@@ -283,7 +298,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Short-Form", "Social"],
         descriptor: "Short-Form",
         img: "https://images.unsplash.com/photo-1536240478700-b869ad10e2c8?auto=format&fit=crop&q=80&w=1200",
-        description: "A monthly short-form Reel production package for a fast-growing F&B brand — capturing, editing, and delivering 8–12 platform-ready Reels per month. Each piece was cut for maximum watch time and edited with trending audio, fast pacing, and on-brand visuals that consistently outperformed the client's static content by 3–5x.",
+        description:
+          "A monthly short-form Reel production package for a fast-growing F&B brand — capturing, editing, and delivering 8–12 platform-ready Reels per month. Each piece was cut for maximum watch time and edited with trending audio, fast pacing, and on-brand visuals that consistently outperformed the client's static content by 3–5x.",
       },
     ],
   },
@@ -319,7 +335,8 @@ export const CATEGORIES: Category[] = [
         tags: ["IG", "TikTok"],
         descriptor: "Content Strategy",
         img: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&q=80&w=1200",
-        description: "Ongoing full-service social media management for a regional F&B brand across Instagram and TikTok — monthly content capture, strategy, scheduling, caption writing, and community management all handled by our team. The result: a consistent, high-quality presence that grew to 40k+ followers in under 12 months without a single paid post.",
+        description:
+          "Ongoing full-service social media management for a regional F&B brand across Instagram and TikTok — monthly content capture, strategy, scheduling, caption writing, and community management all handled by our team. The result: a consistent, high-quality presence that grew to 40k+ followers in under 12 months without a single paid post.",
       },
       {
         slug: "reels-bundle",
@@ -327,7 +344,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Short-Form", "Social"],
         descriptor: "Social Growth",
         img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200",
-        description: "A dedicated short-form content bundle for a brand making its first serious push into Reels — 10 videos shot, edited, and caption-written in one production day. Each Reel was built with a clear hook, platform-native pacing, and a CTA designed to drive either a save, a follow, or a visit.",
+        description:
+          "A dedicated short-form content bundle for a brand making its first serious push into Reels — 10 videos shot, edited, and caption-written in one production day. Each Reel was built with a clear hook, platform-native pacing, and a CTA designed to drive either a save, a follow, or a visit.",
       },
       {
         slug: "launch-campaign",
@@ -335,7 +353,8 @@ export const CATEGORIES: Category[] = [
         tags: ["F&B", "Organic"],
         descriptor: "Community",
         img: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&q=80&w=1200",
-        description: "Organic social launch campaign for a new F&B concept entering a crowded market — strategy, content creation, rollout calendar, and community management for the first 60 days. We built the account from zero to a loyal early audience before a single paid dollar was spent, using content that gave people a reason to care.",
+        description:
+          "Organic social launch campaign for a new F&B concept entering a crowded market — strategy, content creation, rollout calendar, and community management for the first 60 days. We built the account from zero to a loyal early audience before a single paid dollar was spent, using content that gave people a reason to care.",
       },
     ],
   },
@@ -371,7 +390,8 @@ export const CATEGORIES: Category[] = [
         tags: ["IG", "Beverage"],
         descriptor: "Creator Collab",
         img: "https://images.unsplash.com/photo-1542744094-24638eff58bb?auto=format&fit=crop&q=80&w=1200",
-        description: "Influencer collaboration campaign for a beverage brand targeting Pittsburgh's lifestyle and nightlife audience — sourcing, briefing, and managing five local creators across a two-week activation. Full usage rights secured, content repurposed across paid ads and organic, and a performance recap delivered at the end of the campaign.",
+        description:
+          "Influencer collaboration campaign for a beverage brand targeting Pittsburgh's lifestyle and nightlife audience — sourcing, briefing, and managing five local creators across a two-week activation. Full usage rights secured, content repurposed across paid ads and organic, and a performance recap delivered at the end of the campaign.",
       },
       {
         slug: "ugc-pack",
@@ -379,7 +399,8 @@ export const CATEGORIES: Category[] = [
         tags: ["F&B", "Organic"],
         descriptor: "Organic Growth",
         img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=1200",
-        description: "A monthly UGC content bundle for a growing F&B brand — coordinating eight creators per month to deliver authentic, on-brief content ready for organic posting and paid amplification. The program replaced expensive production shoots for evergreen content while maintaining brand consistency and driving stronger engagement than polished studio work.",
+        description:
+          "A monthly UGC content bundle for a growing F&B brand — coordinating eight creators per month to deliver authentic, on-brief content ready for organic posting and paid amplification. The program replaced expensive production shoots for evergreen content while maintaining brand consistency and driving stronger engagement than polished studio work.",
       },
       {
         slug: "campaign-brief",
@@ -387,7 +408,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Lifestyle", "Product"],
         descriptor: "UGC Campaign",
         img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1200",
-        description: "End-to-end UGC campaign management for a lifestyle product launch — building the brief, sourcing creators, managing the relationship, reviewing deliverables, and handling usage rights. The resulting content library gave the brand 30+ pieces of authentic social proof ready to deploy across ads, landing pages, and organic channels.",
+        description:
+          "End-to-end UGC campaign management for a lifestyle product launch — building the brief, sourcing creators, managing the relationship, reviewing deliverables, and handling usage rights. The resulting content library gave the brand 30+ pieces of authentic social proof ready to deploy across ads, landing pages, and organic channels.",
       },
     ],
   },
@@ -423,7 +445,8 @@ export const CATEGORIES: Category[] = [
         tags: ["F&B", "Launch"],
         descriptor: "Grand Opening",
         img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1200",
-        description: "Grand opening strategy and execution for a new restaurant group — six weeks of pre-launch content, opening week event coverage, same-day social delivery, and a full post-event recap package. The opening night sold out before the doors opened, and the social content from the event drove reservations for the following three weeks.",
+        description:
+          "Grand opening strategy and execution for a new restaurant group — six weeks of pre-launch content, opening week event coverage, same-day social delivery, and a full post-event recap package. The opening night sold out before the doors opened, and the social content from the event drove reservations for the following three weeks.",
       },
       {
         slug: "pop-up-event",
@@ -431,7 +454,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Retail", "Activation"],
         descriptor: "Event Strategy",
         img: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=1200",
-        description: "Event marketing and content capture for a retail brand's pop-up activation in Pittsburgh's Strip District — from pre-event promo graphics to live coverage and post-event recap Reels. The activation drove 800+ visitors over two days and generated more organic UGC than any other marketing effort the brand had run.",
+        description:
+          "Event marketing and content capture for a retail brand's pop-up activation in Pittsburgh's Strip District — from pre-event promo graphics to live coverage and post-event recap Reels. The activation drove 800+ visitors over two days and generated more organic UGC than any other marketing effort the brand had run.",
       },
       {
         slug: "soft-launch",
@@ -439,7 +463,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Hospitality", "PR"],
         descriptor: "Launch Rollout",
         img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200",
-        description: "Soft launch content strategy and PR asset production for a boutique hospitality concept opening to an invite-only audience. We created the full pre-launch content calendar, photographed the space for press, and delivered a media kit that landed the brand features in two regional publications before the public opening.",
+        description:
+          "Soft launch content strategy and PR asset production for a boutique hospitality concept opening to an invite-only audience. We created the full pre-launch content calendar, photographed the space for press, and delivered a media kit that landed the brand features in two regional publications before the public opening.",
       },
     ],
   },
@@ -475,7 +500,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Animation", "Brand"],
         descriptor: "Motion Design",
         img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200",
-        description: "Animated logo pack for a hospitality brand — delivering the primary mark, secondary lockup, and icon in transparent, dark, and light versions across multiple animation styles. Each version was produced in the correct specs for social intro cards, website headers, email signatures, and presentation decks.",
+        description:
+          "Animated logo pack for a hospitality brand — delivering the primary mark, secondary lockup, and icon in transparent, dark, and light versions across multiple animation styles. Each version was produced in the correct specs for social intro cards, website headers, email signatures, and presentation decks.",
       },
       {
         slug: "story-templates",
@@ -483,7 +509,8 @@ export const CATEGORIES: Category[] = [
         tags: ["IG", "Social"],
         descriptor: "Animation",
         img: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1200",
-        description: "A set of 12 branded animated story templates for a restaurant group — covering daily specials, event announcements, hours reminders, and promotional formats. Built in CapCut and delivered as editable templates the client's team could update weekly without any design experience, ensuring brand consistency without ongoing agency dependency.",
+        description:
+          "A set of 12 branded animated story templates for a restaurant group — covering daily specials, event announcements, hours reminders, and promotional formats. Built in CapCut and delivered as editable templates the client's team could update weekly without any design experience, ensuring brand consistency without ongoing agency dependency.",
       },
       {
         slug: "promo-series",
@@ -491,7 +518,8 @@ export const CATEGORIES: Category[] = [
         tags: ["Campaign", "Digital"],
         descriptor: "Kinetic",
         img: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&q=80&w=1200",
-        description: "A kinetic typography promo series produced for a seasonal campaign — five animated videos using bold type, brand colors, and motion effects designed to stop the scroll. Delivered in square, vertical, and landscape formats ready for IG feed, Reels, TikTok, and digital screen placement across all venue locations.",
+        description:
+          "A kinetic typography promo series produced for a seasonal campaign — five animated videos using bold type, brand colors, and motion effects designed to stop the scroll. Delivered in square, vertical, and landscape formats ready for IG feed, Reels, TikTok, and digital screen placement across all venue locations.",
       },
     ],
   },

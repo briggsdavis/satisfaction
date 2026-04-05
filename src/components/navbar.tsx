@@ -63,7 +63,7 @@ export const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease }}
-            className="bg-bg fixed inset-0 z-[999] flex flex-col items-center justify-center"
+            className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-bg"
           >
             <nav className="flex flex-col items-center gap-6">
               {[...NAV_LINKS, "Contact"].map((item, i) => (
@@ -88,7 +88,7 @@ export const Navbar = () => {
             <div className="absolute bottom-8 left-8 font-mono text-[8px] font-bold tracking-widest text-white/15 uppercase">
               ← → Creative Direction
             </div>
-            <div className="absolute bottom-8 right-8 font-mono text-[8px] font-bold tracking-widest text-white/15 uppercase">
+            <div className="absolute right-8 bottom-8 font-mono text-[8px] font-bold tracking-widest text-white/15 uppercase">
               Social Satisfaction
             </div>
           </motion.div>

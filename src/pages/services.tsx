@@ -24,7 +24,7 @@ const SERVICES = [
     desc: "Food, lifestyle, and event photography built for brands that demand presence.",
     bullets: [
       "Food and beverage photography (hero dishes, menu items, action shots)",
-      "Lifestyle photography (guests, staff, ambiance, \"vibe\" shots)",
+      'Lifestyle photography (guests, staff, ambiance, "vibe" shots)',
       "Interior / hospitality photography",
       "Event photography + recap coverage",
       "Product photography (retail items, merch, packaged goods)",
@@ -168,14 +168,18 @@ const ServiceCell = ({
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               className="overflow-hidden"
             >
-              <div className="pt-5 space-y-2">
+              <div className="space-y-2 pt-5">
                 {service.bullets.map((bullet, i) => (
                   <motion.li
                     key={i}
                     initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.06, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className={`flex items-start gap-2 text-xs leading-relaxed list-none ${
+                    transition={{
+                      delay: i * 0.06,
+                      duration: 0.35,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className={`flex list-none items-start gap-2 text-xs leading-relaxed ${
                       service.inverted ? "text-black/70" : "text-white/65"
                     }`}
                   >
@@ -193,12 +197,15 @@ const ServiceCell = ({
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: service.bullets.length * 0.06 + 0.1, duration: 0.35 }}
+                transition={{
+                  delay: service.bullets.length * 0.06 + 0.1,
+                  duration: 0.35,
+                }}
                 className="pt-5"
               >
                 <Link
                   to="/portfolio"
-                  className={`text-xs font-bold tracking-[0.2em] underline underline-offset-4 uppercase transition-opacity hover:opacity-60 ${
+                  className={`text-xs font-bold tracking-[0.2em] uppercase underline underline-offset-4 transition-opacity hover:opacity-60 ${
                     service.inverted ? "text-black/60" : "text-white/60"
                   }`}
                 >
@@ -213,7 +220,7 @@ const ServiceCell = ({
       {/* Center — expand toggle */}
       <button
         onClick={() => setIsOpen((v) => !v)}
-        className={`flex items-center justify-center py-8 text-7xl font-thin leading-none transition-opacity hover:opacity-60 ${
+        className={`flex items-center justify-center py-8 text-7xl leading-none font-thin transition-opacity hover:opacity-60 ${
           service.inverted ? "text-black/15" : "text-white/12"
         }`}
         aria-label={isOpen ? `Close ${service.name}` : `Expand ${service.name}`}
@@ -229,7 +236,7 @@ const ServiceCell = ({
 
       {/* Bottom — service name large */}
       <div className="overflow-hidden">
-        <span className="block font-display text-[clamp(2rem,4.5vw,3.5rem)] uppercase leading-[0.85]">
+        <span className="block font-display text-[clamp(2rem,4.5vw,3.5rem)] leading-[0.85] uppercase">
           {service.name}
         </span>
       </div>
@@ -255,7 +262,11 @@ export const Services = () => (
       {[0, 1, 2].map((col) => (
         <div key={col} className="flex flex-1 flex-col">
           {SERVICES.filter((_, i) => i % 3 === col).map((service, row) => (
-            <ServiceCell key={service.name} service={service} index={col + row * 3} />
+            <ServiceCell
+              key={service.name}
+              service={service}
+              index={col + row * 3}
+            />
           ))}
         </div>
       ))}

@@ -122,7 +122,9 @@ const Lightbox = ({
   // Lock body scroll while lightbox is open
   useEffect(() => {
     document.body.style.overflow = "hidden"
-    return () => { document.body.style.overflow = "" }
+    return () => {
+      document.body.style.overflow = ""
+    }
   }, [])
 
   useEffect(() => {
@@ -149,22 +151,30 @@ const Lightbox = ({
         onClick={onClose}
         className="absolute top-6 right-6 z-10 flex items-center gap-2 text-white/40 transition-colors hover:text-white"
       >
-        <span className="font-mono text-[9px] font-bold tracking-widest uppercase">Close</span>
+        <span className="font-mono text-[9px] font-bold tracking-widest uppercase">
+          Close
+        </span>
         <X size={20} />
       </button>
 
       {/* Prev */}
       <button
-        onClick={(e) => { e.stopPropagation(); onPrev() }}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 rounded-none border border-white/20 p-3 text-white/50 transition-colors hover:bg-white hover:text-black md:left-8"
+        onClick={(e) => {
+          e.stopPropagation()
+          onPrev()
+        }}
+        className="absolute top-1/2 left-4 z-10 -translate-y-1/2 rounded-none border border-white/20 p-3 text-white/50 transition-colors hover:bg-white hover:text-black md:left-8"
       >
         <ArrowLeft size={20} />
       </button>
 
       {/* Next */}
       <button
-        onClick={(e) => { e.stopPropagation(); onNext() }}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 rounded-none border border-white/20 p-3 text-white/50 transition-colors hover:bg-white hover:text-black md:right-8"
+        onClick={(e) => {
+          e.stopPropagation()
+          onNext()
+        }}
+        className="absolute top-1/2 right-4 z-10 -translate-y-1/2 rounded-none border border-white/20 p-3 text-white/50 transition-colors hover:bg-white hover:text-black md:right-8"
       >
         <ArrowRight size={20} />
       </button>
@@ -185,7 +195,8 @@ const Lightbox = ({
 
       {/* Counter */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-[9px] font-bold tracking-widest text-white/30 uppercase">
-        {String(index + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}
+        {String(index + 1).padStart(2, "0")} /{" "}
+        {String(images.length).padStart(2, "0")}
       </div>
     </motion.div>
   )
@@ -209,7 +220,10 @@ export const ProjectPage = () => {
   const closeLightbox = useCallback(() => setLightboxIndex(null), [])
   const prevImage = useCallback(() => {
     if (lightboxIndex === null || !project) return
-    setLightboxIndex((lightboxIndex - 1 + project.galleryImages.length) % project.galleryImages.length)
+    setLightboxIndex(
+      (lightboxIndex - 1 + project.galleryImages.length) %
+        project.galleryImages.length,
+    )
   }, [lightboxIndex, project])
   const nextImage = useCallback(() => {
     if (lightboxIndex === null || !project) return
@@ -220,8 +234,14 @@ export const ProjectPage = () => {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <TextReveal text="PROJECT NOT FOUND" className="massive-text text-[8vw]" immediate />
-          <Link to="/" className="btn-industrial mt-8 inline-block">Back Home</Link>
+          <TextReveal
+            text="PROJECT NOT FOUND"
+            className="massive-text text-[8vw]"
+            immediate
+          />
+          <Link to="/" className="btn-industrial mt-8 inline-block">
+            Back Home
+          </Link>
         </div>
       </div>
     )
@@ -230,7 +250,10 @@ export const ProjectPage = () => {
   return (
     <div className="min-h-screen bg-black">
       {/* ── Hero Banner ── */}
-      <div ref={heroRef} className="relative h-[70vh] overflow-hidden md:h-[80vh]">
+      <div
+        ref={heroRef}
+        className="relative h-[70vh] overflow-hidden md:h-[80vh]"
+      >
         <motion.img
           style={{ y: heroImgY }}
           src={project.heroImg}
@@ -241,14 +264,16 @@ export const ProjectPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black" />
 
         {/* Hero decorative elements */}
-        <div className="absolute top-28 right-8 font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase text-right pointer-events-none">
-          Social Satisfaction<br />Case Study
+        <div className="pointer-events-none absolute top-28 right-8 text-right font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase">
+          Social Satisfaction
+          <br />
+          Case Study
         </div>
-        <div className="absolute bottom-8 left-8 flex gap-3 pointer-events-none">
+        <div className="pointer-events-none absolute bottom-8 left-8 flex gap-3">
           <span className="font-mono text-xl text-white/30">←</span>
           <span className="font-mono text-xl text-white/30">←</span>
         </div>
-        <div className="absolute bottom-8 right-8 font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase pointer-events-none">
+        <div className="pointer-events-none absolute right-8 bottom-8 font-mono text-[8px] font-bold tracking-widest text-white/25 uppercase">
           {project.year}
         </div>
       </div>
@@ -291,8 +316,8 @@ export const ProjectPage = () => {
             </span>
             {/* Decorative */}
             <div className="mt-4 flex items-center gap-3">
-              <span className="font-mono text-white/25 text-sm">←</span>
-              <span className="font-mono text-white/25 text-sm">←</span>
+              <span className="font-mono text-sm text-white/25">←</span>
+              <span className="font-mono text-sm text-white/25">←</span>
               <span className="font-mono text-[8px] font-bold tracking-widest text-white/15 uppercase">
                 No shortcuts.
               </span>
@@ -336,7 +361,11 @@ export const ProjectPage = () => {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-150px" }}
-              transition={{ duration: 0.7, delay: (i % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.7,
+                delay: (i % 3) * 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               onClick={() => openLightbox(i)}
             >
               <img
@@ -356,7 +385,7 @@ export const ProjectPage = () => {
               </div>
 
               {/* Image number */}
-              <span className="absolute bottom-3 right-3 font-mono text-[8px] font-bold text-white/30">
+              <span className="absolute right-3 bottom-3 font-mono text-[8px] font-bold text-white/30">
                 0{i + 1}
               </span>
             </motion.div>
@@ -395,13 +424,17 @@ export const ProjectPage = () => {
           </div>
           <div className="hidden items-center gap-2 md:flex">
             <button
-              onClick={() => galleryRef.current?.scrollBy({ left: -400, behavior: "smooth" })}
+              onClick={() =>
+                galleryRef.current?.scrollBy({ left: -400, behavior: "smooth" })
+              }
               className="border border-white/20 p-2 text-white/50 transition-colors hover:bg-white hover:text-black"
             >
               <ArrowLeft size={16} />
             </button>
             <button
-              onClick={() => galleryRef.current?.scrollBy({ left: 400, behavior: "smooth" })}
+              onClick={() =>
+                galleryRef.current?.scrollBy({ left: 400, behavior: "smooth" })
+              }
               className="border border-white/20 p-2 text-white/50 transition-colors hover:bg-white hover:text-black"
             >
               <ArrowRight size={16} />
@@ -422,7 +455,11 @@ export const ProjectPage = () => {
               initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-150px" }}
-              transition={{ duration: 0.7, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.7,
+                delay: i * 0.05,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               onClick={() => openLightbox(i)}
             >
               <img

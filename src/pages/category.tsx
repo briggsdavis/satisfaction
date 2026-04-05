@@ -1,7 +1,7 @@
 import { motion } from "motion/react"
 import { Link, useParams } from "react-router"
-import { CATEGORIES, type Project } from "../lib/categories"
 import { TextReveal } from "../components/text-reveal"
+import { CATEGORIES, type Project } from "../lib/categories"
 
 // ─── Project card — same structure as CategoryCard, no bullet expansion ───────
 const ProjectCard = ({
@@ -16,49 +16,49 @@ const ProjectCard = ({
   index?: number
 }) => (
   <Link to={`/portfolio/${categorySlug}/${project.slug}`} className="block">
-  <motion.div
-    className={`group relative overflow-hidden ${className}`}
-    initial={{ opacity: 0, y: 24 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-150px" }}
-    transition={{
-      duration: 0.7,
-      delay: index * 0.08,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-    }}
-  >
-    {/* Background image */}
-    <img
-      src={project.img}
-      alt={project.title}
-      loading="lazy"
-      referrerPolicy="no-referrer"
-      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-    />
+    <motion.div
+      className={`group relative overflow-hidden ${className}`}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-150px" }}
+      transition={{
+        duration: 0.7,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+      }}
+    >
+      {/* Background image */}
+      <img
+        src={project.img}
+        alt={project.title}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+      />
 
-    {/* Permanent gradient from bottom */}
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
+      {/* Permanent gradient from bottom */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
 
-    {/* Bottom-left overlay — identical pill language to portfolio cards */}
-    <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-      <div className="flex items-center gap-2">
-        <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white backdrop-blur-sm">
-          <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-white/80" />
-          {project.title}
-        </span>
-        <span className="bg-black/60 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white/45 backdrop-blur-sm">
-          {project.descriptor}
+      {/* Bottom-left overlay — identical pill language to portfolio cards */}
+      <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
+        <div className="flex items-center gap-2">
+          <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-white uppercase backdrop-blur-sm">
+            <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-white/80" />
+            {project.title}
+          </span>
+          <span className="bg-black/60 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-white/45 uppercase backdrop-blur-sm">
+            {project.descriptor}
+          </span>
+        </div>
+      </div>
+
+      {/* Top-right CTA chip — appears on hover */}
+      <div className="absolute top-5 right-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <span className="block bg-white px-3 py-1.5 text-[9px] font-bold tracking-widest text-black uppercase">
+          View Work →
         </span>
       </div>
-    </div>
-
-    {/* Top-right CTA chip — appears on hover */}
-    <div className="absolute right-5 top-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-      <span className="block bg-white px-3 py-1.5 text-[9px] font-bold tracking-widest uppercase text-black">
-        View Work →
-      </span>
-    </div>
-  </motion.div>
+    </motion.div>
   </Link>
 )
 
@@ -71,7 +71,11 @@ export const CategoryPage = () => {
   if (!category) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-8">
-        <TextReveal text="NOT FOUND" className="massive-text text-[8vw]" immediate />
+        <TextReveal
+          text="NOT FOUND"
+          className="massive-text text-[8vw]"
+          immediate
+        />
         <Link to="/portfolio" className="btn-industrial">
           ← Back to Portfolio
         </Link>
@@ -87,7 +91,7 @@ export const CategoryPage = () => {
       <section className="border-b border-white/10 px-8 pb-16 md:px-16">
         <Link
           to="/portfolio"
-          className="mb-6 block text-[9px] font-bold tracking-[0.4em] uppercase text-white/30 transition-colors hover:text-white"
+          className="mb-6 block text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase transition-colors hover:text-white"
         >
           ← Portfolio
         </Link>
@@ -101,7 +105,7 @@ export const CategoryPage = () => {
       <section className="border-b border-white/10 px-8 py-20 md:px-16">
         {/* Top row: headline + description — uses same 4-col grid so description aligns with Execution below */}
         <div className="mb-20 grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-8">
-          <h2 className="text-3xl font-bold leading-[1.15] tracking-tight md:col-span-2 md:text-4xl">
+          <h2 className="text-3xl leading-[1.15] font-bold tracking-tight md:col-span-2 md:text-4xl">
             {category.overview.headline}
           </h2>
           <p className="text-base leading-relaxed text-white/55 md:col-span-2 md:text-lg">
@@ -120,7 +124,7 @@ export const CategoryPage = () => {
             ] as const
           ).map(({ label, body }) => (
             <div key={label}>
-              <span className="mb-5 block text-[9px] font-bold tracking-[0.4em] uppercase text-white/35">
+              <span className="mb-5 block text-[9px] font-bold tracking-[0.4em] text-white/35 uppercase">
                 {label}
               </span>
               <p className="text-sm leading-relaxed text-white/55">{body}</p>
@@ -131,16 +135,29 @@ export const CategoryPage = () => {
 
       {/* Project grid — px-8 + gap-8 matches portfolio page exactly */}
       <div className="flex flex-col gap-8 px-4 py-8 md:px-8">
-
         {/* Row 1 — full width */}
-        <ProjectCard project={p0} categorySlug={category.slug} className="h-[62vh] md:h-[68vh]" index={0} />
+        <ProjectCard
+          project={p0}
+          categorySlug={category.slug}
+          className="h-[62vh] md:h-[68vh]"
+          index={0}
+        />
 
         {/* Row 2 — 2 columns */}
         <div className="flex flex-col gap-8 md:flex-row">
-          <ProjectCard project={p1} categorySlug={category.slug} className="h-[72vh] flex-1" index={1} />
-          <ProjectCard project={p2} categorySlug={category.slug} className="h-[72vh] flex-1" index={2} />
+          <ProjectCard
+            project={p1}
+            categorySlug={category.slug}
+            className="h-[72vh] flex-1"
+            index={1}
+          />
+          <ProjectCard
+            project={p2}
+            categorySlug={category.slug}
+            className="h-[72vh] flex-1"
+            index={2}
+          />
         </div>
-
       </div>
 
       {/* Bottom nav */}

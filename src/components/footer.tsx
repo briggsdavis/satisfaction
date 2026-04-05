@@ -4,7 +4,10 @@ const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://instagram.com/socialsatisfaction" },
   { label: "Facebook", href: "https://www.facebook.com/socialsatisfaction" },
   { label: "Twitter", href: "https://twitter.com/socialsatisfaction" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/company/socialsatisfaction" },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/socialsatisfaction",
+  },
   { label: "YouTube", href: "https://www.youtube.com/@socialsatisfaction" },
 ]
 
@@ -68,7 +71,9 @@ export const Footer = () => {
           <h4 className="text-[10px] font-bold tracking-[0.3em] text-white/40 uppercase">
             Contact
           </h4>
-          <p className="text-sm font-light tracking-wide text-white/70">info@socialsatisfaction.com</p>
+          <p className="text-sm font-light tracking-wide text-white/70">
+            info@socialsatisfaction.com
+          </p>
           <p className="text-sm text-white/40">Marketing Agency</p>
           <Link to="/contact" className="btn-industrial-sm mt-4 inline-block">
             Start a Project

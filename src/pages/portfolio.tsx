@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 import { Link } from "react-router"
-import { CATEGORIES, type Category } from "../lib/categories"
 import { TextReveal } from "../components/text-reveal"
+import { CATEGORIES, type Category } from "../lib/categories"
 
 // ─── Single category image card ───────────────────────────────────────────────
 const CategoryCard = ({
@@ -56,9 +56,11 @@ const CategoryCard = ({
                       duration: 0.3,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="flex items-start gap-2.5 list-none text-xs leading-relaxed text-white/70"
+                    className="flex list-none items-start gap-2.5 text-xs leading-relaxed text-white/70"
                   >
-                    <span className="mt-[3px] shrink-0 text-white/30 text-[10px]">—</span>
+                    <span className="mt-[3px] shrink-0 text-[10px] text-white/30">
+                      —
+                    </span>
                     {bullet}
                   </motion.li>
                 ))}
@@ -69,19 +71,19 @@ const CategoryCard = ({
 
         {/* Tag pills */}
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white backdrop-blur-sm">
+          <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-white uppercase backdrop-blur-sm">
             <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-white/80" />
             {category.name}
           </span>
-          <span className="bg-black/60 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white/45 backdrop-blur-sm">
+          <span className="bg-black/60 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] text-white/45 uppercase backdrop-blur-sm">
             Portfolio
           </span>
         </div>
       </div>
 
       {/* Top-right CTA chip — appears on hover */}
-      <div className="absolute right-5 top-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <span className="block bg-white px-3 py-1.5 text-[9px] font-bold tracking-widest uppercase text-black">
+      <div className="absolute top-5 right-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <span className="block bg-white px-3 py-1.5 text-[9px] font-bold tracking-widest text-black uppercase">
           View Work →
         </span>
       </div>
@@ -106,7 +108,6 @@ export const Portfolio = () => (
 
     {/* Image grid — px-8 matches navbar margin; gap-8 between every image */}
     <div className="flex flex-col gap-8 px-4 py-8 md:px-8">
-
       {/* Row 1 — full width */}
       <CategoryCard category={CATEGORIES[0]} className="h-[62vh] md:h-[68vh]" />
 
@@ -133,7 +134,6 @@ export const Portfolio = () => (
         <CategoryCard category={CATEGORIES[7]} className="h-[72vh] flex-1" />
         <CategoryCard category={CATEGORIES[8]} className="h-[72vh] flex-1" />
       </div>
-
     </div>
   </div>
 )
