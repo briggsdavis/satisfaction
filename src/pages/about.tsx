@@ -204,7 +204,7 @@ export const About = () => {
             className="flex h-screen flex-col overflow-hidden"
           >
             {/* Compact header — 50% less padding than before */}
-            <div className="flex-shrink-0 border-b border-white/10 px-8 pt-6 pb-3">
+            <div className="flex-shrink-0 border-b border-white/10 px-8 pt-3 pb-1.5">
               <h2 className="text-[10px] font-bold tracking-widest text-white/40 uppercase">
                 PORTFOLIO
               </h2>
