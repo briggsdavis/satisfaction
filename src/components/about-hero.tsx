@@ -125,37 +125,37 @@ const marqueeText = Array(8)
 const BorderMarquee = ({ opacity }: { opacity: ReturnType<typeof useTransform<number, number>> }) => {
   return (
     <motion.div className="pointer-events-none absolute inset-0" style={{ opacity }}>
-      {/* Bottom border — full width, sits on top of side borders at corners */}
-      <div className="absolute bottom-0 left-0 z-10 h-[50px] w-full overflow-hidden">
+      {/* Bottom border — inset by side border widths, sits on top at corners */}
+      <div className="absolute bottom-0 left-[28px] right-[28px] z-10 h-[28px] overflow-hidden">
         <div className="animate-marquee-horizontal flex whitespace-nowrap">
-          <span className="massive-text text-[16px] leading-[50px] tracking-[0.3em] text-white/30 uppercase">
+          <span className="massive-text text-[11px] leading-[28px] tracking-[0.3em] text-white/30 uppercase">
             {marqueeText}
           </span>
-          <span className="massive-text text-[16px] leading-[50px] tracking-[0.3em] text-white/30 uppercase">
+          <span className="massive-text text-[11px] leading-[28px] tracking-[0.3em] text-white/30 uppercase">
             {marqueeText}
           </span>
         </div>
       </div>
 
       {/* Left border — stops at bottom border */}
-      <div className="absolute top-0 left-0 bottom-[50px] w-[50px] overflow-hidden" style={{ writingMode: "vertical-lr", transform: "rotate(180deg)" }}>
+      <div className="absolute top-0 left-0 bottom-[28px] w-[28px] overflow-hidden" style={{ writingMode: "vertical-lr", transform: "rotate(180deg)" }}>
         <div className="animate-marquee-vertical-reverse flex h-max flex-col whitespace-nowrap">
-          <span className="massive-text text-[16px] tracking-[0.3em] text-white/30 uppercase">
+          <span className="massive-text text-[11px] tracking-[0.3em] text-white/30 uppercase">
             {marqueeText}
           </span>
-          <span className="massive-text text-[16px] tracking-[0.3em] text-white/30 uppercase">
+          <span className="massive-text text-[11px] tracking-[0.3em] text-white/30 uppercase">
             {marqueeText}
           </span>
         </div>
       </div>
 
       {/* Right border — stops at bottom border */}
-      <div className="absolute top-0 right-0 bottom-[50px] w-[50px] overflow-hidden">
+      <div className="absolute top-0 right-0 bottom-[28px] w-[28px] overflow-hidden">
         <div className="animate-marquee-vertical-reverse flex h-max flex-col whitespace-nowrap" style={{ writingMode: "vertical-rl" }}>
-          <span className="massive-text text-[16px] tracking-[0.3em] text-white/30 uppercase">
+          <span className="massive-text text-[11px] tracking-[0.3em] text-white/30 uppercase">
             {marqueeText}
           </span>
-          <span className="massive-text text-[16px] tracking-[0.3em] text-white/30 uppercase">
+          <span className="massive-text text-[11px] tracking-[0.3em] text-white/30 uppercase">
             {marqueeText}
           </span>
         </div>

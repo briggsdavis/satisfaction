@@ -85,7 +85,8 @@ export const About = () => {
       }
     }
 
-    requestAnimationFrame(measure)
+    // Double-RAF ensures the hero section above has finished setting its height
+    requestAnimationFrame(() => requestAnimationFrame(measure))
     window.addEventListener("resize", measure)
     return () => window.removeEventListener("resize", measure)
   }, [smoothY])
@@ -116,21 +117,21 @@ export const About = () => {
       <div className="mb-32 px-8 md:px-16 lg:px-24">
         {/* Paragraph 1 — Left aligned */}
         <div className="flex justify-start">
-          <DeBlurText as="p" className="about-glow-text max-w-md text-lg leading-relaxed text-white/70 font-light">
+          <DeBlurText as="p" noDisplay className="about-glow-text max-w-xs text-sm leading-relaxed text-white/70 font-light">
             Social Satisfaction, founded by Devon Colebank, transforms hospitality and lifestyle brands through cultural storytelling. We blend nostalgia with modern innovation to create resonant identities that bridge the gap between trend-forward messaging and striking visuals.
           </DeBlurText>
         </div>
 
         {/* Paragraph 2 — Right aligned, further down */}
         <div className="mt-32 flex justify-end">
-          <DeBlurText as="p" className="about-glow-text max-w-md text-lg leading-relaxed text-white/70 font-light">
+          <DeBlurText as="p" noDisplay className="about-glow-text max-w-xs text-sm leading-relaxed text-white/70 font-light">
             We replace &ldquo;shoot and share&rdquo; tactics with performance-driven campaigns. As an end-to-end partner, we manage everything from ideation to execution. This streamlined structure ensures every effort is intentional, cohesive, and designed to drive reservations.
           </DeBlurText>
         </div>
 
         {/* Paragraph 3 — Center aligned, further down */}
         <div className="mt-32 flex justify-center">
-          <DeBlurText as="p" className="about-glow-text max-w-md text-lg leading-relaxed text-white/70 font-light text-center">
+          <DeBlurText as="p" noDisplay className="about-glow-text max-w-xs text-sm leading-relaxed text-white/70 font-light text-center">
             By integrating strategy with internal production, we eliminate fragmented communication and multiple vendors. Every piece of content serves a business objective. The result is a consistent, optimized rollout that delivers measurable brand loyalty.
           </DeBlurText>
         </div>

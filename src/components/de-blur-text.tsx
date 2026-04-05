@@ -6,12 +6,14 @@ interface DeBlurTextProps {
   children: React.ReactNode
   className?: string
   as?: "h1" | "h2" | "h3" | "p" | "span"
+  noDisplay?: boolean
 }
 
 export const DeBlurText = ({
   children,
   className,
   as: Component = "h2",
+  noDisplay = false,
 }: DeBlurTextProps) => {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({
@@ -33,7 +35,7 @@ export const DeBlurText = ({
       }}
       className={cn("will-change-[filter,opacity,transform]", className)}
     >
-      <Component className="massive-text">{children}</Component>
+      <Component className={noDisplay ? undefined : "massive-text"}>{children}</Component>
     </motion.div>
   )
 }
