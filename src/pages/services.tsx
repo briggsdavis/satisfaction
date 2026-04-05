@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
+import { Link } from "react-router"
 import { TextReveal } from "../components/text-reveal"
 
 const SERVICES = [
@@ -189,6 +190,21 @@ const ServiceCell = ({
                   </motion.li>
                 ))}
               </div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: service.bullets.length * 0.06 + 0.1, duration: 0.35 }}
+                className="pt-5"
+              >
+                <Link
+                  to="/portfolio"
+                  className={`text-xs font-bold tracking-[0.2em] underline underline-offset-4 uppercase transition-opacity hover:opacity-60 ${
+                    service.inverted ? "text-black/60" : "text-white/60"
+                  }`}
+                >
+                  CR Portfolio
+                </Link>
+              </motion.div>
             </motion.ul>
           )}
         </AnimatePresence>

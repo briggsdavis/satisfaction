@@ -653,37 +653,37 @@ const CascadeImg = ({
 }
 
 export const FeaturedCascade = () => (
-  <section className="border-t border-white/10 bg-black px-8 pt-32 pb-64 md:px-16">
-    <div className="mx-auto max-w-7xl">
-      {/* Header */}
-      <div className="mb-20 flex items-end justify-between">
-        <div>
-          <p className="mb-5 text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
-            Selected Work
-          </p>
-          <TextReveal text="Featured Projects" className="massive-text text-[6vw] leading-none" />
-        </div>
-        <Link
-          to="/portfolio"
-          className="btn-industrial-sm hidden items-center gap-2 md:inline-flex"
-        >
-          View All <span>→</span>
-        </Link>
+  <section className="border-t border-white/10 bg-black pt-32 pb-64">
+    {/* Header — px-8 matches nav padding so View All right-edge aligns with Contact */}
+    <div className="mb-20 flex items-end justify-between px-8">
+      <div>
+        <p className="mb-5 text-[9px] font-bold tracking-[0.4em] text-white/30 uppercase">
+          Selected Work
+        </p>
+        <TextReveal text="Featured Projects" className="massive-text text-[6vw] leading-none" />
       </div>
+      <Link
+        to="/portfolio"
+        className="btn-industrial-sm hidden items-center gap-2 md:inline-flex"
+      >
+        View All <span>→</span>
+      </Link>
+    </div>
 
-      {/* Cascade */}
+    {/* Cascade */}
+    <div className="px-8 md:px-16">
       <div className="flex items-start gap-5 md:gap-8">
         {CASCADE_ITEMS.map((item, i) => (
           <CascadeImg key={i} item={item} index={i} />
         ))}
       </div>
+    </div>
 
-      {/* Mobile CTA */}
-      <div className="mt-16 flex justify-center md:hidden">
-        <Link to="/portfolio" className="btn-industrial inline-flex items-center gap-3">
-          View All Projects <span className="text-sm">→</span>
-        </Link>
-      </div>
+    {/* Mobile CTA */}
+    <div className="mt-16 flex justify-center px-8 md:hidden">
+      <Link to="/portfolio" className="btn-industrial inline-flex items-center gap-3">
+        View All Projects <span className="text-sm">→</span>
+      </Link>
     </div>
   </section>
 )
