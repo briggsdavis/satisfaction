@@ -60,6 +60,10 @@
     @apply bg-white text-black;
   }
 
+  .btn-industrial-sm {
+    @apply rounded-none border border-white/40 bg-transparent px-5 py-2 text-[10px] font-bold tracking-[0.25em] uppercase transition-all hover:bg-white hover:text-black;
+  }
+
   .massive-text {
     @apply font-display leading-[0.85] tracking-normal uppercase transition-opacity duration-400 ease-in-out;
   }

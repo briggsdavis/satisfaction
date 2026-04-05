@@ -329,8 +329,8 @@ export const BrandsCarousel = () => {
                   className="relative h-full w-9 shrink-0"
                   style={{ transform: skewTransform }}
                 >
-                  <div className="absolute inset-y-0 w-px bg-white/[0.13]" style={{ left: "8px" }} />
-                  <div className="absolute inset-y-0 w-px bg-white/[0.13]" style={{ left: "24px" }} />
+                  <div className="absolute inset-y-0 w-px bg-white/[0.35]" style={{ left: "8px" }} />
+                  <div className="absolute inset-y-0 w-px bg-white/[0.35]" style={{ left: "24px" }} />
                 </motion.div>
               </div>
             ))}
@@ -348,8 +348,8 @@ export const BrandsCarousel = () => {
                   className="relative h-full w-9 shrink-0"
                   style={{ transform: skewTransform }}
                 >
-                  <div className="absolute inset-y-0 w-px bg-white/[0.13]" style={{ left: "8px" }} />
-                  <div className="absolute inset-y-0 w-px bg-white/[0.13]" style={{ left: "24px" }} />
+                  <div className="absolute inset-y-0 w-px bg-white/[0.35]" style={{ left: "8px" }} />
+                  <div className="absolute inset-y-0 w-px bg-white/[0.35]" style={{ left: "24px" }} />
                 </motion.div>
               </div>
             ))}
@@ -665,9 +665,9 @@ export const FeaturedCascade = () => (
         </div>
         <Link
           to="/portfolio"
-          className="btn-industrial hidden items-center gap-3 md:inline-flex"
+          className="btn-industrial-sm hidden items-center gap-2 md:inline-flex"
         >
-          View All <span className="text-sm">→</span>
+          View All <span>→</span>
         </Link>
       </div>
 

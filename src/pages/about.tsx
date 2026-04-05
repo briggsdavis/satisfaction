@@ -1,8 +1,28 @@
 import { AnimatePresence, motion, useMotionValue, useTransform } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import { AboutHero } from "../components/about-hero"
-import { DeBlurText } from "../components/de-blur-text"
 import { useSmoothScroll } from "../components/smooth-scroll"
+
+// Splits text into sentences and blurs each in on scroll
+const BlurInLines = ({ text, className, align }: { text: string; className?: string; align?: string }) => {
+  const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean)
+  return (
+    <div className={className}>
+      {sentences.map((sentence, i) => (
+        <motion.p
+          key={i}
+          className={`mb-4 text-xl font-light leading-loose text-white/70 ${align ?? ""}`}
+          initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
+          whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 1, delay: i * 0.18, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {sentence}
+        </motion.p>
+      ))}
+    </div>
+  )
+}
 
 const values = [
   {
@@ -149,22 +169,27 @@ export const About = () => {
       <AboutHero />
 
       <div className="pt-24">
-        {/* Three staggered paragraphs */}
+        {/* Three staggered paragraphs — line-by-line blur-in */}
         <div className="mb-32 px-8 md:px-16 lg:px-24">
           <div className="flex justify-start">
-            <DeBlurText as="p" noDisplay className="about-glow-text max-w-xs text-sm leading-relaxed text-white/70 font-light">
-              Social Satisfaction, founded by Devon Colebank, transforms hospitality and lifestyle brands through cultural storytelling. We blend nostalgia with modern innovation to create resonant identities that bridge the gap between trend-forward messaging and striking visuals.
-            </DeBlurText>
+            <BlurInLines
+              className="about-glow-text max-w-sm"
+              text="Social Satisfaction, founded by Devon Colebank, transforms hospitality and lifestyle brands through cultural storytelling. We blend nostalgia with modern innovation to create resonant identities that bridge the gap between trend-forward messaging and striking visuals."
+            />
           </div>
           <div className="mt-32 flex justify-end">
-            <DeBlurText as="p" noDisplay className="about-glow-text max-w-xs text-sm leading-relaxed text-white/70 font-light">
-              We replace &ldquo;shoot and share&rdquo; tactics with performance-driven campaigns. As an end-to-end partner, we manage everything from ideation to execution. This streamlined structure ensures every effort is intentional, cohesive, and designed to drive reservations.
-            </DeBlurText>
+            <BlurInLines
+              className="about-glow-text max-w-sm text-right"
+              text={'We replace \u201cshoot and share\u201d tactics with performance-driven campaigns. As an end-to-end partner, we manage everything from ideation to execution. This streamlined structure ensures every effort is intentional, cohesive, and designed to drive reservations.'}
+              align="text-right"
+            />
           </div>
           <div className="mt-32 flex justify-center">
-            <DeBlurText as="p" noDisplay className="about-glow-text max-w-xs text-sm leading-relaxed text-white/70 font-light text-center">
-              By integrating strategy with internal production, we eliminate fragmented communication and multiple vendors. Every piece of content serves a business objective. The result is a consistent, optimized rollout that delivers measurable brand loyalty.
-            </DeBlurText>
+            <BlurInLines
+              className="about-glow-text max-w-sm"
+              text="By integrating strategy with internal production, we eliminate fragmented communication and multiple vendors. Every piece of content serves a business objective. The result is a consistent, optimized rollout that delivers measurable brand loyalty."
+              align="text-center"
+            />
           </div>
         </div>
 
@@ -235,16 +260,20 @@ export const About = () => {
                 transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
                 onClick={() => setActiveValue(label)}
               >
-                <div className="aspect-[2/3] w-full overflow-hidden">
+                <div className="relative aspect-[2/3] w-full overflow-hidden">
                   <img
                     src={img}
                     alt={label}
                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                   />
+                  {/* Tag overlay — matches portfolio project card style */}
+                  <div className="absolute bottom-3 left-3">
+                    <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-[9px] font-bold tracking-[0.22em] uppercase text-white backdrop-blur-sm">
+                      <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-white/80" />
+                      {label}
+                    </span>
+                  </div>
                 </div>
-                <p className="mt-3 text-[10px] font-bold tracking-[0.3em] text-white/50 uppercase">
-                  {label}
-                </p>
               </motion.button>
             ))}
           </div>

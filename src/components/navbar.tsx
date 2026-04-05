@@ -40,7 +40,7 @@ export const Navbar = () => {
         {/* Desktop CTA */}
         <Link
           to="/contact"
-          className="btn-industrial hidden justify-self-end md:inline-flex"
+          className="btn-industrial-sm hidden justify-self-end md:inline-flex"
         >
           Contact
         </Link>
