@@ -25,6 +25,14 @@ import { Services } from "./pages/services"
 
 const Home = () => (
   <>
+    {/* Column lines — only on the landing page */}
+    {[...Array(7)].map((_, i) => (
+      <div
+        key={i}
+        className="column-line"
+        style={{ left: `${(100 / 6) * i}%`, ['--sweep-delay' as string]: `${i * 0.75}s` } as React.CSSProperties}
+      />
+    ))}
     <Hero />
     <StatsGrid />
     <BrandsCarousel />
@@ -40,14 +48,6 @@ export default function App() {
   return (
     <Router>
       <CustomCursor />
-      {/* Column Lines — z-[1] keeps them above the background but below page content (z-[2]) */}
-      {[...Array(7)].map((_, i) => (
-        <div
-          key={i}
-          className="column-line"
-          style={{ left: `${(100 / 6) * i}%`, ['--sweep-delay' as string]: `${i * 0.75}s` } as React.CSSProperties}
-        />
-      ))}
 
       <Navbar />
 

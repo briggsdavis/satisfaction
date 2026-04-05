@@ -2,49 +2,62 @@ import { motion, useMotionValue, useTransform } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import { useSmoothScroll } from "./smooth-scroll"
 
-const marqueeText = Array(8)
+// Ends with separator so the seam between two copies is identical to all other gaps
+const marqueeText = Array(10)
   .fill("SOCIAL SATISFACTION")
-  .join(" \u2022 ")
-  .concat(" \u2022 ")
+  .join("  \u00B7  ")
+  .concat("  \u00B7  ")
+
+const spanClass = "massive-text text-[11px] tracking-[0.25em] text-white/30 uppercase whitespace-nowrap"
 
 const BorderMarquee = ({ opacity }: { opacity: ReturnType<typeof useTransform<number, number>> }) => {
   return (
     <motion.div className="pointer-events-none absolute inset-0" style={{ opacity }}>
-      {/* Bottom border — inset by side border widths */}
+
+      {/* Bottom — horizontal, inset so corners don't overlap */}
       <div className="absolute bottom-0 left-[28px] right-[28px] z-10 h-[28px] overflow-hidden">
-        <div className="animate-marquee-horizontal flex whitespace-nowrap">
-          <span className="massive-text text-[11px] leading-[28px] tracking-[0.3em] text-white/30 uppercase">
-            {marqueeText}
-          </span>
-          <span className="massive-text text-[11px] leading-[28px] tracking-[0.3em] text-white/30 uppercase">
-            {marqueeText}
-          </span>
-        </div>
+        <motion.div
+          className="flex"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ repeat: Infinity, repeatType: "loop", duration: 40, ease: "linear" }}
+        >
+          <span className={`${spanClass} leading-[28px]`}>{marqueeText}</span>
+          <span className={`${spanClass} leading-[28px]`} aria-hidden>{marqueeText}</span>
+        </motion.div>
       </div>
 
-      {/* Left border — stops at bottom border */}
-      <div className="absolute top-0 left-0 bottom-[28px] w-[28px] overflow-hidden" style={{ writingMode: "vertical-lr", transform: "rotate(180deg)" }}>
-        <div className="animate-marquee-vertical-reverse flex h-max flex-col whitespace-nowrap">
-          <span className="massive-text text-[11px] tracking-[0.3em] text-white/30 uppercase">
-            {marqueeText}
-          </span>
-          <span className="massive-text text-[11px] tracking-[0.3em] text-white/30 uppercase">
-            {marqueeText}
-          </span>
-        </div>
+      {/* Left — vertical, writing-mode on the outer div; flex (= row = inline axis = vertical stacking in vertical-rl) */}
+      <div
+        className="absolute left-0 top-0 bottom-[28px] w-[28px] overflow-hidden"
+        style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+      >
+        <motion.div
+          className="flex"
+          animate={{ y: ["0%", "-50%"] }}
+          transition={{ repeat: Infinity, repeatType: "loop", duration: 40, ease: "linear" }}
+          style={{ willChange: "transform" }}
+        >
+          <span className={spanClass}>{marqueeText}</span>
+          <span className={spanClass} aria-hidden>{marqueeText}</span>
+        </motion.div>
       </div>
 
-      {/* Right border — stops at bottom border */}
-      <div className="absolute top-0 right-0 bottom-[28px] w-[28px] overflow-hidden">
-        <div className="animate-marquee-vertical-reverse flex h-max flex-col whitespace-nowrap" style={{ writingMode: "vertical-rl" }}>
-          <span className="massive-text text-[11px] tracking-[0.3em] text-white/30 uppercase">
-            {marqueeText}
-          </span>
-          <span className="massive-text text-[11px] tracking-[0.3em] text-white/30 uppercase">
-            {marqueeText}
-          </span>
-        </div>
+      {/* Right — same but without rotation */}
+      <div
+        className="absolute right-0 top-0 bottom-[28px] w-[28px] overflow-hidden"
+        style={{ writingMode: "vertical-rl" }}
+      >
+        <motion.div
+          className="flex"
+          animate={{ y: ["0%", "-50%"] }}
+          transition={{ repeat: Infinity, repeatType: "loop", duration: 40, ease: "linear" }}
+          style={{ willChange: "transform" }}
+        >
+          <span className={spanClass}>{marqueeText}</span>
+          <span className={spanClass} aria-hidden>{marqueeText}</span>
+        </motion.div>
       </div>
+
     </motion.div>
   )
 }
@@ -64,13 +77,11 @@ export const AboutHero = () => {
       const dist = window.innerHeight * 0.5
       heroScrollDistanceRef.current = dist
       setHeroScrollDistance(dist)
-
       if (heroWrapperRef.current) {
         const rect = heroWrapperRef.current.getBoundingClientRect()
         heroWrapperTopRef.current = rect.top + (smoothY?.get() ?? 0)
       }
     }
-
     requestAnimationFrame(measure)
     window.addEventListener("resize", measure)
     return () => window.removeEventListener("resize", measure)
