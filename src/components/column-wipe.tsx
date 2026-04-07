@@ -3,8 +3,8 @@ import React, { useEffect, useRef, useState } from "react"
 import { useLocation } from "react-router"
 
 const COLUMNS = 6
-const DURATION = 0.38
-const STAGGER = 0.05
+const DURATION = 0.52
+const STAGGER = 0.07
 
 export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation()
