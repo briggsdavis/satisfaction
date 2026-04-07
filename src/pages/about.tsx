@@ -243,7 +243,7 @@ export const About = () => {
 
       <div className="pt-24">
         {/* Three staggered paragraphs — line-by-line blur-in */}
-        <div className="mb-32 px-8 md:px-16">
+        <div className="mb-12 px-8 md:px-16">
           <div className="flex justify-start">
             <BlurInLines
               className="about-glow-text max-w-sm"
@@ -288,7 +288,7 @@ export const About = () => {
               </h3>
             </div>
             {/* Scrolling cards */}
-            <div className="flex flex-1 items-center overflow-hidden">
+            <div className="flex flex-1 items-start pt-6 overflow-hidden">
               <motion.div
                 ref={horizontalRef}
                 style={{ x }}
@@ -326,7 +326,7 @@ export const About = () => {
         </div>
 
         {/* Values Images — four staggered portrait images, click to expand text */}
-        <div className="px-8 py-16 md:px-16 md:py-24">
+        <div className="px-8 pt-16 pb-6 md:px-16 md:pt-24 md:pb-8">
           <div className="flex items-start gap-3 md:gap-5">
             {values.map((value) => (
               <ValueCard key={value.label} value={value} />
@@ -335,7 +335,7 @@ export const About = () => {
         </div>
 
         {/* Discover Our Services CTA */}
-        <div className="flex justify-center border-t border-white/10 py-24">
+        <div className="flex justify-center border-t border-white/10 py-12">
           <Link to="/services" className="btn-industrial">
             Discover Our Services
           </Link>

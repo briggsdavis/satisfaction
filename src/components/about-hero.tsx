@@ -90,44 +90,36 @@ const BorderMarquee = ({
 }
 
 export const AboutHero = () => {
-  const [heroScrollDistance, setHeroScrollDistance] = useState(0)
-  const heroWrapperRef = useRef<HTMLDivElement>(null)
-  const heroWrapperTopRef = useRef(0)
-  const heroScrollDistanceRef = useRef(0)
+  const [scrollDistance, setScrollDistance] = useState(
+    () => window.innerHeight * 0.5,
+  )
+  const scrollDistanceRef = useRef(scrollDistance)
 
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
 
   useEffect(() => {
-    const measure = () => {
-      const dist = window.innerHeight * 0.5
-      heroScrollDistanceRef.current = dist
-      setHeroScrollDistance(dist)
-      if (heroWrapperRef.current) {
-        const rect = heroWrapperRef.current.getBoundingClientRect()
-        heroWrapperTopRef.current = rect.top + (smoothY?.get() ?? 0)
-      }
+    const update = () => {
+      scrollDistanceRef.current = window.innerHeight * 0.5
+      setScrollDistance(window.innerHeight * 0.5)
     }
-    requestAnimationFrame(measure)
-    window.addEventListener("resize", measure)
-    return () => window.removeEventListener("resize", measure)
-  }, [smoothY])
-
-  const heroPinY = useTransform(activeY, (y: number) => {
-    const T = heroWrapperTopRef.current
-    const D = heroScrollDistanceRef.current
-    if (D === 0) return 0
-    if (y <= T) return 0
-    if (y >= T + D) return D
-    return y - T
-  })
+    window.addEventListener("resize", update)
+    return () => window.removeEventListener("resize", update)
+  }, [])
 
   const heroProgress = useTransform(activeY, (y: number) => {
-    const T = heroWrapperTopRef.current
-    const D = heroScrollDistanceRef.current
+    const D = scrollDistanceRef.current
     if (D === 0) return 0
-    return Math.max(0, Math.min(1, (y - T) / D))
+    return Math.max(0, Math.min(1, y / D))
+  })
+
+  // Fade the overlay out quickly once the animation is done — no black hold period
+  const heroOpacity = useTransform(activeY, (y: number) => {
+    const D = scrollDistanceRef.current
+    if (y <= D) return 1
+    if (y >= D + 80) return 0
+    return 1 - (y - D) / 80
   })
 
   const scale = useTransform(heroProgress, [0, 0.5, 1], [1, 5, 28])
@@ -135,17 +127,16 @@ export const AboutHero = () => {
   const bgOpacity = useTransform(heroProgress, [0.4, 0.75], [1, 0])
 
   return (
-    <div
-      ref={heroWrapperRef}
-      className="relative"
-      style={{ height: `calc(${heroScrollDistance}px + 100vh)` }}
-    >
+    <>
+      {/* Spacer gives the scroll range for the animation */}
+      <div style={{ height: scrollDistance }} />
+
+      {/* Fixed overlay — exits immediately after animation, no 100vh black hold */}
       <motion.div
-        style={{ y: heroPinY }}
-        className="relative flex h-screen w-full items-center justify-center overflow-hidden"
+        style={{ opacity: heroOpacity }}
+        className="fixed inset-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden"
       >
         <BorderMarquee opacity={bgOpacity} />
-
         <motion.h1
           className="relative z-10 text-center font-sans text-4xl font-black tracking-tight text-white uppercase md:text-7xl lg:text-9xl"
           style={{ scale, opacity: textOpacity }}
@@ -153,6 +144,6 @@ export const AboutHero = () => {
           WHO WE ARE
         </motion.h1>
       </motion.div>
-    </div>
+    </>
   )
 }
