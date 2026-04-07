@@ -289,11 +289,18 @@ export const BrandsCarousel = () => {
     return () => window.removeEventListener("resize", measure)
   }, [])
 
-  // Update skew target when scroll direction changes
+  const directionRef = useRef<1 | -1>(-1)
+
+  // Update skew and carousel direction when scroll direction changes
   useEffect(() => {
     return scrollVelocity.on("change", (v) => {
-      if (v > 20) skewAngle.set(-12)
-      else if (v < -20) skewAngle.set(12)
+      if (v > 20) {
+        skewAngle.set(-12)
+        directionRef.current = -1
+      } else if (v < -20) {
+        skewAngle.set(12)
+        directionRef.current = 1
+      }
     })
   }, [scrollVelocity, skewAngle])
 
@@ -301,9 +308,11 @@ export const BrandsCarousel = () => {
     const BASE_SPEED = 60 // px/s
     const velocityBoost = Math.abs(smoothVelocity.get()) * 0.06
     const speed = BASE_SPEED + velocityBoost
-    let next = baseX.get() - speed * (delta / 1000)
-    if (copyWidthRef.current > 0 && next < -copyWidthRef.current) {
-      next += copyWidthRef.current
+    const dir = directionRef.current
+    let next = baseX.get() + dir * speed * (delta / 1000)
+    if (copyWidthRef.current > 0) {
+      if (next < -copyWidthRef.current) next += copyWidthRef.current
+      if (next > 0) next -= copyWidthRef.current
     }
     baseX.set(next)
   })
@@ -473,9 +482,7 @@ export const WhatWeDoSection = () => {
   })
 
   const panel1Opacity = useTransform(progress, [0, 0.45, 0.65], [1, 1, 0])
-  const panel1Y = useTransform(progress, [0.45, 0.65], ["0px", "-24px"])
   const panel2Opacity = useTransform(progress, [0.45, 0.65, 1], [0, 1, 1])
-  const panel2Y = useTransform(progress, [0.45, 0.65], ["24px", "0px"])
   const indicatorOpacity = useTransform(progress, [0.8, 1], [1, 0])
 
   return (
@@ -490,7 +497,7 @@ export const WhatWeDoSection = () => {
       >
         {/* Panel 1: What We Do */}
         <motion.div
-          style={{ opacity: panel1Opacity, y: panel1Y }}
+          style={{ opacity: panel1Opacity }}
           className="absolute inset-0 flex flex-col md:flex-row"
         >
           <div className="flex items-end border-b border-white/10 px-8 py-16 md:w-[42%] md:border-r md:border-b-0 md:px-16">
@@ -500,7 +507,7 @@ export const WhatWeDoSection = () => {
               immediate
             />
           </div>
-          <div className="flex flex-1 items-center px-8 py-12 md:px-16">
+          <div className="flex flex-1 flex-col justify-center gap-8 px-8 py-12 md:px-16">
             <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
               Social Satisfaction is a creative agency specializing in bold
               brand transformations rooted in culture and storytelling. Founded
@@ -509,12 +516,15 @@ export const WhatWeDoSection = () => {
               striking visuals. By blending nostalgia with innovation, we create
               identities that feel both familiar and fresh for modern audiences.
             </p>
+            <Link to="/about" className="btn-industrial-sm inline-block self-start">
+              About Us →
+            </Link>
           </div>
         </motion.div>
 
         {/* Panel 2: Why We're Different */}
         <motion.div
-          style={{ opacity: panel2Opacity, y: panel2Y }}
+          style={{ opacity: panel2Opacity }}
           className="absolute inset-0 flex flex-col md:flex-row"
         >
           <div className="flex items-end border-b border-white/10 px-8 py-16 md:w-[42%] md:border-r md:border-b-0 md:px-16">
@@ -524,7 +534,7 @@ export const WhatWeDoSection = () => {
               immediate
             />
           </div>
-          <div className="flex flex-1 flex-col justify-center gap-10 px-8 py-12 md:px-16">
+          <div className="flex flex-1 flex-col justify-center gap-8 px-8 py-12 md:px-16">
             <div className="space-y-3">
               <p className="text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
                 Full-Scale Creative Campaigns
@@ -549,6 +559,9 @@ export const WhatWeDoSection = () => {
                 real results for your business.
               </p>
             </div>
+            <Link to="/about" className="btn-industrial-sm inline-block self-start">
+              About Us →
+            </Link>
           </div>
         </motion.div>
 
@@ -568,7 +581,7 @@ export const WhatWeDoSection = () => {
 const CAMPAIGN_WORDS = ["CAMPAIGNS", "BUILT", "TO", "PERFORM."]
 
 export const CampaignStatement = () => (
-  <section className="overflow-hidden border-t border-white/10 bg-black pb-20 md:pb-28">
+  <section className="overflow-hidden border-t border-white/10 bg-black pb-8 md:pb-12">
     {CAMPAIGN_WORDS.map((word, i) => {
       const isRight = i % 2 === 1
       return (
@@ -708,7 +721,7 @@ const CascadeImg = ({
 }
 
 export const FeaturedCascade = () => (
-  <section className="border-t border-white/10 bg-black pt-32 pb-64">
+  <section className="border-t border-white/10 bg-black pt-12 pb-64">
     {/* Header — px-8 matches nav padding so View All right-edge aligns with Contact */}
     <div className="mb-20 flex items-end justify-between px-8 md:px-16">
       <div>

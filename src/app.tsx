@@ -16,7 +16,6 @@ import {
   Hero,
   StatsGrid,
   WhatWeDoSection,
-  WordStatement,
 } from "./pages/home"
 import { NotFound } from "./pages/not-found"
 import { Portfolio } from "./pages/portfolio"
@@ -41,7 +40,6 @@ const Home = () => (
     <Hero />
     <StatsGrid />
     <BrandsCarousel />
-    <WordStatement />
     <WhatWeDoSection />
     <CampaignStatement />
     <FeaturedCascade />

@@ -1,14 +1,8 @@
 import { Link } from "react-router"
 
 const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://instagram.com/socialsatisfaction" },
-  { label: "Facebook", href: "https://www.facebook.com/socialsatisfaction" },
-  { label: "Twitter", href: "https://twitter.com/socialsatisfaction" },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/socialsatisfaction",
-  },
-  { label: "YouTube", href: "https://www.youtube.com/@socialsatisfaction" },
+  { label: "Instagram", href: "https://www.instagram.com/socialsatisfaction" },
+  { label: "TikTok", href: "https://www.tiktok.com/@socialsatisfaction" },
 ]
 
 export const Footer = () => {
@@ -85,14 +79,6 @@ export const Footer = () => {
         <p className="text-xs tracking-widest text-white/15 uppercase">
           © {new Date().getFullYear()} Social Satisfaction. All Rights Reserved
         </p>
-        <div className="flex gap-8">
-          <span className="text-xs tracking-widest text-white/15 uppercase">
-            Privacy Policy
-          </span>
-          <span className="text-xs tracking-widest text-white/15 uppercase">
-            Terms of Service
-          </span>
-        </div>
         <p className="text-xs tracking-widest text-white/15 uppercase">
           Made by{" "}
           <a
