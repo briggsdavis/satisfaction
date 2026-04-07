@@ -1,5 +1,5 @@
 import { motion } from "motion/react"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { useBlocker } from "react-router"
 
@@ -11,9 +11,17 @@ export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
   const [phase, setPhase] = useState<"idle" | "in" | "out">("idle")
   const proceedRef = useRef<(() => void) | null>(null)
 
-  // Block navigation while idle — let the animation handle it
+  // Only block AFTER the component has mounted — prevents intercepting
+  // React Router's internal initial-load navigation which would leave
+  // the page blank (body is black, no route rendered yet).
+  const mountedRef = useRef(false)
+  useLayoutEffect(() => {
+    mountedRef.current = true
+  }, [])
+
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
+      mountedRef.current &&
       phase === "idle" &&
       currentLocation.pathname !== nextLocation.pathname,
   )
