@@ -16,7 +16,7 @@ const SERVICES = [
       "Location scouting + talent coordination",
     ],
     inverted: false,
-    minH: "min-h-[546px]",
+    minH: "min-h-[300px]",
   },
   {
     name: "Photography",
@@ -30,7 +30,7 @@ const SERVICES = [
       "Product photography (retail items, merch, packaged goods)",
     ],
     inverted: true,
-    minH: "min-h-[728px]",
+    minH: "min-h-[360px]",
   },
   {
     name: "Branding",
@@ -44,7 +44,7 @@ const SERVICES = [
       "Brand guidelines / brand book",
     ],
     inverted: true,
-    minH: "min-h-[416px]",
+    minH: "min-h-[260px]",
   },
   {
     name: "Visual Identity",
@@ -58,7 +58,7 @@ const SERVICES = [
       "Brand asset library",
     ],
     inverted: false,
-    minH: "min-h-[624px]",
+    minH: "min-h-[320px]",
   },
   {
     name: "Social Media",
@@ -72,7 +72,7 @@ const SERVICES = [
       "Community management (comments + DMs)",
     ],
     inverted: false,
-    minH: "min-h-[390px]",
+    minH: "min-h-[260px]",
   },
   {
     name: "Email Marketing",
@@ -86,7 +86,7 @@ const SERVICES = [
       "Performance reporting (open rates, CTR)",
     ],
     inverted: true,
-    minH: "min-h-[676px]",
+    minH: "min-h-[340px]",
   },
   {
     name: "Graphic Design",
@@ -100,7 +100,7 @@ const SERVICES = [
       "Monthly graphic drops + highlight covers",
     ],
     inverted: true,
-    minH: "min-h-[520px]",
+    minH: "min-h-[280px]",
   },
   {
     name: "Motion Graphics",
@@ -114,25 +114,25 @@ const SERVICES = [
       "Lower thirds + title sequences",
     ],
     inverted: false,
-    minH: "min-h-[754px]",
+    minH: "min-h-[380px]",
   },
 ]
 
 const ServiceCell = ({
   service,
   index,
-  isLast,
 }: {
   service: (typeof SERVICES)[0]
   index: number
-  isLast?: boolean
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <motion.div
-      className={`relative flex flex-col justify-between border-b border-white/30 p-7 ${service.minH} ${isLast ? "flex-1" : ""} ${
-        service.inverted ? "bg-white text-black" : "bg-black text-white"
+      className={`relative flex flex-col justify-between border-b p-7 ${service.minH} ${
+        service.inverted
+          ? "border-black/25 bg-white text-black"
+          : "border-white/40 bg-black text-white"
       }`}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -144,7 +144,7 @@ const ServiceCell = ({
       }}
     >
       {/* Top — tag + description */}
-      <div>
+      <div className="pb-12">
         <span
           className={`mb-4 block text-xs font-bold tracking-[0.35em] uppercase ${
             service.inverted ? "text-black/40" : "text-white/30"
@@ -219,10 +219,10 @@ const ServiceCell = ({
         </AnimatePresence>
       </div>
 
-      {/* Center — expand toggle */}
+      {/* Plus — absolutely centered in the card */}
       <button
         onClick={() => setIsOpen((v) => !v)}
-        className={`flex w-fit items-center justify-center py-4 text-5xl leading-none font-thin transition-opacity hover:opacity-60 ${
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex w-fit items-center justify-center py-2 text-5xl leading-none font-thin transition-opacity hover:opacity-60 ${
           service.inverted ? "text-black/40" : "text-white/40"
         }`}
         aria-label={isOpen ? `Close ${service.name}` : `Expand ${service.name}`}
@@ -237,7 +237,7 @@ const ServiceCell = ({
       </button>
 
       {/* Bottom — service name large */}
-      <div className="overflow-hidden">
+      <div className="overflow-hidden pt-12">
         <span className="block font-display text-3xl leading-[0.85] uppercase md:text-4xl">
           {service.name}
         </span>
@@ -260,7 +260,7 @@ export const Services = () => (
     </section>
 
     {/* Asymmetric bento grid — 3 flex columns so cards stack flush */}
-    <div className="flex flex-col divide-y divide-white/30 md:flex-row md:divide-x md:divide-y-0">
+    <div className="flex flex-col divide-y divide-white/40 md:flex-row md:divide-x md:divide-y-0">
       {[0, 1, 2].map((col) => {
         const colServices = SERVICES.filter((_, i) => i % 3 === col)
         return (
@@ -270,7 +270,6 @@ export const Services = () => (
                 key={service.name}
                 service={service}
                 index={col + row * 3}
-                isLast={row === colServices.length - 1}
               />
             ))}
           </div>

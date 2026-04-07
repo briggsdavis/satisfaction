@@ -114,12 +114,12 @@ export const AboutHero = () => {
     return Math.max(0, Math.min(1, y / D))
   })
 
-  // Fade the overlay out quickly once the animation is done — no black hold period
+  // Cut the overlay away almost instantly after animation — near-zero transition
   const heroOpacity = useTransform(activeY, (y: number) => {
     const D = scrollDistanceRef.current
     if (y <= D) return 1
-    if (y >= D + 80) return 0
-    return 1 - (y - D) / 80
+    if (y >= D + 6) return 0
+    return 1 - (y - D) / 6
   })
 
   const scale = useTransform(heroProgress, [0, 0.5, 1], [1, 5, 28])
