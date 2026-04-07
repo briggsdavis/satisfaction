@@ -210,6 +210,7 @@ const ImageCard = ({
       className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
     />
     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/20" />
     <span className="absolute right-4 bottom-4 font-mono text-xs font-bold tracking-widest text-white/30">
       {String(index + 1).padStart(2, "0")}
     </span>
