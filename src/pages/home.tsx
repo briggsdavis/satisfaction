@@ -24,7 +24,7 @@ export const Hero = () => {
   return (
     <section className="relative flex h-screen flex-col overflow-hidden bg-black">
       {/* Background hero image with parallax */}
-      <div className="absolute inset-0 z-0 will-change-transform">
+      <div className="absolute inset-0 z-0">
         <motion.div
           style={{ y: bgY }}
           className="h-[120%] w-full bg-[url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-25 grayscale will-change-transform [backface-visibility:hidden]"
@@ -675,7 +675,7 @@ const CascadeImg = ({
       }}
     >
       <Link to="/portfolio" className="group block">
-        <div className="relative aspect-[3/4] overflow-hidden will-change-transform">
+        <div className="relative aspect-[3/4] overflow-hidden">
           <motion.img
             style={{ y: imgY, height: "calc(100% + 120px)", top: "-60px" }}
             src={item.src}
@@ -1122,7 +1122,7 @@ const FeaturedProjectCard = ({
         }`}
       >
         <div
-          className={`relative aspect-[4/3] w-full overflow-hidden will-change-transform ${project.widthClass}`}
+          className={`relative aspect-[4/3] w-full overflow-hidden ${project.widthClass}`}
         >
           <motion.img
             style={{ y: imgY, height: "calc(100% + 160px)", top: "-80px" }}
@@ -1415,7 +1415,7 @@ const ServiceCard = ({
       viewport={{ once: true, margin: "-150px" }}
       transition={{ duration: 0.7, delay: index * 0.12 }}
     >
-      <div className="relative mb-8 aspect-[3/4] overflow-hidden will-change-transform">
+      <div className="relative mb-8 aspect-[3/4] overflow-hidden">
         <motion.img
           style={{ y: imgY, height: "calc(100% + 60px)", top: "-30px" }}
           src={service.img}

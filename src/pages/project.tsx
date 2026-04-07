@@ -252,7 +252,7 @@ export const ProjectPage = () => {
       {/* ── Hero Banner ── */}
       <div
         ref={heroRef}
-        className="relative h-[70vh] overflow-hidden will-change-transform md:h-[80vh]"
+        className="relative h-[70vh] overflow-hidden md:h-[80vh]"
       >
         <motion.img
           style={{ y: heroImgY }}
@@ -372,7 +372,7 @@ export const ProjectPage = () => {
                 src={img}
                 alt={`${project.title} ${i + 1}`}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 will-change-transform [backface-visibility:hidden] group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-black/20 transition-opacity duration-500 group-hover:bg-black/10" />
@@ -468,7 +468,7 @@ export const ProjectPage = () => {
                 src={img}
                 alt={`${project.title} gallery ${i + 1}`}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 will-change-transform [backface-visibility:hidden] group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-black/10 transition-opacity duration-500 group-hover:bg-transparent" />

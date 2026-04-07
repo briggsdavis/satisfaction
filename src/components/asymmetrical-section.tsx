@@ -51,7 +51,7 @@ export const AsymmetricalSection = ({
             Section itself has no overflow-hidden so titles are never clipped. */}
         <div
           className={cn(
-            "w-full relative aspect-[16/10] overflow-hidden will-change-transform",
+            "w-full relative aspect-[16/10] overflow-hidden",
             imageWidth,
           )}
         >

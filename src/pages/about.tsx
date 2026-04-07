@@ -151,7 +151,7 @@ const ValueCard = ({ value }: { value: (typeof values)[0] }) => {
       onClick={() => setIsOpen((v) => !v)}
     >
       {/* Image with parallax */}
-      <div className="relative aspect-2/3 w-full overflow-hidden will-change-transform">
+      <div className="relative aspect-2/3 w-full overflow-hidden">
         <motion.img
           src={value.img}
           alt={value.label}
