@@ -198,7 +198,7 @@ export const About = () => {
 
   // Fade content in as the WHO WE ARE overlay exits (matches AboutHero's scrollDistance = 50vh)
   const heroEnd = typeof window !== "undefined" ? window.innerHeight * 0.5 : 0
-  const contentOpacity = useTransform(activeY, [heroEnd, heroEnd + 80], [0, 1])
+  const contentOpacity = useTransform(activeY, [heroEnd - 10, heroEnd + 10], [0, 1])
 
   const wrapperTopRef = useRef(0)
   const scrollDistanceRef = useRef(0)
