@@ -198,7 +198,7 @@ export const About = () => {
 
   // Fade content in as the WHO WE ARE overlay exits (matches AboutHero's scrollDistance = 50vh)
   const heroEnd = typeof window !== "undefined" ? window.innerHeight * 0.5 : 0
-  const contentOpacity = useTransform(activeY, [heroEnd, heroEnd + 160], [0, 1])
+  const contentOpacity = useTransform(activeY, [heroEnd, heroEnd + 80], [0, 1])
 
   const wrapperTopRef = useRef(0)
   const scrollDistanceRef = useRef(0)
@@ -245,7 +245,7 @@ export const About = () => {
     <>
       <AboutHero />
 
-      <motion.div style={{ opacity: contentOpacity }} className="pt-24">
+      <motion.div style={{ opacity: contentOpacity }} className="pt-[62vh]">
         {/* Three staggered paragraphs — line-by-line blur-in */}
         <div className="mb-12 px-8 md:px-16">
           <div className="flex justify-start">
