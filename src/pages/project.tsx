@@ -357,7 +357,7 @@ export const ProjectPage = () => {
           {project.gridImages.map((img, i) => (
             <motion.div
               key={i}
-              className="group relative aspect-[4/3] cursor-pointer overflow-hidden"
+              className="group relative aspect-[4/3] cursor-pointer overflow-hidden [backface-visibility:hidden]"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-150px" }}
@@ -372,7 +372,7 @@ export const ProjectPage = () => {
                 src={img}
                 alt={`${project.title} ${i + 1}`}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-700 will-change-transform [backface-visibility:hidden] group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-black/20 transition-opacity duration-500 group-hover:bg-black/10" />
@@ -453,7 +453,7 @@ export const ProjectPage = () => {
           {project.galleryImages.map((img, i) => (
             <motion.div
               key={i}
-              className="group relative h-[50vh] w-[70vw] flex-shrink-0 cursor-pointer overflow-hidden md:h-[60vh] md:w-[40vw]"
+              className="group relative h-[50vh] w-[70vw] flex-shrink-0 cursor-pointer overflow-hidden [backface-visibility:hidden] md:h-[60vh] md:w-[40vw]"
               initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-150px" }}
@@ -468,7 +468,7 @@ export const ProjectPage = () => {
                 src={img}
                 alt={`${project.title} gallery ${i + 1}`}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-700 will-change-transform [backface-visibility:hidden] group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-black/10 transition-opacity duration-500 group-hover:bg-transparent" />

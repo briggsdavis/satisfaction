@@ -17,7 +17,7 @@ const ProjectCard = ({
 }) => (
   <Link to={`/portfolio/${categorySlug}/${project.slug}`} className="block">
     <motion.div
-      className={`group relative overflow-hidden ${className}`}
+      className={`group relative overflow-hidden [backface-visibility:hidden] ${className}`}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-150px" }}
@@ -33,7 +33,7 @@ const ProjectCard = ({
         alt={project.title}
         loading="lazy"
         referrerPolicy="no-referrer"
-        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        className="h-full w-full object-cover transition-transform duration-700 ease-out will-change-transform [backface-visibility:hidden] group-hover:scale-105"
       />
 
       {/* Permanent gradient from bottom */}

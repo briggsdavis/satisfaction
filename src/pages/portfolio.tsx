@@ -17,7 +17,7 @@ const CategoryCard = ({
   return (
     <Link
       to={`/portfolio/${category.slug}`}
-      className={`group relative block overflow-hidden ${className}`}
+      className={`group relative block overflow-hidden [backface-visibility:hidden] ${className}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -27,7 +27,7 @@ const CategoryCard = ({
         alt={category.name}
         loading="lazy"
         referrerPolicy="no-referrer"
-        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        className="h-full w-full object-cover transition-transform duration-700 ease-out will-change-transform [backface-visibility:hidden] group-hover:scale-105"
       />
 
       {/* Permanent gradient from bottom */}
