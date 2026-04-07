@@ -368,12 +368,14 @@ export const ProjectPage = () => {
               }}
               onClick={() => openLightbox(i)}
             >
-              <img
+              <motion.img
                 src={img}
                 alt={`${project.title} ${i + 1}`}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 will-change-transform [backface-visibility:hidden] group-hover:scale-105"
+                className="h-full w-full object-cover"
                 referrerPolicy="no-referrer"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               />
               <div className="absolute inset-0 bg-black/20 transition-opacity duration-500 group-hover:bg-black/10" />
               {/* Bottom border line */}
@@ -464,12 +466,14 @@ export const ProjectPage = () => {
               }}
               onClick={() => openLightbox(i)}
             >
-              <img
+              <motion.img
                 src={img}
                 alt={`${project.title} gallery ${i + 1}`}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 will-change-transform [backface-visibility:hidden] group-hover:scale-105"
+                className="h-full w-full object-cover"
                 referrerPolicy="no-referrer"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               />
               <div className="absolute inset-0 bg-black/10 transition-opacity duration-500 group-hover:bg-transparent" />
               {/* Bottom border line */}

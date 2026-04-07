@@ -681,7 +681,9 @@ const CascadeImg = ({
             src={item.src}
             alt={item.title}
             loading="lazy"
-            className="absolute w-full object-cover transition-transform duration-700 will-change-transform [backface-visibility:hidden] group-hover:scale-[1.03]"
+            className="absolute w-full object-cover will-change-transform [backface-visibility:hidden]"
+            whileHover={{ scale: 1.03 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             referrerPolicy="no-referrer"
           />
           {/* Gradient */}
@@ -1421,7 +1423,9 @@ const ServiceCard = ({
           src={service.img}
           alt={service.title}
           loading="lazy"
-          className="absolute w-full object-cover transition-transform duration-700 will-change-transform [backface-visibility:hidden] group-hover:scale-105"
+          className="absolute w-full object-cover will-change-transform [backface-visibility:hidden]"
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-black/30 transition-colors duration-500 group-hover:bg-black/10" />

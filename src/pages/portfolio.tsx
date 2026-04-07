@@ -22,12 +22,14 @@ const CategoryCard = ({
       onMouseLeave={() => setHovered(false)}
     >
       {/* Background image */}
-      <img
+      <motion.img
         src={category.img}
         alt={category.name}
         loading="lazy"
         referrerPolicy="no-referrer"
-        className="h-full w-full object-cover transition-transform duration-700 ease-out will-change-transform [backface-visibility:hidden] group-hover:scale-105"
+        className="h-full w-full object-cover"
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       />
 
       {/* Permanent gradient from bottom */}
