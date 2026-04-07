@@ -159,7 +159,7 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
   <Link to="/services" className="group block">
     <motion.div
       style={{ borderRadius: 0, rotate: card.rotate }}
-      className="relative aspect-[3/4] overflow-hidden"
+      className="relative aspect-[3/4] overflow-hidden ring-1 ring-white/20"
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-150px" }}
@@ -175,29 +175,15 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
         alt={card.service}
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
       />
-      {/* Overlay */}
-      <div
-        className={`absolute inset-0 transition-opacity duration-500 ${
-          card.inverted
-            ? "bg-white/70 group-hover:bg-white/50"
-            : "bg-black/60 group-hover:bg-black/50"
-        }`}
-      />
+      {/* Dark overlay — uniform across all cards */}
+      <div className="absolute inset-0 bg-black/65 transition-opacity duration-500 group-hover:bg-black/50" />
 
       {/* Content */}
-      <div
-        className={`relative z-10 flex h-full flex-col justify-between p-5 md:p-7 ${
-          card.inverted ? "text-black" : "text-white"
-        }`}
-      >
+      <div className="relative z-10 flex h-full flex-col justify-between p-5 text-white md:p-7">
         {/* Top — discipline tag */}
         <div>
           {card.tag ? (
-            <span
-              className={`text-xs font-bold tracking-[0.35em] uppercase ${
-                card.inverted ? "text-black/50" : "text-white/60"
-              }`}
-            >
+            <span className="text-xs font-bold tracking-[0.35em] text-white/60 uppercase">
               {card.tag}
             </span>
           ) : (
@@ -207,11 +193,7 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
 
         {/* Bottom — service name + rule */}
         <div>
-          <div
-            className={`mb-3 h-px w-full ${
-              card.inverted ? "bg-black/20" : "bg-white/25"
-            }`}
-          />
+          <div className="mb-3 h-px w-full bg-white/25" />
           <p className="font-display text-xl leading-tight uppercase md:text-2xl">
             {card.service}
           </p>
