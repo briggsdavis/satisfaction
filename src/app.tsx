@@ -1,6 +1,6 @@
 import React from "react"
 import { Route, BrowserRouter as Router, Routes } from "react-router"
-import { ColumnWipe } from "./components/column-wipe"
+import { ColumnWipe, useColumnWipeLocation } from "./components/column-wipe"
 import { CustomCursor } from "./components/custom-cursor"
 import { Footer } from "./components/footer"
 import { Navbar } from "./components/navbar"
@@ -49,6 +49,26 @@ const Home = () => (
   </>
 )
 
+// Inner component so it can read the controlled location from ColumnWipe context
+const AppRoutes = () => {
+  const displayedLocation = useColumnWipeLocation()
+  return (
+    <Routes location={displayedLocation ?? undefined}>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/services" element={<Services />} />
+      <Route path="/portfolio" element={<Portfolio />} />
+      <Route path="/portfolio/:category" element={<CategoryPage />} />
+      <Route
+        path="/portfolio/:category/:project"
+        element={<ProjectPage />}
+      />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  )
+}
+
 export default function App() {
   return (
     <Router>
@@ -58,19 +78,7 @@ export default function App() {
 
       <ColumnWipe>
         <SmoothScroll>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/portfolio/:category" element={<CategoryPage />} />
-            <Route
-              path="/portfolio/:category/:project"
-              element={<ProjectPage />}
-            />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AppRoutes />
           <Footer />
         </SmoothScroll>
       </ColumnWipe>

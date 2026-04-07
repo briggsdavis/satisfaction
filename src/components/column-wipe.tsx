@@ -1,50 +1,41 @@
 import { motion } from "motion/react"
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
+import React, { createContext, useContext, useEffect, useRef, useState } from "react"
 import { flushSync } from "react-dom"
-import { useBlocker } from "react-router"
+import { useLocation } from "react-router"
+import type { Location } from "react-router"
 
 const COLUMNS = 6
 const DURATION = 0.52
 const STAGGER = 0.07
 
+// Exposes the "displayed" location so <Routes> can render the old page during wipe-in
+const ColumnWipeContext = createContext<Location | null>(null)
+export const useColumnWipeLocation = () => useContext(ColumnWipeContext)
+
 export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation()
+  const [displayedLocation, setDisplayedLocation] = useState(location)
+  const pendingRef = useRef<Location>(location)
   const [phase, setPhase] = useState<"idle" | "in" | "out">("idle")
-  const proceedRef = useRef<(() => void) | null>(null)
 
-  // Only block AFTER the component has mounted — prevents intercepting
-  // React Router's internal initial-load navigation which would leave
-  // the page blank (body is black, no route rendered yet).
-  const mountedRef = useRef(false)
-  useLayoutEffect(() => {
-    mountedRef.current = true
-  }, [])
-
-  const blocker = useBlocker(
-    ({ currentLocation, nextLocation }) =>
-      mountedRef.current &&
-      phase === "idle" &&
-      currentLocation.pathname !== nextLocation.pathname,
-  )
-
-  // Navigation intercepted → start wipe-in, stash the proceed fn
+  // When the real location changes and we're idle, start wipe-in
   useEffect(() => {
-    if (blocker.state === "blocked") {
-      proceedRef.current = blocker.proceed
+    if (location.key !== displayedLocation.key && phase === "idle") {
+      pendingRef.current = location
       setPhase("in")
     }
-  }, [blocker.state])
+  }, [location, displayedLocation, phase])
 
-  // Screen fully white → navigate, then immediately begin wipe-out
+  // Screen fully white → swap displayed location, then begin wipe-out
   const handleInComplete = () => {
-    // flushSync ensures the 'out' columns are committed to the DOM
-    // (fully covering the screen) before React Router swaps the page
-    flushSync(() => setPhase("out"))
-    proceedRef.current?.()
-    proceedRef.current = null
+    flushSync(() => {
+      setDisplayedLocation(pendingRef.current)
+      setPhase("out")
+    })
   }
 
   return (
-    <>
+    <ColumnWipeContext.Provider value={displayedLocation}>
       {children}
 
       {/* Wipe IN: columns drop from top, old page visible behind them */}
@@ -92,6 +83,6 @@ export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
           ))}
         </div>
       )}
-    </>
+    </ColumnWipeContext.Provider>
   )
 }
