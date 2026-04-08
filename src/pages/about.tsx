@@ -210,9 +210,10 @@ export const About = () => {
         wrapperTopRef.current = rect.top + (smoothY?.get() ?? 0)
       }
       if (horizontalRef.current) {
+        const leftOffset = window.innerWidth >= 768 ? 64 : 32
         const dist = Math.max(
           0,
-          horizontalRef.current.scrollWidth - window.innerWidth,
+          horizontalRef.current.scrollWidth - (window.innerWidth - leftOffset),
         )
         scrollDistanceRef.current = dist
         setScrollDistance(dist)
@@ -292,11 +293,11 @@ export const About = () => {
               </h3>
             </div>
             {/* Scrolling cards */}
-            <div className="flex flex-1 items-start pt-6 overflow-hidden">
+            <div className="ml-8 md:ml-16 flex flex-1 items-start pt-6 overflow-hidden">
               <motion.div
                 ref={horizontalRef}
                 style={{ x }}
-                className="flex gap-24 px-8"
+                className="flex gap-24 pr-8 md:pr-16"
               >
                 {timeline.map((item) => (
                   <div
