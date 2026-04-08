@@ -18,7 +18,7 @@ export const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="block w-fit" onClick={handleLinkClick}>
           <img
-            src="/logo.png"
+            src="/satisfactionlogo.png"
             alt="Social Satisfaction"
             className="h-10 w-auto md:h-12"
           />
