@@ -75,7 +75,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="mt-32 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 md:flex-row">
+      <div className="mt-32 flex flex-col items-center justify-between gap-4 pt-8 md:flex-row">
         <p className="text-xs tracking-widest text-white/15 uppercase">
           © {new Date().getFullYear()} Social Satisfaction. All Rights Reserved
         </p>
@@ -93,7 +93,7 @@ export const Footer = () => {
       </div>
 
       {/* Large background text */}
-      <div className="massive-text pointer-events-none absolute -right-20 -bottom-20 text-7xl font-black text-white/5 select-none md:text-10xl lg:text-12xl">
+      <div className="massive-text pointer-events-none absolute bottom-0 left-8 right-8 overflow-hidden whitespace-nowrap text-[13vw] leading-none font-black text-white/5 select-none md:left-16 md:right-16">
         SATISFACTION
       </div>
     </footer>

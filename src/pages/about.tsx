@@ -283,7 +283,7 @@ export const About = () => {
             className="flex h-screen flex-col overflow-hidden"
           >
             {/* Compact header */}
-            <div className="flex-shrink-0 border-b border-white/10 px-8 pt-20 pb-[3px] md:px-16">
+            <div className="flex-shrink-0 px-8 pt-40 pb-[3px] md:px-16">
               <h2 className="text-xs font-bold tracking-widest text-white/40 uppercase">
                 PORTFOLIO
               </h2>
