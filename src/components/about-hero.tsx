@@ -130,7 +130,7 @@ export const AboutHero = () => {
   const overlay = (
     <motion.div
       style={{ opacity: heroOpacity }}
-      className="fixed inset-0 z-[998] flex h-screen w-full items-center justify-center overflow-hidden bg-black"
+      className="fixed inset-0 z-[998] flex h-screen w-full items-center justify-center overflow-hidden bg-black pointer-events-none"
     >
       <BorderMarquee opacity={bgOpacity} />
       <motion.h1
