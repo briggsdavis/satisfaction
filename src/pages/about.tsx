@@ -68,53 +68,210 @@ const values = [
 ]
 
 const timeline = [
+  // 2021
   {
-    date: "FEB - 2021",
-    client: "TRULY",
-    campaign: '"THIS IS GOLD" CAMPAIGN',
-    role: "DIGITAL CONTENT CREATOR LEAD",
+    date: "OCT 2021",
+    client: "HOUSE OF BALLOONS",
+    campaign: "BOSTON BEER COMPANY",
+    role: "CREATIVE DIRECTION / EVENT ACTIVATION",
     description:
-      'Created and developed photo and video content for TRULY distribution in the Pittsburgh region. "#THISISGOLD" Introduces the New TRULY Iced Tea Hard Seltzer. Refreshing hard seltzer meets real brewed tea and fruit flavor for a drink that\'s liquid gold.',
+      "Led creative direction for an immersive Halloween event amplifying product awareness for Angry Orchard, Twisted Tea, and Truly. Inspired by The Weeknd's album, the experience blended moody aesthetics with cocktail storytelling to drive in-person and social engagement.",
   },
   {
-    date: "OCT - 2020",
-    client: "COORS SELTZER",
-    campaign: "HALLOWEEN CAMPAIGN",
-    role: "DIGITAL CONTENT CREATOR & EVENT COORDINATOR LEAD",
-    description:
-      "Created and developed photo and video content for COORS SELTZER distribution in the Greater Pittsburgh Area region leading and ongoing into the Halloween holiday season. Along with developing and creating ads, also planned and coordinated an event for their target audience in the area, that lead to product being pushed to over 40,000 people.",
-  },
-  {
-    date: "2019 - 2020",
-    client: "WINES OF AMERICA",
+    date: "DEC 2021",
+    client: "ALISON COSMETICS",
     campaign: null,
-    role: "MARKETING DIRECTOR & CREATIVE DIRECTOR",
+    role: "BRAND IDENTITY / LABEL DESIGN",
     description:
-      "Lead and fulfilled the rebrand of a nationwide wine distribution company. Created a cohesive brand aesthetic across all social media platforms that helps enhance the brand's story. Oversaw the operation of a company's website or email marketing program and provide analytics review.",
+      "Developed the complete visual identity and brand direction, including label design. The vibrant pink-on-black packaging with an interlocking AC logo was crafted for strong shelf appeal and lasting brand recognition.",
+  },
+  // 2022
+  {
+    date: "FEB 2022",
+    client: "SINGLES ONLY",
+    campaign: "BEAM SUNTORY",
+    role: "EVENT ACTIVATION / CONTENT",
+    description:
+      "Redefined Valentine's Day as a celebration of self-love in collaboration with Beam Suntory. Strategic storytelling, bold cocktails, and influencer engagement positioned the spirits within a culturally resonant moment.",
   },
   {
-    date: "2019 - PRESENT",
-    client: "DOCHERTY:",
-    campaign: "MODEL & TALENT AGENCY",
-    role: "PHOTOGRAPHER",
-    description:
-      "Fashion photographer highlighting model and other clothing products in exciting and memorable ways. Worked closely with models and brands to conceptualize and shoot photos that showcase them as effectively as possible.",
-  },
-  {
-    date: "2019 - 2020",
-    client: "VANDALS CLOTHING CO.",
+    date: "JUN 2022",
+    client: "VORTEX HELICOPTERS",
     campaign: null,
-    role: "CONTENT CREATOR & DESIGNER",
-    description:
-      "Developed organic creative content for social media platforms and website. Designed and developed clothing graphics. Creative Direction with project ideas, collaborations, etc.",
+    role: "CONTENT CREATION",
+    description: "",
   },
   {
-    date: "2017 - PRESENT",
-    client: "SOCIAL SATISFACTION",
+    date: "JUN 2022",
+    client: "ABSOLUT CITRON",
     campaign: null,
-    role: "FULL-SERVICE MARKETING AGENCY",
+    role: "CREATIVE DIRECTION / PHOTOSHOOT",
     description:
-      "A full-service marketing agency delivering photography, videography, graphic design, creative direction, and brand strategy for businesses, entrepreneurs, artists, and advertising agencies.",
+      "Used warm orange backdrops, diamonds, and citrus florals to evoke the bold, premium feel of the product. Delivered a visually striking campaign reinforcing Absolut Citron's vibrant, sophisticated identity.",
+  },
+  {
+    date: "JUL 2022",
+    client: "BLUE MOON LIGHT SKY",
+    campaign: null,
+    role: "CREATIVE DIRECTION / PHOTOSHOOT",
+    description:
+      "Crafted a sunlit picnic visual narrative positioning Light Sky as the go-to beer for refreshing social moments. Composition and color palette highlighted the crisp, citrus-forward flavor while driving organic shareability.",
+  },
+  {
+    date: "AUG 2022",
+    client: "BELOVED DUNKS",
+    campaign: "NIKE",
+    role: "ART DIRECTION / CAMPAIGN",
+    description:
+      "Art directed the launch campaign for a bespoke Nike Dunk release, emphasizing the red-and-white palette and signature heart detail across digital and print. Every visual element was designed to amplify desirability and reinforce Nike's cultural influence.",
+  },
+  {
+    date: "NOV 2022",
+    client: "MAKER'S MARK",
+    campaign: null,
+    role: "CREATIVE DIRECTION / CAMPAIGN",
+    description:
+      "Directed a Thanksgiving-themed campaign around Maker's Mark's personalized label feature, evoking warmth and holiday tradition through rich color palettes and intimate dinner settings.",
+  },
+  {
+    date: "NOV 2022",
+    client: "LIGHT UP NIGHT",
+    campaign: "SMIRNOFF",
+    role: "EVENT ACTIVATION",
+    description: "",
+  },
+  // 2023
+  {
+    date: "FEB 2023",
+    client: "SINGLES ONLY",
+    campaign: "BEAM SUNTORY",
+    role: "CAMPAIGN / CONTENT",
+    description:
+      "Elevated the concept by pairing each model with a Beam Suntory whisky that reflected their personality, from Hibiki to Maker's Mark to Hornitos. Refined visuals and digital amplification repositioned whisky as an extension of individuality.",
+  },
+  {
+    date: "AUG 2023",
+    client: "MORGAN WALLEN",
+    campaign: "JIM BEAM",
+    role: "CREATIVE DIRECTION / CAMPAIGN",
+    description:
+      "Produced a campaign integrating Jim Beam Peach, Apple, and Orange into an authentic country music concert experience. Intentional set design drove relatability while expanding reach across digital and social platforms.",
+  },
+  {
+    date: "OCT 2023",
+    client: "TRICKS AND TREATS 2",
+    campaign: "BEAM SUNTORY",
+    role: "EVENT ACTIVATION",
+    description:
+      "Designed an immersive Halloween activation for Hornitos, Maker's Mark, Tres Generaciones, and Haku Vodka. Eerie cocktails and seasonal decor sparked social sharing and deepened brand affinity across the portfolio.",
+  },
+  {
+    date: "NOV 2023",
+    client: "LIGHT UP NIGHT",
+    campaign: null,
+    role: "EVENT ACTIVATION",
+    description: "",
+  },
+  {
+    date: "DEC 2023",
+    client: "CANDY CANES AND COCKTAILS",
+    campaign: null,
+    role: "EVENT ACTIVATION",
+    description: "",
+  },
+  // 2024
+  {
+    date: "FEB 2024",
+    client: "SINGLES ONLY",
+    campaign: null,
+    role: "EVENT ACTIVATION",
+    description: "",
+  },
+  {
+    date: "MAY 2024",
+    client: "YUZU KITCHEN",
+    campaign: null,
+    role: "REBRAND / DIGITAL",
+    description:
+      "Led a comprehensive rebrand including a refreshed logo, website overhaul, and food photography for online ordering. Bold Japanese-inspired aesthetics modernized the visual identity and strengthened community connection.",
+  },
+  {
+    date: "JUN 2024",
+    client: "TRULY HARD SELTZER",
+    campaign: null,
+    role: "CONTENT CREATION",
+    description: "",
+  },
+  {
+    date: "JUL 2024",
+    client: "THIS AIN'T TEXAS",
+    campaign: "CODIGO TEQUILA",
+    role: "EVENT ACTIVATION / PHOTOSHOOT",
+    description:
+      "Planned and executed a Western-themed summer activation and photoshoot for Codigo Tequila. A vintage Chevy truck, guitars, and rustic settings aligned with the brand's premium yet approachable lifestyle identity.",
+  },
+  {
+    date: "SEP 2024",
+    client: "HIGH END SWEETS",
+    campaign: null,
+    role: "BRAND IDENTITY",
+    description:
+      "Created a luxury brand identity featuring an elegant flowing logo with an embedded heart and a pink-red palette. Every design choice communicates indulgence, artistry, and high-end appeal within the specialty desserts market.",
+  },
+  {
+    date: "SEP 2024",
+    client: "PITTSBURGH PLANNER",
+    campaign: null,
+    role: "BRAND IDENTITY",
+    description:
+      "Designed a distinctive visual identity with an interlocking PP monogram and a warm pink-purple-orange palette. The branding reflects personalization and creative energy across all digital and print touchpoints.",
+  },
+  {
+    date: "NOV 2024",
+    client: "LILITH",
+    campaign: null,
+    role: "REBRAND / DIGITAL",
+    description:
+      "Led a full digital rebrand including website and menu redesign plus ongoing social media management for this woman-owned restaurant. SEO optimization, Instagram Reels, and event promotions increased visibility and drove reservations.",
+  },
+  {
+    date: "DEC 2024",
+    client: "EYV",
+    campaign: null,
+    role: "DIGITAL MARKETING / REBRAND",
+    description:
+      "Transformed the digital presence of this vegetable-forward restaurant through website redesign, SEO, and social content strategy. Dynamic Reels and curated posts broadened appeal while reinforcing a plant-forward culinary identity.",
+  },
+  {
+    date: "DEC 2024",
+    client: "SHORTY'S",
+    campaign: "PINS AND PINTS",
+    role: "CREATIVE DIRECTION / CONTENT",
+    description:
+      "Directed a Santa's Holiday Workshop pop-up photoshoot and new bar menu launch, capturing playful seasonal visuals and crave-worthy food photography. Content reinforced Shorty's reputation as a go-to entertainment and dining destination.",
+  },
+  // 2025
+  {
+    date: "JAN 2025",
+    client: "ELECTRIC BEAUTY",
+    campaign: null,
+    role: "CREATIVE DIRECTION",
+    description: "",
+  },
+  {
+    date: "FEB 2025",
+    client: "SINGLES ONLY",
+    campaign: "TEREMANA TEQUILA",
+    role: "EVENT ACTIVATION / CONTENT",
+    description:
+      "Designed an anti-Valentine's Day event for Teremana Tequila featuring cheeky cocktail names and nostalgic candy heart elements. Skit-driven photoshoots and nightlife storytelling made the brand aspirational and approachable for a young social audience.",
+  },
+  {
+    date: "MAR 2025",
+    client: "LUNCHLINE",
+    campaign: null,
+    role: "CREATIVE DIRECTION",
+    description: "",
   },
 ]
 
@@ -298,7 +455,7 @@ export const About = () => {
               >
                 {timeline.map((item) => (
                   <div
-                    key={item.client}
+                    key={item.date + "-" + item.client}
                     className="w-[85vw] flex-shrink-0 md:w-[45vw]"
                   >
                     <div>
@@ -316,9 +473,11 @@ export const About = () => {
                       <p className="mt-6 text-xs font-bold tracking-widest text-white/60 uppercase">
                         {item.role}
                       </p>
-                      <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
-                        {item.description}
-                      </p>
+                      {item.description && (
+                        <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
+                          {item.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
