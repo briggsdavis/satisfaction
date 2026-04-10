@@ -8,6 +8,21 @@ import {
 import { ColumnWipe, useColumnWipeLocation } from "./components/column-wipe"
 import { CustomCursor } from "./components/custom-cursor"
 import { Footer } from "./components/footer"
+
+// Prevents Three.js / WebGL / asset-load failures inside the 3D canvas from
+// crashing the outer React tree and making the whole page disappear.
+class CanvasErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  render() {
+    return this.state.failed ? null : this.props.children
+  }
+}
 import { Navbar } from "./components/navbar"
 import { SmoothScroll, SmoothScrollProvider } from "./components/smooth-scroll"
 import { About } from "./pages/about"
@@ -89,7 +104,11 @@ const AppRoutes = () => {
 const ConditionalHeroCanvas = () => {
   const { pathname } = useLocation()
   if (pathname !== "/") return null
-  return <HeroCanvas />
+  return (
+    <CanvasErrorBoundary>
+      <HeroCanvas />
+    </CanvasErrorBoundary>
+  )
 }
 
 export default function App() {

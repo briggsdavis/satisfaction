@@ -1,4 +1,4 @@
-import { Environment, useGLTF } from "@react-three/drei"
+import { useGLTF } from "@react-three/drei"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { MotionValue } from "motion/react"
 import { Suspense, useMemo, useRef } from "react"
@@ -80,8 +80,6 @@ function Scene({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
       <Suspense fallback={null}>
         <Laptop scrollProgress={scrollProgress} />
       </Suspense>
-
-      <Environment preset="city" background={false} />
     </>
   )
 }

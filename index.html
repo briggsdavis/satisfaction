@@ -57,6 +57,11 @@
 
     <!-- Theme -->
     <meta name="theme-color" content="#000000" />
+
+    <!-- Prevent browser scroll-restoration before React mounts. Module scripts
+         are deferred, so setting this in main.tsx runs too late. An inline
+         script in <head> executes immediately, before any restoration happens. -->
+    <script>history.scrollRestoration = "manual";</script>
   </head>
 
   <body>
