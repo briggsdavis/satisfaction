@@ -46,7 +46,7 @@ const Home = () => (
     {[...Array(7)].map((_, i) => (
       <div
         key={i}
-        className="column-line"
+        className={`column-line${i % 2 !== 0 ? " hidden md:block" : ""}`}
         style={
           {
             left: `${(100 / 6) * i}%`,
@@ -78,7 +78,7 @@ const AppRoutes = () => {
             {[...Array(7)].map((_, i) => (
               <div
                 key={i}
-                className="column-line"
+                className={`column-line${i % 2 !== 0 ? " hidden md:block" : ""}`}
                 style={
                   {
                     left: `${(100 / 6) * i}%`,
