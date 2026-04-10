@@ -28,6 +28,15 @@ export const SmoothScrollProvider = ({
     stiffness: 280,
     mass: 0.7,
     restDelta: 0.001,
+    // Framer Motion's useScroll measures the real scrollY on the first
+    // frame.read AFTER mount, not during render. useSpring has already been
+    // initialised at 0 by that point, so if the measured value is non-zero
+    // (browser scroll anchoring, restored scroll, StrictMode remount, etc.)
+    // the spring animates from 0 → measured over ~1s — which, because our
+    // transform is y: -smoothY, pulls the entire page off-screen for a second
+    // and makes the content "appear then disappear" on load. skipInitialAnimation
+    // makes the spring JUMP to the first source change instead of animating it.
+    skipInitialAnimation: true,
   })
 
   return (
