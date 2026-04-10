@@ -274,7 +274,7 @@ export const Contact = () => {
     <div className="pt-32">
       {/* ── Big centered header ───────────────────────────────────────────── */}
       <motion.section
-        className="border-b border-white/10 px-8 pb-16 text-center md:px-16"
+        className="border-b border-white/10 px-8 pb-16 md:px-16"
         initial={{ opacity: 0, filter: "blur(20px)" }}
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}

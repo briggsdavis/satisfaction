@@ -110,7 +110,7 @@ export const BrandsCarousel = () => {
       </div>
 
       {/* Scrolling track */}
-      <div className="h-40 overflow-hidden">
+      <div className="h-40 overflow-hidden border-b border-white/10">
         <motion.div style={{ x: baseX }} className="flex h-full w-max">
           {/* First copy — measured for wrap */}
           <div ref={trackRef} className="flex h-full">

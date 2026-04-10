@@ -69,52 +69,36 @@ const values = [
 
 const timeline = [
   {
-    date: "FEB - 2021",
-    client: "TRULY",
-    campaign: '"THIS IS GOLD" CAMPAIGN',
-    role: "DIGITAL CONTENT CREATOR LEAD",
+    date: "2021–2025",
+    client: "BRAND ACTIVATIONS",
+    campaign: "IMMERSIVE EVENTS",
+    role: "CREATIVE DIRECTION",
     description:
-      'Created and developed photo and video content for TRULY distribution in the Pittsburgh region. "#THISISGOLD" Introduces the New TRULY Iced Tea Hard Seltzer. Refreshing hard seltzer meets real brewed tea and fruit flavor for a drink that\'s liquid gold.',
+      "Led creative direction for high-impact experiential events including the House of Balloons Halloween series and annual Singles Only campaigns. Storytelling-driven aesthetics integrated brands like Boston Beer Company, Beam Suntory, and Teremana Tequila into specific cultural moments.",
   },
   {
-    date: "OCT - 2020",
-    client: "COORS SELTZER",
-    campaign: "HALLOWEEN CAMPAIGN",
-    role: "DIGITAL CONTENT CREATOR & EVENT COORDINATOR LEAD",
+    date: "2021–2024",
+    client: "VISUAL IDENTITY",
+    campaign: "PACKAGING & BRANDING",
+    role: "BRAND DESIGN",
     description:
-      "Created and developed photo and video content for COORS SELTZER distribution in the Greater Pittsburgh Area region leading and ongoing into the Halloween holiday season. Along with developing and creating ads, also planned and coordinated an event for their target audience in the area, that lead to product being pushed to over 40,000 people.",
+      "Developed comprehensive brand identities and physical packaging for emerging companies including Alison Cosmetics and High End Sweets. Projects focused on bespoke logo design, strategic color palettes, and luxury positioning to establish immediate market recognition and shelf appeal.",
   },
   {
-    date: "2019 - 2020",
-    client: "WINES OF AMERICA",
+    date: "2022–2023",
+    client: "COMMERCIAL CONTENT",
+    campaign: "PRODUCT CAMPAIGNS",
+    role: "CREATIVE DIRECTION",
+    description:
+      "Directed high-production photoshoots and visual narratives for legacy brands including Absolut Vodka, Blue Moon, Nike, and Maker's Mark. Each campaign translated product attributes into aspirational lifestyle content, driving organic engagement and digital amplification across social platforms.",
+  },
+  {
+    date: "2024–2025",
+    client: "HOSPITALITY REBRANDS",
     campaign: null,
-    role: "MARKETING DIRECTOR & CREATIVE DIRECTOR",
+    role: "DIGITAL & PHYSICAL TRANSFORMATION",
     description:
-      "Lead and fulfilled the rebrand of a nationwide wine distribution company. Created a cohesive brand aesthetic across all social media platforms that helps enhance the brand's story. Oversaw the operation of a company's website or email marketing program and provide analytics review.",
-  },
-  {
-    date: "2019 - PRESENT",
-    client: "DOCHERTY:",
-    campaign: "MODEL & TALENT AGENCY",
-    role: "PHOTOGRAPHER",
-    description:
-      "Fashion photographer highlighting model and other clothing products in exciting and memorable ways. Worked closely with models and brands to conceptualize and shoot photos that showcase them as effectively as possible.",
-  },
-  {
-    date: "2019 - 2020",
-    client: "VANDALS CLOTHING CO.",
-    campaign: null,
-    role: "CONTENT CREATOR & DESIGNER",
-    description:
-      "Developed organic creative content for social media platforms and website. Designed and developed clothing graphics. Creative Direction with project ideas, collaborations, etc.",
-  },
-  {
-    date: "2017 - PRESENT",
-    client: "SOCIAL SATISFACTION",
-    campaign: null,
-    role: "FULL-SERVICE MARKETING AGENCY",
-    description:
-      "A full-service marketing agency delivering photography, videography, graphic design, creative direction, and brand strategy for businesses, entrepreneurs, artists, and advertising agencies.",
+      "Executed end-to-end digital and physical transformations for hospitality clients including Yuzu Kitchen, Lilith, EYV, and Shorty's. Delivered website redesigns, SEO optimization, and social media management to increase foot traffic through cohesive storytelling.",
   },
 ]
 
@@ -298,7 +282,7 @@ export const About = () => {
               >
                 {timeline.map((item) => (
                   <div
-                    key={item.client}
+                    key={item.date + "-" + item.client}
                     className="w-[85vw] flex-shrink-0 md:w-[45vw]"
                   >
                     <div>
@@ -316,9 +300,11 @@ export const About = () => {
                       <p className="mt-6 text-xs font-bold tracking-widest text-white/60 uppercase">
                         {item.role}
                       </p>
-                      <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
-                        {item.description}
-                      </p>
+                      {item.description && (
+                        <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
+                          {item.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}

@@ -1,4 +1,5 @@
 import { motion } from "motion/react"
+import React, { useRef } from "react"
 import { Link } from "react-router"
 
 type ServiceCardDef = {
@@ -112,26 +113,56 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
   </Link>
 )
 
-export const StatsGrid = () => (
-  <section className="relative overflow-hidden bg-black pt-16 pb-12">
-    <p className="mb-10 px-8 text-xs font-bold tracking-[0.4em] text-white/30 uppercase md:px-16">
-      Our Services
-    </p>
-    {/* Horizontal scroll track — shows ~3.5 cards */}
-    <div
-      className="overflow-x-auto px-8 py-6 md:px-16"
-      style={{ touchAction: "pan-x", overflowY: "clip" }}
-    >
-      <div className="flex gap-4" style={{ width: "max-content" }}>
-        {ALL_SERVICES.map((card, i) => (
-          <div key={i} className="relative z-[2] w-[72vw] shrink-0 md:w-[26vw]">
-            <ServicesGridCard card={card} />
-          </div>
-        ))}
+export const StatsGrid = () => {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const isDragging = useRef(false)
+  const startX = useRef(0)
+  const scrollLeft = useRef(0)
+
+  const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    isDragging.current = true
+    startX.current = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
+    scrollLeft.current = scrollRef.current?.scrollLeft ?? 0
+  }
+
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging.current) return
+    e.preventDefault()
+    const x = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
+    const walk = (x - startX.current) * 1.5
+    if (scrollRef.current) scrollRef.current.scrollLeft = scrollLeft.current - walk
+  }
+
+  const stopDrag = () => {
+    isDragging.current = false
+  }
+
+  return (
+    <section className="relative overflow-hidden bg-black pt-16 pb-12">
+      <p className="mb-10 px-8 text-xs font-bold tracking-[0.4em] text-white/30 uppercase md:px-16">
+        Our Services
+      </p>
+      {/* Horizontal scroll track — shows ~3.5 cards */}
+      <div
+        ref={scrollRef}
+        className="cursor-grab overflow-x-auto px-8 py-6 active:cursor-grabbing md:px-16"
+        style={{ touchAction: "pan-x", overflowY: "clip" }}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={stopDrag}
+        onMouseLeave={stopDrag}
+      >
+        <div className="flex gap-4" style={{ width: "max-content" }}>
+          {ALL_SERVICES.map((card, i) => (
+            <div key={i} className="relative z-[2] w-[72vw] shrink-0 md:w-[26vw]">
+              <ServicesGridCard card={card} />
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-    <p className="mt-6 px-8 text-xs font-bold tracking-[0.35em] text-white/30 uppercase md:px-16">
-      Scroll horizontally to see all services →
-    </p>
-  </section>
-)
+      <p className="mt-6 px-8 text-xs font-bold tracking-[0.35em] text-white/30 uppercase md:px-16">
+        Scroll horizontally to see all services →
+      </p>
+    </section>
+  )
+}
