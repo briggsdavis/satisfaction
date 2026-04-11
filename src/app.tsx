@@ -5,6 +5,7 @@ import {
   Routes,
   useLocation,
 } from "react-router"
+import { AdminRoot } from "./admin/admin-root"
 import { ColumnWipe, useColumnWipeLocation } from "./components/column-wipe"
 import { CustomCursor } from "./components/custom-cursor"
 import { Footer } from "./components/footer"
@@ -111,23 +112,29 @@ const ConditionalHeroCanvas = () => {
   )
 }
 
+const SiteRoot = () => (
+  <>
+    <CustomCursor />
+    <Navbar />
+    <SmoothScrollProvider>
+      <ConditionalHeroCanvas />
+      <ColumnWipe>
+        <SmoothScroll>
+          <AppRoutes />
+          <Footer />
+        </SmoothScroll>
+      </ColumnWipe>
+    </SmoothScrollProvider>
+  </>
+)
+
 export default function App() {
   return (
     <Router>
-      <CustomCursor />
-
-      <Navbar />
-
-      <SmoothScrollProvider>
-        <ConditionalHeroCanvas />
-
-        <ColumnWipe>
-          <SmoothScroll>
-            <AppRoutes />
-            <Footer />
-          </SmoothScroll>
-        </ColumnWipe>
-      </SmoothScrollProvider>
+      <Routes>
+        <Route path="/admin/*" element={<AdminRoot />} />
+        <Route path="/*" element={<SiteRoot />} />
+      </Routes>
     </Router>
   )
 }
