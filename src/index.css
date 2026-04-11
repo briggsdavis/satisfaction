@@ -149,6 +149,15 @@
   }
 }
 
+/* Restore standard cursor inside the admin */
+body.admin-mode,
+body.admin-mode *,
+body.admin-mode a,
+body.admin-mode button,
+body.admin-mode [role="button"] {
+  cursor: auto !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
