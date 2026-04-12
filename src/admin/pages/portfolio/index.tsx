@@ -1,12 +1,19 @@
 import { ChevronDown, ChevronRight, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router"
-import { AdminTextField } from "../../components/fields"
+import { AdminImageField, AdminTextareaField, AdminTextField } from "../../components/fields"
 import { ConfirmDialog, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
 import type { AdminContent } from "../../context/content-context"
 
 type Category = AdminContent["categories"][number]
+
+const toSlug = (name: string) =>
+  name
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
 
 const blankCategory = (): Category => ({
   slug: "",
@@ -30,9 +37,24 @@ export const PortfolioIndex = () => {
   const categories = content.categories
   const [expanded, setExpanded] = useState<string | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
-
-  // Draft state for new category
   const [draft, setDraft] = useState<Category | null>(null)
+
+  const setDraftField = (key: keyof Category, value: unknown) =>
+    setDraft((d) => d ? { ...d, [key]: value } : d)
+
+  const setDraftOverview = (key: string, value: string) =>
+    setDraft((d) => d ? { ...d, overview: { ...d.overview, [key]: value } } : d)
+
+  const setDraftBullet = (i: number, value: string) =>
+    setDraft((d) => {
+      if (!d) return d
+      const next = [...d.bullets]
+      next[i] = value
+      return { ...d, bullets: next }
+    })
+
+  const handleNameChange = (name: string) =>
+    setDraft((d) => d ? { ...d, name, slug: toSlug(name) } : d)
 
   const confirmCategory = () => {
     if (draft) {
@@ -56,7 +78,6 @@ export const PortfolioIndex = () => {
       <div className="space-y-1">
         {categories.map((cat) => (
           <div key={cat.slug} className="border border-white/10">
-            {/* Category row */}
             <div className="flex items-center gap-3 px-4 py-3">
               <button
                 onClick={() => setExpanded((e) => (e === cat.slug ? null : cat.slug))}
@@ -69,7 +90,9 @@ export const PortfolioIndex = () => {
                 )}
                 <div>
                   <p className="text-sm font-bold">{cat.name}</p>
-                  <p className="text-xs text-white/40">{cat.projects.length} project{cat.projects.length !== 1 ? "s" : ""} · /portfolio/{cat.slug}</p>
+                  <p className="text-xs text-white/40">
+                    {cat.projects.length} project{cat.projects.length !== 1 ? "s" : ""} · /portfolio/{cat.slug}
+                  </p>
                 </div>
               </button>
               <Link
@@ -87,7 +110,6 @@ export const PortfolioIndex = () => {
               </button>
             </div>
 
-            {/* Projects sub-list */}
             {expanded === cat.slug && (
               <div className="border-t border-white/10 pl-10 pr-4">
                 {cat.projects.map((p) => (
@@ -119,6 +141,7 @@ export const PortfolioIndex = () => {
       {/* Draft new category form */}
       {draft !== null ? (
         <div className="mt-4 border border-dashed border-white/30">
+          {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
             <span className="text-xs font-bold tracking-[0.25em] text-white/40 uppercase">New Category</span>
             <div className="flex items-center gap-4">
@@ -136,18 +159,85 @@ export const PortfolioIndex = () => {
               </button>
             </div>
           </div>
-          <div className="px-4 pb-4">
+
+          <div className="px-4 pb-6">
+            {/* Name + auto-slug */}
             <AdminTextField
               label="Category Name"
               value={draft.name}
-              onChange={(v) => setDraft({ ...draft, name: v })}
+              onChange={handleNameChange}
               placeholder="e.g. Photography"
             />
+            <div className="border-b border-white/10 py-3">
+              <p className="text-[10px] font-bold tracking-[0.3em] text-white/25 uppercase">
+                URL Slug (auto-generated)
+              </p>
+              <p className="mt-1 font-mono text-xs text-white/50">
+                /portfolio/<span className="text-white/70">{draft.slug || "…"}</span>
+              </p>
+            </div>
+
+            <AdminImageField
+              label="Header Image"
+              value={draft.img}
+              onChange={(v) => setDraftField("img", v)}
+            />
+
+            {/* Bullets */}
+            <div className="border-b border-white/10 py-4">
+              <label className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+                Bullets (5 items)
+              </label>
+              {draft.bullets.map((b, i) => (
+                <input
+                  key={i}
+                  type="text"
+                  value={b}
+                  onChange={(e) => setDraftBullet(i, e.target.value)}
+                  placeholder={`Bullet ${i + 1}`}
+                  className="mb-2 block w-full border-b border-white/20 bg-transparent pb-1 text-sm text-white outline-none focus:border-white/50"
+                />
+              ))}
+            </div>
+
+            {/* Overview */}
+            <div className="mt-4 mb-2">
+              <p className="text-xs font-bold tracking-[0.3em] text-white/30 uppercase">Overview</p>
+            </div>
             <AdminTextField
-              label="Slug (URL)"
-              value={draft.slug}
-              onChange={(v) => setDraft({ ...draft, slug: v })}
-              placeholder="e.g. photography"
+              label="Headline"
+              value={draft.overview.headline}
+              onChange={(v) => setDraftOverview("headline", v)}
+            />
+            <AdminTextareaField
+              label="Description"
+              value={draft.overview.description}
+              onChange={(v) => setDraftOverview("description", v)}
+              rows={3}
+            />
+            <AdminTextareaField
+              label="Problem"
+              value={draft.overview.problem}
+              onChange={(v) => setDraftOverview("problem", v)}
+              rows={3}
+            />
+            <AdminTextareaField
+              label="Solution"
+              value={draft.overview.solution}
+              onChange={(v) => setDraftOverview("solution", v)}
+              rows={3}
+            />
+            <AdminTextareaField
+              label="Execution"
+              value={draft.overview.execution}
+              onChange={(v) => setDraftOverview("execution", v)}
+              rows={3}
+            />
+            <AdminTextareaField
+              label="Results"
+              value={draft.overview.results}
+              onChange={(v) => setDraftOverview("results", v)}
+              rows={3}
             />
           </div>
         </div>
