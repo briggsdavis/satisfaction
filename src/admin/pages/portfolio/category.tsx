@@ -1,6 +1,6 @@
 import { Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
-import { Link, useNavigate, useParams, useSearchParams } from "react-router"
+import { Link, useNavigate, useParams } from "react-router"
 import { AdminImageField, AdminTextareaField, AdminTextField } from "../../components/fields"
 import { ConfirmDialog, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
@@ -8,9 +8,9 @@ import type { AdminContent } from "../../context/content-context"
 
 type Project = AdminContent["categories"][number]["projects"][number]
 
-const newProject = (): Project => ({
-  slug: `project-${Date.now()}`,
-  title: "New Project",
+const blankProject = (): Project => ({
+  slug: "",
+  title: "",
   tags: ["", ""],
   descriptor: "",
   img: "",
@@ -20,14 +20,13 @@ const newProject = (): Project => ({
 export const CategoryAdmin = () => {
   const { categorySlug } = useParams<{ categorySlug: string }>()
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const showNewProjectForm = searchParams.has("new")
 
   const { content, update } = useContent()
   const catIndex = content.categories.findIndex((c) => c.slug === categorySlug)
   const cat = content.categories[catIndex]
 
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
+  const [draftProject, setDraftProject] = useState<Project | null>(null)
 
   if (!cat) {
     return (
@@ -52,9 +51,12 @@ export const CategoryAdmin = () => {
     updateCat({ bullets: next })
   }
 
-  const addProject = () => {
-    updateCat({ projects: [...cat.projects, newProject()] })
-    navigate(`/admin/portfolio/${cat.slug}`)
+  const confirmProject = () => {
+    if (draftProject) {
+      updateCat({ projects: [...cat.projects, draftProject] })
+      setDraftProject(null)
+      navigate(`/admin/portfolio/${cat.slug}`)
+    }
   }
 
   const deleteProject = (slug: string) => {
@@ -134,20 +136,54 @@ export const CategoryAdmin = () => {
           </div>
         ))}
 
-        {showNewProjectForm ? (
-          <div className="border border-dashed border-white/20 p-4 mt-4">
-            <p className="mb-3 text-xs text-white/40">Adding new project to {cat.name}</p>
-            <button onClick={addProject} className="btn-industrial-sm">
-              Create Project
-            </button>
+        {/* Draft new project form */}
+        {draftProject !== null ? (
+          <div className="mt-4 border border-dashed border-white/30">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
+              <span className="text-xs font-bold tracking-[0.25em] text-white/40 uppercase">New Project</span>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setDraftProject(null)}
+                  className="text-xs font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmProject}
+                  className="text-xs font-bold tracking-[0.2em] text-white uppercase transition-colors hover:text-white/60"
+                >
+                  Create →
+                </button>
+              </div>
+            </div>
+            <div className="px-4 pb-4">
+              <AdminTextField
+                label="Title"
+                value={draftProject.title}
+                onChange={(v) => setDraftProject({ ...draftProject, title: v })}
+                placeholder="e.g. Summer Campaign 2024"
+              />
+              <AdminTextField
+                label="Slug (URL)"
+                value={draftProject.slug}
+                onChange={(v) => setDraftProject({ ...draftProject, slug: v })}
+                placeholder="e.g. summer-campaign-2024"
+              />
+              <AdminTextField
+                label="Descriptor"
+                value={draftProject.descriptor}
+                onChange={(v) => setDraftProject({ ...draftProject, descriptor: v })}
+                placeholder="e.g. Brand Campaign"
+              />
+            </div>
           </div>
         ) : (
-          <Link
-            to={`?new`}
+          <button
+            onClick={() => setDraftProject(blankProject())}
             className="mt-4 flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase hover:border-white/40 hover:text-white/70 transition-colors"
           >
             <Plus size={12} /> Add Project
-          </Link>
+          </button>
         )}
       </div>
 

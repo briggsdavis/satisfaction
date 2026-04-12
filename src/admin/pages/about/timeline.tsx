@@ -1,5 +1,5 @@
 import { AdminTextareaField, AdminTextField } from "../../components/fields"
-import { SectionHeader } from "../../components/misc"
+import { BackButton, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
 
 export const TimelineAdmin = () => {
@@ -15,6 +15,7 @@ export const TimelineAdmin = () => {
 
   return (
     <div className="max-w-2xl">
+      <BackButton to="/admin/about" label="About" />
       <SectionHeader
         title="About — Timeline"
         description="Past projects & clients horizontal scroll. Edit only — add/delete not available."

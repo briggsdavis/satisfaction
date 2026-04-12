@@ -1,7 +1,8 @@
-import { ReadOnlyFrame, SectionHeader } from "../../components/misc"
+import { BackButton, ReadOnlyFrame, SectionHeader } from "../../components/misc"
 
 export const HeroAdmin = () => (
   <div className="max-w-2xl">
+    <BackButton to="/admin/homepage" label="Homepage" />
     <SectionHeader
       title="Hero Banner"
       description="The homepage hero is a 3D animated section. Its metadata labels are shown below for reference only."

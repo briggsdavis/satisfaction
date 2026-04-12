@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { AdminTextareaField, AdminTextField } from "../../components/fields"
-import { SectionHeader } from "../../components/misc"
+import { BackButton, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
 import type { AdminContent } from "../../context/content-context"
 
@@ -13,6 +13,11 @@ export const FaqAdmin = () => {
   const sections = content.faqSections
   const [expandedSection, setExpandedSection] = useState<number | null>(null)
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
+
+  // Draft state for new section
+  const [draftSection, setDraftSection] = useState<FaqSection | null>(null)
+  // Draft state for new item within a section: { si, item }
+  const [draftItem, setDraftItem] = useState<{ si: number; item: FaqItem } | null>(null)
 
   const updateSections = (next: FaqSection[]) => update("faqSections", next)
 
@@ -33,7 +38,13 @@ export const FaqAdmin = () => {
   }
 
   const deleteSection = (si: number) => updateSections(sections.filter((_, i) => i !== si))
-  const addSection = () => updateSections([...sections, { section: "New Section", items: [] }])
+
+  const confirmSection = () => {
+    if (draftSection) {
+      updateSections([...sections, draftSection])
+      setDraftSection(null)
+    }
+  }
 
   const moveItem = (si: number, ii: number, dir: -1 | 1) => {
     const items = [...sections[si].items]
@@ -47,12 +58,17 @@ export const FaqAdmin = () => {
     updateSection(si, { items: sections[si].items.filter((_, i) => i !== ii) })
   }
 
-  const addItem = (si: number) => {
-    updateSection(si, { items: [...sections[si].items, { q: "", a: "" }] })
+  const confirmItem = () => {
+    if (draftItem) {
+      const { si, item } = draftItem
+      updateSection(si, { items: [...sections[si].items, item] })
+      setDraftItem(null)
+    }
   }
 
   return (
     <div className="max-w-3xl">
+      <BackButton to="/admin/contact" label="Contact" />
       <SectionHeader
         title="FAQ Builder"
         description="Add, edit, remove, and reorder FAQ sections and questions."
@@ -114,12 +130,49 @@ export const FaqAdmin = () => {
                       </div>
                     )
                   })}
-                  <button
-                    onClick={() => addItem(si)}
-                    className="flex items-center gap-1.5 text-xs font-bold tracking-[0.2em] text-white/30 uppercase hover:text-white transition-colors py-2"
-                  >
-                    <Plus size={11} /> Add Question
-                  </button>
+
+                  {/* Draft new item form */}
+                  {draftItem?.si === si ? (
+                    <div className="border border-dashed border-white/30">
+                      <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
+                        <span className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase">New Question</span>
+                        <div className="flex items-center gap-4">
+                          <button
+                            onClick={() => setDraftItem(null)}
+                            className="text-xs font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={confirmItem}
+                            className="text-xs font-bold tracking-[0.2em] text-white uppercase transition-colors hover:text-white/60"
+                          >
+                            Create →
+                          </button>
+                        </div>
+                      </div>
+                      <div className="px-3 pb-3">
+                        <AdminTextField
+                          label="Question"
+                          value={draftItem.item.q}
+                          onChange={(v) => setDraftItem({ si, item: { ...draftItem.item, q: v } })}
+                        />
+                        <AdminTextareaField
+                          label="Answer"
+                          value={draftItem.item.a}
+                          onChange={(v) => setDraftItem({ si, item: { ...draftItem.item, a: v } })}
+                          rows={3}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setDraftItem({ si, item: { q: "", a: "" } })}
+                      className="flex items-center gap-1.5 py-2 text-xs font-bold tracking-[0.2em] text-white/30 uppercase hover:text-white transition-colors"
+                    >
+                      <Plus size={11} /> Add Question
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -127,12 +180,42 @@ export const FaqAdmin = () => {
         ))}
       </div>
 
-      <button
-        onClick={addSection}
-        className="mt-4 flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase hover:border-white/40 hover:text-white/70 transition-colors"
-      >
-        <Plus size={12} /> Add Section
-      </button>
+      {/* Draft new section form */}
+      {draftSection !== null ? (
+        <div className="mt-4 border border-dashed border-white/30">
+          <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
+            <span className="text-xs font-bold tracking-[0.25em] text-white/40 uppercase">New Section</span>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setDraftSection(null)}
+                className="text-xs font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmSection}
+                className="text-xs font-bold tracking-[0.2em] text-white uppercase transition-colors hover:text-white/60"
+              >
+                Create →
+              </button>
+            </div>
+          </div>
+          <div className="px-4 pb-4">
+            <AdminTextField
+              label="Section Title"
+              value={draftSection.section}
+              onChange={(v) => setDraftSection({ ...draftSection, section: v })}
+            />
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setDraftSection({ section: "", items: [] })}
+          className="mt-4 flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase hover:border-white/40 hover:text-white/70 transition-colors"
+        >
+          <Plus size={12} /> Add Section
+        </button>
+      )}
     </div>
   )
 }

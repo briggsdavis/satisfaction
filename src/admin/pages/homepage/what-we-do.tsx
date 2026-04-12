@@ -1,5 +1,5 @@
 import { AdminTextareaField, AdminTextField } from "../../components/fields"
-import { SectionHeader } from "../../components/misc"
+import { BackButton, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
 
 export const WhatWeDoAdmin = () => {
@@ -11,6 +11,7 @@ export const WhatWeDoAdmin = () => {
 
   return (
     <div className="max-w-2xl">
+      <BackButton to="/admin/homepage" label="Homepage" />
       <SectionHeader
         title="What We Do / Why We're Different"
         description="Two-panel scroll section on the homepage."

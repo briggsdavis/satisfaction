@@ -1,15 +1,16 @@
 import { ChevronDown, ChevronRight, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router"
+import { AdminTextField } from "../../components/fields"
 import { ConfirmDialog, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
 import type { AdminContent } from "../../context/content-context"
 
 type Category = AdminContent["categories"][number]
 
-const newCategory = (): Category => ({
-  slug: `category-${Date.now()}`,
-  name: "New Category",
+const blankCategory = (): Category => ({
+  slug: "",
+  name: "",
   img: "",
   height: "680px",
   bullets: ["", "", "", "", ""],
@@ -30,8 +31,14 @@ export const PortfolioIndex = () => {
   const [expanded, setExpanded] = useState<string | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
 
-  const addCategory = () => {
-    update("categories", [...categories, newCategory()])
+  // Draft state for new category
+  const [draft, setDraft] = useState<Category | null>(null)
+
+  const confirmCategory = () => {
+    if (draft) {
+      update("categories", [...categories, draft])
+      setDraft(null)
+    }
   }
 
   const deleteCategory = (slug: string) => {
@@ -109,13 +116,50 @@ export const PortfolioIndex = () => {
         ))}
       </div>
 
-      <button
-        onClick={addCategory}
-        className="mt-4 flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase transition-colors hover:border-white/40 hover:text-white/70"
-      >
-        <Plus size={12} />
-        Add Category
-      </button>
+      {/* Draft new category form */}
+      {draft !== null ? (
+        <div className="mt-4 border border-dashed border-white/30">
+          <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
+            <span className="text-xs font-bold tracking-[0.25em] text-white/40 uppercase">New Category</span>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setDraft(null)}
+                className="text-xs font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmCategory}
+                className="text-xs font-bold tracking-[0.2em] text-white uppercase transition-colors hover:text-white/60"
+              >
+                Create →
+              </button>
+            </div>
+          </div>
+          <div className="px-4 pb-4">
+            <AdminTextField
+              label="Category Name"
+              value={draft.name}
+              onChange={(v) => setDraft({ ...draft, name: v })}
+              placeholder="e.g. Photography"
+            />
+            <AdminTextField
+              label="Slug (URL)"
+              value={draft.slug}
+              onChange={(v) => setDraft({ ...draft, slug: v })}
+              placeholder="e.g. photography"
+            />
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setDraft(blankCategory())}
+          className="mt-4 flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase transition-colors hover:border-white/40 hover:text-white/70"
+        >
+          <Plus size={12} />
+          Add Category
+        </button>
+      )}
 
       {deleteTarget && (
         <ConfirmDialog

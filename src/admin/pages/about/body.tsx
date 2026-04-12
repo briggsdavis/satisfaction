@@ -1,5 +1,5 @@
 import { AdminTextareaField } from "../../components/fields"
-import { SectionHeader } from "../../components/misc"
+import { BackButton, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
 
 export const AboutBodyAdmin = () => {
@@ -16,6 +16,7 @@ export const AboutBodyAdmin = () => {
 
   return (
     <div className="max-w-2xl">
+      <BackButton to="/admin/about" label="About" />
       <SectionHeader
         title="About — Body Copy"
         description="Three staggered paragraphs that blur in on scroll."

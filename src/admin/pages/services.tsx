@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { AdminImageField, AdminTextareaField, AdminTextField } from "../components/fields"
 import { ItemActions, ListEditor } from "../components/list-editor"
+import type { ItemHelpers } from "../components/list-editor"
 import { RouteBadge, SectionHeader } from "../components/misc"
 import { useContent } from "../context/content-context"
 import type { AdminContent } from "../context/content-context"
@@ -24,9 +25,9 @@ const ServiceEditor = ({
   helpers,
 }: {
   service: Service
-  helpers: Parameters<Parameters<typeof ListEditor<Service>>[0]["renderItem"]>[2]
+  helpers: ItemHelpers<Service>
 }) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(helpers.isDraft ?? false)
 
   const set = (key: keyof Service, value: unknown) =>
     helpers.update({ ...service, [key]: value })
@@ -48,19 +49,23 @@ const ServiceEditor = ({
           <span className="text-xs text-white/40">{service.tag}</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => setOpen((o) => !o)}
-            className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase hover:text-white transition-colors"
-          >
-            {open ? "Close" : "Edit"}
-          </button>
-          <ItemActions
-            onMoveUp={helpers.moveUp}
-            onMoveDown={helpers.moveDown}
-            onRemove={helpers.remove}
-            isFirst={helpers.isFirst}
-            isLast={helpers.isLast}
-          />
+          {!helpers.isDraft && (
+            <>
+              <button
+                onClick={() => setOpen((o) => !o)}
+                className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase hover:text-white transition-colors"
+              >
+                {open ? "Close" : "Edit"}
+              </button>
+              <ItemActions
+                onMoveUp={helpers.moveUp}
+                onMoveDown={helpers.moveDown}
+                onRemove={helpers.remove}
+                isFirst={helpers.isFirst}
+                isLast={helpers.isLast}
+              />
+            </>
+          )}
         </div>
       </div>
 

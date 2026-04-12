@@ -1,4 +1,4 @@
-import { SectionHeader } from "../../components/misc"
+import { BackButton, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
 
 export const FeaturedAdmin = () => {
@@ -26,6 +26,7 @@ export const FeaturedAdmin = () => {
 
   return (
     <div className="max-w-3xl">
+      <BackButton to="/admin/homepage" label="Homepage" />
       <SectionHeader
         title="Featured Projects"
         description="Choose exactly 3 projects to appear in the homepage cascade. Select up to 3."

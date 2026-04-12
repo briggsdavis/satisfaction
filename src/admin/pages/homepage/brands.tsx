@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { AdminImageField, AdminTextField } from "../../components/fields"
 import { ItemActions, ListEditor } from "../../components/list-editor"
-import { SectionHeader } from "../../components/misc"
+import type { ItemHelpers } from "../../components/list-editor"
+import { BackButton, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
 
 type Brand = { name: string; logo?: string }
@@ -13,9 +14,9 @@ const BrandCard = ({
 }: {
   brand: Brand
   index: number
-  helpers: Parameters<Parameters<typeof ListEditor<Brand>>[0]["renderItem"]>[2]
+  helpers: ItemHelpers<Brand>
 }) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(helpers.isDraft ?? false)
 
   return (
     <div className="border border-white/10">
@@ -32,19 +33,23 @@ const BrandCard = ({
           <span className="text-sm font-bold truncate">{brand.name || "Untitled"}</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => setOpen((o) => !o)}
-            className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase hover:text-white transition-colors"
-          >
-            {open ? "Close" : "Edit"}
-          </button>
-          <ItemActions
-            onMoveUp={helpers.moveUp}
-            onMoveDown={helpers.moveDown}
-            onRemove={helpers.remove}
-            isFirst={helpers.isFirst}
-            isLast={helpers.isLast}
-          />
+          {!helpers.isDraft && (
+            <>
+              <button
+                onClick={() => setOpen((o) => !o)}
+                className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase hover:text-white transition-colors"
+              >
+                {open ? "Close" : "Edit"}
+              </button>
+              <ItemActions
+                onMoveUp={helpers.moveUp}
+                onMoveDown={helpers.moveDown}
+                onRemove={helpers.remove}
+                isFirst={helpers.isFirst}
+                isLast={helpers.isLast}
+              />
+            </>
+          )}
         </div>
       </div>
 
@@ -72,6 +77,7 @@ export const BrandsAdmin = () => {
 
   return (
     <div className="max-w-2xl">
+      <BackButton to="/admin/homepage" label="Homepage" />
       <SectionHeader
         title="Brands Carousel"
         description="The scrolling brand ticker on the homepage. Add, edit, or remove client names."

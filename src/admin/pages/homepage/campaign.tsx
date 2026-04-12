@@ -1,5 +1,5 @@
 import { AdminTextField } from "../../components/fields"
-import { SectionHeader } from "../../components/misc"
+import { BackButton, SectionHeader } from "../../components/misc"
 import { useContent } from "../../context/content-context"
 
 export const CampaignAdmin = () => {
@@ -14,6 +14,7 @@ export const CampaignAdmin = () => {
 
   return (
     <div className="max-w-2xl">
+      <BackButton to="/admin/homepage" label="Homepage" />
       <SectionHeader
         title="Campaign Statement"
         description="The large animated 4-word tagline on the homepage. Each word appears on its own line, alternating left/right."

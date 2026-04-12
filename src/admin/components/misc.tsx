@@ -1,5 +1,17 @@
-import { CheckCircle2 } from "lucide-react"
+import { CheckCircle2, ChevronLeft } from "lucide-react"
 import React from "react"
+import { Link } from "react-router"
+
+// Back navigation button for sub-pages
+export const BackButton = ({ to, label }: { to: string; label: string }) => (
+  <Link
+    to={to}
+    className="mb-6 flex items-center gap-1.5 text-xs font-bold tracking-[0.2em] text-white/40 uppercase transition-colors hover:text-white"
+  >
+    <ChevronLeft size={13} />
+    {label}
+  </Link>
+)
 
 // Section wrapper with title + optional description
 export const SectionHeader = ({
