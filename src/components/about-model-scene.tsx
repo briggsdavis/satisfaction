@@ -1,4 +1,4 @@
-import { useGLTF } from "@react-three/drei"
+import { Environment, useGLTF } from "@react-three/drei"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { Suspense, useEffect, useMemo, useRef } from "react"
 import * as THREE from "three"
@@ -7,7 +7,14 @@ import * as THREE from "three"
 function Model() {
   const groupRef = useRef<THREE.Group>(null)
   const { scene: originalScene } = useGLTF("/model.gltf")
-  const scene = useMemo(() => originalScene.clone(true), [originalScene])
+  const scene = useMemo(() => {
+    const cloned = originalScene.clone(true)
+    // Reset any baked-in rotation from the GLTF node hierarchy
+    // so the model faces the camera head-on
+    cloned.rotation.set(0, 0, 0)
+    cloned.updateMatrixWorld(true)
+    return cloned
+  }, [originalScene])
 
   // Normalize geometry — center and scale to fit in a 2-unit box
   const { scale, offset } = useMemo(() => {
@@ -36,8 +43,8 @@ function Model() {
   // Smooth rotation toward mouse position each frame
   useFrame(() => {
     if (!groupRef.current) return
-    const maxAngle = 0.1 // ±0.1 rad (~5.7°) — subtle
-    const damping = 0.05
+    const maxAngle = 0.06 // ±0.06 rad (~3.4°) — very subtle
+    const damping = 0.03
 
     const targetY = mouse.current.x * maxAngle
     const targetX = -mouse.current.y * maxAngle
@@ -63,6 +70,11 @@ useGLTF.preload("/model.gltf")
 function Scene() {
   return (
     <>
+      {/* Environment map — required for KHR_materials_transmission (glass)
+          to have something to refract. Without this, transmission materials
+          render flat/dark since the refraction buffer is empty. */}
+      <Environment preset="city" />
+
       {/* Lighting */}
       <ambientLight intensity={0.4} />
       <directionalLight

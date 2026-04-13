@@ -1,3 +1,4 @@
+import { motion, useMotionValue, useTransform } from "motion/react"
 import React from "react"
 import {
   Route,
@@ -27,7 +28,11 @@ class CanvasErrorBoundary extends React.Component<
 }
 import { AboutModelScene } from "./components/about-model-scene"
 import { Navbar } from "./components/navbar"
-import { SmoothScroll, SmoothScrollProvider } from "./components/smooth-scroll"
+import {
+  SmoothScroll,
+  SmoothScrollProvider,
+  useSmoothScroll,
+} from "./components/smooth-scroll"
 import { About } from "./pages/about"
 import { CategoryPage } from "./pages/category"
 import { Contact } from "./pages/contact"
@@ -114,14 +119,39 @@ const ConditionalHeroCanvas = () => {
   )
 }
 
+const AboutCanvasInner = () => {
+  const smoothY = useSmoothScroll()
+  const fallbackY = useMotionValue(0)
+  const activeY = smoothY ?? fallbackY
+
+  const [heroEnd, setHeroEnd] = React.useState(
+    () => window.innerHeight * 0.5,
+  )
+  React.useEffect(() => {
+    const update = () => setHeroEnd(window.innerHeight * 0.5)
+    window.addEventListener("resize", update)
+    return () => window.removeEventListener("resize", update)
+  }, [])
+
+  // Fade in after the "WHO WE ARE" hero zoom completes
+  const opacity = useTransform(activeY, [heroEnd - 10, heroEnd + 10], [0, 1])
+
+  return (
+    <motion.div
+      className="pointer-events-none fixed inset-0 z-[1]"
+      style={{ opacity }}
+    >
+      <AboutModelScene />
+    </motion.div>
+  )
+}
+
 const ConditionalAboutCanvas = () => {
   const { pathname } = useLocation()
   if (pathname !== "/about") return null
   return (
     <CanvasErrorBoundary>
-      <div className="pointer-events-none fixed inset-0 z-[1]">
-        <AboutModelScene />
-      </div>
+      <AboutCanvasInner />
     </CanvasErrorBoundary>
   )
 }
