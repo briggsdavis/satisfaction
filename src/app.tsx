@@ -126,7 +126,7 @@ const AboutCanvasInner = () => {
 
       {/* Black overlay — z-[2], darkens 3D but sits below column lines and text */}
       <motion.div
-        className="pointer-events-none fixed inset-0 z-[2] bg-black/85"
+        className="pointer-events-none fixed inset-0 z-[2] bg-black"
         style={{ opacity: scrollOpacity }}
       />
     </>
