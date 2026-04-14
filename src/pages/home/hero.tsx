@@ -30,7 +30,7 @@ export const HeroCanvas = () => {
 
   return (
     <motion.div
-      className="pointer-events-none fixed inset-0 z-[3]"
+      className="pointer-events-none fixed inset-0 z-[4]"
       style={{ y: scrollOffset }}
     >
       <LaptopScene scrollProgress={scrollProgress} />

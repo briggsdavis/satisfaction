@@ -1,4 +1,4 @@
-import { useMotionValue } from "motion/react"
+import { motion, useMotionValue, useTransform } from "motion/react"
 import React from "react"
 import {
   Route,
@@ -79,26 +79,7 @@ const AppRoutes = () => {
   return (
     <Routes location={displayedLocation ?? undefined}>
       <Route path="/" element={<Home />} />
-      <Route
-        path="/about"
-        element={
-          <>
-            {[...Array(7)].map((_, i) => (
-              <div
-                key={i}
-                className={`column-line${i % 2 !== 0 ? " hidden md:block" : ""}`}
-                style={
-                  {
-                    left: `${(100 / 6) * i}%`,
-                    ["--sweep-delay" as string]: `${i * 0.75}s`,
-                  } as React.CSSProperties
-                }
-              />
-            ))}
-            <About />
-          </>
-        }
-      />
+      <Route path="/about" element={<About />} />
       <Route path="/services" element={<Services />} />
       <Route path="/portfolio" element={<Portfolio />} />
       <Route path="/portfolio/:category" element={<CategoryPage />} />
@@ -121,32 +102,34 @@ const ConditionalHeroCanvas = () => {
 
 const AboutCanvasInner = () => {
   const [canvasReady, setCanvasReady] = React.useState(false)
-  const [heroComplete, setHeroComplete] = React.useState(false)
 
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
 
-  // Watch scroll — only allow fade-in after the hero zoom finishes
-  React.useEffect(() => {
-    const heroEnd = window.innerHeight * 0.5
-    return activeY.on("change", (y) => {
-      if (y >= heroEnd) setHeroComplete(true)
-    })
-  }, [activeY])
-
-  const visible = canvasReady && heroComplete
+  const heroEnd = window.innerHeight * 0.5
+  const scrollOpacity = useTransform(
+    activeY,
+    [heroEnd, heroEnd + window.innerHeight * 0.3],
+    [0, 1],
+  )
 
   return (
-    <div
-      className="pointer-events-none fixed inset-0 z-[1]"
-      style={{
-        opacity: visible ? 1 : 0,
-        transition: "opacity 1.5s ease",
-      }}
-    >
-      <AboutModelScene onReady={() => setCanvasReady(true)} />
-    </div>
+    <>
+      {/* 3D canvas — z-[1], behind overlay and content */}
+      <motion.div
+        className="pointer-events-none fixed inset-0 z-[1]"
+        style={{ opacity: canvasReady ? scrollOpacity : 0 }}
+      >
+        <AboutModelScene onReady={() => setCanvasReady(true)} />
+      </motion.div>
+
+      {/* Black overlay — z-[2], darkens 3D but sits below column lines and text */}
+      <motion.div
+        className="pointer-events-none fixed inset-0 z-[2] bg-black/75"
+        style={{ opacity: scrollOpacity }}
+      />
+    </>
   )
 }
 

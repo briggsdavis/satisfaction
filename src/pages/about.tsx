@@ -173,11 +173,11 @@ export const About = () => {
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
 
-  // Fade content in as the WHO WE ARE overlay exits (matches AboutHero's scrollDistance = 50vh)
+  // Fade content in gradually over ~30% of viewport height after the WHO WE ARE hero exits
   const heroEnd = typeof window !== "undefined" ? window.innerHeight * 0.5 : 0
   const contentOpacity = useTransform(
     activeY,
-    [heroEnd - 10, heroEnd + 10],
+    [heroEnd, heroEnd + (typeof window !== "undefined" ? window.innerHeight * 0.3 : 300)],
     [0, 1],
   )
 
@@ -226,6 +226,19 @@ export const About = () => {
   return (
     <>
       <AboutHero />
+
+      {/* Decorative column lines — fade in with scroll, same timing as text */}
+      {[...Array(7)].map((_, i) => (
+        <motion.div
+          key={i}
+          className={`column-line${i % 2 !== 0 ? " hidden md:block" : ""}`}
+          style={{
+            left: `${(100 / 6) * i}%`,
+            opacity: contentOpacity,
+            ...({ ["--sweep-delay"]: `${i * 0.75}s` } as React.CSSProperties),
+          }}
+        />
+      ))}
 
       <motion.div style={{ opacity: contentOpacity }} className="pt-[62vh]">
         {/* Three staggered paragraphs — line-by-line blur-in */}

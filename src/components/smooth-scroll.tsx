@@ -79,7 +79,7 @@ export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
       <motion.div
         ref={scrollRef}
         style={{ y: transform }}
-        className="fixed top-0 left-0 z-[2] w-full will-change-transform"
+        className="fixed top-0 left-0 z-[3] w-full will-change-transform"
       >
         {children}
       </motion.div>
