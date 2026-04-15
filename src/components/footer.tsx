@@ -4,6 +4,14 @@ import { useContent } from "../admin/context/content-context"
 const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://www.instagram.com/socialsatisfaction" },
   { label: "TikTok", href: "https://www.tiktok.com/@socialsatisfaction" },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/social-satisfaction/posts/?feedView=all",
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@SocialSatisfactionAgency",
+  },
 ]
 
 export const Footer = () => {
@@ -14,11 +22,13 @@ export const Footer = () => {
     <footer className="relative overflow-hidden border-t border-white/10 bg-black px-8 pt-32 pb-12 md:px-16">
       <div className="relative z-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:grid-cols-4 lg:gap-16">
         <div className="space-y-8">
-          <img
-            src={logoSrc}
-            alt="Social Satisfaction"
-            className="h-12 w-auto md:h-14"
-          />
+          <Link to="/">
+            <img
+              src={logoSrc}
+              alt="Social Satisfaction"
+              className="h-12 w-auto md:h-14"
+            />
+          </Link>
           <p className="max-w-xs text-sm leading-relaxed text-white/40">
             Full-service marketing agency specialising in creative direction,
             brand identity, and commercial production.
@@ -30,18 +40,16 @@ export const Footer = () => {
             Navigation
           </h4>
           <ul className="space-y-4">
-            {["Home", "About", "Services", "Portfolio", "Contact"].map(
-              (item) => (
-                <li key={item}>
-                  <Link
-                    to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                    className="text-sm font-light tracking-wide text-white/70 transition-colors hover:text-white"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ),
-            )}
+            {["About", "Services", "Portfolio", "Contact"].map((item) => (
+              <li key={item}>
+                <Link
+                  to={`/${item.toLowerCase()}`}
+                  className="text-sm font-light tracking-wide text-white/70 transition-colors hover:text-white"
+                >
+                  {item}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
