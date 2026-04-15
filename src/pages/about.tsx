@@ -190,16 +190,24 @@ const WheelPair = ({
   // Linear mapping: at progress=0 → rotateX for this item's distance from top,
   //                 at progress=1 → rotateX for this item's distance from bottom
   const rotateX = useTransform(progress, [0, 1], [center * -110, (center - 1) * -110])
-  const opacity = useTransform(
-    progress,
-    [
-      Math.max(0, center - 0.38),
-      Math.max(0, center - 0.1),
-      Math.min(1, center + 0.1),
-      Math.min(1, center + 0.22),
-    ],
-    [0.08, 1, 1, 0.08],
-  )
+
+  // Sequential visibility: each section is fully invisible outside its range.
+  // The boundary between item i and i+1 is the midpoint of their centers.
+  // Item i fades out over [boundary - fade, boundary]; item i+1 fades in over
+  // [boundary, boundary + fade] — so they are never simultaneously visible.
+  const leftBound = index === 0 ? 0 : (2 * index - 1) / (2 * (n - 1))
+  const rightBound = index === n - 1 ? 1 : (2 * index + 1) / (2 * (n - 1))
+  const fade = 0.08
+  const opacityInput =
+    index === 0
+      ? [0, Math.max(0, rightBound - fade), rightBound]
+      : index === n - 1
+        ? [leftBound, Math.min(1, leftBound + fade), 1]
+        : [leftBound, leftBound + fade, rightBound - fade, rightBound]
+  const opacityOutput =
+    index === 0 ? [1, 1, 0] : index === n - 1 ? [0, 1, 1] : [0, 1, 1, 0]
+  const opacity = useTransform(progress, opacityInput, opacityOutput)
+
   const yVal = useTransform(progress, [0, 1], [center * -80, (center - 1) * -80])
 
   return (
@@ -313,7 +321,7 @@ const WheelSection = () => {
     >
       <motion.div
         style={{ y: pinY }}
-        className="relative h-screen bg-black"
+        className="relative h-screen"
       >
         {/* Right-side progress dots */}
         <div className="pointer-events-none absolute right-8 top-1/2 z-10 flex -translate-y-1/2 flex-col gap-3 md:right-16">
@@ -378,9 +386,18 @@ export const About = () => {
         setScrollDistance(dist)
       }
     }
+    // Initial measurement
     requestAnimationFrame(() => requestAnimationFrame(measure))
     window.addEventListener("resize", measure)
-    return () => window.removeEventListener("resize", measure)
+    // Re-measure whenever the document height changes — this fires after child
+    // components (e.g. WheelSection) setState and re-render, so wrapperTopRef
+    // always reflects the true post-layout position of the timeline wrapper.
+    const ro = new ResizeObserver(() => requestAnimationFrame(measure))
+    ro.observe(document.documentElement)
+    return () => {
+      window.removeEventListener("resize", measure)
+      ro.disconnect()
+    }
   }, [smoothY])
 
   const pinY = useTransform(activeY, (y: number) => {
@@ -476,10 +493,10 @@ export const About = () => {
               </h3>
             </div>
 
-            {/* Progress line */}
-            <div className="relative mx-8 mt-5 mb-1 h-px bg-white/10 md:mx-16">
+            {/* Progress bar */}
+            <div className="relative mx-8 mt-5 mb-1 h-[3px] bg-white/10 md:mx-16">
               <motion.div
-                className="absolute inset-y-0 left-0 h-full bg-white/60"
+                className="absolute inset-y-0 left-0 h-full bg-white/70"
                 style={{
                   scaleX: timelineProgress,
                   transformOrigin: "left center",
