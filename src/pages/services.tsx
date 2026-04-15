@@ -152,7 +152,7 @@ const ServiceCell = ({
 
   return (
     <motion.div
-      className={`relative border-b border-white/10 ${service.minH}`}
+      className={`relative border-b border-white/10 bg-black ${service.minH}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       initial={{ opacity: 0, y: 24 }}
@@ -164,8 +164,10 @@ const ServiceCell = ({
         ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       }}
     >
-      {/* Image inset — gap from card edge with prominent rounded corners */}
-      <div className="absolute inset-3 overflow-hidden rounded-2xl">
+      {/* Image inset — gap from card edge with rounded corners.
+          Uses rounded-[16px] not rounded-2xl because index.css overrides
+          .rounded-xl and .rounded-2xl to border-radius:0 !important. */}
+      <div className="absolute inset-3 overflow-hidden rounded-[16px]">
         {/* Photo */}
         <img
           src={service.img}

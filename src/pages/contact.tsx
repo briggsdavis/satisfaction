@@ -240,8 +240,8 @@ const ServiceSelect = () => {
           {selectedOption ? (
             <span className="flex items-center gap-2.5">
               <span
-                className="h-2 w-2 shrink-0 rounded-full"
-                style={{ backgroundColor: selectedOption.color }}
+                className="h-2 w-2 shrink-0"
+                style={{ backgroundColor: selectedOption.color, borderRadius: "50%" }}
               />
               <span className="text-white">{selectedOption.name}</span>
             </span>
@@ -264,7 +264,7 @@ const ServiceSelect = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 z-50 mt-1 border border-white/10 bg-black shadow-2xl"
+              className="absolute top-full left-0 right-0 z-50 mt-1 border border-white/20 bg-neutral-900 shadow-2xl"
             >
               {SERVICE_OPTIONS.map((option) => (
                 <button
@@ -277,8 +277,8 @@ const ServiceSelect = () => {
                   className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-white"
                 >
                   <span
-                    className="h-2 w-2 shrink-0 rounded-full"
-                    style={{ backgroundColor: option.color }}
+                    className="h-2 w-2 shrink-0"
+                    style={{ backgroundColor: option.color, borderRadius: "50%" }}
                   />
                   {option.name}
                 </button>
@@ -533,7 +533,7 @@ export const Contact = () => {
 
         {/* Alternating FAQ sections — section name left, Q&A right */}
         {FAQ_SECTIONS.map((section, i) => {
-          const isLight = i % 2 !== 0
+          const isLight = i % 2 === 0
           return (
             <motion.div
               key={section.section}
