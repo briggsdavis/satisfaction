@@ -493,10 +493,10 @@ export const About = () => {
               </h3>
             </div>
 
-            {/* Progress line */}
-            <div className="relative mx-8 mt-5 mb-1 h-px bg-white/10 md:mx-16">
+            {/* Progress bar */}
+            <div className="relative mx-8 mt-5 mb-1 h-[3px] bg-white/10 md:mx-16">
               <motion.div
-                className="absolute inset-y-0 left-0 h-full bg-white/60"
+                className="absolute inset-y-0 left-0 h-full bg-white/70"
                 style={{
                   scaleX: timelineProgress,
                   transformOrigin: "left center",

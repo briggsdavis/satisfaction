@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useLocation } from "react-router"
 import { TextReveal } from "../components/text-reveal"
 
@@ -148,6 +148,19 @@ const FAQ_SECTIONS = [
   },
 ]
 
+// ─── Service options for dropdown ────────────────────────────────────────────
+const SERVICE_OPTIONS = [
+  { name: "Creative Direction", color: "#F59E0B" },
+  { name: "Photography", color: "#3B82F6" },
+  { name: "Branding", color: "#8B5CF6" },
+  { name: "Visual Identity", color: "#EC4899" },
+  { name: "Social Media", color: "#10B981" },
+  { name: "Email Marketing", color: "#EF4444" },
+  { name: "Graphic Design", color: "#06B6D4" },
+  { name: "Motion Graphics", color: "#F97316" },
+  { name: "Videography", color: "#6366F1" },
+]
+
 // ─── Form field components ────────────────────────────────────────────────────
 const TextField = ({
   label,
@@ -195,28 +208,119 @@ const TextareaField = ({
   </div>
 )
 
+// ─── Service dropdown ─────────────────────────────────────────────────────────
+const ServiceSelect = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [selected, setSelected] = useState<string | null>(null)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClick)
+    return () => document.removeEventListener("mousedown", handleClick)
+  }, [])
+
+  const selectedOption = SERVICE_OPTIONS.find((s) => s.name === selected)
+
+  return (
+    <div className="border-b border-white/10 py-5" ref={ref}>
+      <label className="mb-2 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+        Service
+      </label>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setIsOpen((v) => !v)}
+          className="flex w-full items-center justify-between border-b border-white/20 pb-2 text-base outline-none transition-colors focus:border-white/50"
+        >
+          {selectedOption ? (
+            <span className="flex items-center gap-2.5">
+              <span
+                className="h-2 w-2 shrink-0 rounded-full"
+                style={{ backgroundColor: selectedOption.color }}
+              />
+              <span className="text-white">{selectedOption.name}</span>
+            </span>
+          ) : (
+            <span className="text-white/20">Select a service…</span>
+          )}
+          <motion.span
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.25 }}
+            className="shrink-0 text-xs leading-none text-white/30"
+          >
+            ▾
+          </motion.span>
+        </button>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-full left-0 right-0 z-50 mt-1 border border-white/10 bg-[#0a0a0a] shadow-2xl"
+            >
+              {SERVICE_OPTIONS.map((option) => (
+                <button
+                  key={option.name}
+                  type="button"
+                  onClick={() => {
+                    setSelected(option.name)
+                    setIsOpen(false)
+                  }}
+                  className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-white"
+                >
+                  <span
+                    className="h-2 w-2 shrink-0 rounded-full"
+                    style={{ backgroundColor: option.color }}
+                  />
+                  {option.name}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <input type="hidden" name="service" value={selected ?? ""} />
+      </div>
+    </div>
+  )
+}
+
 // ─── FAQ accordion item ───────────────────────────────────────────────────────
 const FaqItem = ({
   item,
   isOpen,
   onToggle,
+  isLight = false,
 }: {
   item: { q: string; a: string }
   isOpen: boolean
   onToggle: () => void
+  isLight?: boolean
 }) => (
-  <div className="border-b border-white/10">
+  <div className={`border-b ${isLight ? "border-black/15" : "border-white/10"}`}>
     <button
       onClick={onToggle}
       className="group flex w-full items-center justify-between py-5 text-left"
     >
-      <span className="pr-8 text-sm font-medium tracking-wide text-white/70 transition-colors group-hover:text-white">
+      <span
+        className={`pr-8 text-sm font-bold tracking-wide transition-colors ${
+          isLight ? "text-black/80 group-hover:text-black" : "text-white/70 group-hover:text-white"
+        }`}
+      >
         {item.q}
       </span>
       <motion.span
         animate={{ rotate: isOpen ? 45 : 0 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="shrink-0 text-xl font-thin text-white/30"
+        className={`shrink-0 text-xl font-thin ${isLight ? "text-black/40" : "text-white/30"}`}
       >
         +
       </motion.span>
@@ -230,7 +334,13 @@ const FaqItem = ({
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="overflow-hidden"
         >
-          <p className="pb-5 text-sm leading-relaxed text-white/50">{item.a}</p>
+          <p
+            className={`pb-5 text-sm font-normal leading-relaxed ${
+              isLight ? "text-black/55" : "text-white/50"
+            }`}
+          >
+            {item.a}
+          </p>
         </motion.div>
       )}
     </AnimatePresence>
@@ -286,16 +396,16 @@ export const Contact = () => {
 
   return (
     <div className="pt-32">
-      {/* ── Big centered header ───────────────────────────────────────────── */}
+      {/* ── Centered header ───────────────────────────────────────────────── */}
       <motion.section
-        className="border-b border-white/10 px-8 pb-16 md:px-16"
+        className="border-b border-white/10 px-8 pb-16 text-center md:px-16"
         initial={{ opacity: 0, filter: "blur(20px)" }}
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
         <TextReveal
           text="CONTACT"
-          className="massive-text text-7xl leading-none md:text-10xl lg:text-12xl"
+          className="massive-text justify-center text-7xl leading-none md:text-10xl lg:text-12xl"
           immediate
         />
       </motion.section>
@@ -381,7 +491,7 @@ export const Contact = () => {
               />
             </BlurIn>
             <BlurIn delay={0.34}>
-              <TextField label="Service" name="service" placeholder="" />
+              <ServiceSelect />
             </BlurIn>
             <BlurIn delay={0.42}>
               <TextareaField
@@ -402,44 +512,64 @@ export const Contact = () => {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-      <section
-        id="faq"
-        className="grid grid-cols-1 border-b border-white/10 lg:grid-cols-[1fr_2fr]"
-      >
-        {/* FAQ title sidebar */}
-        <BlurIn
-          delay={0.1}
-          className="border-b border-white/10 px-8 py-12 lg:border-r lg:border-b-0 md:px-16 lg:py-16"
-        >
-          <span className="mb-4 block text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
-            Frequently Asked
-          </span>
-          <TextReveal
-            text="FAQ"
-            className="massive-text text-4xl leading-none md:text-6xl lg:text-8xl"
-          />
-        </BlurIn>
+      <section id="faq">
+        {/* FAQ header sidebar */}
+        <div className="grid grid-cols-1 border-b border-white/10 lg:grid-cols-[1fr_2fr]">
+          <BlurIn
+            delay={0.1}
+            className="border-b border-white/10 px-8 py-12 lg:border-r lg:border-b-0 md:px-16 lg:py-16"
+          >
+            <span className="mb-4 block text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
+              Frequently Asked
+            </span>
+            <TextReveal
+              text="FAQ"
+              className="massive-text text-4xl leading-none md:text-6xl lg:text-8xl"
+            />
+          </BlurIn>
+          {/* spacer — keeps the sidebar grid balanced */}
+          <div className="hidden lg:block" />
+        </div>
 
-        {/* FAQ questions */}
-        <div className="px-8 py-12 md:px-16 lg:py-16">
-          <div className="space-y-14">
-            {FAQ_SECTIONS.map((section) => (
-              <BlurIn key={section.section}>
-                <p className="mb-4 border-t border-white/10 pt-6 text-xs font-bold tracking-[0.35em] text-white/30 uppercase">
-                  {section.section}
-                </p>
+        {/* Alternating FAQ section blocks */}
+        {FAQ_SECTIONS.map((section, i) => {
+          const isLight = i % 2 !== 0
+          return (
+            <motion.div
+              key={section.section}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5 }}
+              className={`border-b px-8 py-10 md:px-16 md:py-12 ${
+                isLight
+                  ? "border-black/10 bg-white"
+                  : "border-white/10 bg-black"
+              }`}
+            >
+              <p
+                className={`mb-5 border-t pt-6 text-xs font-bold tracking-[0.35em] uppercase ${
+                  isLight
+                    ? "border-black/10 text-black/40"
+                    : "border-white/10 text-white/30"
+                }`}
+              >
+                {section.section}
+              </p>
+              <div className="max-w-2xl">
                 {section.items.map((item, j) => (
                   <FaqItem
                     key={j}
                     item={item}
                     isOpen={openFaq === `${section.section}-${j}`}
                     onToggle={() => toggleFaq(`${section.section}-${j}`)}
+                    isLight={isLight}
                   />
                 ))}
-              </BlurIn>
-            ))}
-          </div>
-        </div>
+              </div>
+            </motion.div>
+          )
+        })}
       </section>
     </div>
   )

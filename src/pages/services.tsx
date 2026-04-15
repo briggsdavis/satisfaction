@@ -7,6 +7,8 @@ const SERVICES = [
   {
     name: "Creative Direction",
     tag: "Strategy",
+    color: "#F59E0B",
+    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Full art direction and campaign concepting, from moodboards to shoot day.",
     bullets: [
       "Creative direction + art direction",
@@ -15,12 +17,13 @@ const SERVICES = [
       "Moodboards + visual references",
       "Location scouting + talent coordination",
     ],
-    inverted: false,
     minH: "min-h-[414px]",
   },
   {
     name: "Photography",
     tag: "Photo",
+    color: "#3B82F6",
+    img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Food, lifestyle, and event photography built for brands that demand presence.",
     bullets: [
       "Food and beverage photography (hero dishes, menu items, action shots)",
@@ -29,12 +32,13 @@ const SERVICES = [
       "Event photography + recap coverage",
       "Product photography (retail items, merch, packaged goods)",
     ],
-    inverted: true,
     minH: "min-h-[497px]",
   },
   {
     name: "Branding",
     tag: "Design",
+    color: "#8B5CF6",
+    img: "https://images.unsplash.com/photo-1542744094-24638eff58bb?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Brand development and identity systems built to outlast trends and grow with you.",
     bullets: [
       "Branding development + refresh",
@@ -43,12 +47,13 @@ const SERVICES = [
       "Logo suite (primary, secondary, icons, stacked marks)",
       "Brand guidelines / brand book",
     ],
-    inverted: true,
     minH: "min-h-[359px]",
   },
   {
     name: "Visual Identity",
     tag: "Design",
+    color: "#EC4899",
+    img: "https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Cohesive visual systems: color, type, patterns, and a full brand asset library.",
     bullets: [
       "Visual identity systems",
@@ -57,12 +62,13 @@ const SERVICES = [
       "Social media look + feel system",
       "Brand asset library",
     ],
-    inverted: false,
     minH: "min-h-[442px]",
   },
   {
     name: "Social Media",
     tag: "Content",
+    color: "#10B981",
+    img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Full social media management: strategy, content, scheduling, and community.",
     bullets: [
       "Full social media management (IG, TikTok, FB, etc.)",
@@ -71,12 +77,13 @@ const SERVICES = [
       "Caption writing + brand voice development",
       "Community management (comments + DMs)",
     ],
-    inverted: false,
     minH: "min-h-[359px]",
   },
   {
     name: "Email Marketing",
     tag: "Email",
+    color: "#EF4444",
+    img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Email strategy, design, and campaigns that drive opens, clicks, and conversions.",
     bullets: [
       "Email strategy + campaign planning",
@@ -85,12 +92,13 @@ const SERVICES = [
       "Monthly email campaigns + promotional blasts",
       "Performance reporting (open rates, CTR)",
     ],
-    inverted: true,
     minH: "min-h-[469px]",
   },
   {
     name: "Graphic Design",
     tag: "Design",
+    color: "#06B6D4",
+    img: "https://images.unsplash.com/photo-1626785774625-ddcddc3445e9?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Full-service graphic design: print, digital, and everything in between.",
     bullets: [
       "Full-service graphic design + promotional design",
@@ -99,12 +107,13 @@ const SERVICES = [
       "Digital assets (social graphics, headers, templates)",
       "Monthly graphic drops + highlight covers",
     ],
-    inverted: true,
     minH: "min-h-[386px]",
   },
   {
     name: "Motion Graphics",
     tag: "Video / Motion",
+    color: "#F97316",
+    img: "https://images.unsplash.com/photo-1574717024453-354056afd6fc?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Animated content that moves: logo animation, kinetic type, and promo templates.",
     bullets: [
       "Logo animation (transparent + background versions)",
@@ -113,12 +122,13 @@ const SERVICES = [
       "Kinetic typography promos",
       "Lower thirds + title sequences",
     ],
-    inverted: false,
     minH: "min-h-[524px]",
   },
   {
     name: "Videography",
     tag: "Video",
+    color: "#6366F1",
+    img: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Professional video production: brand films, reels, event coverage, and scroll-stopping content.",
     bullets: [
       "Brand films + short-form video",
@@ -127,7 +137,6 @@ const SERVICES = [
       "Product + promotional video",
       "Testimonial + interview production",
     ],
-    inverted: true,
     minH: "min-h-[414px]",
   },
 ]
@@ -139,15 +148,13 @@ const ServiceCell = ({
   service: (typeof SERVICES)[0]
   index: number
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   return (
     <motion.div
-      className={`relative flex flex-col justify-between border-b p-7 ${service.minH} ${
-        service.inverted
-          ? "border-black/25 bg-white text-black"
-          : "border-white/40 bg-black text-white"
-      }`}
+      className={`relative border-b border-white/10 ${service.minH}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-150px" }}
@@ -157,104 +164,78 @@ const ServiceCell = ({
         ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       }}
     >
-      {/* Top — tag + description */}
-      <div className="pb-12">
-        <span
-          className={`mb-4 block text-xs font-bold tracking-[0.35em] uppercase ${
-            service.inverted ? "text-black/40" : "text-white/30"
-          }`}
-        >
-          {service.tag}
-        </span>
-        <p
-          className={`text-sm leading-relaxed ${
-            service.inverted ? "text-black/60" : "text-white/60"
-          }`}
-        >
-          {service.desc}
-        </p>
+      {/* Image inset — small gap from card edge with rounded corners */}
+      <div className="absolute inset-2.5 overflow-hidden rounded-xl">
+        {/* Photo */}
+        <img
+          src={service.img}
+          alt={service.name}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700"
+          style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
+        />
 
-        {/* Expandable bullets */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.ul
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="overflow-hidden"
-            >
-              <div className="space-y-2 pt-5">
-                {service.bullets.map((bullet, i) => (
-                  <motion.li
-                    key={i}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      delay: i * 0.06,
-                      duration: 0.35,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    className={`flex list-none items-start gap-2 text-xs leading-relaxed ${
-                      service.inverted ? "text-black/70" : "text-white/70"
-                    }`}
-                  >
-                    <span
-                      className={`mt-[3px] shrink-0 text-xs ${
-                        service.inverted ? "text-black/30" : "text-white/30"
-                      }`}
-                    >
-                      -
-                    </span>
-                    {bullet}
-                  </motion.li>
-                ))}
-              </div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{
-                  delay: service.bullets.length * 0.06 + 0.1,
-                  duration: 0.35,
-                }}
-                className="pt-5"
-              >
-                <Link
-                  to="/portfolio"
-                  className={`text-xs font-bold tracking-[0.2em] uppercase underline underline-offset-4 transition-opacity hover:opacity-60 ${
-                    service.inverted ? "text-black/60" : "text-white/60"
-                  }`}
+        {/* Permanent gradient — keeps bottom text legible */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" />
+
+        {/* Hover darkening */}
+        <motion.div
+          className="pointer-events-none absolute inset-0 bg-black"
+          animate={{ opacity: isHovered ? 0.4 : 0 }}
+          transition={{ duration: 0.35 }}
+        />
+
+        {/* Content overlay */}
+        <div className="absolute inset-0 flex flex-col p-5 md:p-6">
+          {/* Tag — top */}
+          <span className="text-xs font-bold tracking-[0.35em] text-white/50 uppercase">
+            {service.tag}
+          </span>
+
+          {/* Bottom area: hover bullets above the service name */}
+          <div className="flex flex-1 flex-col justify-end">
+            <AnimatePresence>
+              {isHovered && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 12 }}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  className="mb-4"
                 >
-                  Visit Portfolio
-                </Link>
-              </motion.div>
-            </motion.ul>
-          )}
-        </AnimatePresence>
-      </div>
+                  <ul className="space-y-1.5">
+                    {service.bullets.map((bullet, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          delay: i * 0.04,
+                          duration: 0.3,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="flex list-none items-start gap-2 text-xs leading-relaxed text-white/80"
+                      >
+                        <span className="mt-[3px] shrink-0 text-white/40">–</span>
+                        {bullet}
+                      </motion.li>
+                    ))}
+                  </ul>
+                  <Link
+                    to="/portfolio"
+                    className="mt-4 inline-block text-xs font-bold tracking-[0.2em] text-white/70 uppercase underline underline-offset-4 transition-opacity hover:text-white"
+                  >
+                    See Portfolio
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-      {/* Plus — absolutely centered in the card */}
-      <button
-        onClick={() => setIsOpen((v) => !v)}
-        className={`absolute top-1/2 left-1/2 flex w-fit -translate-x-1/2 -translate-y-1/2 items-center justify-center py-2 text-5xl leading-none font-thin transition-opacity hover:opacity-60 ${
-          service.inverted ? "text-black/40" : "text-white/40"
-        }`}
-        aria-label={isOpen ? `Close ${service.name}` : `Expand ${service.name}`}
-      >
-        <motion.span
-          animate={{ rotate: isOpen ? 45 : 0 }}
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-block"
-        >
-          +
-        </motion.span>
-      </button>
-
-      {/* Bottom — service name large */}
-      <div className="overflow-hidden pt-12">
-        <span className="block font-display text-3xl leading-[0.85] uppercase md:text-4xl">
-          {service.name}
-        </span>
+            {/* Service name — always at bottom */}
+            <span className="block font-display text-3xl leading-[0.85] uppercase text-white md:text-4xl">
+              {service.name}
+            </span>
+          </div>
+        </div>
       </div>
     </motion.div>
   )
@@ -262,19 +243,19 @@ const ServiceCell = ({
 
 export const Services = () => (
   <div className="pt-32">
-    {/* Page header */}
-    <section className="border-b border-white/10 px-8 pb-16 md:px-16">
+    {/* Page header — centered */}
+    <section className="border-b border-white/10 px-8 pb-16 text-center md:px-16">
       <span className="mb-6 block text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
         What We Do
       </span>
       <TextReveal
         text="SERVICES"
-        className="massive-text text-6xl leading-none md:text-10xl lg:text-11xl"
+        className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
       />
     </section>
 
-    {/* Asymmetric bento grid — 3 flex columns so cards stack flush */}
-    <div className="flex flex-col divide-y divide-white/40 md:flex-row md:divide-x md:divide-y-0">
+    {/* 3-column bento grid */}
+    <div className="flex flex-col divide-y divide-white/10 md:flex-row md:divide-x md:divide-y-0">
       {[0, 1, 2].map((col) => {
         const colServices = SERVICES.filter((_, i) => i % 3 === col)
         return (
