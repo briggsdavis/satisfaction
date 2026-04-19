@@ -58,11 +58,8 @@ function Model({ onReady }: { onReady?: () => void }) {
 
   return (
     <group ref={groupRef}>
-      {/* Counter-rotate the 45° Y rotation baked into GLTF node 10 */}
-      <group rotation={[0, -Math.PI / 4, 0]}>
-        <group scale={scale} position={offset}>
-          <primitive object={scene} />
-        </group>
+      <group scale={scale} position={offset}>
+        <primitive object={scene} />
       </group>
     </group>
   )
@@ -74,9 +71,13 @@ useGLTF.preload("/v6U0l01.glb")
 function Scene({ onReady }: { onReady?: () => void }) {
   return (
     <>
-      {/* Lighting — HDR environment handles global illumination; keep this minimal */}
-      <ambientLight intensity={0.3} />
-      <pointLight position={[-3, 3, -2]} intensity={0.5} color="#4466ff" />
+      <ambientLight intensity={1.5} />
+      {/* Key light — top-right, bright white to create specular highlights on metallic surface */}
+      <directionalLight position={[4, 6, 3]} intensity={6} color="#ffffff" />
+      {/* Fill light — left side, cooler tone */}
+      <directionalLight position={[-4, 2, 2]} intensity={3} color="#aabbff" />
+      {/* Rim light — back-right for edge definition */}
+      <directionalLight position={[2, -2, -4]} intensity={2} color="#ffffff" />
 
       {/* Environment + Model in same Suspense so both must load before render */}
       <Suspense fallback={null}>
