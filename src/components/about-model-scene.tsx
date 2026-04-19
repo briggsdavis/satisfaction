@@ -65,8 +65,11 @@ function Model() {
 
   return (
     <group ref={groupRef}>
-      <group scale={scale} position={offset}>
-        <primitive object={scene} />
+      {/* Counter-rotate the 45° Y rotation baked into node 20 */}
+      <group rotation={[0, -Math.PI / 4, 0]}>
+        <group scale={scale} position={offset}>
+          <primitive object={scene} />
+        </group>
       </group>
     </group>
   )
