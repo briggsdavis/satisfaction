@@ -104,8 +104,6 @@ const ConditionalHeroCanvas = () => {
 }
 
 const AboutCanvasInner = () => {
-  const [canvasReady, setCanvasReady] = React.useState(false)
-
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
@@ -118,21 +116,12 @@ const AboutCanvasInner = () => {
   )
 
   return (
-    <>
-      {/* 3D canvas — z-[1], behind overlay and content */}
-      <motion.div
-        className="pointer-events-none fixed inset-0 z-[1]"
-        style={{ opacity: canvasReady ? scrollOpacity : 0 }}
-      >
-        <AboutModelScene onReady={() => setCanvasReady(true)} />
-      </motion.div>
-
-      {/* Black overlay — z-[2], darkens 3D but sits below column lines and text */}
-      <motion.div
-        className="pointer-events-none fixed inset-0 z-[2] bg-black/75"
-        style={{ opacity: scrollOpacity }}
-      />
-    </>
+    <motion.div
+      className="pointer-events-none fixed inset-0 z-[1]"
+      style={{ opacity: scrollOpacity }}
+    >
+      <AboutModelScene />
+    </motion.div>
   )
 }
 
