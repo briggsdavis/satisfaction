@@ -7,7 +7,7 @@ import * as THREE from "three"
 function Model({ onReady }: { onReady?: () => void }) {
   const groupRef = useRef<THREE.Group>(null)
   const readyFired = useRef(false)
-  const { scene: originalScene } = useGLTF("/glassmodel")
+  const { scene: originalScene } = useGLTF("/v6U0l01.glb")
   const scene = useMemo(() => originalScene.clone(true), [originalScene])
 
   // Normalize geometry — center and scale to fit in a 2-unit box
@@ -68,7 +68,7 @@ function Model({ onReady }: { onReady?: () => void }) {
   )
 }
 
-useGLTF.preload("/glassmodel")
+useGLTF.preload("/v6U0l01.glb")
 
 // ─── Scene ──────────────────────────────────────────────────────────────────
 function Scene({ onReady }: { onReady?: () => void }) {
