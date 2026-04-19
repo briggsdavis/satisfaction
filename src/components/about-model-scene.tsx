@@ -4,9 +4,8 @@ import { Suspense, useEffect, useMemo, useRef } from "react"
 import * as THREE from "three"
 
 // ─── Loaded GLTF Model ─────────────────────────────────────────────────────
-function Model({ onReady }: { onReady?: () => void }) {
+function Model() {
   const groupRef = useRef<THREE.Group>(null)
-  const readyFired = useRef(false)
   const { scene: originalScene } = useGLTF("/v6U0l01.glb")
   const scene = useMemo(() => originalScene.clone(true), [originalScene])
 
@@ -16,11 +15,28 @@ function Model({ onReady }: { onReady?: () => void }) {
     const center = box.getCenter(new THREE.Vector3())
     const size = box.getSize(new THREE.Vector3())
     const maxDim = Math.max(size.x, size.y, size.z)
-    const s = 2 / maxDim
+    const s = maxDim > 0 ? 2 / maxDim : 1
     return {
       scale: s,
       offset: new THREE.Vector3(-center.x * s, -center.y * s, -center.z * s),
     }
+  }, [scene])
+
+  // Boost emissive so the black metallic model is visible on a dark background
+  useEffect(() => {
+    scene.traverse((obj) => {
+      if ((obj as THREE.Mesh).isMesh) {
+        const mesh = obj as THREE.Mesh
+        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+        mats.forEach((mat) => {
+          if (mat instanceof THREE.MeshStandardMaterial) {
+            mat.emissive.set(0x333333)
+            mat.emissiveIntensity = 0.4
+            mat.needsUpdate = true
+          }
+        })
+      }
+    })
   }, [scene])
 
   // Mouse tracking: normalized to [-1, 1]
@@ -37,19 +53,10 @@ function Model({ onReady }: { onReady?: () => void }) {
   // Smooth rotation toward mouse position each frame
   useFrame(() => {
     if (!groupRef.current) return
-
-    // Signal that the scene has actually rendered
-    if (!readyFired.current) {
-      readyFired.current = true
-      onReady?.()
-    }
-
-    const maxAngle = 0.3 // ±0.30 rad (~17.2°)
+    const maxAngle = 0.3
     const damping = 0.08
-
     const targetY = mouse.current.x * maxAngle
     const targetX = -mouse.current.y * maxAngle
-
     groupRef.current.rotation.y +=
       (targetY - groupRef.current.rotation.y) * damping
     groupRef.current.rotation.x +=
@@ -68,28 +75,24 @@ function Model({ onReady }: { onReady?: () => void }) {
 useGLTF.preload("/v6U0l01.glb")
 
 // ─── Scene ──────────────────────────────────────────────────────────────────
-function Scene({ onReady }: { onReady?: () => void }) {
+function Scene() {
   return (
     <>
       <ambientLight intensity={1.5} />
-      {/* Key light — top-right, bright white to create specular highlights on metallic surface */}
       <directionalLight position={[4, 6, 3]} intensity={6} color="#ffffff" />
-      {/* Fill light — left side, cooler tone */}
       <directionalLight position={[-4, 2, 2]} intensity={3} color="#aabbff" />
-      {/* Rim light — back-right for edge definition */}
       <directionalLight position={[2, -2, -4]} intensity={2} color="#ffffff" />
 
-      {/* Environment + Model in same Suspense so both must load before render */}
       <Suspense fallback={null}>
         <Environment files="/environement.hdr" background={false} />
-        <Model onReady={onReady} />
+        <Model />
       </Suspense>
     </>
   )
 }
 
 // ─── Exported Canvas Wrapper ────────────────────────────────────────────────
-export function AboutModelScene({ onReady }: { onReady?: () => void }) {
+export function AboutModelScene() {
   const dpr = Math.min(window.devicePixelRatio, 1.5)
 
   return (
@@ -99,7 +102,7 @@ export function AboutModelScene({ onReady }: { onReady?: () => void }) {
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
     >
-      <Scene onReady={onReady} />
+      <Scene />
     </Canvas>
   )
 }
