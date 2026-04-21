@@ -490,7 +490,7 @@ export const About = () => {
               <h2 className="text-xs font-bold tracking-widest text-white/40 uppercase">
                 PORTFOLIO
               </h2>
-              <h3 className="mt-1 text-3xl font-bold tracking-tight uppercase md:text-5xl">
+              <h3 className="mt-1 font-display text-3xl font-bold tracking-tight uppercase md:text-5xl">
                 PAST PROJECTS &amp; CLIENTS
               </h3>
             </div>

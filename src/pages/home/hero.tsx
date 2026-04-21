@@ -34,7 +34,7 @@ export const HeroCanvas = () => {
       className="pointer-events-none fixed inset-0 z-[4]"
       style={{ y: scrollOffset }}
     >
-      <ScatteredImages />
+      <ScatteredImages scrollProgress={scrollProgress} />
 
       <div className="pointer-events-none fixed inset-0 z-[5]">
         <LaptopScene scrollProgress={scrollProgress} />

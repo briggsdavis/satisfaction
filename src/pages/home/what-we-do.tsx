@@ -35,7 +35,7 @@ export const WhatWeDoSection = () => {
           <div className="flex items-center border-b border-white/10 px-8 py-16 md:w-[42%] md:border-b-0 md:px-16">
             <TextReveal
               text="What we do"
-              className="massive-text text-3xl leading-none md:text-6xl lg:text-9xl"
+              className="massive-text text-2xl leading-none md:text-5xl lg:text-8xl"
               immediate
             />
           </div>
@@ -65,7 +65,7 @@ export const WhatWeDoSection = () => {
           <div className="flex items-center border-b border-white/10 px-8 py-16 md:w-[42%] md:border-b-0 md:px-16">
             <TextReveal
               text="Why we're different"
-              className="massive-text text-3xl leading-none md:text-6xl lg:text-9xl"
+              className="massive-text text-2xl leading-none md:text-5xl lg:text-8xl"
               immediate
             />
           </div>

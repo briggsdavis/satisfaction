@@ -134,7 +134,7 @@ export const AboutHero = () => {
     >
       <BorderMarquee opacity={bgOpacity} />
       <motion.h1
-        className="relative z-10 text-center font-sans text-4xl font-black tracking-tight text-white uppercase md:text-7xl lg:text-9xl"
+        className="relative z-10 text-center font-display text-4xl font-black tracking-tight text-white uppercase md:text-7xl lg:text-9xl"
         style={{ scale, opacity: textOpacity }}
       >
         WHO WE ARE

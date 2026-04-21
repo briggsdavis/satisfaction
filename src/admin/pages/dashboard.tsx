@@ -36,7 +36,7 @@ export const Dashboard = () => {
   return (
     <div className="max-w-4xl">
       <div className="mb-10 border-b border-white/10 pb-6">
-        <h1 className="text-3xl font-bold tracking-tight uppercase">
+        <h1 className="font-display text-3xl font-bold tracking-tight uppercase">
           Dashboard
         </h1>
         <p className="mt-2 text-sm text-white/40">

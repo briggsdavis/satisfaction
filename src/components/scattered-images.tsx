@@ -1,4 +1,4 @@
-import { motion } from "motion/react"
+import { motion, MotionValue, useTransform } from "motion/react"
 
 // Drop square images into public/scatter/ and list them here.
 // Positions are viewport-relative (%) and sizes are vmin so they scale responsively.
@@ -12,82 +12,64 @@ const IMAGES: {
   duration: number
 }[] = [
   {
-    src: "/logo.png",
-    top: "12%",
-    left: "6%",
+    src: "/nate.jpg",
+    top: "22%",
+    left: "18%",
     size: "14vmin",
     rotate: -8,
     delay: 0,
     duration: 4.2,
   },
   {
-    src: "/logo.png",
-    top: "20%",
-    left: "78%",
+    src: "/nate.jpg",
+    top: "26%",
+    left: "68%",
     size: "16vmin",
     rotate: 6,
     delay: 0.6,
     duration: 5.1,
   },
   {
-    src: "/logo.png",
-    top: "58%",
-    left: "4%",
-    size: "18vmin",
-    rotate: 4,
+    src: "/nate.jpg",
+    top: "62%",
+    left: "30%",
+    size: "12vmin",
+    rotate: 5,
     delay: 1.1,
     duration: 4.8,
   },
   {
-    src: "/logo.png",
-    top: "62%",
-    left: "82%",
+    src: "/nate.jpg",
+    top: "64%",
+    left: "60%",
     size: "13vmin",
-    rotate: -5,
+    rotate: -6,
     delay: 0.3,
     duration: 5.6,
   },
   {
-    src: "/logo.png",
-    top: "8%",
-    left: "44%",
-    size: "11vmin",
-    rotate: -3,
+    src: "/nate.jpg",
+    top: "18%",
+    left: "calc(50% - 5vmin)",
+    size: "10vmin",
+    rotate: -4,
     delay: 1.4,
-    duration: 4.4,
-  },
-  {
-    src: "/logo.png",
-    top: "72%",
-    left: "46%",
-    size: "12vmin",
-    rotate: 7,
-    delay: 0.9,
-    duration: 5.3,
-  },
-  {
-    src: "/logo.png",
-    top: "38%",
-    left: "88%",
-    size: "10vmin",
-    rotate: -10,
-    delay: 1.7,
     duration: 4.9,
-  },
-  {
-    src: "/logo.png",
-    top: "40%",
-    left: "2%",
-    size: "10vmin",
-    rotate: 9,
-    delay: 0.2,
-    duration: 5.8,
   },
 ]
 
-export function ScatteredImages() {
+export function ScatteredImages({
+  scrollProgress,
+}: {
+  scrollProgress: MotionValue<number>
+}) {
+  const opacity = useTransform(scrollProgress, [0, 1], [1, 0.1])
+
   return (
-    <div className="pointer-events-none fixed inset-0 z-[3] overflow-hidden">
+    <motion.div
+      className="pointer-events-none fixed inset-0 z-[3] overflow-hidden"
+      style={{ opacity }}
+    >
       {IMAGES.map((img, i) => (
         <motion.img
           key={i}
@@ -112,6 +94,6 @@ export function ScatteredImages() {
           }}
         />
       ))}
-    </div>
+    </motion.div>
   )
 }

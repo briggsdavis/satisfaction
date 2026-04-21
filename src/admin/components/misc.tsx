@@ -22,7 +22,9 @@ export const SectionHeader = ({
   description?: string
 }) => (
   <div className="mb-8 border-b border-white/10 pb-6">
-    <h2 className="text-2xl font-bold tracking-tight uppercase">{title}</h2>
+    <h2 className="font-display text-2xl font-bold tracking-tight uppercase">
+      {title}
+    </h2>
     {description && <p className="mt-2 text-sm text-white/50">{description}</p>}
   </div>
 )
