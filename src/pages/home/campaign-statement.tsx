@@ -16,22 +16,23 @@ export const CampaignStatement = () => (
     {CAMPAIGN_WORDS.map((word, i) => {
       const isRight = i % 2 === 1
       return (
-        <motion.div
-          key={word}
-          className={`flex items-end px-8 md:px-16 ${isRight ? "justify-end" : "justify-start"}`}
-          initial={{ opacity: 0, x: isRight ? 40 : -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-150px" }}
-          transition={{
-            duration: 0.7,
-            delay: i * 0.08,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        >
-          <span className="massive-text text-5xl leading-[0.88] select-none md:text-9xl lg:text-11xl">
-            {word}
-          </span>
-        </motion.div>
+        <div key={word} className="px-8 md:px-16">
+          <motion.div
+            className={`flex items-end overflow-hidden ${isRight ? "justify-end" : "justify-start"}`}
+            initial={{ opacity: 0, x: isRight ? 40 : -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-150px" }}
+            transition={{
+              duration: 0.7,
+              delay: i * 0.08,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <span className="massive-text text-5xl leading-[0.88] select-none md:text-9xl lg:text-11xl">
+              {word}
+            </span>
+          </motion.div>
+        </div>
       )
     })}
 

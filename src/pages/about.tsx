@@ -13,39 +13,6 @@ import { useSmoothScroll } from "../components/smooth-scroll"
 import { BrandsCarousel } from "./home/brands-carousel"
 import { FeaturedCascade } from "./home/featured-cascade"
 
-// ─── BlurInLines ─────────────────────────────────────────────────────────────
-const BlurInLines = ({
-  text,
-  className,
-  align,
-}: {
-  text: string
-  className?: string
-  align?: string
-}) => {
-  const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean)
-  return (
-    <div className={className}>
-      {sentences.map((sentence, i) => (
-        <motion.p
-          key={i}
-          className={`mb-4 text-xl leading-loose font-light text-white/70 ${align ?? ""}`}
-          initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
-          whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{
-            duration: 1,
-            delay: i * 0.18,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        >
-          {sentence}
-        </motion.p>
-      ))}
-    </div>
-  )
-}
-
 // ─── Values data + card ───────────────────────────────────────────────────────
 const values = [
   {
@@ -451,29 +418,6 @@ export const About = () => {
       <motion.div style={{ opacity: contentOpacity }} className="pt-[62vh]">
         {/* ── Wheel section (new) ───────────────────────────────────────── */}
         <WheelSection />
-
-        {/* ── Three staggered paragraphs ────────────────────────────────── */}
-        <div className="mb-12 px-8 md:px-16">
-          <div className="flex justify-start">
-            <BlurInLines
-              className="about-glow-text max-w-sm"
-              text="Social Satisfaction, founded by Devon Colebank, transforms hospitality and lifestyle brands through cultural storytelling. We blend nostalgia with modern innovation to create resonant identities that bridge the gap between trend-forward messaging and striking visuals."
-            />
-          </div>
-          <div className="mt-32 flex justify-end">
-            <BlurInLines
-              className="about-glow-text max-w-sm text-right"
-              text="We replace \u201cshoot and share\u201d tactics with performance-driven campaigns. As an end-to-end partner, we manage everything from ideation to execution. This streamlined structure ensures every effort is intentional, cohesive, and designed to drive reservations."
-              align="text-right"
-            />
-          </div>
-          <div className="mt-32 flex justify-start">
-            <BlurInLines
-              className="about-glow-text max-w-sm"
-              text="By integrating strategy with internal production, we eliminate fragmented communication and multiple vendors. Every piece of content serves a business objective. The result is a consistent, optimized rollout that delivers measurable brand loyalty."
-            />
-          </div>
-        </div>
 
         {/* ── Portfolio Timeline ────────────────────────────────────────── */}
         <div

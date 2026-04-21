@@ -470,11 +470,13 @@ export const Contact = () => {
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
-        <TextReveal
-          text="CONTACT"
-          className="massive-text justify-center text-7xl leading-none md:text-10xl lg:text-12xl"
-          immediate
-        />
+        <div className="overflow-hidden">
+          <TextReveal
+            text="CONTACT"
+            className="massive-text justify-center text-7xl leading-none md:text-10xl lg:text-12xl"
+            immediate
+          />
+        </div>
       </motion.section>
 
       {/* ── Form + contact details ────────────────────────────────────────── */}
