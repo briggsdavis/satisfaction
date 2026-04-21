@@ -9,7 +9,7 @@ const FitWord = ({ word, isRight }: { word: string; isRight: boolean }) => {
 
   useEffect(() => {
     const PROBE = 200
-    const fit = () => {
+    const measure = () => {
       const container = containerRef.current
       if (!container) return
       const probe = document.createElement("span")
@@ -24,6 +24,7 @@ const FitWord = ({ word, isRight }: { word: string; isRight: boolean }) => {
         setFontSize((containerWidth / textWidth) * PROBE)
       }
     }
+    const fit = () => void document.fonts.ready.then(measure)
     fit()
     const ro = new ResizeObserver(fit)
     if (containerRef.current) ro.observe(containerRef.current)

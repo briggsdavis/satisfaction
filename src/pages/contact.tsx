@@ -421,7 +421,7 @@ const FitTitle = ({ text }: { text: string }) => {
 
   useEffect(() => {
     const PROBE = 200
-    const fit = () => {
+    const measure = () => {
       const container = containerRef.current
       if (!container) return
       const probe = document.createElement("span")
@@ -436,6 +436,7 @@ const FitTitle = ({ text }: { text: string }) => {
         setFontSize((containerWidth / textWidth) * PROBE)
       }
     }
+    const fit = () => void document.fonts.ready.then(measure)
     fit()
     const ro = new ResizeObserver(fit)
     if (containerRef.current) ro.observe(containerRef.current)
