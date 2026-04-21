@@ -414,6 +414,46 @@ const FaqItem = ({
   </div>
 )
 
+// ─── Fit title ───────────────────────────────────────────────────────────────
+const FitTitle = ({ text }: { text: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [fontSize, setFontSize] = useState<number | null>(null)
+
+  useEffect(() => {
+    const PROBE = 200
+    const measure = () => {
+      const container = containerRef.current
+      if (!container) return
+      const probe = document.createElement("span")
+      probe.style.cssText = `position:absolute;visibility:hidden;white-space:nowrap;font-size:${PROBE}px`
+      probe.className = "massive-text"
+      probe.textContent = text
+      document.body.appendChild(probe)
+      const textWidth = probe.offsetWidth
+      document.body.removeChild(probe)
+      const containerWidth = container.clientWidth
+      if (textWidth > 0 && containerWidth > 0) {
+        setFontSize((containerWidth / textWidth) * PROBE)
+      }
+    }
+    const fit = () => void document.fonts.ready.then(measure)
+    fit()
+    const ro = new ResizeObserver(fit)
+    if (containerRef.current) ro.observe(containerRef.current)
+    return () => ro.disconnect()
+  }, [text])
+
+  return (
+    <div ref={containerRef} style={fontSize ? { fontSize } : undefined}>
+      <TextReveal
+        text={text}
+        className="massive-text justify-center leading-none"
+        immediate
+      />
+    </div>
+  )
+}
+
 // ─── Blur-in wrapper ──────────────────────────────────────────────────────────
 const blurInVariants = {
   hidden: { opacity: 0, filter: "blur(16px)", y: 20 },
@@ -470,11 +510,7 @@ export const Contact = () => {
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
-        <TextReveal
-          text="CONTACT"
-          className="massive-text justify-center text-7xl leading-none md:text-10xl lg:text-12xl"
-          immediate
-        />
+        <FitTitle text="CONTACT" />
       </motion.section>
 
       {/* ── Form + contact details ────────────────────────────────────────── */}
