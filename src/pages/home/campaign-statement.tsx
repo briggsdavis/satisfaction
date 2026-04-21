@@ -1,6 +1,49 @@
 import { motion } from "motion/react"
+import { useEffect, useRef, useState } from "react"
 
 const CAMPAIGN_WORDS = ["CAMPAIGNS", "BUILT", "TO", "PERFORM."]
+
+const FitWord = ({ word, isRight }: { word: string; isRight: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [fontSize, setFontSize] = useState(100)
+
+  useEffect(() => {
+    const PROBE = 200
+    const fit = () => {
+      const container = containerRef.current
+      if (!container) return
+      const probe = document.createElement("span")
+      probe.style.cssText = `position:absolute;visibility:hidden;white-space:nowrap;font-size:${PROBE}px`
+      probe.className = "massive-text"
+      probe.textContent = word
+      document.body.appendChild(probe)
+      const textWidth = probe.offsetWidth
+      document.body.removeChild(probe)
+      const containerWidth = container.clientWidth
+      if (textWidth > 0 && containerWidth > 0) {
+        setFontSize((containerWidth / textWidth) * PROBE)
+      }
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    if (containerRef.current) ro.observe(containerRef.current)
+    return () => ro.disconnect()
+  }, [word])
+
+  return (
+    <div
+      ref={containerRef}
+      className={`flex items-end ${isRight ? "justify-end" : "justify-start"}`}
+    >
+      <span
+        className="massive-text leading-[0.88] select-none"
+        style={{ fontSize }}
+      >
+        {word}
+      </span>
+    </div>
+  )
+}
 
 export const CampaignStatement = () => (
   <section className="relative overflow-hidden border-t border-white/10 bg-black pb-8 md:pb-12">
@@ -18,7 +61,6 @@ export const CampaignStatement = () => (
       return (
         <div key={word} className="px-8 md:px-16">
           <motion.div
-            className={`flex items-end overflow-hidden ${isRight ? "justify-end" : "justify-start"}`}
             initial={{ opacity: 0, x: isRight ? 40 : -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-150px" }}
@@ -28,9 +70,7 @@ export const CampaignStatement = () => (
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <span className="massive-text text-5xl leading-[0.88] select-none md:text-9xl lg:text-11xl">
-              {word}
-            </span>
+            <FitWord word={word} isRight={isRight} />
           </motion.div>
         </div>
       )
