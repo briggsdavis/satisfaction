@@ -195,16 +195,6 @@ const WheelPair = ({
   n: number
   progress: MotionValue<number>
 }) => {
-  const center = n === 1 ? 0 : index / (n - 1)
-
-  // Linear mapping: at progress=0 → rotateX for this item's distance from top,
-  //                 at progress=1 → rotateX for this item's distance from bottom
-  const rotateX = useTransform(
-    progress,
-    [0, 1],
-    [center * -110, (center - 1) * -110],
-  )
-
   // Sequential visibility: each section is fully invisible outside its range.
   // The boundary between item i and i+1 is the midpoint of their centers.
   // Item i fades out over [boundary - fade, boundary]; item i+1 fades in over
@@ -222,15 +212,9 @@ const WheelPair = ({
     index === 0 ? [1, 1, 0] : index === n - 1 ? [0, 1, 1] : [0, 1, 1, 0]
   const opacity = useTransform(progress, opacityInput, opacityOutput)
 
-  const yVal = useTransform(
-    progress,
-    [0, 1],
-    [center * -80, (center - 1) * -80],
-  )
-
   return (
     <motion.div
-      style={{ rotateX, opacity, y: yVal }}
+      style={{ opacity }}
       className="absolute inset-0 flex flex-col items-center justify-center gap-10 px-8 pt-24 md:flex-row md:gap-16 md:px-16"
     >
       {/* Left: text — always left-aligned */}
@@ -350,11 +334,7 @@ const WheelSection = () => {
           ))}
         </div>
 
-        {/* 3D perspective container — clips and gives depth */}
-        <div
-          className="h-full"
-          style={{ perspective: "1400px", perspectiveOrigin: "50% 50%" }}
-        >
+        <div className="h-full">
           {WHEEL_PAIRS.map((item, i) => (
             <WheelPair
               key={i}
@@ -487,11 +467,10 @@ export const About = () => {
               align="text-right"
             />
           </div>
-          <div className="mt-32 flex justify-center">
+          <div className="mt-32 flex justify-start">
             <BlurInLines
               className="about-glow-text max-w-sm"
               text="By integrating strategy with internal production, we eliminate fragmented communication and multiple vendors. Every piece of content serves a business objective. The result is a consistent, optimized rollout that delivers measurable brand loyalty."
-              align="text-center"
             />
           </div>
         </div>

@@ -1,7 +1,40 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Arian LT";
+  src: url("/fonts/arian-lt-light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arian LT";
+  src: url("/fonts/arian-lt-demi.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arian LT";
+  src: url("/fonts/arian-lt-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arian LT";
+  src: url("/fonts/arian-lt-heavy.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
-  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    "Arian LT", "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Anton", "Saira Extra Condensed", sans-serif;
   --color-bg: #000000;
   --color-fg: #ffffff;

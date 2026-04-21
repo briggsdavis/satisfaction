@@ -2,6 +2,7 @@ import { motion, useMotionValue, useTransform } from "motion/react"
 import { useEffect, useState } from "react"
 import { useContent } from "../../admin/context/content-context"
 import { LaptopScene } from "../../components/laptop-scene"
+import { ScatteredImages } from "../../components/scattered-images"
 import { useSmoothScroll } from "../../components/smooth-scroll"
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
@@ -33,7 +34,11 @@ export const HeroCanvas = () => {
       className="pointer-events-none fixed inset-0 z-[4]"
       style={{ y: scrollOffset }}
     >
-      <LaptopScene scrollProgress={scrollProgress} />
+      <ScatteredImages />
+
+      <div className="pointer-events-none fixed inset-0 z-[5]">
+        <LaptopScene scrollProgress={scrollProgress} />
+      </div>
     </motion.div>
   )
 }

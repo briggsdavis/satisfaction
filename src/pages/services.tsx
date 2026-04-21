@@ -152,7 +152,7 @@ const ServiceCell = ({
 
   return (
     <motion.div
-      className={`relative border-b border-white/10 bg-black ${service.minH}`}
+      className={`relative border-b-2 border-white/15 bg-black ${service.minH}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       initial={{ opacity: 0, y: 24 }}
@@ -243,7 +243,7 @@ const ServiceCell = ({
 export const Services = () => (
   <div className="pt-32">
     {/* Page header — centered */}
-    <section className="border-b border-white/10 px-8 pb-16 text-center md:px-16">
+    <section className="border-b-2 border-white/15 px-8 pb-16 text-center md:px-16">
       <span className="mb-6 block text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
         What We Do
       </span>
@@ -254,7 +254,7 @@ export const Services = () => (
     </section>
 
     {/* 3-column bento grid */}
-    <div className="flex flex-col divide-y divide-white/10 md:flex-row md:divide-x md:divide-y-0">
+    <div className="flex flex-col divide-y-2 divide-white/15 md:flex-row md:divide-x-2 md:divide-y-0">
       {[0, 1, 2].map((col) => {
         const colServices = SERVICES.filter((_, i) => i % 3 === col)
         return (

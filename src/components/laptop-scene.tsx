@@ -29,7 +29,7 @@ function Laptop({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const t = scrollProgress.get()
 
     // Start far away, come close to fill the screen
-    groupRef.current.position.z = THREE.MathUtils.lerp(-15, 2.65, t)
+    groupRef.current.position.z = THREE.MathUtils.lerp(-15, 2.415, t)
     // Center model in zone below nav: ~0.75× nav-height gap on top, 1.5× on bottom
     groupRef.current.position.y = THREE.MathUtils.lerp(0, -0.13, t)
     // Slight tilt throughout

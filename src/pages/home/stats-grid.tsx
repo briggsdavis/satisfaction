@@ -70,7 +70,7 @@ const ALL_SERVICES: ServiceCardDef[] = [
 ]
 
 const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
-  <Link to="/services" className="group block">
+  <Link to="/services" className="group block" draggable={false}>
     <motion.div
       style={{ borderRadius: 0, rotate: card.rotate }}
       className="relative aspect-[3/4] overflow-hidden ring-1 ring-white/20"
@@ -87,7 +87,8 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
       <img
         src={card.img}
         alt={card.service}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+        draggable={false}
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out select-none group-hover:scale-110"
       />
       {/* Dark overlay — uniform across all cards */}
       <div className="absolute inset-0 bg-black/65 transition-opacity duration-500 group-hover:bg-black/50" />
@@ -113,27 +114,40 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
 
 export const StatsGrid = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
-  const isDragging = useRef(false)
+  const isPointerDown = useRef(false)
+  const hasDragged = useRef(false)
   const startX = useRef(0)
   const scrollLeft = useRef(0)
 
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    isDragging.current = true
+    isPointerDown.current = true
+    hasDragged.current = false
     startX.current = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
     scrollLeft.current = scrollRef.current?.scrollLeft ?? 0
   }
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDragging.current) return
-    e.preventDefault()
+    if (!isPointerDown.current) return
     const x = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
-    const walk = (x - startX.current) * 1.5
-    if (scrollRef.current)
-      scrollRef.current.scrollLeft = scrollLeft.current - walk
+    const walk = x - startX.current
+    if (Math.abs(walk) > 5) hasDragged.current = true
+    if (hasDragged.current) {
+      e.preventDefault()
+      if (scrollRef.current)
+        scrollRef.current.scrollLeft = scrollLeft.current - walk
+    }
   }
 
   const stopDrag = () => {
-    isDragging.current = false
+    isPointerDown.current = false
+  }
+
+  const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (hasDragged.current) {
+      e.preventDefault()
+      e.stopPropagation()
+      hasDragged.current = false
+    }
   }
 
   return (
@@ -144,12 +158,13 @@ export const StatsGrid = () => {
       {/* Horizontal scroll track — shows ~3.5 cards with overlap */}
       <div
         ref={scrollRef}
-        className="cursor-grab overflow-x-auto px-8 py-8 active:cursor-grabbing md:px-16"
+        className="cursor-grab overflow-x-auto px-8 py-8 select-none active:cursor-grabbing md:px-16"
         style={{ touchAction: "pan-x", overflowY: "clip" }}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={stopDrag}
         onMouseLeave={stopDrag}
+        onClickCapture={onClickCapture}
       >
         <div className="flex" style={{ width: "max-content" }}>
           {ALL_SERVICES.map((card, i) => (
@@ -163,9 +178,6 @@ export const StatsGrid = () => {
           ))}
         </div>
       </div>
-      <p className="mt-6 px-8 text-xs font-bold tracking-[0.35em] text-white/30 uppercase md:px-16">
-        Scroll horizontally to see all services →
-      </p>
     </section>
   )
 }
