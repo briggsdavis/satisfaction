@@ -62,11 +62,32 @@ export const Hero = () => {
 
         {/* Center heading */}
         <div className="flex flex-1 items-center justify-center">
-          <div className="hero-glint-wrapper">
+          <motion.div
+            className="relative inline-block overflow-hidden"
+            initial="rest"
+            animate="rest"
+            whileHover="hover"
+          >
             <h1 className="hero-shine-text massive-text font-black text-[11vw] leading-none select-none">
               SATISFACTION
             </h1>
-          </div>
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(105deg, transparent 18%, rgba(255,255,255,0.12) 42%, rgba(255,255,255,0.34) 50%, rgba(255,255,255,0.12) 58%, transparent 82%)",
+              }}
+              variants={{
+                rest: { x: "-150%", skewX: -12, transition: { duration: 0 } },
+                hover: {
+                  x: "150%",
+                  skewX: -12,
+                  transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+                },
+              }}
+            />
+          </motion.div>
         </div>
 
         {/* Bottom metadata */}

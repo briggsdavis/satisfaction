@@ -211,36 +211,6 @@
   opacity: 1;
 }
 
-.hero-glint-wrapper {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-}
-
-.hero-glint-wrapper::after {
-  content: "";
-  position: absolute;
-  top: -20%;
-  left: -80%;
-  width: 50%;
-  height: 140%;
-  background: linear-gradient(
-    105deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.1) 42%,
-    rgba(255, 255, 255, 0.24) 50%,
-    rgba(255, 255, 255, 0.1) 58%,
-    transparent 80%
-  );
-  pointer-events: none;
-  transform: skewX(-12deg);
-}
-
-.hero-glint-wrapper:hover::after {
-  left: 150%;
-  transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 /* Restore standard cursor inside the admin */
 body.admin-mode,
 body.admin-mode *,
