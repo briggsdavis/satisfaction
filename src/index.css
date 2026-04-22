@@ -181,6 +181,32 @@
   }
 }
 
+/* Hero heading: base metallic shine + hover glint */
+@keyframes hero-text-shine {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.hero-shine-text {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(255, 255, 255, 0.98) 38%,
+    rgba(205, 218, 255, 1) 48%,
+    rgba(255, 255, 255, 0.98) 58%,
+    rgba(255, 255, 255, 0.72) 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: hero-text-shine 6s linear infinite;
+}
+
 /* Restore standard cursor inside the admin */
 body.admin-mode,
 body.admin-mode *,

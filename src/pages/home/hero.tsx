@@ -5,7 +5,7 @@ import { LaptopScene } from "../../components/laptop-scene"
 import { ScatteredImages } from "../../components/scattered-images"
 import { useSmoothScroll } from "../../components/smooth-scroll"
 
-// ─── Hero ─────────────────────────────────────────────────────────────────────
+// ─── HeroCanvas ───────────────────────────────────────────────────────────────
 export const HeroCanvas = () => {
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
@@ -21,7 +21,7 @@ export const HeroCanvas = () => {
 
   // Animation completes over 2vh of the 3vh hero
   const animationEnd = vh * 2
-  const scrollProgress = useTransform(activeY, [0, animationEnd], [0, 1])
+  const scrollProgress = useTransform(activeY, [0, animationEnd || 1], [0, 1])
 
   // Once animation is done, convert the scroll overshoot into a Y offset
   // so the canvas scrolls with the page
@@ -43,6 +43,37 @@ export const HeroCanvas = () => {
   )
 }
 
+// ─── HeroHeading ──────────────────────────────────────────────────────────────
+export const HeroHeading = () => {
+  const smoothY = useSmoothScroll()
+  const fallbackY = useMotionValue(0)
+  const activeY = smoothY ?? fallbackY
+  const [vh, setVh] = useState(0)
+
+  useEffect(() => {
+    const onResize = () => setVh(window.innerHeight)
+    onResize()
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
+  }, [])
+
+  const animationEnd = vh * 2
+  const scrollProgress = useTransform(activeY, [0, animationEnd || 1], [0, 1])
+  const opacity = useTransform(scrollProgress, [0, 0.7], [1, 0])
+
+  return (
+    <motion.div
+      className="pointer-events-none fixed inset-0 z-[6] flex items-center justify-center"
+      style={{ opacity }}
+    >
+      <h1 className="hero-shine-text massive-text font-black text-[11vw] leading-none select-none">
+        SATISFACTION
+      </h1>
+    </motion.div>
+  )
+}
+
+// ─── Hero ─────────────────────────────────────────────────────────────────────
 export const Hero = () => {
   const { content } = useContent()
   const { topLeft, topRight, bottomLeft } = content.hero
@@ -60,7 +91,7 @@ export const Hero = () => {
           </div>
         </div>
 
-        {/* Flex spacer */}
+        {/* Flex spacer — HeroHeading is rendered above the canvas at z-[6] */}
         <div className="flex-1" />
 
         {/* Bottom metadata */}
