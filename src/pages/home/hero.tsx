@@ -44,16 +44,11 @@ export const HeroCanvas = () => {
 }
 
 // ─── HeroHeading ──────────────────────────────────────────────────────────────
-// Rendered at z-[6] (above the Three.js canvas stack) so hover events reach it
-// and the glint overlay is actually visible.
 export const HeroHeading = () => {
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
   const [vh, setVh] = useState(0)
-  // Incrementing this key remounts the glint span, restarting the CSS animation
-  // cleanly on each hover without needing an animation-reset hack.
-  const [glintKey, setGlintKey] = useState(0)
 
   useEffect(() => {
     const onResize = () => setVh(window.innerHeight)
@@ -64,8 +59,6 @@ export const HeroHeading = () => {
 
   const animationEnd = vh * 2
   const scrollProgress = useTransform(activeY, [0, animationEnd || 1], [0, 1])
-  // Fade out over the first 70 % of the hero scroll so it exits before the
-  // laptop model is fully in focus.
   const opacity = useTransform(scrollProgress, [0, 0.7], [1, 0])
 
   return (
@@ -73,20 +66,9 @@ export const HeroHeading = () => {
       className="pointer-events-none fixed inset-0 z-[6] flex items-center justify-center"
       style={{ opacity }}
     >
-      <div
-        className="pointer-events-auto relative inline-block overflow-hidden"
-        onMouseEnter={() => setGlintKey((k) => k + 1)}
-      >
-        <h1 className="hero-shine-text massive-text font-black text-[11vw] leading-none select-none">
-          SATISFACTION
-        </h1>
-        {/* key remount = CSS animation restart on each hover */}
-        <span
-          key={glintKey}
-          aria-hidden
-          className={`pointer-events-none absolute inset-0 hero-glint-beam${glintKey > 0 ? " hero-glint-active" : ""}`}
-        />
-      </div>
+      <h1 className="hero-shine-text massive-text font-black text-[11vw] leading-none select-none">
+        SATISFACTION
+      </h1>
     </motion.div>
   )
 }

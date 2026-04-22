@@ -207,37 +207,6 @@
   animation: hero-text-shine 6s linear infinite;
 }
 
-.hero-shine-text.massive-text:hover {
-  opacity: 1;
-}
-
-/* Glint beam: starts off-screen left, swept right by CSS animation on hover.
-   The parent has overflow:hidden so it's invisible at rest and at end. */
-@keyframes hero-glint-sweep {
-  from {
-    transform: translateX(-150%) skewX(-12deg);
-  }
-  to {
-    transform: translateX(250%) skewX(-12deg);
-  }
-}
-
-.hero-glint-beam {
-  background: linear-gradient(
-    105deg,
-    transparent 18%,
-    rgba(255, 255, 255, 0.15) 38%,
-    rgba(255, 255, 255, 0.48) 50%,
-    rgba(255, 255, 255, 0.15) 62%,
-    transparent 82%
-  );
-  transform: translateX(-150%) skewX(-12deg);
-}
-
-.hero-glint-active {
-  animation: hero-glint-sweep 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
 /* Restore standard cursor inside the admin */
 body.admin-mode,
 body.admin-mode *,
