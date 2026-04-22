@@ -1,7 +1,5 @@
 import { motion, MotionValue, useTransform } from "motion/react"
 
-// Drop square images into public/scatter/ and list them here.
-// Positions are viewport-relative (%) and sizes are vmin so they scale responsively.
 const IMAGES: {
   src: string
   top: string
@@ -12,7 +10,7 @@ const IMAGES: {
   duration: number
 }[] = [
   {
-    src: "/nate.jpg",
+    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
     top: "22%",
     left: "18%",
     size: "14vmin",
@@ -21,7 +19,7 @@ const IMAGES: {
     duration: 4.2,
   },
   {
-    src: "/nate.jpg",
+    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80",
     top: "26%",
     left: "68%",
     size: "16vmin",
@@ -30,7 +28,7 @@ const IMAGES: {
     duration: 5.1,
   },
   {
-    src: "/nate.jpg",
+    src: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80",
     top: "62%",
     left: "30%",
     size: "12vmin",
@@ -39,7 +37,7 @@ const IMAGES: {
     duration: 4.8,
   },
   {
-    src: "/nate.jpg",
+    src: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=400&q=80",
     top: "64%",
     left: "60%",
     size: "13vmin",
@@ -48,7 +46,7 @@ const IMAGES: {
     duration: 5.6,
   },
   {
-    src: "/nate.jpg",
+    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400&q=80",
     top: "18%",
     left: "calc(50% - 5vmin)",
     size: "10vmin",
@@ -63,12 +61,13 @@ export function ScatteredImages({
 }: {
   scrollProgress: MotionValue<number>
 }) {
-  const opacity = useTransform(scrollProgress, [0, 1], [1, 0.1])
+  const opacity = useTransform(scrollProgress, [0, 0.75], [1, 0])
+  const scale = useTransform(scrollProgress, [0, 1], [1, 0.72])
 
   return (
     <motion.div
       className="pointer-events-none fixed inset-0 z-[3] overflow-hidden"
-      style={{ opacity }}
+      style={{ opacity, scale }}
     >
       {IMAGES.map((img, i) => (
         <motion.img
@@ -85,7 +84,7 @@ export function ScatteredImages({
             objectFit: "cover",
             rotate: img.rotate,
           }}
-          animate={{ scale: [1, 1.08, 1], opacity: [0.75, 0.95, 0.75] }}
+          animate={{ scale: [1, 1.03, 1], opacity: [0.75, 0.82, 0.75] }}
           transition={{
             duration: img.duration,
             delay: img.delay,

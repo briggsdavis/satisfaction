@@ -60,8 +60,14 @@ export const Hero = () => {
           </div>
         </div>
 
-        {/* Flex spacer */}
-        <div className="flex-1" />
+        {/* Center heading */}
+        <div className="flex flex-1 items-center justify-center">
+          <div className="hero-glint-wrapper">
+            <h1 className="hero-shine-text massive-text font-black text-[11vw] leading-none select-none">
+              SATISFACTION
+            </h1>
+          </div>
+        </div>
 
         {/* Bottom metadata */}
         <div className="flex items-center justify-between px-8 py-4 md:px-16">
