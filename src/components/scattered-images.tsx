@@ -19,7 +19,7 @@ const IMAGES: ImageDef[] = [
   // 1 — top-left large landscape: coding / laptop
   {
     src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80",
-    top: "7vh",
+    top: "15vh",
     left: "3vw",
     width: "19vw",
     height: "12vw",
@@ -31,7 +31,7 @@ const IMAGES: ImageDef[] = [
   // 2 — left-middle portrait: photo / video studio
   {
     src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
-    top: "36vh",
+    top: "44vh",
     left: "1vw",
     width: "12vw",
     height: "16vw",
@@ -43,7 +43,7 @@ const IMAGES: ImageDef[] = [
   // 3 — upper-centre-left portrait card: UI design mockup
   {
     src: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80",
-    top: "28vh",
+    top: "36vh",
     left: "21vw",
     width: "10vw",
     height: "13vw",
@@ -55,7 +55,7 @@ const IMAGES: ImageDef[] = [
   // 4 — top-centre small square: app / email UI
   {
     src: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=300&q=80",
-    top: "2vh",
+    top: "10vh",
     left: "55vw",
     width: "9vw",
     height: "9vw",
@@ -67,7 +67,7 @@ const IMAGES: ImageDef[] = [
   // 5 — top-right large landscape: colourful design / branding
   {
     src: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80",
-    top: "6vh",
+    top: "14vh",
     left: "72vw",
     width: "20vw",
     height: "12vw",
@@ -79,7 +79,7 @@ const IMAGES: ImageDef[] = [
   // 6 — right-upper small square: logo / brand identity
   {
     src: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=300&q=80",
-    top: "27vh",
+    top: "35vh",
     left: "85vw",
     width: "10vw",
     height: "10vw",
@@ -91,7 +91,7 @@ const IMAGES: ImageDef[] = [
   // 7 — right-middle landscape: camera / photography gear
   {
     src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&q=80",
-    top: "49vh",
+    top: "57vh",
     left: "76vw",
     width: "17vw",
     height: "13vw",
@@ -103,7 +103,7 @@ const IMAGES: ImageDef[] = [
   // 8 — bottom-left portrait: mobile app mockup
   {
     src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=300&q=80",
-    top: "61vh",
+    top: "69vh",
     left: "5vw",
     width: "9vw",
     height: "15vw",
@@ -115,7 +115,7 @@ const IMAGES: ImageDef[] = [
   // 9 — bottom-right large landscape: lifestyle / portfolio
   {
     src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&q=80",
-    top: "62vh",
+    top: "70vh",
     left: "72vw",
     width: "21vw",
     height: "13vw",

@@ -46,7 +46,7 @@ export const HeroCanvas = () => {
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 export const Hero = () => {
   const { content } = useContent()
-  const { topLeft, topRight, bottomLeft } = content.hero
+  const { bottomLeft } = content.hero
 
   return (
     <section
@@ -68,17 +68,6 @@ export const Hero = () => {
       />
 
       <div className="relative z-10 flex h-screen flex-col">
-        {/* Top metadata bar */}
-        <div className="flex items-start justify-between px-8 pt-28 pb-4 md:px-16">
-          <div className="text-xs leading-relaxed font-bold tracking-[0.35em] whitespace-pre-line text-white/25 uppercase">
-            {topLeft}
-          </div>
-          <div className="text-right text-xs leading-relaxed font-bold tracking-[0.35em] whitespace-pre-line text-white/25 uppercase">
-            {topRight}
-          </div>
-        </div>
-
-        {/* Flex spacer — HeroHeading is rendered above the canvas at z-[6] */}
         <div className="flex-1" />
 
         {/* Bottom metadata */}
