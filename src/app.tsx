@@ -41,7 +41,7 @@ import { BrandsCarousel, LogosCarousel } from "./pages/home/brands-carousel"
 import { CampaignStatement } from "./pages/home/campaign-statement"
 import { FaqCta } from "./pages/home/faq-cta"
 import { FeaturedCascade } from "./pages/home/featured-cascade"
-import { HeroCanvas, HeroHeading, Hero } from "./pages/home/hero"
+import { HeroCanvas, Hero } from "./pages/home/hero"
 import { StatsGrid } from "./pages/home/stats-grid"
 import { WhatWeDoSection } from "./pages/home/what-we-do"
 import { NotFound } from "./pages/not-found"
@@ -103,16 +103,6 @@ const ConditionalHeroCanvas = () => {
   )
 }
 
-// Rendered outside SmoothScroll (z-[3]) so it sits at z-[6], above the Three.js
-// canvas stack (z-[4]/z-[5]). This is the only way hover events and the glint
-// overlay actually reach the user — the WebGL canvas surface blocks both when
-// the heading is at a lower z-level.
-const ConditionalHeroHeading = () => {
-  const { pathname } = useLocation()
-  if (pathname !== "/") return null
-  return <HeroHeading />
-}
-
 const AboutCanvasInner = () => {
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
@@ -151,7 +141,6 @@ const SiteRoot = () => (
     <Navbar />
     <SmoothScrollProvider>
       <ConditionalHeroCanvas />
-      <ConditionalHeroHeading />
       <ConditionalAboutCanvas />
       <ColumnWipe>
         <SmoothScroll>
