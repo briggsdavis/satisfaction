@@ -6,7 +6,6 @@ type ImageDef = {
   left: string
   width: string
   height: string
-  rotate: number
   delay: number
   duration: number
   zoomIn: boolean
@@ -22,7 +21,6 @@ const IMAGES: ImageDef[] = [
     left: "11vw",
     width: "14vw",
     height: "9.5vw",
-    rotate: -4,
     delay: 0,
     duration: 4.8,
     zoomIn: false,
@@ -34,7 +32,6 @@ const IMAGES: ImageDef[] = [
     left: "53vw",
     width: "9.5vw",
     height: "9.5vw",
-    rotate: 2,
     delay: 0.3,
     duration: 5.2,
     zoomIn: true,
@@ -46,7 +43,6 @@ const IMAGES: ImageDef[] = [
     left: "73vw",
     width: "18vw",
     height: "8vw",
-    rotate: 3,
     delay: 0.6,
     duration: 4.6,
     zoomIn: false,
@@ -58,7 +54,6 @@ const IMAGES: ImageDef[] = [
     left: "3vw",
     width: "18vw",
     height: "11vw",
-    rotate: -2,
     delay: 0.9,
     duration: 5.4,
     zoomIn: true,
@@ -70,7 +65,6 @@ const IMAGES: ImageDef[] = [
     left: "22vw",
     width: "11vw",
     height: "10vw",
-    rotate: -3,
     delay: 0.2,
     duration: 4.9,
     zoomIn: false,
@@ -82,7 +76,6 @@ const IMAGES: ImageDef[] = [
     left: "71.5vw",
     width: "6vw",
     height: "7vw",
-    rotate: -4,
     delay: 1.1,
     duration: 5.7,
     zoomIn: true,
@@ -94,7 +87,6 @@ const IMAGES: ImageDef[] = [
     left: "80vw",
     width: "16vw",
     height: "16vw",
-    rotate: 4,
     delay: 0.7,
     duration: 4.3,
     zoomIn: false,
@@ -106,7 +98,6 @@ const IMAGES: ImageDef[] = [
     left: "10.5vw",
     width: "7vw",
     height: "10vw",
-    rotate: -5,
     delay: 1.3,
     duration: 5.1,
     zoomIn: true,
@@ -118,7 +109,6 @@ const IMAGES: ImageDef[] = [
     left: "76vw",
     width: "17.5vw",
     height: "10vw",
-    rotate: 2,
     delay: 0.4,
     duration: 5.8,
     zoomIn: false,
@@ -148,11 +138,11 @@ const ScatteredImage = ({
         left: img.left,
         width: img.width,
         height: img.height,
-        rotate: img.rotate,
         scale: scrollScale,
         ...(img.zoomIn ? {} : { opacity: scrollOpacity }),
       }}
     >
+      {/* Main card */}
       <motion.img
         src={img.src}
         alt=""
@@ -166,6 +156,39 @@ const ScatteredImage = ({
           ease: "easeInOut",
         }}
       />
+
+      {/* Glass-floor mirror reflection */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          top: "100%",
+          left: 0,
+          right: 0,
+          height: "45%",
+          overflow: "hidden",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%)",
+          maskImage:
+            "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%)",
+          pointerEvents: "none",
+        }}
+      >
+        <img
+          src={img.src}
+          alt=""
+          aria-hidden
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transform: "scaleY(-1)",
+            filter: "blur(10px)",
+            opacity: 0.6,
+          }}
+        />
+      </div>
     </motion.div>
   )
 }
