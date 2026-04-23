@@ -136,7 +136,7 @@ const ScatteredImage = ({
   const scrollScale = useTransform(
     scrollProgress,
     [0, 1],
-    img.zoomIn ? [1, 2.6] : [1, 0.1],
+    img.zoomIn ? [1, 1.5] : [1, 0.1],
   )
 
   const scrollOpacity = useTransform(scrollProgress, [0, 0.8], [1, 0])

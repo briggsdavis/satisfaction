@@ -43,36 +43,6 @@ export const HeroCanvas = () => {
   )
 }
 
-// ─── HeroHeading ──────────────────────────────────────────────────────────────
-export const HeroHeading = () => {
-  const smoothY = useSmoothScroll()
-  const fallbackY = useMotionValue(0)
-  const activeY = smoothY ?? fallbackY
-  const [vh, setVh] = useState(0)
-
-  useEffect(() => {
-    const onResize = () => setVh(window.innerHeight)
-    onResize()
-    window.addEventListener("resize", onResize)
-    return () => window.removeEventListener("resize", onResize)
-  }, [])
-
-  const animationEnd = vh * 2
-  const scrollProgress = useTransform(activeY, [0, animationEnd || 1], [0, 1])
-  const opacity = useTransform(scrollProgress, [0, 0.7], [1, 0])
-
-  return (
-    <motion.div
-      className="pointer-events-none fixed inset-0 z-[6] flex items-center justify-center"
-      style={{ opacity }}
-    >
-      <h1 className="hero-shine-text massive-text font-black text-[11vw] leading-none select-none">
-        SATISFACTION
-      </h1>
-    </motion.div>
-  )
-}
-
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 export const Hero = () => {
   const { content } = useContent()
