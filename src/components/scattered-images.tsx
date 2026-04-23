@@ -18,7 +18,7 @@ const IMAGES: ImageDef[] = [
   {
     src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80",
     top: "12vh",
-    left: "11vw",
+    left: "16vw",
     width: "14vw",
     height: "9.5vw",
     delay: 0,
@@ -28,7 +28,7 @@ const IMAGES: ImageDef[] = [
   // J — upper-left: creative workspace (landscape ~3:2) — 5th left-side image
   {
     src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&q=80",
-    top: "22vh",
+    top: "16vh",
     left: "2vw",
     width: "11vw",
     height: "7.5vw",
