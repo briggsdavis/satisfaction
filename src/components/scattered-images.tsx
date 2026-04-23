@@ -25,6 +25,17 @@ const IMAGES: ImageDef[] = [
     duration: 4.8,
     zoomIn: false,
   },
+  // J — upper-left: creative workspace (landscape ~3:2) — 5th left-side image
+  {
+    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&q=80",
+    top: "22vh",
+    left: "2vw",
+    width: "11vw",
+    height: "7.5vw",
+    delay: 1.0,
+    duration: 5.0,
+    zoomIn: false,
+  },
   // B — top-centre: icon / UI graphic (square)
   {
     src: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=300&q=80",
@@ -111,7 +122,7 @@ const IMAGES: ImageDef[] = [
     height: "10vw",
     delay: 0.4,
     duration: 5.8,
-    zoomIn: false,
+    zoomIn: true,
   },
 ]
 
@@ -158,7 +169,7 @@ const ScatteredImage = ({
       />
 
       {/* Glass-floor mirror reflection */}
-      <div
+      <motion.div
         aria-hidden
         style={{
           position: "absolute",
@@ -172,6 +183,9 @@ const ScatteredImage = ({
           maskImage:
             "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%)",
           pointerEvents: "none",
+          // zoomOut images: the outer div already fades the whole card (incl. reflection).
+          // zoomIn images: only the reflection fades so the card itself stays fully visible.
+          ...(img.zoomIn ? { opacity: scrollOpacity } : {}),
         }}
       >
         <img
@@ -188,7 +202,7 @@ const ScatteredImage = ({
             opacity: 0.6,
           }}
         />
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
