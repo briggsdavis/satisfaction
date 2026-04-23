@@ -79,14 +79,31 @@ export const Hero = () => {
   const { topLeft, topRight, bottomLeft } = content.hero
 
   return (
-    <section className="relative h-[300vh] bg-black">
+    <section
+      className="relative h-[300vh]"
+      style={{
+        background:
+          "radial-gradient(ellipse 80% 80% at 50% 42%, #0c0c18 0%, #000000 62%)",
+      }}
+    >
+      {/* Subtle centre glow — gives the iMac a slight halo effect */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        style={{
+          width: "55vw",
+          height: "55vh",
+          background:
+            "radial-gradient(ellipse at center, rgba(80,90,180,0.07) 0%, transparent 70%)",
+        }}
+      />
+
       <div className="relative z-10 flex h-screen flex-col">
         {/* Top metadata bar */}
         <div className="flex items-start justify-between px-8 pt-28 pb-4 md:px-16">
-          <div className="text-xs leading-relaxed font-bold tracking-[0.35em] whitespace-pre-line text-white/30 uppercase">
+          <div className="text-xs leading-relaxed font-bold tracking-[0.35em] whitespace-pre-line text-white/25 uppercase">
             {topLeft}
           </div>
-          <div className="text-right text-xs leading-relaxed font-bold tracking-[0.35em] whitespace-pre-line text-white/30 uppercase">
+          <div className="text-right text-xs leading-relaxed font-bold tracking-[0.35em] whitespace-pre-line text-white/25 uppercase">
             {topRight}
           </div>
         </div>
