@@ -12,116 +12,115 @@ type ImageDef = {
   zoomIn: boolean
 }
 
-// 9 images spread across the full viewport, arranged to frame the central iMac.
-// Positions mirror the mockup layout: large landscape cards in corners,
-// smaller accent cards on the sides, portrait cards as vertical accents.
+// Positions, sizes, and aspect ratios derived directly from the reference mockup.
+// Heights use vw units to preserve aspect ratios across screen sizes.
 const IMAGES: ImageDef[] = [
-  // 1 — top-left large landscape: coding / laptop
+  // A — top-left: laptop / coding photo (landscape ~3:2)
   {
     src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80",
-    top: "15vh",
-    left: "3vw",
-    width: "19vw",
-    height: "12vw",
-    rotate: -5,
+    top: "12vh",
+    left: "11vw",
+    width: "14vw",
+    height: "9.5vw",
+    rotate: -4,
     delay: 0,
     duration: 4.8,
     zoomIn: false,
   },
-  // 2 — left-middle portrait: photo / video studio
-  {
-    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
-    top: "44vh",
-    left: "1vw",
-    width: "12vw",
-    height: "16vw",
-    rotate: 4,
-    delay: 0.8,
-    duration: 5.3,
-    zoomIn: true,
-  },
-  // 3 — upper-centre-left portrait card: UI design mockup
-  {
-    src: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80",
-    top: "36vh",
-    left: "21vw",
-    width: "10vw",
-    height: "13vw",
-    rotate: -3,
-    delay: 1.1,
-    duration: 4.5,
-    zoomIn: false,
-  },
-  // 4 — top-centre small square: app / email UI
+  // B — top-centre: icon / UI graphic (square)
   {
     src: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=300&q=80",
     top: "10vh",
-    left: "55vw",
-    width: "9vw",
-    height: "9vw",
-    rotate: 6,
+    left: "53vw",
+    width: "9.5vw",
+    height: "9.5vw",
+    rotate: 2,
     delay: 0.3,
-    duration: 5.6,
+    duration: 5.2,
     zoomIn: true,
   },
-  // 5 — top-right large landscape: colourful design / branding
+  // C — top-right: UI / website screenshot (very wide landscape ~16:7.5)
   {
     src: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80",
-    top: "14vh",
-    left: "72vw",
-    width: "20vw",
-    height: "12vw",
+    top: "13vh",
+    left: "73vw",
+    width: "18vw",
+    height: "8vw",
     rotate: 3,
     delay: 0.6,
-    duration: 5.1,
+    duration: 4.6,
     zoomIn: false,
   },
-  // 6 — right-upper small square: logo / brand identity
+  // D — left: photo / video studio (wide landscape ~5:3)
+  {
+    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+    top: "36vh",
+    left: "3vw",
+    width: "18vw",
+    height: "11vw",
+    rotate: -2,
+    delay: 0.9,
+    duration: 5.4,
+    zoomIn: true,
+  },
+  // E — centre-left: graphic design card (near-square)
+  {
+    src: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80",
+    top: "53vh",
+    left: "22vw",
+    width: "11vw",
+    height: "10vw",
+    rotate: -3,
+    delay: 0.2,
+    duration: 4.9,
+    zoomIn: false,
+  },
+  // F — right: brand / logo card (small near-square)
   {
     src: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=300&q=80",
     top: "35vh",
-    left: "85vw",
-    width: "10vw",
-    height: "10vw",
-    rotate: -5,
-    delay: 1.4,
-    duration: 4.2,
+    left: "71.5vw",
+    width: "6vw",
+    height: "7vw",
+    rotate: -4,
+    delay: 1.1,
+    duration: 5.7,
     zoomIn: true,
   },
-  // 7 — right-middle landscape: camera / photography gear
+  // G — far-right: camera lens (large square)
   {
     src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&q=80",
-    top: "57vh",
-    left: "76vw",
-    width: "17vw",
-    height: "13vw",
-    rotate: 5,
-    delay: 0.9,
-    duration: 5.8,
+    top: "32vh",
+    left: "80vw",
+    width: "16vw",
+    height: "16vw",
+    rotate: 4,
+    delay: 0.7,
+    duration: 4.3,
     zoomIn: false,
   },
-  // 8 — bottom-left portrait: mobile app mockup
+  // H — bottom-left: phone app mockup (portrait ~3:4)
   {
     src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=300&q=80",
-    top: "69vh",
-    left: "5vw",
-    width: "9vw",
-    height: "15vw",
-    rotate: -6,
-    delay: 0.4,
-    duration: 4.9,
+    top: "75vh",
+    left: "10.5vw",
+    width: "7vw",
+    height: "10vw",
+    rotate: -5,
+    delay: 1.3,
+    duration: 5.1,
     zoomIn: true,
   },
-  // 9 — bottom-right large landscape: lifestyle / portfolio
+  // I — bottom-right: portfolio / lifestyle (landscape ~16:9.5)
   {
     src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&q=80",
-    top: "70vh",
-    left: "72vw",
-    width: "21vw",
-    height: "13vw",
-    rotate: 3,
-    delay: 1.2,
-    duration: 5.4,
+    top: "76vh",
+    left: "76vw",
+    width: "17.5vw",
+    height: "10vw",
+    rotate: 2,
+    delay: 0.4,
+    duration: 5.8,
     zoomIn: false,
   },
 ]
