@@ -58,7 +58,7 @@ export const Hero = () => {
     >
       {/* Subtle centre glow — gives the iMac a slight halo effect */}
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         style={{
           width: "55vw",
           height: "55vh",

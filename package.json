@@ -14,7 +14,7 @@
     "@react-three/drei": "10.7.7",
     "@react-three/fiber": "9.6.0",
     "clsx": "2.1.1",
-    "lucide-react": "1.8.0",
+    "lucide-react": "1.11.0",
     "motion": "12.38.0",
     "react": "19.2.5",
     "react-dom": "19.2.5",
@@ -29,10 +29,10 @@
     "@types/react-dom": "19.2.3",
     "@types/three": "0.184.0",
     "@vitejs/plugin-react": "6.0.1",
-    "oxfmt": "0.46.0",
-    "oxlint": "1.61.0",
+    "oxfmt": "0.47.0",
+    "oxlint": "1.62.0",
     "tailwindcss": "4.2.4",
     "typescript": "6.0.3",
-    "vite": "8.0.9"
+    "vite": "8.0.10"
   }
 }
