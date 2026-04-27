@@ -22,6 +22,7 @@ const toSlug = (name: string) =>
 const blankCategory = (): Category => ({
   slug: "",
   name: "",
+  color: "#6B7280",
   img: "",
   height: "680px",
   bullets: ["", "", "", "", ""],

@@ -85,7 +85,10 @@ const CategoryCard = ({
               className="flex items-center gap-2"
             >
               <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-xs font-bold tracking-[0.22em] text-white uppercase backdrop-blur-sm">
-                <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-white/80" />
+                <span
+                  className="h-[6px] w-[6px] shrink-0 rounded-full"
+                  style={{ backgroundColor: category.color }}
+                />
                 {category.name}
               </span>
             </motion.div>
