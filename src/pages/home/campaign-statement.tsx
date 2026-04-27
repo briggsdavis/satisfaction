@@ -37,9 +37,9 @@ export const CampaignStatement = () => {
   return (
     <section className="relative overflow-hidden border-t border-white/10 bg-black pb-8 md:pb-12">
       <motion.img
-        src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
+        src="/mock.png"
         alt=""
-        className="pointer-events-none absolute top-1/2 left-1/2 z-10 h-[17.6rem] w-[17.6rem] -translate-x-1/2 -translate-y-1/2 rounded-lg object-cover shadow-2xl md:h-[26.4rem] md:w-[26.4rem]"
+        className="pointer-events-none absolute top-1/2 left-1/2 z-10 h-[31.68rem] w-[31.68rem] -translate-x-1/2 -translate-y-[54%] rounded-lg object-cover shadow-2xl md:h-[47.52rem] md:w-[47.52rem]"
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-150px" }}
