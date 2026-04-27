@@ -19,6 +19,7 @@ export type CategoryOverview = {
 export type Category = {
   slug: string
   name: string
+  color: string
   img: string
   height: string
   bullets: string[]
@@ -30,6 +31,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: "creative-direction",
     name: "Creative Direction",
+    color: "#F59E0B",
     img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=1600",
     height: "720px",
     bullets: [
@@ -85,6 +87,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: "photography",
     name: "Photography",
+    color: "#3B82F6",
     img: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&q=80&w=1600",
     height: "860px",
     bullets: [
@@ -140,6 +143,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: "branding",
     name: "Branding",
+    color: "#8B5CF6",
     img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1600",
     height: "560px",
     bullets: [
@@ -195,6 +199,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: "campaigns",
     name: "Campaigns",
+    color: "#6B7280",
     img: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=1600",
     height: "620px",
     bullets: [
@@ -251,6 +256,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: "production",
     name: "Production",
+    color: "#6B7280",
     img: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=1600",
     height: "680px",
     bullets: [
@@ -306,6 +312,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: "social-media",
     name: "Social Media",
+    color: "#10B981",
     img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=1600",
     height: "780px",
     bullets: [
@@ -361,6 +368,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: "influencer-ugc",
     name: "Influencer / UGC",
+    color: "#6B7280",
     img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&q=80&w=1600",
     height: "620px",
     bullets: [
@@ -416,6 +424,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: "launch-event-marketing",
     name: "Launch + Event Marketing",
+    color: "#6B7280",
     img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1600",
     height: "640px",
     bullets: [
@@ -471,6 +480,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: "motion-graphics",
     name: "Motion Graphics",
+    color: "#F97316",
     img: "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&q=80&w=1600",
     height: "700px",
     bullets: [
