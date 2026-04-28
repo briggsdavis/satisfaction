@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useTransform } from "motion/react"
 import React, { useEffect, useRef } from "react"
 import { Link, useNavigationType, useParams } from "react-router"
+import { BrandingProcess } from "../components/branding-process"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
 import { CATEGORIES, type Category, type Project } from "../lib/categories"
@@ -329,6 +330,9 @@ export const CategoryPage = () => {
           </p>
         </div>
       </section>
+
+      {/* Branding-only: scroll-driven process line section */}
+      {category.slug === "branding" && <BrandingProcess />}
 
       {/* Project grid with CTA blocks */}
       <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
