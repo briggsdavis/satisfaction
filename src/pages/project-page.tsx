@@ -119,54 +119,54 @@ export const ProjectPage = () => {
         </div>
       </section>
 
-      {/* 6-image grid — same visual pattern as category page, extended */}
-      <div className="flex flex-col gap-8 px-8 py-8 md:px-16">
+      {/* 6-image vertical masonry — mirrors FeaturedCascade pattern rotated 90° */}
+      <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
         {/* Row 1 — full width */}
         <ImageCard
           img={images[0]}
           title={project.title}
           index={0}
-          className="h-[62vh] md:h-[68vh]"
+          className="h-[75vh]"
         />
 
-        {/* Row 2 — 2 columns */}
-        <div className="flex flex-col gap-8 md:flex-row">
+        {/* Row 2 — 2 columns, tall */}
+        <div className="flex flex-col gap-4 md:flex-row">
           <ImageCard
             img={images[1]}
             title={project.title}
             index={1}
-            className="h-[72vh] flex-1"
+            className="h-[90vh] flex-1"
           />
           <ImageCard
             img={images[2]}
             title={project.title}
             index={2}
-            className="h-[72vh] flex-1"
+            className="h-[90vh] flex-1"
           />
         </div>
 
-        {/* Row 3 — full width */}
-        <ImageCard
-          img={images[3]}
-          title={project.title}
-          index={3}
-          className="h-[62vh] md:h-[68vh]"
-        />
-
-        {/* Row 4 — 2 columns */}
-        <div className="flex flex-col gap-8 md:flex-row">
+        {/* Row 3 — wide top + two under */}
+        <div className="flex flex-col gap-4">
           <ImageCard
-            img={images[4]}
+            img={images[3]}
             title={project.title}
-            index={4}
-            className="h-[72vh] flex-1"
+            index={3}
+            className="h-[65vh]"
           />
-          <ImageCard
-            img={images[5]}
-            title={project.title}
-            index={5}
-            className="h-[72vh] flex-1"
-          />
+          <div className="flex flex-col gap-4 md:flex-row">
+            <ImageCard
+              img={images[4]}
+              title={project.title}
+              index={4}
+              className="h-[58vh] flex-1"
+            />
+            <ImageCard
+              img={images[5]}
+              title={project.title}
+              index={5}
+              className="h-[58vh] flex-1"
+            />
+          </div>
         </div>
       </div>
 
@@ -196,7 +196,7 @@ const ImageCard = ({
   className?: string
 }) => (
   <motion.div
-    className={`group relative block overflow-hidden ${className}`}
+    className={`group relative block overflow-hidden rounded-[16px] ${className}`}
     initial={{ opacity: 0, y: 24 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-150px" }}

@@ -17,7 +17,7 @@ const CategoryCard = ({
   return (
     <Link
       to={`/portfolio/${category.slug}`}
-      className={`group relative block overflow-hidden [backface-visibility:hidden] ${className}`}
+      className={`group relative block overflow-hidden rounded-[16px] [backface-visibility:hidden] ${className}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -120,34 +120,34 @@ export const Portfolio = () => {
       />
     </section>
 
-    {/* Image grid — px-8 matches navbar margin; gap-8 between every image */}
-    <div className="flex flex-col gap-8 px-8 py-8 md:px-16">
+    {/* Vertical masonry grid — mirrors FeaturedCascade pattern rotated 90° */}
+    <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
       {/* Row 1 — full width */}
-      <CategoryCard category={CATEGORIES[0]} className="h-[62vh] md:h-[68vh]" />
+      <CategoryCard category={CATEGORIES[0]} className="h-[72vh]" />
 
-      {/* Row 2 — 2 columns */}
-      <div className="flex flex-col gap-8 md:flex-row">
-        <CategoryCard category={CATEGORIES[1]} className="h-[72vh] flex-1" />
-        <CategoryCard category={CATEGORIES[2]} className="h-[72vh] flex-1" />
+      {/* Row 2 — 2 equal columns, tall */}
+      <div className="flex flex-col gap-4 md:flex-row">
+        <CategoryCard category={CATEGORIES[1]} className="h-[90vh] flex-1" />
+        <CategoryCard category={CATEGORIES[2]} className="h-[90vh] flex-1" />
       </div>
 
-      {/* Row 3 — full width */}
-      <CategoryCard category={CATEGORIES[3]} className="h-[62vh] md:h-[68vh]" />
+      {/* Row 3 — wide top + two under (FeaturedCascade Group 3 rotated) */}
+      <div className="flex flex-col gap-4">
+        <CategoryCard category={CATEGORIES[3]} className="h-[65vh]" />
+        <div className="flex flex-col gap-4 md:flex-row">
+          <CategoryCard category={CATEGORIES[4]} className="h-[58vh] flex-1" />
+          <CategoryCard category={CATEGORIES[5]} className="h-[58vh] flex-1" />
+        </div>
+      </div>
 
-      {/* Row 4 — 2 columns */}
-      <div className="flex flex-col gap-8 md:flex-row">
-        <CategoryCard category={CATEGORIES[4]} className="h-[72vh] flex-1" />
-        <CategoryCard category={CATEGORIES[5]} className="h-[72vh] flex-1" />
+      {/* Row 4 — 2 equal columns, tall */}
+      <div className="flex flex-col gap-4 md:flex-row">
+        <CategoryCard category={CATEGORIES[6]} className="h-[90vh] flex-1" />
+        <CategoryCard category={CATEGORIES[7]} className="h-[90vh] flex-1" />
       </div>
 
       {/* Row 5 — full width */}
-      <CategoryCard category={CATEGORIES[6]} className="h-[62vh] md:h-[68vh]" />
-
-      {/* Row 6 — 2 columns */}
-      <div className="flex flex-col gap-8 md:flex-row">
-        <CategoryCard category={CATEGORIES[7]} className="h-[72vh] flex-1" />
-        <CategoryCard category={CATEGORIES[8]} className="h-[72vh] flex-1" />
-      </div>
+      <CategoryCard category={CATEGORIES[8]} className="h-[72vh]" />
     </div>
   </div>
   )

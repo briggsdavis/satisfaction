@@ -44,7 +44,7 @@ const ProjectCard = ({
 }) => (
   <Link to={`/portfolio/${categorySlug}/${project.slug}`} className="block">
     <motion.div
-      className={`group relative overflow-hidden [backface-visibility:hidden] ${className}`}
+      className={`group relative overflow-hidden rounded-[16px] [backface-visibility:hidden] ${className}`}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-150px" }}
@@ -136,14 +136,14 @@ const MasonryGrid = ({
       <div key={`full-${i}`}>
         {fullItem.kind === "cta" ? (
           <CtaBlock
-            className="h-[62vh] md:h-[68vh]"
+            className="h-[72vh]"
             copyIndex={fullItem.copyIndex}
           />
         ) : (
           <ProjectCard
             project={fullItem.project}
             categorySlug={categorySlug}
-            className="h-[62vh] md:h-[68vh]"
+            className="h-[72vh]"
             index={animIdx++}
           />
         )}
@@ -157,25 +157,25 @@ const MasonryGrid = ({
     const right = i + 1 < items.length ? items[i + 1] : undefined
 
     rows.push(
-      <div key={`pair-${i}`} className="flex flex-col gap-8 md:flex-row">
+      <div key={`pair-${i}`} className="flex flex-col gap-4 md:flex-row">
         {left.kind === "cta" ? (
-          <CtaBlock className="h-[72vh] flex-1" copyIndex={left.copyIndex} />
+          <CtaBlock className="h-[88vh] flex-1" copyIndex={left.copyIndex} />
         ) : (
           <ProjectCard
             project={left.project}
             categorySlug={categorySlug}
-            className="h-[72vh] flex-1"
+            className="h-[88vh] flex-1"
             index={animIdx++}
           />
         )}
         {right &&
           (right.kind === "cta" ? (
-            <CtaBlock className="h-[72vh] flex-1" copyIndex={right.copyIndex} />
+            <CtaBlock className="h-[88vh] flex-1" copyIndex={right.copyIndex} />
           ) : (
             <ProjectCard
               project={right.project}
               categorySlug={categorySlug}
-              className="h-[72vh] flex-1"
+              className="h-[88vh] flex-1"
               index={animIdx++}
             />
           ))}
@@ -320,7 +320,7 @@ export const CategoryPage = () => {
 
       {/* Overview section */}
       <section className="border-b border-white/10 px-8 py-20 md:px-16">
-        <div className="mb-20 grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-8">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-8">
           <h2 className="text-3xl leading-[1.15] font-bold tracking-tight md:col-span-2 md:text-4xl">
             {category.overview.headline}
           </h2>
@@ -328,28 +328,10 @@ export const CategoryPage = () => {
             {category.overview.description}
           </p>
         </div>
-
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
-          {(
-            [
-              { label: "Problem", body: category.overview.problem },
-              { label: "Solution", body: category.overview.solution },
-              { label: "Execution", body: category.overview.execution },
-              { label: "Results", body: category.overview.results },
-            ] as const
-          ).map(({ label, body }) => (
-            <div key={label}>
-              <span className="mb-5 block text-xs font-bold tracking-[0.4em] text-white/40 uppercase">
-                {label}
-              </span>
-              <p className="text-sm leading-relaxed text-white/60">{body}</p>
-            </div>
-          ))}
-        </div>
       </section>
 
       {/* Project grid with CTA blocks */}
-      <div className="flex flex-col gap-8 px-8 py-8 md:px-16">
+      <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
         <MasonryGrid
           projects={category.projects}
           categorySlug={category.slug}
