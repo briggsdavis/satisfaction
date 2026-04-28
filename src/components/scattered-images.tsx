@@ -151,8 +151,12 @@ const ScatteredImage = ({
   )
 
   const scrollOpacity = useTransform(scrollProgress, [0, 0.8], [1, 0])
-  const blurPx = useTransform(scrollProgress, [0, 0.8], [0, 10])
-  const blurFilter = useTransform(blurPx, (b: number) => `blur(${b}px)`)
+  // Blur only applies to zoomOut images (the ones that shrink as you scroll).
+  // No overflow:hidden on the wrapper so the blur bleeds past the image edges.
+  const blurPx = useTransform(scrollProgress, [0, 0.8], [0, 12])
+  const blurFilter = useTransform(blurPx, (b: number) =>
+    !img.zoomIn ? `blur(${b}px)` : "none",
+  )
 
   return (
     <motion.div
@@ -168,23 +172,14 @@ const ScatteredImage = ({
         ...(img.zoomIn ? {} : { opacity: scrollOpacity }),
       }}
     >
-      {/* Rounded-corner clip wrapper — overflow:hidden kept here so reflection
-          below isn't clipped by the parent */}
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-          overflow: "hidden",
-          borderRadius: "16px",
-        }}
-      >
+      {/* No overflow:hidden here — lets the blur filter bleed beyond the rounded edges */}
+      <div style={{ position: "relative", width: "100%", height: "100%" }}>
         <motion.img
           src={img.src}
           alt=""
           aria-hidden
           className="h-full w-full object-cover"
-          style={{ filter: blurFilter }}
+          style={{ borderRadius: "16px", filter: blurFilter }}
           animate={{ scale: [1, 1.03, 1], opacity: [0.72, 0.88, 0.72] }}
           transition={{
             duration: img.duration,
