@@ -287,6 +287,7 @@ export const ProjectPage = () => {
           <TextReveal
             text={project.title}
             className="massive-text text-5xl leading-[0.88] md:text-7xl lg:text-9xl"
+            slideFrom="left"
           />
         </div>
 

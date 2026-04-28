@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useTransform } from "motion/react"
 import React, { useEffect, useRef } from "react"
-import { Link, useParams } from "react-router"
+import { Link, useNavigationType, useParams } from "react-router"
+import { BrandingProcess } from "../components/branding-process"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
 import { CATEGORIES, type Category, type Project } from "../lib/categories"
@@ -44,7 +45,7 @@ const ProjectCard = ({
 }) => (
   <Link to={`/portfolio/${categorySlug}/${project.slug}`} className="block">
     <motion.div
-      className={`group relative overflow-hidden [backface-visibility:hidden] ${className}`}
+      className={`group relative overflow-hidden rounded-[16px] [backface-visibility:hidden] ${className}`}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-150px" }}
@@ -136,14 +137,14 @@ const MasonryGrid = ({
       <div key={`full-${i}`}>
         {fullItem.kind === "cta" ? (
           <CtaBlock
-            className="h-[62vh] md:h-[68vh]"
+            className="h-[42vh]"
             copyIndex={fullItem.copyIndex}
           />
         ) : (
           <ProjectCard
             project={fullItem.project}
             categorySlug={categorySlug}
-            className="h-[62vh] md:h-[68vh]"
+            className="h-[42vh]"
             index={animIdx++}
           />
         )}
@@ -157,25 +158,25 @@ const MasonryGrid = ({
     const right = i + 1 < items.length ? items[i + 1] : undefined
 
     rows.push(
-      <div key={`pair-${i}`} className="flex flex-col gap-8 md:flex-row">
+      <div key={`pair-${i}`} className="flex flex-col gap-4 md:flex-row">
         {left.kind === "cta" ? (
-          <CtaBlock className="h-[72vh] flex-1" copyIndex={left.copyIndex} />
+          <CtaBlock className="h-[56vh] flex-1" copyIndex={left.copyIndex} />
         ) : (
           <ProjectCard
             project={left.project}
             categorySlug={categorySlug}
-            className="h-[72vh] flex-1"
+            className="h-[56vh] flex-1"
             index={animIdx++}
           />
         )}
         {right &&
           (right.kind === "cta" ? (
-            <CtaBlock className="h-[72vh] flex-1" copyIndex={right.copyIndex} />
+            <CtaBlock className="h-[56vh] flex-1" copyIndex={right.copyIndex} />
           ) : (
             <ProjectCard
               project={right.project}
               categorySlug={categorySlug}
-              className="h-[72vh] flex-1"
+              className="h-[56vh] flex-1"
               index={animIdx++}
             />
           ))}
@@ -208,6 +209,8 @@ const CategoryHero = ({ category }: { category: Category }) => {
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
+  const navType = useNavigationType()
+  const titleDelay = navType === "PUSH" ? 0.75 : 0
 
   const centeredRef = useRef<HTMLDivElement>(null)
   const crossoverRef = useRef(0)
@@ -266,6 +269,8 @@ const CategoryHero = ({ category }: { category: Category }) => {
           <TextReveal
             text={category.name.toUpperCase()}
             className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
+            slideFrom="left"
+            delay={titleDelay}
           />
         </div>
       </motion.div>
@@ -280,6 +285,8 @@ const CategoryHero = ({ category }: { category: Category }) => {
             text={category.name.toUpperCase()}
             className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
             immediate
+            slideFrom="left"
+            delay={titleDelay}
           />
         </div>
       </motion.div>
@@ -314,7 +321,7 @@ export const CategoryPage = () => {
 
       {/* Overview section */}
       <section className="border-b border-white/10 px-8 py-20 md:px-16">
-        <div className="mb-20 grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-8">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-8">
           <h2 className="text-3xl leading-[1.15] font-bold tracking-tight md:col-span-2 md:text-4xl">
             {category.overview.headline}
           </h2>
@@ -322,28 +329,13 @@ export const CategoryPage = () => {
             {category.overview.description}
           </p>
         </div>
-
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
-          {(
-            [
-              { label: "Problem", body: category.overview.problem },
-              { label: "Solution", body: category.overview.solution },
-              { label: "Execution", body: category.overview.execution },
-              { label: "Results", body: category.overview.results },
-            ] as const
-          ).map(({ label, body }) => (
-            <div key={label}>
-              <span className="mb-5 block text-xs font-bold tracking-[0.4em] text-white/40 uppercase">
-                {label}
-              </span>
-              <p className="text-sm leading-relaxed text-white/60">{body}</p>
-            </div>
-          ))}
-        </div>
       </section>
 
+      {/* Branding-only: scroll-driven process line section */}
+      {category.slug === "branding" && <BrandingProcess />}
+
       {/* Project grid with CTA blocks */}
-      <div className="flex flex-col gap-8 px-8 py-8 md:px-16">
+      <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
         <MasonryGrid
           projects={category.projects}
           categorySlug={category.slug}

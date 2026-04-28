@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
-import { Link } from "react-router"
+import { Link, useNavigationType } from "react-router"
 import { TextReveal } from "../components/text-reveal"
 
 const SERVICES = [
@@ -164,11 +164,22 @@ const ServiceCell = ({
         ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       }}
     >
-      {/* Image inset — gap from card edge with rounded corners.
+      {/* Image inset — the container itself breathes so the whole card
+          (rounded corners + image) visibly grows and shrinks.
           Uses rounded-[16px] not rounded-2xl because index.css overrides
           .rounded-xl and .rounded-2xl to border-radius:0 !important. */}
-      <div className="absolute inset-3 overflow-hidden rounded-[16px]">
-        {/* Photo */}
+      <motion.div
+        className="absolute inset-3 overflow-hidden rounded-[16px]"
+        animate={{ scale: [1, 1.0194, 1] }}
+        transition={{
+          duration: 3.5 + (index % 4) * 0.65,
+          repeat: Infinity,
+          ease: "easeInOut",
+          times: [0, 0.5, 1],
+          delay: index * 0.45,
+        }}
+      >
+        {/* Photo — hover zoom stays on the img itself */}
         <img
           src={service.img}
           alt={service.name}
@@ -210,7 +221,7 @@ const ServiceCell = ({
                           duration: 0.3,
                           ease: [0.22, 1, 0.36, 1],
                         }}
-                        className="flex list-none items-start gap-2 text-xs leading-relaxed text-white/80"
+                        className="flex list-none items-start gap-2 text-xs leading-relaxed text-white/80 lowercase"
                       >
                         <span className="mt-[3px] shrink-0 text-white/40">
                           –
@@ -221,9 +232,9 @@ const ServiceCell = ({
                   </ul>
                   <Link
                     to="/portfolio"
-                    className="mt-4 inline-block text-xs font-bold tracking-[0.2em] text-white/70 uppercase underline underline-offset-4 transition-opacity hover:text-white"
+                    className="mt-4 inline-block text-xs font-bold tracking-[0.2em] text-white/70 lowercase underline underline-offset-4 transition-opacity hover:text-white"
                   >
-                    See Portfolio
+                    see portfolio
                   </Link>
                 </motion.div>
               )}
@@ -235,12 +246,16 @@ const ServiceCell = ({
             </span>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
 
-export const Services = () => (
+export const Services = () => {
+  const navType = useNavigationType()
+  const titleDelay = navType === "PUSH" ? 0.75 : 0
+
+  return (
   <div className="pt-32">
     {/* Page header — centered */}
     <section className="border-b-2 border-white/15 px-8 pb-16 text-center md:px-16">
@@ -250,6 +265,8 @@ export const Services = () => (
       <TextReveal
         text="SERVICES"
         className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
+        slideFrom="left"
+        delay={titleDelay}
       />
     </section>
 
@@ -271,4 +288,5 @@ export const Services = () => (
       })}
     </div>
   </div>
-)
+  )
+}

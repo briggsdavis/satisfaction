@@ -9,6 +9,7 @@ interface TextRevealProps {
   nowrap?: boolean
   stagger?: number
   immediate?: boolean
+  slideFrom?: "bottom" | "left"
 }
 
 export const TextReveal = ({
@@ -19,27 +20,48 @@ export const TextReveal = ({
   nowrap = false,
   stagger = 0.01,
   immediate = false,
+  slideFrom = "bottom",
 }: TextRevealProps) => {
+  // Left-to-right wipes need more stagger so the sweep is actually visible.
+  const effectiveStagger = slideFrom === "left" ? Math.max(stagger, 0.065) : stagger
+
   const container = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
-      transition: { staggerChildren: stagger, delayChildren: 0.02 * i + delay },
+      transition: {
+        staggerChildren: effectiveStagger,
+        delayChildren: 0.02 * i + delay,
+      },
     }),
   }
 
-  const child = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: "spring" as const, damping: 12, stiffness: 100 },
-    },
-    hidden: {
-      opacity: 0,
-      y: 20,
-      transition: { type: "spring" as const, damping: 12, stiffness: 100 },
-    },
-  }
+  const child =
+    slideFrom === "left"
+      ? {
+          visible: {
+            opacity: 1,
+            x: 0,
+            transition: { type: "spring" as const, damping: 14, stiffness: 120 },
+          },
+          hidden: {
+            opacity: 0,
+            x: -24,
+            transition: { type: "spring" as const, damping: 14, stiffness: 120 },
+          },
+        }
+      : {
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: { type: "spring" as const, damping: 12, stiffness: 100 },
+          },
+          hidden: {
+            opacity: 0,
+            y: 20,
+            transition: { type: "spring" as const, damping: 12, stiffness: 100 },
+          },
+        }
 
   const words = text.split(" ")
 

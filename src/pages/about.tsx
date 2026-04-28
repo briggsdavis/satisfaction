@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
 import { AboutHero } from "../components/about-hero"
 import { useSmoothScroll } from "../components/smooth-scroll"
-import { BrandsCarousel } from "./home/brands-carousel"
+import { LogosCarousel } from "./home/brands-carousel"
 import { FeaturedCascade } from "./home/featured-cascade"
 
 // ─── Values data + card ───────────────────────────────────────────────────────
@@ -490,6 +490,12 @@ export const About = () => {
           </motion.div>
         </div>
 
+        {/* ── Logos carousel ────────────────────────────────────────────── */}
+        <LogosCarousel />
+
+        {/* ── Featured projects ─────────────────────────────────────────── */}
+        <FeaturedCascade />
+
         {/* ── Values Images ─────────────────────────────────────────────── */}
         <div className="px-8 pt-[54px] pb-6 md:px-16 md:pt-[82px] md:pb-8">
           <div className="flex items-start gap-3 md:gap-5">
@@ -499,18 +505,32 @@ export const About = () => {
           </div>
         </div>
 
+        {/* ── Branding CTA ──────────────────────────────────────────────── */}
+        <div className="border-t border-white/10 px-8 py-16 md:px-16">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="mb-2 text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
+                Brand Identity
+              </p>
+              <h2 className="text-2xl font-bold tracking-tight uppercase md:text-3xl">
+                Ready to build your brand?
+              </h2>
+            </div>
+            <Link
+              to="/contact?branding=1"
+              className="btn-industrial shrink-0"
+            >
+              Start a Branding Brief →
+            </Link>
+          </div>
+        </div>
+
         {/* ── Discover CTA ──────────────────────────────────────────────── */}
-        <div className="flex justify-center py-12">
+        <div className="flex justify-center border-t border-white/10 py-12">
           <Link to="/services" className="btn-industrial">
             Discover Our Services
           </Link>
         </div>
-
-        {/* ── Brands carousel ───────────────────────────────────────────── */}
-        <BrandsCarousel />
-
-        {/* ── Featured projects ─────────────────────────────────────────── */}
-        <FeaturedCascade />
       </motion.div>
     </>
   )
