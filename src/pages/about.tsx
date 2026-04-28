@@ -505,8 +505,28 @@ export const About = () => {
           </div>
         </div>
 
+        {/* ── Branding CTA ──────────────────────────────────────────────── */}
+        <div className="border-t border-white/10 px-8 py-16 md:px-16">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="mb-2 text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
+                Brand Identity
+              </p>
+              <h2 className="text-2xl font-bold tracking-tight uppercase md:text-3xl">
+                Ready to build your brand?
+              </h2>
+            </div>
+            <Link
+              to="/contact?branding=1"
+              className="btn-industrial shrink-0"
+            >
+              Start a Branding Brief →
+            </Link>
+          </div>
+        </div>
+
         {/* ── Discover CTA ──────────────────────────────────────────────── */}
-        <div className="flex justify-center py-12">
+        <div className="flex justify-center border-t border-white/10 py-12">
           <Link to="/services" className="btn-industrial">
             Discover Our Services
           </Link>

@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from "motion/react"
 import React, { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
-import { useLocation, useNavigationType } from "react-router"
+import { useLocation, useNavigationType, useSearchParams } from "react-router"
+import { BrandingModal } from "../components/branding-modal"
 import { TextReveal } from "../components/text-reveal"
 
 // ─── FAQ Data ─────────────────────────────────────────────────────────────────
@@ -494,9 +495,19 @@ const BlurIn = ({
 // ─── Contact page ─────────────────────────────────────────────────────────────
 export const Contact = () => {
   const [openFaq, setOpenFaq] = useState<string | null>(null)
+  const [brandingOpen, setBrandingOpen] = useState(false)
   const { hash } = useLocation()
+  const [searchParams] = useSearchParams()
   const navType = useNavigationType()
   const titleDelay = navType === "PUSH" ? 0.75 : 0
+
+  // Auto-open branding modal when ?branding=1 is in the URL
+  useEffect(() => {
+    if (searchParams.get("branding") === "1") {
+      const timer = setTimeout(() => setBrandingOpen(true), 800)
+      return () => clearTimeout(timer)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     if (hash === "#faq") {
@@ -626,6 +637,39 @@ export const Contact = () => {
         </div>
       </section>
 
+      {/* ── Branding Brief CTA ───────────────────────────────────────────── */}
+      <section className="border-b border-white/10">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr]">
+          <BlurIn
+            delay={0.1}
+            className="border-b border-white/10 px-8 py-12 md:px-16 lg:border-r lg:border-b-0 lg:py-16"
+          >
+            <p className="mb-4 text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
+              Brand Identity
+            </p>
+            <h2 className="text-2xl font-bold leading-tight tracking-tight uppercase md:text-3xl">
+              Need a logo or brand?
+            </h2>
+          </BlurIn>
+          <BlurIn
+            delay={0.18}
+            className="flex flex-col justify-center gap-6 px-8 py-12 md:px-16 lg:py-16"
+          >
+            <p className="max-w-lg text-base leading-relaxed text-white/60">
+              Skip the general inquiry — fill out our focused branding brief and we'll come back with a tailored direction for your identity.
+            </p>
+            <div>
+              <button
+                onClick={() => setBrandingOpen(true)}
+                className="btn-industrial"
+              >
+                Start a Branding Brief →
+              </button>
+            </div>
+          </BlurIn>
+        </div>
+      </section>
+
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section id="faq">
         {/* FAQ header sidebar */}
@@ -693,6 +737,8 @@ export const Contact = () => {
           )
         })}
       </section>
+
+      <BrandingModal open={brandingOpen} onClose={() => setBrandingOpen(false)} />
     </div>
   )
 }
