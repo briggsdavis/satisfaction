@@ -164,27 +164,27 @@ const ServiceCell = ({
         ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       }}
     >
-      {/* Image inset — gap from card edge with rounded corners.
+      {/* Image inset — the container itself breathes so the whole card
+          (rounded corners + image) visibly grows and shrinks.
           Uses rounded-[16px] not rounded-2xl because index.css overrides
           .rounded-xl and .rounded-2xl to border-radius:0 !important. */}
-      <div className="absolute inset-3 overflow-hidden rounded-[16px]">
-        {/* Photo — subtle breathing effect, staggered per card */}
-        <motion.img
+      <motion.div
+        className="absolute inset-3 overflow-hidden rounded-[16px]"
+        animate={{ scale: [1, 1.006, 1] }}
+        transition={{
+          duration: 3.5 + (index % 4) * 0.65,
+          repeat: Infinity,
+          ease: "easeInOut",
+          times: [0, 0.5, 1],
+          delay: index * 0.45,
+        }}
+      >
+        {/* Photo — hover zoom stays on the img itself */}
+        <img
           src={service.img}
           alt={service.name}
-          className="absolute inset-0 h-full w-full object-cover"
-          animate={{ scale: isHovered ? 1.05 : [1, 1.005, 1] }}
-          transition={
-            isHovered
-              ? { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
-              : {
-                  duration: 3.5 + (index % 4) * 0.65,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  times: [0, 0.5, 1],
-                  delay: index * 0.45,
-                }
-          }
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700"
+          style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
         />
 
         {/* Permanent gradient — keeps bottom text legible */}
@@ -246,7 +246,7 @@ const ServiceCell = ({
             </span>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
@@ -262,6 +262,7 @@ export const Services = () => (
         text="SERVICES"
         className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
         slideFrom="left"
+        delay={0.8}
       />
     </section>
 

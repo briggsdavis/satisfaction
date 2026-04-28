@@ -267,6 +267,7 @@ const CategoryHero = ({ category }: { category: Category }) => {
             text={category.name.toUpperCase()}
             className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
             slideFrom="left"
+            delay={0.8}
           />
         </div>
       </motion.div>
@@ -282,6 +283,7 @@ const CategoryHero = ({ category }: { category: Category }) => {
             className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
             immediate
             slideFrom="left"
+            delay={0.8}
           />
         </div>
       </motion.div>

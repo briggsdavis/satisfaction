@@ -112,6 +112,7 @@ export const Portfolio = () => (
         text="PORTFOLIO"
         className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
         slideFrom="left"
+        delay={0.8}
       />
     </section>
 
