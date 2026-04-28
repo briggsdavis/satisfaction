@@ -266,6 +266,7 @@ const CategoryHero = ({ category }: { category: Category }) => {
           <TextReveal
             text={category.name.toUpperCase()}
             className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
+            slideFrom="left"
           />
         </div>
       </motion.div>
@@ -280,6 +281,7 @@ const CategoryHero = ({ category }: { category: Category }) => {
             text={category.name.toUpperCase()}
             className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
             immediate
+            slideFrom="left"
           />
         </div>
       </motion.div>

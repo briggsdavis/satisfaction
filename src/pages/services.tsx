@@ -168,12 +168,23 @@ const ServiceCell = ({
           Uses rounded-[16px] not rounded-2xl because index.css overrides
           .rounded-xl and .rounded-2xl to border-radius:0 !important. */}
       <div className="absolute inset-3 overflow-hidden rounded-[16px]">
-        {/* Photo */}
-        <img
+        {/* Photo — subtle breathing effect, staggered per card */}
+        <motion.img
           src={service.img}
           alt={service.name}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700"
-          style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
+          className="absolute inset-0 h-full w-full object-cover"
+          animate={{ scale: isHovered ? 1.05 : [1, 1.005, 1] }}
+          transition={
+            isHovered
+              ? { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
+              : {
+                  duration: 3.5 + (index % 4) * 0.65,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  times: [0, 0.5, 1],
+                  delay: index * 0.45,
+                }
+          }
         />
 
         {/* Permanent gradient — keeps bottom text legible */}
@@ -210,7 +221,7 @@ const ServiceCell = ({
                           duration: 0.3,
                           ease: [0.22, 1, 0.36, 1],
                         }}
-                        className="flex list-none items-start gap-2 text-xs leading-relaxed text-white/80"
+                        className="flex list-none items-start gap-2 text-xs leading-relaxed text-white/80 lowercase"
                       >
                         <span className="mt-[3px] shrink-0 text-white/40">
                           –
@@ -221,9 +232,9 @@ const ServiceCell = ({
                   </ul>
                   <Link
                     to="/portfolio"
-                    className="mt-4 inline-block text-xs font-bold tracking-[0.2em] text-white/70 uppercase underline underline-offset-4 transition-opacity hover:text-white"
+                    className="mt-4 inline-block text-xs font-bold tracking-[0.2em] text-white/70 lowercase underline underline-offset-4 transition-opacity hover:text-white"
                   >
-                    See Portfolio
+                    see portfolio
                   </Link>
                 </motion.div>
               )}
@@ -250,6 +261,7 @@ export const Services = () => (
       <TextReveal
         text="SERVICES"
         className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
+        slideFrom="left"
       />
     </section>
 

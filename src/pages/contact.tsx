@@ -415,7 +415,13 @@ const FaqItem = ({
 )
 
 // ─── Fit title ───────────────────────────────────────────────────────────────
-const FitTitle = ({ text }: { text: string }) => {
+const FitTitle = ({
+  text,
+  slideFrom = "bottom",
+}: {
+  text: string
+  slideFrom?: "bottom" | "left"
+}) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [fontSize, setFontSize] = useState<number | null>(null)
 
@@ -449,6 +455,7 @@ const FitTitle = ({ text }: { text: string }) => {
         text={text}
         className="massive-text justify-center leading-none"
         immediate
+        slideFrom={slideFrom}
       />
     </div>
   )
@@ -510,7 +517,7 @@ export const Contact = () => {
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
-        <FitTitle text="CONTACT" />
+        <FitTitle text="CONTACT" slideFrom="left" />
       </motion.section>
 
       {/* ── Form + contact details ────────────────────────────────────────── */}

@@ -54,6 +54,7 @@ export const ProjectPage = () => {
         <TextReveal
           text={project.title.toUpperCase()}
           className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
+          slideFrom="left"
         />
       </section>
 

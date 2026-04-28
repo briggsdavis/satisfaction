@@ -111,6 +111,7 @@ export const Portfolio = () => (
       <TextReveal
         text="PORTFOLIO"
         className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
+        slideFrom="left"
       />
     </section>
 
