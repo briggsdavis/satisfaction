@@ -123,31 +123,31 @@ export const Portfolio = () => {
     {/* Vertical masonry grid — mirrors FeaturedCascade pattern rotated 90° */}
     <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
       {/* Row 1 — full width */}
-      <CategoryCard category={CATEGORIES[0]} className="h-[72vh]" />
+      <CategoryCard category={CATEGORIES[0]} className="h-[42vh]" />
 
-      {/* Row 2 — 2 equal columns, tall */}
+      {/* Row 2 — 2 equal columns */}
       <div className="flex flex-col gap-4 md:flex-row">
-        <CategoryCard category={CATEGORIES[1]} className="h-[90vh] flex-1" />
-        <CategoryCard category={CATEGORIES[2]} className="h-[90vh] flex-1" />
+        <CategoryCard category={CATEGORIES[1]} className="h-[56vh] flex-1" />
+        <CategoryCard category={CATEGORIES[2]} className="h-[56vh] flex-1" />
       </div>
 
-      {/* Row 3 — wide top + two under (FeaturedCascade Group 3 rotated) */}
+      {/* Row 3 — wide top + two under */}
       <div className="flex flex-col gap-4">
-        <CategoryCard category={CATEGORIES[3]} className="h-[65vh]" />
+        <CategoryCard category={CATEGORIES[3]} className="h-[40vh]" />
         <div className="flex flex-col gap-4 md:flex-row">
-          <CategoryCard category={CATEGORIES[4]} className="h-[58vh] flex-1" />
-          <CategoryCard category={CATEGORIES[5]} className="h-[58vh] flex-1" />
+          <CategoryCard category={CATEGORIES[4]} className="h-[34vh] flex-1" />
+          <CategoryCard category={CATEGORIES[5]} className="h-[34vh] flex-1" />
         </div>
       </div>
 
-      {/* Row 4 — 2 equal columns, tall */}
+      {/* Row 4 — 2 equal columns */}
       <div className="flex flex-col gap-4 md:flex-row">
-        <CategoryCard category={CATEGORIES[6]} className="h-[90vh] flex-1" />
-        <CategoryCard category={CATEGORIES[7]} className="h-[90vh] flex-1" />
+        <CategoryCard category={CATEGORIES[6]} className="h-[56vh] flex-1" />
+        <CategoryCard category={CATEGORIES[7]} className="h-[56vh] flex-1" />
       </div>
 
       {/* Row 5 — full width */}
-      <CategoryCard category={CATEGORIES[8]} className="h-[72vh]" />
+      <CategoryCard category={CATEGORIES[8]} className="h-[42vh]" />
     </div>
   </div>
   )

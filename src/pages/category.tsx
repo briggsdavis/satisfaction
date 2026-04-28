@@ -136,14 +136,14 @@ const MasonryGrid = ({
       <div key={`full-${i}`}>
         {fullItem.kind === "cta" ? (
           <CtaBlock
-            className="h-[72vh]"
+            className="h-[42vh]"
             copyIndex={fullItem.copyIndex}
           />
         ) : (
           <ProjectCard
             project={fullItem.project}
             categorySlug={categorySlug}
-            className="h-[72vh]"
+            className="h-[42vh]"
             index={animIdx++}
           />
         )}
@@ -159,23 +159,23 @@ const MasonryGrid = ({
     rows.push(
       <div key={`pair-${i}`} className="flex flex-col gap-4 md:flex-row">
         {left.kind === "cta" ? (
-          <CtaBlock className="h-[88vh] flex-1" copyIndex={left.copyIndex} />
+          <CtaBlock className="h-[56vh] flex-1" copyIndex={left.copyIndex} />
         ) : (
           <ProjectCard
             project={left.project}
             categorySlug={categorySlug}
-            className="h-[88vh] flex-1"
+            className="h-[56vh] flex-1"
             index={animIdx++}
           />
         )}
         {right &&
           (right.kind === "cta" ? (
-            <CtaBlock className="h-[88vh] flex-1" copyIndex={right.copyIndex} />
+            <CtaBlock className="h-[56vh] flex-1" copyIndex={right.copyIndex} />
           ) : (
             <ProjectCard
               project={right.project}
               categorySlug={categorySlug}
-              className="h-[88vh] flex-1"
+              className="h-[56vh] flex-1"
               index={animIdx++}
             />
           ))}

@@ -126,22 +126,22 @@ export const ProjectPage = () => {
           img={images[0]}
           title={project.title}
           index={0}
-          className="h-[75vh]"
+          className="h-[48vh]"
         />
 
-        {/* Row 2 — 2 columns, tall */}
+        {/* Row 2 — 2 columns */}
         <div className="flex flex-col gap-4 md:flex-row">
           <ImageCard
             img={images[1]}
             title={project.title}
             index={1}
-            className="h-[90vh] flex-1"
+            className="h-[58vh] flex-1"
           />
           <ImageCard
             img={images[2]}
             title={project.title}
             index={2}
-            className="h-[90vh] flex-1"
+            className="h-[58vh] flex-1"
           />
         </div>
 
@@ -151,20 +151,20 @@ export const ProjectPage = () => {
             img={images[3]}
             title={project.title}
             index={3}
-            className="h-[65vh]"
+            className="h-[42vh]"
           />
           <div className="flex flex-col gap-4 md:flex-row">
             <ImageCard
               img={images[4]}
               title={project.title}
               index={4}
-              className="h-[58vh] flex-1"
+              className="h-[36vh] flex-1"
             />
             <ImageCard
               img={images[5]}
               title={project.title}
               index={5}
-              className="h-[58vh] flex-1"
+              className="h-[36vh] flex-1"
             />
           </div>
         </div>
