@@ -209,7 +209,7 @@ const CategoryHero = ({ category }: { category: Category }) => {
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
   const navType = useNavigationType()
-  const titleDelay = navType === "PUSH" ? 0.5 : 0
+  const titleDelay = navType === "PUSH" ? 0.75 : 0
 
   const centeredRef = useRef<HTMLDivElement>(null)
   const crossoverRef = useRef(0)

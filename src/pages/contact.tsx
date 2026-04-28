@@ -496,7 +496,7 @@ export const Contact = () => {
   const [openFaq, setOpenFaq] = useState<string | null>(null)
   const { hash } = useLocation()
   const navType = useNavigationType()
-  const titleDelay = navType === "PUSH" ? 0.5 : 0
+  const titleDelay = navType === "PUSH" ? 0.75 : 0
 
   useEffect(() => {
     if (hash === "#faq") {

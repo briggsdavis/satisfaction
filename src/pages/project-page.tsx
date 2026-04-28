@@ -12,7 +12,7 @@ export const ProjectPage = () => {
     project: string
   }>()
   const navType = useNavigationType()
-  const titleDelay = navType === "PUSH" ? 0.5 : 0
+  const titleDelay = navType === "PUSH" ? 0.75 : 0
 
   const category = CATEGORIES.find((c) => c.slug === categorySlug)
   const project = category?.projects.find((p) => p.slug === projectSlug)

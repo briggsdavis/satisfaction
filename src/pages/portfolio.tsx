@@ -103,7 +103,7 @@ const CategoryCard = ({
 // Layout: full → split → full → split → full → split  (9 categories total)
 export const Portfolio = () => {
   const navType = useNavigationType()
-  const titleDelay = navType === "PUSH" ? 0.5 : 0
+  const titleDelay = navType === "PUSH" ? 0.75 : 0
 
   return (
   <div className="pt-32">
