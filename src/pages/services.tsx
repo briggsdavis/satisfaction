@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
-import { Link } from "react-router"
+import { Link, useNavigationType } from "react-router"
 import { TextReveal } from "../components/text-reveal"
 
 const SERVICES = [
@@ -170,7 +170,7 @@ const ServiceCell = ({
           .rounded-xl and .rounded-2xl to border-radius:0 !important. */}
       <motion.div
         className="absolute inset-3 overflow-hidden rounded-[16px]"
-        animate={{ scale: [1, 1.006, 1] }}
+        animate={{ scale: [1, 1.0072, 1] }}
         transition={{
           duration: 3.5 + (index % 4) * 0.65,
           repeat: Infinity,
@@ -251,7 +251,11 @@ const ServiceCell = ({
   )
 }
 
-export const Services = () => (
+export const Services = () => {
+  const navType = useNavigationType()
+  const titleDelay = navType === "PUSH" ? 0.6 : 0
+
+  return (
   <div className="pt-32">
     {/* Page header — centered */}
     <section className="border-b-2 border-white/15 px-8 pb-16 text-center md:px-16">
@@ -262,7 +266,7 @@ export const Services = () => (
         text="SERVICES"
         className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
         slideFrom="left"
-        delay={0.8}
+        delay={titleDelay}
       />
     </section>
 
@@ -284,4 +288,5 @@ export const Services = () => (
       })}
     </div>
   </div>
-)
+  )
+}

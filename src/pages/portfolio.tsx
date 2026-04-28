@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
-import { Link } from "react-router"
+import { Link, useNavigationType } from "react-router"
 import { TextReveal } from "../components/text-reveal"
 import { CATEGORIES, type Category } from "../lib/categories"
 
@@ -101,7 +101,11 @@ const CategoryCard = ({
 
 // ─── Portfolio page ───────────────────────────────────────────────────────────
 // Layout: full → split → full → split → full → split  (9 categories total)
-export const Portfolio = () => (
+export const Portfolio = () => {
+  const navType = useNavigationType()
+  const titleDelay = navType === "PUSH" ? 0.6 : 0
+
+  return (
   <div className="pt-32">
     {/* Page header */}
     <section className="border-b border-white/10 px-8 pb-16 text-center md:px-16">
@@ -112,7 +116,7 @@ export const Portfolio = () => (
         text="PORTFOLIO"
         className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
         slideFrom="left"
-        delay={0.8}
+        delay={titleDelay}
       />
     </section>
 
@@ -146,4 +150,5 @@ export const Portfolio = () => (
       </div>
     </div>
   </div>
-)
+  )
+}

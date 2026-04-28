@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useTransform } from "motion/react"
 import React, { useEffect, useRef } from "react"
-import { Link, useParams } from "react-router"
+import { Link, useNavigationType, useParams } from "react-router"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
 import { CATEGORIES, type Category, type Project } from "../lib/categories"
@@ -208,6 +208,8 @@ const CategoryHero = ({ category }: { category: Category }) => {
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
+  const navType = useNavigationType()
+  const titleDelay = navType === "PUSH" ? 0.6 : 0
 
   const centeredRef = useRef<HTMLDivElement>(null)
   const crossoverRef = useRef(0)
@@ -267,7 +269,7 @@ const CategoryHero = ({ category }: { category: Category }) => {
             text={category.name.toUpperCase()}
             className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
             slideFrom="left"
-            delay={0.8}
+            delay={titleDelay}
           />
         </div>
       </motion.div>
@@ -283,7 +285,7 @@ const CategoryHero = ({ category }: { category: Category }) => {
             className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
             immediate
             slideFrom="left"
-            delay={0.8}
+            delay={titleDelay}
           />
         </div>
       </motion.div>

@@ -1,5 +1,5 @@
 import { motion } from "motion/react"
-import { Link, useParams } from "react-router"
+import { Link, useNavigationType, useParams } from "react-router"
 import { TextReveal } from "../components/text-reveal"
 import { CATEGORIES } from "../lib/categories"
 
@@ -11,6 +11,8 @@ export const ProjectPage = () => {
     category: string
     project: string
   }>()
+  const navType = useNavigationType()
+  const titleDelay = navType === "PUSH" ? 0.6 : 0
 
   const category = CATEGORIES.find((c) => c.slug === categorySlug)
   const project = category?.projects.find((p) => p.slug === projectSlug)
@@ -55,7 +57,7 @@ export const ProjectPage = () => {
           text={project.title.toUpperCase()}
           className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
           slideFrom="left"
-          delay={0.8}
+          delay={titleDelay}
         />
       </section>
 

@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "motion/react"
 import React, { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
-import { useLocation } from "react-router"
+import { useLocation, useNavigationType } from "react-router"
 import { TextReveal } from "../components/text-reveal"
 
 // ─── FAQ Data ─────────────────────────────────────────────────────────────────
@@ -495,6 +495,8 @@ const BlurIn = ({
 export const Contact = () => {
   const [openFaq, setOpenFaq] = useState<string | null>(null)
   const { hash } = useLocation()
+  const navType = useNavigationType()
+  const titleDelay = navType === "PUSH" ? 0.6 : 0
 
   useEffect(() => {
     if (hash === "#faq") {
@@ -520,7 +522,7 @@ export const Contact = () => {
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
-        <FitTitle text="CONTACT" slideFrom="left" delay={0.8} />
+        <FitTitle text="CONTACT" slideFrom="left" delay={titleDelay} />
       </motion.section>
 
       {/* ── Form + contact details ────────────────────────────────────────── */}
