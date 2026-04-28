@@ -22,9 +22,13 @@ export const CampaignStatement = () => {
       document.body.appendChild(probe)
       const textWidth = probe.offsetWidth
       document.body.removeChild(probe)
-      const containerWidth = container.clientWidth
-      if (textWidth > 0 && containerWidth > 0) {
-        setFontSize((containerWidth / textWidth) * PROBE)
+      const cs = window.getComputedStyle(container)
+      const contentWidth =
+        container.clientWidth -
+        parseFloat(cs.paddingLeft) -
+        parseFloat(cs.paddingRight)
+      if (textWidth > 0 && contentWidth > 0) {
+        setFontSize((contentWidth / textWidth) * PROBE)
       }
     }
     const fit = () => void document.fonts.ready.then(measure)
@@ -39,7 +43,7 @@ export const CampaignStatement = () => {
       <motion.img
         src="/mock.png"
         alt=""
-        className="pointer-events-none absolute top-1/2 left-1/2 z-10 h-[31.68rem] w-[31.68rem] -translate-x-1/2 -translate-y-[54%] rounded-lg object-cover shadow-2xl md:h-[47.52rem] md:w-[47.52rem]"
+        className="pointer-events-none absolute top-1/2 left-[40%] z-10 h-[34.85rem] w-[34.85rem] -translate-x-1/2 -translate-y-[54%] rounded-lg object-cover shadow-2xl md:h-[52.27rem] md:w-[52.27rem]"
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-150px" }}

@@ -23,19 +23,19 @@ function Laptop({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     }
   }, [scene])
 
-  // Animate laptop position and rotation based on scroll
+  // Animate laptop position and rotation based on scroll.
+  // Starts flat-on (facing directly at viewer), drifts in at ~20° tilt.
   useFrame(() => {
     if (!groupRef.current) return
     const t = scrollProgress.get()
 
-    // Start far away, come close to fill the screen
-    groupRef.current.position.z = THREE.MathUtils.lerp(-15, 2.415, t)
-    // Center model in zone below nav: ~0.75× nav-height gap on top, 1.5× on bottom
+    // Come in from far away
+    groupRef.current.position.z = THREE.MathUtils.lerp(-18, 2.415, t)
     groupRef.current.position.y = THREE.MathUtils.lerp(0, -0.13, t)
-    // Slight tilt throughout
-    groupRef.current.rotation.x = THREE.MathUtils.lerp(0.25, 0.1, t)
-    // Slight Y rotation at start for visual interest
-    groupRef.current.rotation.y = THREE.MathUtils.lerp(0.35, 0, t)
+    // X: 0 = screen-flat, grows to ~20° (0.35 rad) like a monitor tilting toward viewer
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(0, 0.35, t)
+    // Y: slight drift angle at start, straightens as it fills frame
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(0.22, 0, t)
   })
 
   return (

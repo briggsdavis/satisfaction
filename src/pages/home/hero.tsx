@@ -29,12 +29,39 @@ export const HeroCanvas = () => {
     y > animationEnd ? -(y - animationEnd) : 0,
   )
 
+  // Radial backlight rises from below the screen and settles behind the model.
+  // Using vh strings keeps this viewport-relative from the first render.
+  const lightY = useTransform(scrollProgress, [0, 0.65, 1], ["50vh", "0vh", "0vh"])
+
   return (
     <motion.div
       className="pointer-events-none fixed inset-0 z-[4]"
       style={{ y: scrollOffset }}
     >
       <ScatteredImages scrollProgress={scrollProgress} />
+
+      {/* Scroll-driven white-blue backlight */}
+      <div
+        className="pointer-events-none absolute"
+        style={{
+          left: "50%",
+          top: "52%",
+          transform: "translate(-50%, -50%)",
+          width: "70vw",
+          height: "75vh",
+          zIndex: 4,
+        }}
+      >
+        <motion.div
+          style={{
+            width: "100%",
+            height: "100%",
+            y: lightY,
+            background:
+              "radial-gradient(ellipse at center, rgba(210,230,255,0.18) 0%, rgba(170,205,255,0.08) 45%, transparent 72%)",
+          }}
+        />
+      </div>
 
       <div className="pointer-events-none fixed inset-0 z-[5]">
         <LaptopScene scrollProgress={scrollProgress} />
@@ -56,17 +83,6 @@ export const Hero = () => {
           "radial-gradient(ellipse 80% 80% at 50% 42%, #0c0c18 0%, #000000 62%)",
       }}
     >
-      {/* Subtle centre glow — gives the iMac a slight halo effect */}
-      <div
-        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{
-          width: "55vw",
-          height: "55vh",
-          background:
-            "radial-gradient(ellipse at center, rgba(80,90,180,0.07) 0%, transparent 70%)",
-        }}
-      />
-
       <div className="relative z-10 flex h-screen flex-col">
         <div className="flex-1" />
 
