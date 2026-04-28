@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
 import { AboutHero } from "../components/about-hero"
 import { useSmoothScroll } from "../components/smooth-scroll"
-import { BrandsCarousel } from "./home/brands-carousel"
+import { LogosCarousel } from "./home/brands-carousel"
 import { FeaturedCascade } from "./home/featured-cascade"
 
 // ─── Values data + card ───────────────────────────────────────────────────────
@@ -490,6 +490,12 @@ export const About = () => {
           </motion.div>
         </div>
 
+        {/* ── Logos carousel ────────────────────────────────────────────── */}
+        <LogosCarousel />
+
+        {/* ── Featured projects ─────────────────────────────────────────── */}
+        <FeaturedCascade />
+
         {/* ── Values Images ─────────────────────────────────────────────── */}
         <div className="px-8 pt-[54px] pb-6 md:px-16 md:pt-[82px] md:pb-8">
           <div className="flex items-start gap-3 md:gap-5">
@@ -505,12 +511,6 @@ export const About = () => {
             Discover Our Services
           </Link>
         </div>
-
-        {/* ── Brands carousel ───────────────────────────────────────────── */}
-        <BrandsCarousel />
-
-        {/* ── Featured projects ─────────────────────────────────────────── */}
-        <FeaturedCascade />
       </motion.div>
     </>
   )
