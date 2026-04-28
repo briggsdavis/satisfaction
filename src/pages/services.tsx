@@ -170,7 +170,7 @@ const ServiceCell = ({
           .rounded-xl and .rounded-2xl to border-radius:0 !important. */}
       <motion.div
         className="absolute inset-3 overflow-hidden rounded-[16px]"
-        animate={{ scale: [1, 1.0072, 1] }}
+        animate={{ scale: [1, 1.0108, 1] }}
         transition={{
           duration: 3.5 + (index % 4) * 0.65,
           repeat: Infinity,
@@ -253,7 +253,7 @@ const ServiceCell = ({
 
 export const Services = () => {
   const navType = useNavigationType()
-  const titleDelay = navType === "PUSH" ? 0.6 : 0
+  const titleDelay = navType === "PUSH" ? 0.5 : 0
 
   return (
   <div className="pt-32">

@@ -23,7 +23,7 @@ export const TextReveal = ({
   slideFrom = "bottom",
 }: TextRevealProps) => {
   // Left-to-right wipes need more stagger so the sweep is actually visible.
-  const effectiveStagger = slideFrom === "left" ? Math.max(stagger, 0.035) : stagger
+  const effectiveStagger = slideFrom === "left" ? Math.max(stagger, 0.065) : stagger
 
   const container = {
     hidden: { opacity: 0 },
