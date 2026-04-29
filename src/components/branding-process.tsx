@@ -58,20 +58,22 @@ const STEPS = [
 ]
 
 // Path connecting all 6 checkpoints with smooth cubic curves and a top swirl.
+// Each turnaround waypoint is G1-continuous: the reflected cp2 of the
+// incoming curve becomes cp1 of the outgoing curve so the path never kinks.
 const PATH_D = [
   "M 500 0",
   "C 600 100, 850 150, 750 350",
-  "C 650 500, 400 500, 250 600", // → Step 1 (left)
+  "C 650 550, 400 500, 250 600", // → Step 1 (left)
   "C 100 700, 50 900, 100 1050",
-  "C 250 1150, 600 1100, 750 1200", // → Step 2 (right)
+  "C 150 1200, 600 1100, 750 1200", // → Step 2 (right)
   "C 900 1300, 950 1500, 900 1650",
-  "C 800 1750, 400 1700, 250 1800", // → Step 3 (left)
+  "C 850 1800, 400 1700, 250 1800", // → Step 3 (left)
   "C 100 1900, 50 2100, 100 2250",
-  "C 250 2350, 600 2300, 750 2400", // → Step 4 (right)
+  "C 150 2400, 600 2300, 750 2400", // → Step 4 (right)
   "C 900 2500, 950 2700, 900 2850",
-  "C 800 2950, 400 2900, 250 3000", // → Step 5 (left)
+  "C 850 3000, 400 2900, 250 3000", // → Step 5 (left)
   "C 100 3100, 50 3300, 100 3450",
-  "C 250 3550, 600 3500, 750 3600", // → Step 6 (right)
+  "C 150 3600, 600 3500, 750 3600", // → Step 6 (right)
   "C 850 3700, 700 3850, 500 3950", // → end at center
 ].join(" ")
 
@@ -156,15 +158,15 @@ export const BrandingProcess = () => {
   }, [smoothY])
 
   // Progress 0 → 1 as the section travels through the viewport.
-  // Starts when section top hits ~80% of viewport, fully filled when
-  // section bottom hits 20% from top — this lines up the line draw with
-  // the user reaching the bottom step + CTA.
+  // range = H exactly so the line tip stays fixed at 50% of viewport height
+  // (center) throughout the scroll — eliminating the drift that caused the
+  // glow to creep toward the top by the time the user reached later steps.
   const progress = useTransform(activeY, (y: number) => {
     const T = sectionTopRef.current
     const H = sectionHeightRef.current
     const vh = window.innerHeight
-    const start = T - vh * 0.8
-    const end = T + H - vh * 0.2
+    const start = T - vh * 0.5
+    const end = T + H - vh * 0.5
     const range = end - start
     if (range <= 0) return 0
     return Math.max(0, Math.min(1, (y - start) / range))
@@ -179,12 +181,13 @@ export const BrandingProcess = () => {
     ["rgba(255,255,255,0.5)", "rgba(180,210,255,0.85)", "rgba(180,210,255,0.95)"],
   )
 
-  // CTA reveal: starts to appear at 0.9, fully present at 1.
-  const ctaOpacity = useTransform(progress, [0.88, 0.99], [0, 1])
-  const ctaY = useTransform(progress, [0.88, 0.99], [40, 0])
-  const ctaBlur = useTransform(progress, [0.88, 0.99], [16, 0])
+  // CTA enters the viewport at ~progress 0.97; fade-in completes right as it
+  // reaches viewport center so it's fully legible when the user sees it.
+  const ctaOpacity = useTransform(progress, [0.92, 0.97], [0, 1])
+  const ctaY = useTransform(progress, [0.92, 0.97], [40, 0])
+  const ctaBlur = useTransform(progress, [0.92, 0.97], [16, 0])
   const ctaFilter = useTransform(ctaBlur, (b: number) => `blur(${b}px)`)
-  const ctaScale = useTransform(progress, [0.88, 1], [0.92, 1])
+  const ctaScale = useTransform(progress, [0.92, 0.98], [0.92, 1])
 
   return (
     <section
