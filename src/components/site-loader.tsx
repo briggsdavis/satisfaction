@@ -23,10 +23,10 @@ export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderPro
 
     const run = async () => {
       // 1. Fade in
-      await animate(logo, { opacity: 1 }, { duration: 1.2, ease: "easeOut" })
+      await animate(logo, { opacity: 1 }, { duration: 1.0, ease: "easeOut" })
 
       // 2. Pause
-      await new Promise<void>((r) => setTimeout(r, 300))
+      await new Promise<void>((r) => setTimeout(r, 200))
 
       // 3. Calculate delta from centered position to navbar logo position
       const logoRect = logo.getBoundingClientRect()
@@ -36,7 +36,7 @@ export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderPro
 
       // 4. Slide logo to nav position and fade overlay simultaneously
       await Promise.all([
-        animate(logo, { x: dx, y: dy }, { duration: 1.3, ease: [0.22, 1, 0.36, 1] }),
+        animate(logo, { x: dx, y: dy }, { duration: 1.2, ease: [0.22, 1, 0.36, 1] }),
         animate(bg, { opacity: 0, filter: "blur(16px)" }, { duration: 1.2, ease: "easeIn" }),
       ])
 
