@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useTransform } from "motion/react"
 import { useEffect, useRef, useState } from "react"
+import { Link } from "react-router"
 import { usePinnedScroll } from "../hooks/use-pinned-scroll"
 
 // ─── Step data ────────────────────────────────────────────────────────────────
@@ -453,8 +454,8 @@ export const WebDevProcess = () => {
 
         {/* ── Main split layout ── */}
         <div className="flex h-full flex-col md:flex-row">
-          {/* Left: step info */}
-          <div className="flex flex-col justify-center px-8 pt-16 md:w-[44%] md:px-16 md:pt-0">
+          {/* Left: step info — shifted down 20% on desktop */}
+          <div className="flex flex-col justify-center px-8 pt-16 md:w-[44%] md:px-16 md:pt-[20vh]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={stepIndex}
@@ -516,13 +517,37 @@ export const WebDevProcess = () => {
           ))}
         </div>
 
-        {/* ── Scroll hint (step 0 only) ── */}
+        {/* ── Scroll hint (step 0 only) / Get Started Now (step 5 only) ── */}
         <motion.div
           style={{ opacity: hintOpacity }}
           className="pointer-events-none absolute bottom-8 right-10 font-mono text-xs tracking-[0.35em] text-white/15 uppercase md:right-16"
         >
           Scroll ↓
         </motion.div>
+
+        <AnimatePresence>
+          {stepIndex === 4 && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 12 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="pointer-events-auto absolute bottom-8 right-10 z-10 md:right-16"
+            >
+              <Link
+                to="/contact"
+                className="group inline-flex items-center gap-3 border border-white/60 bg-black/60 px-8 py-3 backdrop-blur-sm transition-all duration-500 hover:border-white hover:bg-white"
+              >
+                <span className="font-mono text-sm font-bold tracking-[0.2em] text-white uppercase transition-colors duration-500 group-hover:text-black">
+                  Get Started Now
+                </span>
+                <span className="text-white transition-colors duration-500 group-hover:text-black">
+                  →
+                </span>
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
   )

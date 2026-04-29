@@ -158,26 +158,33 @@ const MasonryGrid = ({
     const left = items[i]
     const right = i + 1 < items.length ? items[i + 1] : undefined
 
+    // When a CTA shares a row with a project, the project gets the larger slot
+    // and the CTA stays compact so it doesn't overpower the work.
+    const pairHasCta =
+      left.kind === "cta" || (right !== undefined && right.kind === "cta")
+    const projectPairClass = pairHasCta ? "h-[60vh] flex-[2]" : "h-[56vh] flex-1"
+    const ctaPairClass = "h-[44vh] flex-1 self-center"
+
     rows.push(
-      <div key={`pair-${i}`} className="flex flex-col gap-4 md:flex-row">
+      <div key={`pair-${i}`} className="flex flex-col gap-4 md:flex-row md:items-stretch">
         {left.kind === "cta" ? (
-          <CtaBlock className="h-[56vh] flex-1" copyIndex={left.copyIndex} />
+          <CtaBlock className={ctaPairClass} copyIndex={left.copyIndex} />
         ) : (
           <ProjectCard
             project={left.project}
             categorySlug={categorySlug}
-            className="h-[56vh] flex-1"
+            className={projectPairClass}
             index={animIdx++}
           />
         )}
         {right &&
           (right.kind === "cta" ? (
-            <CtaBlock className="h-[56vh] flex-1" copyIndex={right.copyIndex} />
+            <CtaBlock className={ctaPairClass} copyIndex={right.copyIndex} />
           ) : (
             <ProjectCard
               project={right.project}
               categorySlug={categorySlug}
-              className="h-[56vh] flex-1"
+              className={projectPairClass}
               index={animIdx++}
             />
           ))}
@@ -335,25 +342,8 @@ export const CategoryPage = () => {
       {/* Branding-only: scroll-driven process line section */}
       {category.slug === "branding" && <BrandingProcess />}
 
-      {/* Web development: scroll-pinned animated process section + CTA */}
-      {category.slug === "web-development" && (
-        <>
-          <WebDevProcess />
-          <div className="flex items-center justify-center border-b border-white/10 py-16">
-            <Link
-              to="/contact"
-              className="group inline-flex items-center gap-3 border border-white/60 bg-black px-10 py-4 transition-all duration-500 hover:border-white hover:bg-white"
-            >
-              <span className="text-base font-bold tracking-[0.25em] text-white uppercase transition-colors duration-500 group-hover:text-black">
-                Get Started Now
-              </span>
-              <span className="text-white transition-colors duration-500 group-hover:text-black">
-                →
-              </span>
-            </Link>
-          </div>
-        </>
-      )}
+      {/* Web development: scroll-pinned animated process section */}
+      {category.slug === "web-development" && <WebDevProcess />}
 
       {/* Project grid with CTA blocks */}
       <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
