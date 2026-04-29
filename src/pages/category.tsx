@@ -162,8 +162,8 @@ const MasonryGrid = ({
     // and the CTA stays compact so it doesn't overpower the work.
     const pairHasCta =
       left.kind === "cta" || (right !== undefined && right.kind === "cta")
-    const projectPairClass = pairHasCta ? "h-[60vh] flex-[2]" : "h-[56vh] flex-1"
-    const ctaPairClass = "h-[44vh] flex-1 self-center"
+    const projectPairClass = pairHasCta ? "h-[60vh] flex-[3]" : "h-[56vh] flex-1"
+    const ctaPairClass = "h-[38vh] flex-1 self-center"
 
     rows.push(
       <div key={`pair-${i}`} className="flex flex-col gap-4 md:flex-row md:items-stretch">
