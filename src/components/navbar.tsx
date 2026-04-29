@@ -30,7 +30,7 @@ export const Navbar = ({ logoRef, logoVisible = true }: NavbarProps) => {
             src={logoSrc}
             alt="Social Satisfaction"
             className="h-10 w-auto md:h-12"
-            style={{ opacity: logoVisible ? 1 : 0, transition: "opacity 0.15s ease" }}
+            style={{ opacity: logoVisible ? 1 : 0 }}
           />
         </Link>
 

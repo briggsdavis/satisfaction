@@ -144,16 +144,19 @@ const SiteRoot = () => {
   const [loading, setLoading] = useState(
     () => window.location.pathname === "/",
   )
-
-  const handleLoaderDone = () => setLoading(false)
+  const [navLogoVisible, setNavLogoVisible] = useState(!loading)
 
   return (
     <>
       {loading && (
-        <SiteLoader navLogoRef={navLogoRef} onDone={handleLoaderDone} />
+        <SiteLoader
+          navLogoRef={navLogoRef}
+          onNavLogoReady={() => setNavLogoVisible(true)}
+          onDone={() => setLoading(false)}
+        />
       )}
       <CustomCursor />
-      <Navbar logoRef={navLogoRef} logoVisible={!loading} />
+      <Navbar logoRef={navLogoRef} logoVisible={navLogoVisible} />
       <SmoothScrollProvider>
         <ConditionalHeroCanvas />
         <ConditionalAboutCanvas />

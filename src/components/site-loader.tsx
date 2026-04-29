@@ -4,10 +4,11 @@ import { useContent } from "../admin/context/content-context"
 
 interface SiteLoaderProps {
   navLogoRef: RefObject<HTMLImageElement | null>
+  onNavLogoReady: () => void
   onDone: () => void
 }
 
-export const SiteLoader = ({ navLogoRef, onDone }: SiteLoaderProps) => {
+export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderProps) => {
   const { content } = useContent()
   const logoSrc = content.logo || "/satisfactionlogo.png"
   const bgRef = useRef<HTMLDivElement>(null)
@@ -39,6 +40,12 @@ export const SiteLoader = ({ navLogoRef, onDone }: SiteLoaderProps) => {
         animate(bg, { opacity: 0, filter: "blur(16px)" }, { duration: 1.2, ease: "easeIn" }),
       ])
 
+      if (cancelled) return
+      // Show the real navbar logo instantly, then wait two paint frames so
+      // React has rendered it before this component unmounts and takes the
+      // loader logo with it — prevents the flicker gap.
+      onNavLogoReady()
+      await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
       if (!cancelled) onDone()
     }
 
