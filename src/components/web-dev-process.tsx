@@ -452,50 +452,56 @@ export const WebDevProcess = () => {
           ))}
         </div>
 
-        {/* ── Main split layout ── */}
-        <div className="flex h-full flex-col md:flex-row">
-          {/* Left: step info — shifted down 20% on desktop */}
-          <div className="flex flex-col justify-center px-8 pt-16 md:w-[44%] md:px-16 md:pt-[20vh]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={stepIndex}
-                initial={{ opacity: 0, y: 28 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -28 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <p className="mb-3 font-mono text-xs tracking-[0.3em] text-cyan-400/60">
-                  {STEPS[stepIndex].tag}
-                </p>
-                <div className="mb-5 flex items-baseline gap-4">
-                  <span className="font-mono text-5xl font-bold text-white/8 md:text-7xl">
-                    {STEPS[stepIndex].num}
-                  </span>
-                  <h3 className="text-2xl font-bold leading-tight tracking-tight text-white md:text-4xl">
-                    {STEPS[stepIndex].title}
-                  </h3>
-                </div>
-                <p className="max-w-sm text-base leading-relaxed text-white/50">
-                  {STEPS[stepIndex].body}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+        {/* ── Main layout: spacer pushes both panels into the lower portion ── */}
+        <div className="flex h-full flex-col">
+          {/* Top spacer — keeps content clear of the hero title */}
+          <div className="h-[42vh] shrink-0" />
 
-          {/* Right: animated visual — shifted down to match left panel */}
-          <div className="flex flex-1 items-start justify-center p-8 md:p-16 md:pt-[68vh]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={stepIndex}
-                initial={{ opacity: 0, scale: 0.94, x: 32 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 0.94, x: -32 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="flex w-full justify-center"
-              >
-                <Visual />
-              </motion.div>
-            </AnimatePresence>
+          {/* Content row — text left, visual right, both share the same zone */}
+          <div className="flex min-h-0 flex-1 flex-col gap-6 md:flex-row">
+            {/* Left: step info */}
+            <div className="flex flex-col justify-start px-8 md:w-[44%] md:px-16">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={stepIndex}
+                  initial={{ opacity: 0, y: 28 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -28 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <p className="mb-3 font-mono text-xs tracking-[0.3em] text-cyan-400/60">
+                    {STEPS[stepIndex].tag}
+                  </p>
+                  <div className="mb-5 flex items-baseline gap-4">
+                    <span className="font-mono text-5xl font-bold text-white/8 md:text-7xl">
+                      {STEPS[stepIndex].num}
+                    </span>
+                    <h3 className="text-2xl font-bold leading-tight tracking-tight text-white md:text-4xl">
+                      {STEPS[stepIndex].title}
+                    </h3>
+                  </div>
+                  <p className="max-w-sm text-base leading-relaxed text-white/50">
+                    {STEPS[stepIndex].body}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Right: animated visual — same vertical zone as text */}
+            <div className="flex flex-1 items-start justify-center px-8 md:px-16">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={stepIndex}
+                  initial={{ opacity: 0, scale: 0.94, x: 32 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.94, x: -32 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex w-full justify-center"
+                >
+                  <Visual />
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
 
