@@ -139,6 +139,21 @@ const SERVICES = [
     ],
     minH: "min-h-[414px]",
   },
+  {
+    name: "Web Development",
+    tag: "Web",
+    color: "#22D3EE",
+    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=600&h=800",
+    desc: "Custom websites built to perform — designed, developed, and launched with full support.",
+    bullets: [
+      "Custom website design + development",
+      "E-commerce + booking integrations",
+      "Mobile-responsive builds",
+      "CMS setup + client training",
+      "Hosting, domain, + launch support",
+    ],
+    minH: "min-h-[469px]",
+  },
 ]
 
 const ServiceCell = ({

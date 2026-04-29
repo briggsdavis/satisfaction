@@ -2,6 +2,7 @@ import { motion, useMotionValue, useTransform } from "motion/react"
 import React, { useEffect, useRef } from "react"
 import { Link, useNavigationType, useParams } from "react-router"
 import { BrandingProcess } from "../components/branding-process"
+import { WebDevProcess } from "../components/web-dev-process"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
 import { CATEGORIES, type Category, type Project } from "../lib/categories"
@@ -23,7 +24,7 @@ const CtaBlock = ({
 }) => (
   <Link
     to="/contact"
-    className={`group relative flex items-center justify-center border border-white/80 bg-black transition-all duration-500 hover:bg-white ${className}`}
+    className={`group relative flex items-center justify-center rounded-[16px] border border-white/80 bg-black transition-all duration-500 hover:bg-white ${className}`}
   >
     <span className="text-center text-lg font-bold tracking-[0.25em] text-white uppercase transition-colors duration-500 group-hover:text-black md:text-xl">
       {CTA_COPY[copyIndex % CTA_COPY.length]}
@@ -333,6 +334,26 @@ export const CategoryPage = () => {
 
       {/* Branding-only: scroll-driven process line section */}
       {category.slug === "branding" && <BrandingProcess />}
+
+      {/* Web development: scroll-pinned animated process section + CTA */}
+      {category.slug === "web-development" && (
+        <>
+          <WebDevProcess />
+          <div className="flex items-center justify-center border-b border-white/10 py-16">
+            <Link
+              to="/contact"
+              className="group inline-flex items-center gap-3 border border-white/60 bg-black px-10 py-4 transition-all duration-500 hover:border-white hover:bg-white"
+            >
+              <span className="text-base font-bold tracking-[0.25em] text-white uppercase transition-colors duration-500 group-hover:text-black">
+                Get Started Now
+              </span>
+              <span className="text-white transition-colors duration-500 group-hover:text-black">
+                →
+              </span>
+            </Link>
+          </div>
+        </>
+      )}
 
       {/* Project grid with CTA blocks */}
       <div className="flex flex-col gap-4 px-8 py-8 md:px-16">

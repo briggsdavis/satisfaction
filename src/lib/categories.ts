@@ -478,6 +478,62 @@ export const CATEGORIES: Category[] = [
     ],
   },
   {
+    slug: "web-development",
+    name: "Web Development",
+    color: "#22D3EE",
+    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1600",
+    height: "640px",
+    bullets: [
+      "Custom website design + development",
+      "E-commerce + booking integrations",
+      "Mobile-responsive builds",
+      "CMS setup + client training",
+      "Hosting, domain, + launch support",
+    ],
+    overview: {
+      headline: "Websites built to perform, not just to look good.",
+      description:
+        "Custom web builds designed around your brand and goals — from discovery through launch. Every site we deliver is mobile-responsive, fast, and built for real business impact.",
+      problem:
+        "Most web projects go over budget, miss deadlines, and deliver something that looks nothing like what was promised. The process is unclear and trust erodes fast.",
+      solution:
+        "We run a transparent five-step process: discovery call, scoped agreement, custom prototype, three revision rounds, and a fully supported launch — no guessing at any stage.",
+      execution:
+        "Every build starts with your brand. We design prototypes first, iterate until you're confident, then build and launch with full technical support and handoff documentation.",
+      results:
+        "A fast, polished, fully custom website that looks like you and converts like a business tool — handed off with everything you need to own it.",
+    },
+    projects: [
+      {
+        slug: "noire-digital",
+        title: "Noire Digital",
+        tags: ["Restaurant", "Custom"],
+        descriptor: "Full Build",
+        img: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&q=80&w=1200",
+        description:
+          "Full custom website for a luxury Pittsburgh restaurant concept — brand-forward design, online reservation integration, and a menu experience built to match the dining room energy. Delivered in five weeks from discovery to launch.",
+      },
+      {
+        slug: "east-side-shop",
+        title: "East Side Shop",
+        tags: ["E-commerce", "Retail"],
+        descriptor: "E-Commerce",
+        img: "https://images.unsplash.com/photo-1563986768494-4759ab823130?auto=format&fit=crop&q=80&w=1200",
+        description:
+          "E-commerce site for a regional retail brand moving online — custom Shopify build with branded UX, mobile-first design, and a product experience that matched the in-store feeling. Launched to 200+ SKUs on day one.",
+      },
+      {
+        slug: "gather-digital",
+        title: "Gather Digital",
+        tags: ["Hospitality", "Booking"],
+        descriptor: "Booking Platform",
+        img: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200",
+        description:
+          "Custom booking platform and brand site for a private dining and events concept — reservation flow, gallery, menu reveals, and a private event inquiry system. Built to convert from the first visit.",
+      },
+    ],
+  },
+  {
     slug: "motion-graphics",
     name: "Motion Graphics",
     color: "#F97316",
