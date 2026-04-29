@@ -483,7 +483,7 @@ export const WebDevProcess = () => {
           </div>
 
           {/* Right: animated visual — shifted down to match left panel */}
-          <div className="flex flex-1 items-start justify-center p-8 md:p-16 md:pt-[38vh]">
+          <div className="flex flex-1 items-start justify-center p-8 md:p-16 md:pt-[68vh]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={stepIndex}
