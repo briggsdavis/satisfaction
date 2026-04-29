@@ -455,7 +455,7 @@ export const WebDevProcess = () => {
         {/* ── Main layout: spacer pushes both panels into the lower portion ── */}
         <div className="flex h-full flex-col">
           {/* Top spacer — keeps content clear of the hero title */}
-          <div className="h-[42vh] shrink-0" />
+          <div className="h-[58vh] shrink-0" />
 
           {/* Content row — text left, visual right, both share the same zone */}
           <div className="flex min-h-0 flex-1 flex-col gap-6 md:flex-row">
