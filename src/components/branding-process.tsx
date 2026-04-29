@@ -58,21 +58,24 @@ const STEPS = [
 ]
 
 // Path connecting all 6 checkpoints with smooth cubic curves and a top swirl.
+// At every interior join, cp1 of the incoming segment is the reflection of cp2
+// of the outgoing segment about their shared endpoint — this guarantees G1
+// continuity (no kinks).
 const PATH_D = [
   "M 500 0",
   "C 600 100, 850 150, 750 350",
-  "C 650 500, 400 500, 250 600", // → Step 1 (left)
+  "C 650 550, 400 500, 250 600",    // → Step 1 (left)  — cp1 reflected from (850,150)→(750,350)
   "C 100 700, 50 900, 100 1050",
-  "C 250 1150, 600 1100, 750 1200", // → Step 2 (right)
+  "C 150 1200, 600 1100, 750 1200", // → Step 2 (right) — cp1 reflected from (50,900)→(100,1050)
   "C 900 1300, 950 1500, 900 1650",
-  "C 800 1750, 400 1700, 250 1800", // → Step 3 (left)
+  "C 850 1800, 400 1700, 250 1800", // → Step 3 (left)  — cp1 reflected from (950,1500)→(900,1650)
   "C 100 1900, 50 2100, 100 2250",
-  "C 250 2350, 600 2300, 750 2400", // → Step 4 (right)
+  "C 150 2400, 600 2300, 750 2400", // → Step 4 (right) — cp1 reflected from (50,2100)→(100,2250)
   "C 900 2500, 950 2700, 900 2850",
-  "C 800 2950, 400 2900, 250 3000", // → Step 5 (left)
+  "C 850 3000, 400 2900, 250 3000", // → Step 5 (left)  — cp1 reflected from (950,2700)→(900,2850)
   "C 100 3100, 50 3300, 100 3450",
-  "C 250 3550, 600 3500, 750 3600", // → Step 6 (right)
-  "C 850 3700, 700 3850, 500 3950", // → end at center
+  "C 150 3600, 600 3500, 750 3600", // → Step 6 (right) — cp1 reflected from (50,3300)→(100,3450)
+  "C 900 3700, 700 3850, 500 3950", // → end at center  — cp1 reflected from (600,3500)→(750,3600)
 ].join(" ")
 
 // ─── Step text — fades in as scroll passes its checkpoint ─────────────────────
@@ -156,18 +159,18 @@ export const BrandingProcess = () => {
   }, [smoothY])
 
   // Progress 0 → 1 as the section travels through the viewport.
-  // Starts when section top hits ~80% of viewport, fully filled when
-  // section bottom hits 20% from top — this lines up the line draw with
-  // the user reaching the bottom step + CTA.
+  // T is read live from getBoundingClientRect each frame so stale layout
+  // measurements (e.g. images loading above the section) never cause drift.
+  // With range = H and start = T - 0.5*vh the illuminated tip stays at
+  // exactly 50% viewport height throughout the scroll.
   const progress = useTransform(activeY, (y: number) => {
-    const T = sectionTopRef.current
+    if (!sectionRef.current) return 0
+    const T = sectionRef.current.getBoundingClientRect().top + y
     const H = sectionHeightRef.current
     const vh = window.innerHeight
-    const start = T - vh * 0.8
-    const end = T + H - vh * 0.2
-    const range = end - start
-    if (range <= 0) return 0
-    return Math.max(0, Math.min(1, (y - start) / range))
+    if (H <= 0) return 0
+    const start = T - vh * 0.5
+    return Math.max(0, Math.min(1, (y - start) / H))
   })
 
   const pathLength = useTransform(progress, [0, 1], [0, 1])
