@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform } from "motion/react"
-import React from "react"
+import React, { useRef, useState } from "react"
 import {
   Route,
   BrowserRouter as Router,
@@ -11,6 +11,7 @@ import { AdminContentProvider } from "./admin/context/content-context"
 import { ColumnWipe, useColumnWipeLocation } from "./components/column-wipe"
 import { CustomCursor } from "./components/custom-cursor"
 import { Footer } from "./components/footer"
+import { SiteLoader } from "./components/site-loader"
 
 // Prevents Three.js / WebGL / asset-load failures inside the 3D canvas from
 // crashing the outer React tree and making the whole page disappear.
@@ -135,22 +136,40 @@ const ConditionalAboutCanvas = () => {
   )
 }
 
-const SiteRoot = () => (
-  <>
-    <CustomCursor />
-    <Navbar />
-    <SmoothScrollProvider>
-      <ConditionalHeroCanvas />
-      <ConditionalAboutCanvas />
-      <ColumnWipe>
-        <SmoothScroll>
-          <AppRoutes />
-          <Footer />
-        </SmoothScroll>
-      </ColumnWipe>
-    </SmoothScrollProvider>
-  </>
-)
+const SiteRoot = () => {
+  const navLogoRef = useRef<HTMLImageElement>(null)
+  // Show loader only when the browser hard-loads directly to "/".
+  // SiteRoot stays mounted for the whole session, so client-side navigation
+  // to "/" never re-initialises this state.
+  const [loading, setLoading] = useState(
+    () => window.location.pathname === "/",
+  )
+  const [navLogoVisible, setNavLogoVisible] = useState(!loading)
+
+  return (
+    <>
+      {loading && (
+        <SiteLoader
+          navLogoRef={navLogoRef}
+          onNavLogoReady={() => setNavLogoVisible(true)}
+          onDone={() => setLoading(false)}
+        />
+      )}
+      <CustomCursor />
+      <Navbar logoRef={navLogoRef} logoVisible={navLogoVisible} />
+      <SmoothScrollProvider>
+        <ConditionalHeroCanvas />
+        <ConditionalAboutCanvas />
+        <ColumnWipe>
+          <SmoothScroll>
+            <AppRoutes />
+            <Footer />
+          </SmoothScroll>
+        </ColumnWipe>
+      </SmoothScrollProvider>
+    </>
+  )
+}
 
 export default function App() {
   return (

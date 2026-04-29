@@ -1,6 +1,6 @@
 import { Menu, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
-import { useState } from "react"
+import { type RefObject, useState } from "react"
 import { Link } from "react-router"
 import { useContent } from "../admin/context/content-context"
 
@@ -8,7 +8,12 @@ const NAV_LINKS = ["About", "Services", "Portfolio"]
 
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number]
 
-export const Navbar = () => {
+interface NavbarProps {
+  logoRef?: RefObject<HTMLImageElement | null>
+  logoVisible?: boolean
+}
+
+export const Navbar = ({ logoRef, logoVisible = true }: NavbarProps) => {
   const [open, setOpen] = useState(false)
   const { content } = useContent()
   const logoSrc = content.logo || "/satisfactionlogo.png"
@@ -21,9 +26,11 @@ export const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="block w-fit" onClick={handleLinkClick}>
           <img
+            ref={logoRef}
             src={logoSrc}
             alt="Social Satisfaction"
             className="h-10 w-auto md:h-12"
+            style={{ opacity: logoVisible ? 1 : 0 }}
           />
         </Link>
 
