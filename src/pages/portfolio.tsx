@@ -146,13 +146,10 @@ export const Portfolio = () => {
         <CategoryCard category={CATEGORIES[7]} className="h-[56vh] flex-1" />
       </div>
 
-      {/* Row 5 — full width */}
-      <CategoryCard category={CATEGORIES[8]} className="h-[42vh]" />
-
-      {/* Row 6 — 2 equal columns */}
+      {/* Row 5 — 2 equal columns (web-development + motion-graphics) */}
       <div className="flex flex-col gap-4 md:flex-row">
+        <CategoryCard category={CATEGORIES[8]} className="h-[56vh] flex-1" />
         <CategoryCard category={CATEGORIES[9]} className="h-[56vh] flex-1" />
-        <CategoryCard category={CATEGORIES[10]} className="h-[56vh] flex-1" />
       </div>
     </div>
   </div>
