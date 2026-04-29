@@ -4,8 +4,6 @@ import { Link } from "react-router"
 import { useSmoothScroll } from "./smooth-scroll"
 
 // ─── Steps ────────────────────────────────────────────────────────────────────
-// Path checkpoint positions (in 1000×4000 viewBox).
-// Steps alternate left (x=250) / right (x=750) so the line snakes between them.
 const STEPS = [
   {
     num: "01",
@@ -57,24 +55,32 @@ const STEPS = [
   },
 ]
 
-// Path connecting all 6 checkpoints with smooth cubic curves and a top swirl.
-// Each turnaround waypoint is G1-continuous: the reflected cp2 of the
-// incoming curve becomes cp1 of the outgoing curve so the path never kinks.
+// Single continuous cubic Bézier path.
+// G1 continuity is maintained at every junction: each outgoing cp1 is the
+// reflection of the incoming cp2 through the shared endpoint, so there are
+// no tangent discontinuities ("elbows") at the connection points.
 const PATH_D = [
   "M 500 0",
-  "C 600 100, 850 150, 750 350",
-  "C 650 550, 400 500, 250 600", // → Step 1 (left)
-  "C 100 700, 50 900, 100 1050",
-  "C 150 1200, 600 1100, 750 1200", // → Step 2 (right)
-  "C 900 1300, 950 1500, 900 1650",
-  "C 850 1800, 400 1700, 250 1800", // → Step 3 (left)
-  "C 100 1900, 50 2100, 100 2250",
-  "C 150 2400, 600 2300, 750 2400", // → Step 4 (right)
-  "C 900 2500, 950 2700, 900 2850",
-  "C 850 3000, 400 2900, 250 3000", // → Step 5 (left)
-  "C 100 3100, 50 3300, 100 3450",
-  "C 150 3600, 600 3500, 750 3600", // → Step 6 (right)
-  "C 850 3700, 700 3850, 500 3950", // → end at center
+  // entry swirl → Step 1 (left, cy=600)
+  "C 600 100, 850 200, 750 380",
+  "C 650 560, 380 520, 250 600",
+  // Step 1 → turnaround left → Step 2 (right, cy=1200)
+  "C 120 680, 60 920, 120 1080",
+  "C 180 1240, 620 1140, 750 1200",
+  // Step 2 → turnaround right → Step 3 (left, cy=1800)
+  "C 880 1260, 940 1500, 880 1680",
+  "C 820 1860, 380 1740, 250 1800",
+  // Step 3 → turnaround left → Step 4 (right, cy=2400)
+  "C 120 1860, 60 2100, 120 2280",
+  "C 180 2460, 620 2340, 750 2400",
+  // Step 4 → turnaround right → Step 5 (left, cy=3000)
+  "C 880 2460, 940 2700, 880 2880",
+  "C 820 3060, 380 2940, 250 3000",
+  // Step 5 → turnaround left → Step 6 (right, cy=3600)
+  "C 120 3060, 60 3300, 120 3480",
+  "C 180 3660, 620 3540, 750 3600",
+  // Step 6 → center exit
+  "C 880 3660, 700 3860, 500 3950",
 ].join(" ")
 
 // ─── Step text — fades in as scroll passes its checkpoint ─────────────────────
@@ -89,7 +95,6 @@ const StepText = ({
   index: number
   total: number
 }) => {
-  // Each step's "active" point along the scroll. Spaced evenly with padding.
   const center = (index + 1) / (total + 1)
   const fadeIn = Math.max(0, center - 0.06)
   const peak = center + 0.02
@@ -99,10 +104,8 @@ const StepText = ({
   const blur = useTransform(progress, [fadeIn, peak], [12, 0])
   const filter = useTransform(blur, (b: number) => `blur(${b}px)`)
 
-  // Position along section: matches checkpoint y in viewBox 0–4000.
   const topPct = (step.cy / 4000) * 100
 
-  // Side: left text right-aligned and ending before the line; right text starts after the line.
   const sideClasses =
     step.side === "left"
       ? "left-[5%] right-[55%] text-right items-end"
@@ -134,22 +137,25 @@ export const BrandingProcess = () => {
   const sectionRef = useRef<HTMLDivElement>(null)
   const sectionTopRef = useRef(0)
   const sectionHeightRef = useRef(1)
-  const [pathLengthPx, setPathLengthPx] = useState(0)
-  const pathRef = useRef<SVGPathElement>(null)
+  const grayPathRef = useRef<SVGPathElement>(null)
+  const bluePathRef = useRef<SVGPathElement>(null)
+  const [totalLength, setTotalLength] = useState(0)
 
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
 
+  // Measure section geometry and path length. Re-runs on resize.
   useEffect(() => {
     const measure = () => {
       if (sectionRef.current) {
         const rect = sectionRef.current.getBoundingClientRect()
-        sectionTopRef.current = rect.top + (smoothY?.get() ?? 0)
+        sectionTopRef.current = rect.top + (smoothY?.get() ?? window.scrollY)
         sectionHeightRef.current = rect.height
       }
-      if (pathRef.current) {
-        setPathLengthPx(pathRef.current.getTotalLength())
+      if (grayPathRef.current) {
+        const len = grayPathRef.current.getTotalLength()
+        setTotalLength(len)
       }
     }
     requestAnimationFrame(() => requestAnimationFrame(measure))
@@ -157,10 +163,17 @@ export const BrandingProcess = () => {
     return () => window.removeEventListener("resize", measure)
   }, [smoothY])
 
+  // Apply dasharray once path length is known, and keep dashoffset in sync
+  // with the current scroll position (so a hard-refresh at mid-page is correct).
+  useEffect(() => {
+    if (!bluePathRef.current || totalLength <= 0) return
+    const bp = bluePathRef.current
+    bp.style.strokeDasharray = `${totalLength} ${totalLength}`
+    bp.style.strokeDashoffset = String(totalLength) // start fully hidden
+  }, [totalLength])
+
   // Progress 0 → 1 as the section travels through the viewport.
-  // range = H exactly so the line tip stays fixed at 50% of viewport height
-  // (center) throughout the scroll — eliminating the drift that caused the
-  // glow to creep toward the top by the time the user reached later steps.
+  // 0 = section top at viewport center; 1 = section bottom at viewport center.
   const progress = useTransform(activeY, (y: number) => {
     const T = sectionTopRef.current
     const H = sectionHeightRef.current
@@ -172,17 +185,25 @@ export const BrandingProcess = () => {
     return Math.max(0, Math.min(1, (y - start) / range))
   })
 
-  const pathLength = useTransform(progress, [0, 1], [0, 1])
+  // Drive the blue line's stroke-dashoffset directly from the progress motion
+  // value. This bypasses React rendering entirely for the scroll-tick update,
+  // eliminating the frame lag that caused the illuminated segment to sit above
+  // the visible portion of the SVG.
+  useEffect(() => {
+    if (totalLength <= 0) return
+    // Sync immediately with current progress
+    if (bluePathRef.current) {
+      bluePathRef.current.style.strokeDashoffset = String(
+        totalLength * (1 - progress.get()),
+      )
+    }
+    return progress.on("change", (v: number) => {
+      if (bluePathRef.current) {
+        bluePathRef.current.style.strokeDashoffset = String(totalLength * (1 - v))
+      }
+    })
+  }, [progress, totalLength])
 
-  // Color: faint white at start, light blue once the line has filled past ~15%.
-  const strokeColor = useTransform(
-    progress,
-    [0, 0.15, 1],
-    ["rgba(255,255,255,0.5)", "rgba(180,210,255,0.85)", "rgba(180,210,255,0.95)"],
-  )
-
-  // CTA enters the viewport at ~progress 0.97; fade-in completes right as it
-  // reaches viewport center so it's fully legible when the user sees it.
   const ctaOpacity = useTransform(progress, [0.92, 0.97], [0, 1])
   const ctaY = useTransform(progress, [0.92, 0.97], [40, 0])
   const ctaBlur = useTransform(progress, [0.92, 0.97], [16, 0])
@@ -195,44 +216,57 @@ export const BrandingProcess = () => {
       className="relative overflow-hidden border-b border-white/10 bg-black"
       style={{ height: "420vh" }}
     >
-      {/* Section header — pinned at top with the rest scrolling underneath */}
+      {/* Section label */}
       <div className="pointer-events-none absolute top-12 right-12 z-10 md:top-16 md:right-16">
         <p className="font-display text-base tracking-tight text-white/80 italic md:text-xl">
           process.
         </p>
       </div>
 
-      {/* SVG line — fills the whole section */}
+      {/* SVG line — fills the full section height */}
       <svg
         viewBox="0 0 1000 4000"
         preserveAspectRatio="none"
         className="absolute inset-0 h-full w-full"
         aria-hidden
       >
-        {/* Faint white track */}
+        <defs>
+          <filter id="brand-glow" x="-60%" y="-10%" width="220%" height="120%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Gray base — always fully visible as the static track */}
         <path
+          ref={grayPathRef}
           d={PATH_D}
-          stroke="rgba(255,255,255,0.08)"
+          stroke="rgba(255,255,255,0.10)"
           strokeWidth={3}
           strokeLinecap="round"
           fill="none"
           vectorEffect="non-scaling-stroke"
         />
-        {/* Foreground filled line — pathLength animates the draw */}
-        <motion.path
-          ref={pathRef}
+
+        {/* Blue illuminated overlay — dashoffset updated imperatively on scroll.
+            stroke-dasharray / stroke-dashoffset are set via the DOM (not Framer
+            Motion's pathLength) so the segment is always aligned with the gray
+            base and stays inside the viewport as expected. */}
+        <path
+          ref={bluePathRef}
           d={PATH_D}
-          stroke={strokeColor}
+          stroke="rgba(100,185,255,0.92)"
           strokeWidth={3}
           strokeLinecap="round"
           fill="none"
           vectorEffect="non-scaling-stroke"
-          style={{ pathLength }}
-          // Soft glow via SVG filter
           filter="url(#brand-glow)"
         />
 
-        {/* Checkpoint dots — each appears when its step's progress arrives */}
+        {/* Checkpoint dots */}
         {STEPS.map((step, i) => (
           <CheckpointDot
             key={i}
@@ -243,19 +277,6 @@ export const BrandingProcess = () => {
             total={STEPS.length}
           />
         ))}
-
-        <defs>
-          <filter id="brand-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="glow" />
-            <feMerge>
-              <feMergeNode in="glow" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* Reduce the visible side-stretching that "preserveAspectRatio=none"
-            causes by hiding bounding rects (none used) — keep the SVG clean. */}
       </svg>
 
       {/* Step text overlays */}
@@ -269,7 +290,7 @@ export const BrandingProcess = () => {
         />
       ))}
 
-      {/* End CTA — fades in dramatically at the bottom of the line */}
+      {/* End CTA */}
       <motion.div
         style={{
           opacity: ctaOpacity,
@@ -294,14 +315,11 @@ export const BrandingProcess = () => {
           </span>
         </Link>
       </motion.div>
-
-      {/* The path drawn but hidden — used for `getTotalLength()` measurement.
-          Renders into the same SVG above; we still need a ref. */}
     </section>
   )
 }
 
-// ─── Checkpoint dot — outlined when not reached, filled when reached ─────────
+// ─── Checkpoint dot ───────────────────────────────────────────────────────────
 const CheckpointDot = ({
   cx,
   cy,
@@ -318,7 +336,6 @@ const CheckpointDot = ({
   const center = (index + 1) / (total + 1)
   const reach = Math.max(0, center - 0.04)
   const fill = useTransform(progress, [reach, center], [0, 1])
-  // Outer ring opacity: appears just before the dot fills.
   const ringOpacity = useTransform(
     progress,
     [Math.max(0, center - 0.12), reach],
@@ -332,7 +349,7 @@ const CheckpointDot = ({
         cy={cy}
         r={18}
         fill="none"
-        stroke="rgba(180,210,255,1)"
+        stroke="rgba(100,185,255,1)"
         strokeWidth={2}
         style={{ opacity: ringOpacity }}
         vectorEffect="non-scaling-stroke"
@@ -342,7 +359,7 @@ const CheckpointDot = ({
         cy={cy}
         r={9}
         style={{ opacity: fill }}
-        fill="rgba(180,210,255,1)"
+        fill="rgba(100,185,255,1)"
       />
     </g>
   )
