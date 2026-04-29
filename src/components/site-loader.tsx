@@ -24,13 +24,10 @@ export const SiteLoader = ({ navLogoRef, onDone }: SiteLoaderProps) => {
       // 1. Fade in over 800ms
       await animate(logo, { opacity: 1 }, { duration: 0.8, ease: "easeOut" })
 
-      // 2. Pulse: scale up 20%
+      // 2. Scale up 20%
       await animate(logo, { scale: 1.2 }, { duration: 0.36, ease: [0.34, 1.56, 0.64, 1] })
 
-      // 3. Pulse: return to normal
-      await animate(logo, { scale: 1 }, { duration: 0.44, ease: "easeOut" })
-
-      // 4. Calculate delta from centered position to navbar logo position
+      // 3. Calculate delta from centered position to navbar logo position
       const logoRect = logo.getBoundingClientRect()
       const navRect = navLogoRef.current?.getBoundingClientRect()
       const dx = navRect ? navRect.left - logoRect.left : 0
