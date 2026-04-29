@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform } from "motion/react"
-import React from "react"
+import React, { useRef, useState } from "react"
 import {
   Route,
   BrowserRouter as Router,
@@ -11,6 +11,7 @@ import { AdminContentProvider } from "./admin/context/content-context"
 import { ColumnWipe, useColumnWipeLocation } from "./components/column-wipe"
 import { CustomCursor } from "./components/custom-cursor"
 import { Footer } from "./components/footer"
+import { SiteLoader } from "./components/site-loader"
 
 // Prevents Three.js / WebGL / asset-load failures inside the 3D canvas from
 // crashing the outer React tree and making the whole page disappear.
@@ -135,22 +136,39 @@ const ConditionalAboutCanvas = () => {
   )
 }
 
-const SiteRoot = () => (
-  <>
-    <CustomCursor />
-    <Navbar />
-    <SmoothScrollProvider>
-      <ConditionalHeroCanvas />
-      <ConditionalAboutCanvas />
-      <ColumnWipe>
-        <SmoothScroll>
-          <AppRoutes />
-          <Footer />
-        </SmoothScroll>
-      </ColumnWipe>
-    </SmoothScrollProvider>
-  </>
-)
+// Track whether the intro loader has already played this session
+const hasPlayedLoader = () =>
+  typeof sessionStorage !== "undefined" && !!sessionStorage.getItem("site-loaded")
+
+const SiteRoot = () => {
+  const navLogoRef = useRef<HTMLImageElement>(null)
+  const [loading, setLoading] = useState(() => !hasPlayedLoader())
+
+  const handleLoaderDone = () => {
+    sessionStorage.setItem("site-loaded", "1")
+    setLoading(false)
+  }
+
+  return (
+    <>
+      {loading && (
+        <SiteLoader navLogoRef={navLogoRef} onDone={handleLoaderDone} />
+      )}
+      <CustomCursor />
+      <Navbar logoRef={navLogoRef} logoVisible={!loading} />
+      <SmoothScrollProvider>
+        <ConditionalHeroCanvas />
+        <ConditionalAboutCanvas />
+        <ColumnWipe>
+          <SmoothScroll>
+            <AppRoutes />
+            <Footer />
+          </SmoothScroll>
+        </ColumnWipe>
+      </SmoothScrollProvider>
+    </>
+  )
+}
 
 export default function App() {
   return (
