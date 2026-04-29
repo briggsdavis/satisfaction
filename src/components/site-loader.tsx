@@ -45,7 +45,7 @@ export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderPro
       // React has rendered it before this component unmounts and takes the
       // loader logo with it — prevents the flicker gap.
       onNavLogoReady()
-      await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
+      await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())))
       if (!cancelled) onDone()
     }
 
