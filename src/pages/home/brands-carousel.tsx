@@ -25,6 +25,19 @@ const BRANDS = [
   "ESPN",
 ]
 
+const LOGO_BRANDS = [
+  { name: "NFL", src: "/nfllogo.png" },
+  { name: "Absolut", src: "/absolutlogo.png" },
+  { name: "Maker's Mark", src: "/makerslogo.png" },
+  { name: "H&M", src: "/hmlogo.png" },
+  { name: "Jägermeister", src: "/jaegerlogo.png" },
+  { name: "Truly", src: "/trulylogo.png" },
+  { name: "Angles", src: "/angleslogo.png" },
+  { name: "Jim Beam", src: "/jimlogo.png" },
+  { name: "Coors", src: "/coorslogo.png" },
+  { name: "Red Bull", src: "/redbulllogo.png" },
+]
+
 // Shared hook for the infinite carousel animation logic
 const useCarouselAnimation = () => {
   const sectionRef = useRef<HTMLElement>(null)
@@ -178,23 +191,23 @@ const LogoBrand = ({
   skewTransform,
   counterSkewTransform,
 }: {
-  brand: string
+  brand: { name: string; src: string }
   skewTransform: MotionValue<string>
   counterSkewTransform: MotionValue<string>
 }) => (
   <>
-    {/* Full-height white parallelogram containing the brand name */}
+    {/* Full-height white parallelogram containing the logo image */}
     <motion.div
       className="flex h-full w-[220px] shrink-0 items-center justify-center bg-white"
       style={{ transform: skewTransform }}
     >
-      {/* Counter-skew keeps the text upright */}
-      <motion.span
-        className="font-display text-base tracking-wide whitespace-nowrap text-black uppercase"
+      {/* Counter-skew keeps the image upright */}
+      <motion.img
+        src={brand.src}
+        alt={brand.name}
+        className="max-h-14 max-w-[160px] object-contain"
         style={{ transform: counterSkewTransform }}
-      >
-        {brand}
-      </motion.span>
+      />
     </motion.div>
     {/* Thin black skewed separator line */}
     <motion.div
@@ -225,9 +238,9 @@ export const LogosCarousel = () => {
         <motion.div style={{ x: baseX }} className="flex h-full w-max">
           {/* First copy — measured for wrap */}
           <div ref={trackRef} className="flex h-full">
-            {BRANDS.map((brand) => (
+            {LOGO_BRANDS.map((brand) => (
               <LogoBrand
-                key={brand}
+                key={brand.name}
                 brand={brand}
                 skewTransform={skewTransform}
                 counterSkewTransform={counterSkewTransform}
@@ -236,9 +249,9 @@ export const LogosCarousel = () => {
           </div>
           {/* Second copy — seamless loop */}
           <div aria-hidden className="flex h-full">
-            {BRANDS.map((brand) => (
+            {LOGO_BRANDS.map((brand) => (
               <LogoBrand
-                key={brand}
+                key={brand.name}
                 brand={brand}
                 skewTransform={skewTransform}
                 counterSkewTransform={counterSkewTransform}
