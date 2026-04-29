@@ -23,7 +23,7 @@ export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderPro
 
     const run = async () => {
       // 1. Fade in
-      await animate(logo, { opacity: 1 }, { duration: 1.0, ease: "easeOut" })
+      await animate(logo, { opacity: 1 }, { duration: 1.2, ease: "easeOut" })
 
       // 2. Pause
       await new Promise<void>((r) => setTimeout(r, 200))
