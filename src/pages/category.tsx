@@ -7,31 +7,6 @@ import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
 import { CATEGORIES, type Category, type Project } from "../lib/categories"
 
-// ─── CTA block ────────────────────────────────────────────────────────────────
-const CTA_COPY = [
-  "Secure your Design",
-  "Book your Call",
-  "Start your Project",
-  "Let's Work Together",
-] as const
-
-const CtaBlock = ({
-  className = "",
-  copyIndex = 0,
-}: {
-  className?: string
-  copyIndex?: number
-}) => (
-  <Link
-    to="/contact"
-    className={`group relative flex items-center justify-center rounded-[16px] border border-white/80 bg-black transition-all duration-500 hover:bg-white ${className}`}
-  >
-    <span className="text-center text-lg font-bold tracking-[0.25em] text-white uppercase transition-colors duration-500 group-hover:text-black md:text-xl">
-      {CTA_COPY[copyIndex % CTA_COPY.length]}
-    </span>
-  </Link>
-)
-
 // ─── Project card ─────────────────────────────────────────────────────────────
 const ProjectCard = ({
   project,
@@ -87,33 +62,10 @@ const ProjectCard = ({
 // For 6+ projects: insert a CTA at every slot where slotIndex % 6 === 5.
 //   (5 % 3 === 2 → always a small slot ✓)
 // For fewer than 6 projects: splice one CTA at index 2 (also a small slot ✓).
-type GridItem =
-  | { kind: "project"; project: Project }
-  | { kind: "cta"; copyIndex: number }
+type GridItem = { kind: "project"; project: Project }
 
 function buildGridItems(projects: Project[]): GridItem[] {
-  const items: GridItem[] = []
-  let projectIdx = 0
-  let ctaCopyIdx = 0
-  let slotIdx = 0
-  let ctaInserted = false
-
-  while (projectIdx < projects.length) {
-    if (slotIdx % 6 === 5) {
-      items.push({ kind: "cta", copyIndex: ctaCopyIdx++ })
-      ctaInserted = true
-    } else {
-      items.push({ kind: "project", project: projects[projectIdx++] })
-    }
-    slotIdx++
-  }
-
-  // For short project lists (< 6), splice a CTA at position 2 (small slot)
-  if (!ctaInserted && items.length >= 2) {
-    items.splice(2, 0, { kind: "cta", copyIndex: 0 })
-  }
-
-  return items
+  return projects.map((project) => ({ kind: "project" as const, project }))
 }
 
 // ─── Masonry grid ─────────────────────────────────────────────────────────────
@@ -131,24 +83,15 @@ const MasonryGrid = ({
   let animIdx = 0
 
   while (i < items.length) {
-    const fullItem = items[i]
-
     // Full-width row
     rows.push(
       <div key={`full-${i}`}>
-        {fullItem.kind === "cta" ? (
-          <CtaBlock
-            className="h-[42vh]"
-            copyIndex={fullItem.copyIndex}
-          />
-        ) : (
-          <ProjectCard
-            project={fullItem.project}
-            categorySlug={categorySlug}
-            className="h-[42vh]"
-            index={animIdx++}
-          />
-        )}
+        <ProjectCard
+          project={items[i].project}
+          categorySlug={categorySlug}
+          className="h-[42vh]"
+          index={animIdx++}
+        />
       </div>,
     )
     i++
@@ -158,36 +101,22 @@ const MasonryGrid = ({
     const left = items[i]
     const right = i + 1 < items.length ? items[i + 1] : undefined
 
-    // When a CTA shares a row with a project, the project gets the larger slot
-    // and the CTA stays compact so it doesn't overpower the work.
-    const pairHasCta =
-      left.kind === "cta" || (right !== undefined && right.kind === "cta")
-    const projectPairClass = pairHasCta ? "h-[60vh] flex-[3]" : "h-[56vh] flex-1"
-    const ctaPairClass = "h-[38vh] flex-1 self-center"
-
     rows.push(
-      <div key={`pair-${i}`} className="flex flex-col gap-4 md:flex-row md:items-stretch">
-        {left.kind === "cta" ? (
-          <CtaBlock className={ctaPairClass} copyIndex={left.copyIndex} />
-        ) : (
+      <div key={`pair-${i}`} className="flex flex-col gap-4 md:flex-row">
+        <ProjectCard
+          project={left.project}
+          categorySlug={categorySlug}
+          className="h-[56vh] flex-1"
+          index={animIdx++}
+        />
+        {right && (
           <ProjectCard
-            project={left.project}
+            project={right.project}
             categorySlug={categorySlug}
-            className={projectPairClass}
+            className="h-[56vh] flex-1"
             index={animIdx++}
           />
         )}
-        {right &&
-          (right.kind === "cta" ? (
-            <CtaBlock className={ctaPairClass} copyIndex={right.copyIndex} />
-          ) : (
-            <ProjectCard
-              project={right.project}
-              categorySlug={categorySlug}
-              className={projectPairClass}
-              index={animIdx++}
-            />
-          ))}
       </div>,
     )
     i += right ? 2 : 1
