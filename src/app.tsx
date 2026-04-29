@@ -136,18 +136,16 @@ const ConditionalAboutCanvas = () => {
   )
 }
 
-// Track whether the intro loader has already played this session
-const hasPlayedLoader = () =>
-  typeof sessionStorage !== "undefined" && !!sessionStorage.getItem("site-loaded")
-
 const SiteRoot = () => {
   const navLogoRef = useRef<HTMLImageElement>(null)
-  const [loading, setLoading] = useState(() => !hasPlayedLoader())
+  // Show loader only when the browser hard-loads directly to "/".
+  // SiteRoot stays mounted for the whole session, so client-side navigation
+  // to "/" never re-initialises this state.
+  const [loading, setLoading] = useState(
+    () => window.location.pathname === "/",
+  )
 
-  const handleLoaderDone = () => {
-    sessionStorage.setItem("site-loaded", "1")
-    setLoading(false)
-  }
+  const handleLoaderDone = () => setLoading(false)
 
   return (
     <>

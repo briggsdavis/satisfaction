@@ -35,7 +35,7 @@ export const SiteLoader = ({ navLogoRef, onDone }: SiteLoaderProps) => {
 
       // 5. Slide logo to nav position and blur-fade the overlay simultaneously
       await Promise.all([
-        animate(logo, { x: dx, y: dy }, { duration: 2.86, ease: [0.22, 1, 0.36, 1] }),
+        animate(logo, { x: dx, y: dy }, { duration: 1.43, ease: [0.22, 1, 0.36, 1] }),
         animate(
           bg,
           { opacity: 0, filter: "blur(16px)" },
