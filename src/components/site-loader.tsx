@@ -21,14 +21,14 @@ export const SiteLoader = ({ navLogoRef, onDone }: SiteLoaderProps) => {
     let cancelled = false
 
     const run = async () => {
-      // 1. Fade in over 400ms
-      await animate(logo, { opacity: 1 }, { duration: 0.4, ease: "easeOut" })
+      // 1. Fade in over 800ms
+      await animate(logo, { opacity: 1 }, { duration: 0.8, ease: "easeOut" })
 
       // 2. Pulse: scale up 20%
-      await animate(logo, { scale: 1.2 }, { duration: 0.18, ease: [0.34, 1.56, 0.64, 1] })
+      await animate(logo, { scale: 1.2 }, { duration: 0.36, ease: [0.34, 1.56, 0.64, 1] })
 
       // 3. Pulse: return to normal
-      await animate(logo, { scale: 1 }, { duration: 0.22, ease: "easeOut" })
+      await animate(logo, { scale: 1 }, { duration: 0.44, ease: "easeOut" })
 
       // 4. Calculate delta from centered position to navbar logo position
       const logoRect = logo.getBoundingClientRect()
@@ -38,11 +38,11 @@ export const SiteLoader = ({ navLogoRef, onDone }: SiteLoaderProps) => {
 
       // 5. Slide logo to nav position and blur-fade the overlay simultaneously
       await Promise.all([
-        animate(logo, { x: dx, y: dy }, { duration: 0.55, ease: [0.22, 1, 0.36, 1] }),
+        animate(logo, { x: dx, y: dy }, { duration: 1.1, ease: [0.22, 1, 0.36, 1] }),
         animate(
           bg,
           { opacity: 0, filter: "blur(16px)" },
-          { duration: 0.45, delay: 0.12, ease: "easeIn" },
+          { duration: 0.9, delay: 0.24, ease: "easeIn" },
         ),
       ])
 
