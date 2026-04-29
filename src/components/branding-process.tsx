@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform } from "motion/react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { Link } from "react-router"
 import { useSmoothScroll } from "./smooth-scroll"
 
@@ -57,24 +57,21 @@ const STEPS = [
   },
 ]
 
-// Path connecting all 6 checkpoints with smooth cubic curves and a top swirl.
-// Each turnaround waypoint is G1-continuous: the reflected cp2 of the
-// incoming curve becomes cp1 of the outgoing curve so the path never kinks.
+// Each consecutive pair of steps is connected by a single cubic bezier —
+// no intermediate turnaround waypoints, so there are zero junction kinks.
+// G1 is maintained at every step checkpoint: the departure cp1 is the
+// reflection of the arrival cp2 through the checkpoint, giving the same
+// tangent direction on both sides.
 const PATH_D = [
   "M 500 0",
-  "C 600 100, 850 150, 750 350",
-  "C 650 550, 400 500, 250 600", // → Step 1 (left)
-  "C 100 700, 50 900, 100 1050",
-  "C 150 1200, 600 1100, 750 1200", // → Step 2 (right)
-  "C 900 1300, 950 1500, 900 1650",
-  "C 850 1800, 400 1700, 250 1800", // → Step 3 (left)
-  "C 100 1900, 50 2100, 100 2250",
-  "C 150 2400, 600 2300, 750 2400", // → Step 4 (right)
-  "C 900 2500, 950 2700, 900 2850",
-  "C 850 3000, 400 2900, 250 3000", // → Step 5 (left)
-  "C 100 3100, 50 3300, 100 3450",
-  "C 150 3600, 600 3500, 750 3600", // → Step 6 (right)
-  "C 850 3700, 700 3850, 500 3950", // → end at center
+  "C 600 100, 850 150, 750 350",   // opening swirl …
+  "C 650 550, 400 500, 250 600",   // … → Step 1 (left)
+  "C 100 700, 600 1100, 750 1200", // → Step 2 (right)
+  "C 900 1300, 400 1700, 250 1800", // → Step 3 (left)
+  "C 100 1900, 600 2300, 750 2400", // → Step 4 (right)
+  "C 900 2500, 400 2900, 250 3000", // → Step 5 (left)
+  "C 100 3100, 600 3500, 750 3600", // → Step 6 (right)
+  "C 900 3700, 650 3900, 500 3950", // → end at centre
 ].join(" ")
 
 // ─── Step text — fades in as scroll passes its checkpoint ─────────────────────
@@ -130,11 +127,31 @@ const StepText = ({
 }
 
 // ─── Branding Process Section ─────────────────────────────────────────────────
+// Binary-search the path for the arc-length fraction where the path's y
+// coordinate (in viewBox space, 0–4000) equals targetCy.  Used once on
+// mount to calibrate the scroll offset so the glowing tip tracks at
+// viewport-centre as each step checkpoint scrolls into view.
+function arcFractionAtCy(path: SVGPathElement, targetCy: number): number {
+  const total = path.getTotalLength()
+  let lo = 0
+  let hi = total
+  for (let i = 0; i < 52; i++) {
+    const mid = (lo + hi) / 2
+    if (path.getPointAtLength(mid).y < targetCy) lo = mid
+    else hi = mid
+  }
+  return (lo + hi) / 2 / total
+}
+
 export const BrandingProcess = () => {
   const sectionRef = useRef<HTMLDivElement>(null)
   const sectionTopRef = useRef(0)
   const sectionHeightRef = useRef(1)
-  const [pathLengthPx, setPathLengthPx] = useState(0)
+  // Scroll offset (px) so the line tip is at viewport-centre when each step
+  // is at viewport-centre.  Calibrated at mount from actual arc lengths.
+  const scrollOffsetRef = useRef(
+    typeof window !== "undefined" ? window.innerHeight * 0.5 : 400,
+  )
   const pathRef = useRef<SVGPathElement>(null)
 
   const smoothY = useSmoothScroll()
@@ -148,8 +165,18 @@ export const BrandingProcess = () => {
         sectionTopRef.current = rect.top + (smoothY?.get() ?? 0)
         sectionHeightRef.current = rect.height
       }
-      if (pathRef.current) {
-        setPathLengthPx(pathRef.current.getTotalLength())
+      if (pathRef.current && sectionHeightRef.current > 0) {
+        const path = pathRef.current
+        const H = sectionHeightRef.current
+        const vh = window.innerHeight
+        // Average the required offset across all step checkpoints so one
+        // linear formula keeps the tip near viewport-centre throughout.
+        let sum = 0
+        for (const step of STEPS) {
+          const frac = arcFractionAtCy(path, step.cy)
+          sum += H * (frac - step.cy / 4000) + vh * 0.5
+        }
+        scrollOffsetRef.current = sum / STEPS.length
       }
     }
     requestAnimationFrame(() => requestAnimationFrame(measure))
@@ -158,15 +185,15 @@ export const BrandingProcess = () => {
   }, [smoothY])
 
   // Progress 0 → 1 as the section travels through the viewport.
-  // range = H exactly so the line tip stays fixed at 50% of viewport height
-  // (center) throughout the scroll — eliminating the drift that caused the
-  // glow to creep toward the top by the time the user reached later steps.
+  // The offset is calibrated so the glowing tip aligns with the step that
+  // is currently at viewport-centre, compensating for the opening swirl
+  // being arc-length-longer than the uniform step-to-step segments.
   const progress = useTransform(activeY, (y: number) => {
     const T = sectionTopRef.current
     const H = sectionHeightRef.current
-    const vh = window.innerHeight
-    const start = T - vh * 0.5
-    const end = T + H - vh * 0.5
+    const offset = scrollOffsetRef.current
+    const start = T - offset
+    const end = T + H - offset
     const range = end - start
     if (range <= 0) return 0
     return Math.max(0, Math.min(1, (y - start) / range))
