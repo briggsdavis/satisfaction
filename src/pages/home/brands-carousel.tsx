@@ -33,7 +33,7 @@ const LOGO_BRANDS = [
   { name: "Jägermeister", src: "/jaegerlogo.png" },
   { name: "Truly", src: "/trulylogo.png" },
   { name: "Angles", src: "/angleslogo.png" },
-  { name: "Jim Beam", src: "/jimlogo.png" },
+  { name: "Jim Beam", src: "/jimbeanlogo.png" },
   { name: "Coors", src: "/coorslogo.png" },
   { name: "Red Bull", src: "/redbulllogo.png" },
 ]
