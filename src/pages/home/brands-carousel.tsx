@@ -229,27 +229,31 @@ export const LogosCarousel = () => {
       {/* Scrolling track — white background so gaps between parallelograms are also white */}
       <div className="h-40 overflow-hidden border-b border-white/10 bg-white">
         <motion.div style={{ x: baseX }} className="flex h-full w-max">
-          {/* First copy — measured for wrap */}
+          {/* First copy — measured for wrap. Repeated to ensure it's always wider than the viewport. */}
           <div ref={trackRef} className="flex h-full">
-            {LOGO_BRANDS.map((brand) => (
-              <LogoBrand
-                key={brand.name}
-                brand={brand}
-                skewTransform={skewTransform}
-                counterSkewTransform={counterSkewTransform}
-              />
-            ))}
+            {Array.from({ length: 6 }, (_, i) =>
+              LOGO_BRANDS.map((brand) => (
+                <LogoBrand
+                  key={`${i}-${brand.name}`}
+                  brand={brand}
+                  skewTransform={skewTransform}
+                  counterSkewTransform={counterSkewTransform}
+                />
+              )),
+            )}
           </div>
           {/* Second copy — seamless loop */}
           <div aria-hidden className="flex h-full">
-            {LOGO_BRANDS.map((brand) => (
-              <LogoBrand
-                key={brand.name}
-                brand={brand}
-                skewTransform={skewTransform}
-                counterSkewTransform={counterSkewTransform}
-              />
-            ))}
+            {Array.from({ length: 6 }, (_, i) =>
+              LOGO_BRANDS.map((brand) => (
+                <LogoBrand
+                  key={`${i}-${brand.name}`}
+                  brand={brand}
+                  skewTransform={skewTransform}
+                  counterSkewTransform={counterSkewTransform}
+                />
+              )),
+            )}
           </div>
         </motion.div>
       </div>
