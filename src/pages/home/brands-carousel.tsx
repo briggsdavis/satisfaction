@@ -27,7 +27,14 @@ const BRANDS = [
 
 const LOGO_BRANDS = [
   { name: "NFL", src: "/nfllogo.png" },
+  { name: "Absolut", src: "/absolutlogo.png" },
+  { name: "Maker's Mark", src: "/makerslogo.png" },
+  { name: "H&M", src: "/hmlogo.png" },
+  { name: "Jägermeister", src: "/jaegerlogo.png" },
+  { name: "Truly", src: "/trulylogo.png" },
+  { name: "Angles", src: "/angleslogo.png" },
   { name: "Jim Beam", src: "/jimbeanlogo.png" },
+  { name: "Coors", src: "/coorslogo.png" },
   { name: "Red Bull", src: "/redbulllogo.png" },
 ]
 
@@ -229,31 +236,27 @@ export const LogosCarousel = () => {
       {/* Scrolling track — white background so gaps between parallelograms are also white */}
       <div className="h-40 overflow-hidden border-b border-white/10 bg-white">
         <motion.div style={{ x: baseX }} className="flex h-full w-max">
-          {/* First copy — measured for wrap. Repeated to ensure it's always wider than the viewport. */}
+          {/* First copy — measured for wrap */}
           <div ref={trackRef} className="flex h-full">
-            {Array.from({ length: 6 }, (_, i) =>
-              LOGO_BRANDS.map((brand) => (
-                <LogoBrand
-                  key={`${i}-${brand.name}`}
-                  brand={brand}
-                  skewTransform={skewTransform}
-                  counterSkewTransform={counterSkewTransform}
-                />
-              )),
-            )}
+            {LOGO_BRANDS.map((brand) => (
+              <LogoBrand
+                key={brand.name}
+                brand={brand}
+                skewTransform={skewTransform}
+                counterSkewTransform={counterSkewTransform}
+              />
+            ))}
           </div>
           {/* Second copy — seamless loop */}
           <div aria-hidden className="flex h-full">
-            {Array.from({ length: 6 }, (_, i) =>
-              LOGO_BRANDS.map((brand) => (
-                <LogoBrand
-                  key={`${i}-${brand.name}`}
-                  brand={brand}
-                  skewTransform={skewTransform}
-                  counterSkewTransform={counterSkewTransform}
-                />
-              )),
-            )}
+            {LOGO_BRANDS.map((brand) => (
+              <LogoBrand
+                key={brand.name}
+                brand={brand}
+                skewTransform={skewTransform}
+                counterSkewTransform={counterSkewTransform}
+              />
+            ))}
           </div>
         </motion.div>
       </div>
