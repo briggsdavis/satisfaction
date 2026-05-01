@@ -199,7 +199,9 @@ export const BrandingProcess = () => {
     }
     return progress.on("change", (v: number) => {
       if (bluePathRef.current) {
-        bluePathRef.current.style.strokeDashoffset = String(totalLength * (1 - v))
+        bluePathRef.current.style.strokeDashoffset = String(
+          totalLength * (1 - v),
+        )
       }
     })
   }, [progress, totalLength])

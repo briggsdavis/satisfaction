@@ -647,7 +647,7 @@ export const Contact = () => {
             <p className="mb-4 text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
               Brand Identity
             </p>
-            <h2 className="text-2xl font-bold leading-tight tracking-tight uppercase md:text-3xl">
+            <h2 className="text-2xl leading-tight font-bold tracking-tight uppercase md:text-3xl">
               Need a logo or brand?
             </h2>
           </BlurIn>
@@ -656,7 +656,8 @@ export const Contact = () => {
             className="flex flex-col justify-center gap-6 px-8 py-12 md:px-16 lg:py-16"
           >
             <p className="max-w-lg text-base leading-relaxed text-white/60">
-              Skip the general inquiry — fill out our focused branding brief and we'll come back with a tailored direction for your identity.
+              Skip the general inquiry — fill out our focused branding brief and
+              we'll come back with a tailored direction for your identity.
             </p>
             <div>
               <button
@@ -738,7 +739,10 @@ export const Contact = () => {
         })}
       </section>
 
-      <BrandingModal open={brandingOpen} onClose={() => setBrandingOpen(false)} />
+      <BrandingModal
+        open={brandingOpen}
+        onClose={() => setBrandingOpen(false)}
+      />
     </div>
   )
 }

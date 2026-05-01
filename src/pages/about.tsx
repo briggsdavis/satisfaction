@@ -516,10 +516,7 @@ export const About = () => {
                 Ready to build your brand?
               </h2>
             </div>
-            <Link
-              to="/contact?branding=1"
-              className="btn-industrial shrink-0"
-            >
+            <Link to="/contact?branding=1" className="btn-industrial shrink-0">
               Start a Branding Brief →
             </Link>
           </div>

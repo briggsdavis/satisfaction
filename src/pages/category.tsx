@@ -2,9 +2,9 @@ import { motion, useMotionValue, useTransform } from "motion/react"
 import React, { useEffect, useRef } from "react"
 import { Link, useNavigationType, useParams } from "react-router"
 import { BrandingProcess } from "../components/branding-process"
-import { WebDevProcess } from "../components/web-dev-process"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
+import { WebDevProcess } from "../components/web-dev-process"
 import { CATEGORIES, type Category, type Project } from "../lib/categories"
 
 // ─── Project card ─────────────────────────────────────────────────────────────

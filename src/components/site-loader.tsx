@@ -8,7 +8,11 @@ interface SiteLoaderProps {
   onDone: () => void
 }
 
-export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderProps) => {
+export const SiteLoader = ({
+  navLogoRef,
+  onNavLogoReady,
+  onDone,
+}: SiteLoaderProps) => {
   const { content } = useContent()
   const logoSrc = content.logo || "/satisfactionlogo.png"
   const bgRef = useRef<HTMLDivElement>(null)
@@ -36,8 +40,16 @@ export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderPro
 
       // 4. Slide logo to nav position and fade overlay simultaneously
       await Promise.all([
-        animate(logo, { x: dx, y: dy }, { duration: 1.2, ease: [0.22, 1, 0.36, 1] }),
-        animate(bg, { opacity: 0, filter: "blur(16px)" }, { duration: 1.2, ease: "easeIn" }),
+        animate(
+          logo,
+          { x: dx, y: dy },
+          { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
+        ),
+        animate(
+          bg,
+          { opacity: 0, filter: "blur(16px)" },
+          { duration: 1.2, ease: "easeIn" },
+        ),
       ])
 
       if (cancelled) return
@@ -45,7 +57,9 @@ export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderPro
       // React has rendered it before this component unmounts and takes the
       // loader logo with it — prevents the flicker gap.
       onNavLogoReady()
-      await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())))
+      await new Promise<void>((r) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => r())),
+      )
       if (!cancelled) onDone()
     }
 
@@ -53,12 +67,17 @@ export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderPro
     return () => {
       cancelled = true
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // intentionally run once on mount
 
   return (
     <>
       {/* Black overlay — blurs and fades out during reveal */}
-      <div ref={bgRef} className="fixed inset-0 bg-black" style={{ zIndex: 2000 }} />
+      <div
+        ref={bgRef}
+        className="fixed inset-0 bg-black"
+        style={{ zIndex: 2000 }}
+      />
 
       {/* Logo — centered, animates to nav position */}
       <div

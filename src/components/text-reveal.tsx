@@ -23,7 +23,8 @@ export const TextReveal = ({
   slideFrom = "bottom",
 }: TextRevealProps) => {
   // Left-to-right wipes need more stagger so the sweep is actually visible.
-  const effectiveStagger = slideFrom === "left" ? Math.max(stagger, 0.065) : stagger
+  const effectiveStagger =
+    slideFrom === "left" ? Math.max(stagger, 0.065) : stagger
 
   const container = {
     hidden: { opacity: 0 },
@@ -42,24 +43,40 @@ export const TextReveal = ({
           visible: {
             opacity: 1,
             x: 0,
-            transition: { type: "spring" as const, damping: 14, stiffness: 120 },
+            transition: {
+              type: "spring" as const,
+              damping: 14,
+              stiffness: 120,
+            },
           },
           hidden: {
             opacity: 0,
             x: -24,
-            transition: { type: "spring" as const, damping: 14, stiffness: 120 },
+            transition: {
+              type: "spring" as const,
+              damping: 14,
+              stiffness: 120,
+            },
           },
         }
       : {
           visible: {
             opacity: 1,
             y: 0,
-            transition: { type: "spring" as const, damping: 12, stiffness: 100 },
+            transition: {
+              type: "spring" as const,
+              damping: 12,
+              stiffness: 100,
+            },
           },
           hidden: {
             opacity: 0,
             y: 20,
-            transition: { type: "spring" as const, damping: 12, stiffness: 100 },
+            transition: {
+              type: "spring" as const,
+              damping: 12,
+              stiffness: 100,
+            },
           },
         }
 

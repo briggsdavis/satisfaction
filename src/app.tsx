@@ -141,9 +141,7 @@ const SiteRoot = () => {
   // Show loader only when the browser hard-loads directly to "/".
   // SiteRoot stays mounted for the whole session, so client-side navigation
   // to "/" never re-initialises this state.
-  const [loading, setLoading] = useState(
-    () => window.location.pathname === "/",
-  )
+  const [loading, setLoading] = useState(() => window.location.pathname === "/")
   const [navLogoVisible, setNavLogoVisible] = useState(!loading)
 
   return (

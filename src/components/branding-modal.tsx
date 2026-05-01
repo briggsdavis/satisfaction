@@ -155,8 +155,8 @@ export const BrandingModal = ({
                       Brief received
                     </h3>
                     <p className="max-w-sm text-sm leading-relaxed text-white/50">
-                      We'll review your brand brief and reach out within 48 hours
-                      to kick things off.
+                      We'll review your brand brief and reach out within 48
+                      hours to kick things off.
                     </p>
                     <button
                       onClick={handleClose}

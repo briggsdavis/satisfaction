@@ -93,7 +93,7 @@ const Lightbox = ({
         {/* Prev */}
         <button
           onClick={() => go(-1)}
-          className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white md:left-6"
+          className="absolute top-1/2 left-3 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white md:left-6"
           aria-label="Previous"
         >
           ←
@@ -102,7 +102,7 @@ const Lightbox = ({
         {/* Next */}
         <button
           onClick={() => go(1)}
-          className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white md:right-6"
+          className="absolute top-1/2 right-3 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white md:right-6"
           aria-label="Next"
         >
           →
@@ -372,7 +372,7 @@ const ImageCard = ({
     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
     {/* Expand hint on hover */}
     <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-      <span className="border border-white/40 bg-black/50 px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-white backdrop-blur-sm uppercase">
+      <span className="border border-white/40 bg-black/50 px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-white uppercase backdrop-blur-sm">
         View
       </span>
     </div>

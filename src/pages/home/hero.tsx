@@ -31,7 +31,11 @@ export const HeroCanvas = () => {
 
   // Radial backlight rises from below the screen and settles behind the model.
   // Using vh strings keeps this viewport-relative from the first render.
-  const lightY = useTransform(scrollProgress, [0, 0.65, 1], ["50vh", "0vh", "0vh"])
+  const lightY = useTransform(
+    scrollProgress,
+    [0, 0.65, 1],
+    ["50vh", "0vh", "0vh"],
+  )
 
   return (
     <motion.div

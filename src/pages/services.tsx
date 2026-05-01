@@ -271,37 +271,37 @@ export const Services = () => {
   const titleDelay = navType === "PUSH" ? 0.75 : 0
 
   return (
-  <div className="pt-32">
-    {/* Page header — centered */}
-    <section className="border-b-2 border-white/15 px-8 pb-16 text-center md:px-16">
-      <span className="mb-6 block text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
-        What We Do
-      </span>
-      <TextReveal
-        text="SERVICES"
-        className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
-        slideFrom="left"
-        delay={titleDelay}
-      />
-    </section>
+    <div className="pt-32">
+      {/* Page header — centered */}
+      <section className="border-b-2 border-white/15 px-8 pb-16 text-center md:px-16">
+        <span className="mb-6 block text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
+          What We Do
+        </span>
+        <TextReveal
+          text="SERVICES"
+          className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
+          slideFrom="left"
+          delay={titleDelay}
+        />
+      </section>
 
-    {/* 3-column bento grid */}
-    <div className="flex flex-col divide-y-2 divide-white/15 md:flex-row md:divide-x-2 md:divide-y-0">
-      {[0, 1, 2].map((col) => {
-        const colServices = SERVICES.filter((_, i) => i % 3 === col)
-        return (
-          <div key={col} className="flex flex-1 flex-col">
-            {colServices.map((service, row) => (
-              <ServiceCell
-                key={service.name}
-                service={service}
-                index={col + row * 3}
-              />
-            ))}
-          </div>
-        )
-      })}
+      {/* 3-column bento grid */}
+      <div className="flex flex-col divide-y-2 divide-white/15 md:flex-row md:divide-x-2 md:divide-y-0">
+        {[0, 1, 2].map((col) => {
+          const colServices = SERVICES.filter((_, i) => i % 3 === col)
+          return (
+            <div key={col} className="flex flex-1 flex-col">
+              {colServices.map((service, row) => (
+                <ServiceCell
+                  key={service.name}
+                  service={service}
+                  index={col + row * 3}
+                />
+              ))}
+            </div>
+          )
+        })}
+      </div>
     </div>
-  </div>
   )
 }

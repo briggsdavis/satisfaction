@@ -43,7 +43,11 @@ const DiscoveryVisual = () => {
     { label: ">", text: "start_discovery(client)", accent: true },
     { label: "//", text: "goals: brand_presence + e-commerce", accent: false },
     { label: "//", text: "audience: lifestyle, 25–40", accent: false },
-    { label: "//", text: "features: [booking, portfolio, blog]", accent: false },
+    {
+      label: "//",
+      text: "features: [booking, portfolio, blog]",
+      accent: false,
+    },
     { label: "//", text: "timeline: Q2 launch", accent: false },
     { label: ">", text: "session.record() ✓", accent: true },
   ]
@@ -53,7 +57,9 @@ const DiscoveryVisual = () => {
         <div className="h-3 w-3 rounded-full bg-red-500/70" />
         <div className="h-3 w-3 rounded-full bg-yellow-500/70" />
         <div className="h-3 w-3 rounded-full bg-green-500/70" />
-        <span className="ml-3 font-mono text-xs text-white/30">discovery.sh</span>
+        <span className="ml-3 font-mono text-xs text-white/30">
+          discovery.sh
+        </span>
       </div>
       <div className="p-5 font-mono text-sm">
         {lines.map((line, i) => (
@@ -254,7 +260,11 @@ const RevisionVisual = () => {
           key={i}
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.3, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            delay: i * 0.3,
+            duration: 0.55,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="flex flex-col items-center gap-3"
         >
           <div className="relative">
@@ -362,7 +372,11 @@ const HandOffVisual = () => {
             className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-green-400"
             initial={{ width: "0%" }}
             animate={{ width: "100%" }}
-            transition={{ delay: 0.15, duration: 1.85, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              delay: 0.15,
+              duration: 1.85,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           />
         </div>
       </div>
@@ -442,7 +456,9 @@ export const WebDevProcess = () => {
             <div key={i} className="flex-1 overflow-hidden bg-white/10">
               <motion.div
                 className="h-full bg-cyan-400"
-                animate={{ scaleX: stepIndex > i ? 1 : stepIndex === i ? undefined : 0 }}
+                animate={{
+                  scaleX: stepIndex > i ? 1 : stepIndex === i ? undefined : 0,
+                }}
                 style={stepIndex === i ? { scaleX: segmentFill } : undefined}
                 initial={{ scaleX: 0 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
@@ -476,7 +492,7 @@ export const WebDevProcess = () => {
                     <span className="font-mono text-5xl font-bold text-white/8 md:text-7xl">
                       {STEPS[stepIndex].num}
                     </span>
-                    <h3 className="text-2xl font-bold leading-tight tracking-tight text-white md:text-4xl">
+                    <h3 className="text-2xl leading-tight font-bold tracking-tight text-white md:text-4xl">
                       {STEPS[stepIndex].title}
                     </h3>
                   </div>
@@ -526,7 +542,7 @@ export const WebDevProcess = () => {
         {/* ── Scroll hint (step 0 only) / Get Started Now (step 5 only) ── */}
         <motion.div
           style={{ opacity: hintOpacity }}
-          className="pointer-events-none absolute bottom-8 right-10 font-mono text-xs tracking-[0.35em] text-white/15 uppercase md:right-16"
+          className="pointer-events-none absolute right-10 bottom-8 font-mono text-xs tracking-[0.35em] text-white/15 uppercase md:right-16"
         >
           Scroll ↓
         </motion.div>
@@ -538,7 +554,7 @@ export const WebDevProcess = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 12 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="pointer-events-auto absolute bottom-8 right-10 z-10 md:right-16"
+              className="pointer-events-auto absolute right-10 bottom-8 z-10 md:right-16"
             >
               <Link
                 to="/contact"
