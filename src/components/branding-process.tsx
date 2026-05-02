@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react"
 import { useEffect, useRef, useState } from "react"
+import { Link } from "react-router"
 
 type Side = "right" | "left"
 
@@ -174,6 +175,14 @@ export const BrandingProcess = () => {
     return () => window.removeEventListener("resize", measure)
   }, [])
 
+  const buttonBlurPx = useTransform(scrollYProgress, [0.88, 1.0], [12, 0], {
+    clamp: true,
+  })
+  const buttonFilter = useTransform(buttonBlurPx, (b) => `blur(${b}px)`)
+  const buttonOpacity = useTransform(scrollYProgress, [0.87, 0.99], [0, 1], {
+    clamp: true,
+  })
+
   return (
     <section
       ref={containerRef}
@@ -232,6 +241,19 @@ export const BrandingProcess = () => {
           <Label key={i} wp={wp} t={tValues[i]} progress={scrollYProgress} />
         ))}
       </div>
+
+      {/* CTA button — unblurs as the line finishes drawing */}
+      <motion.div
+        className="mt-16 flex justify-center"
+        style={{ filter: buttonFilter, opacity: buttonOpacity }}
+      >
+        <Link
+          to="/contact"
+          className="btn-industrial inline-flex items-center gap-3"
+        >
+          start your project now <span className="text-sm">→</span>
+        </Link>
+      </motion.div>
     </section>
   )
 }
