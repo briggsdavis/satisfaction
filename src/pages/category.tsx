@@ -106,14 +106,14 @@ const MasonryGrid = ({
         <ProjectCard
           project={left.project}
           categorySlug={categorySlug}
-          className="h-[56vh] flex-1"
+          className="h-[72vh] flex-1"
           index={animIdx++}
         />
         {right && (
           <ProjectCard
             project={right.project}
             categorySlug={categorySlug}
-            className="h-[56vh] flex-1"
+            className="h-[72vh] flex-1"
             index={animIdx++}
           />
         )}
