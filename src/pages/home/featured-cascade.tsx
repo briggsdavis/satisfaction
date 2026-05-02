@@ -146,7 +146,7 @@ const ProjectCard = ({ project }: { project: GridProject }) => (
       <p className="px-6 text-center font-display text-sm tracking-[0.2em] text-white uppercase md:text-base">
         {project.title}
       </p>
-      <span className="text-[10px] font-bold tracking-[0.3em] text-white/60 uppercase">
+      <span className="text-2xs font-bold tracking-[0.3em] text-white/60 uppercase">
         {project.descriptor}
       </span>
     </div>

@@ -268,11 +268,11 @@ export const CategoryPage = () => {
         </div>
       </section>
 
-      {/* Branding-only: scroll-driven process line section */}
-      {category.slug === "branding" && <BrandingProcess />}
-
       {/* Web development: scroll-pinned animated process section */}
       {category.slug === "web-development" && <WebDevProcess />}
+
+      {/* Branding: scroll-driven zigzag path with checkpoints */}
+      {category.slug === "branding" && <BrandingProcess />}
 
       {/* Project grid with CTA blocks */}
       <div className="flex flex-col gap-4 px-8 py-8 md:px-16">

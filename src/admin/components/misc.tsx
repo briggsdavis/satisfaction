@@ -57,7 +57,7 @@ export const ReadOnlyFrame = ({
 }) => (
   <div className="relative mb-8 border border-white/10">
     <div className="pointer-events-none absolute inset-0 z-10 bg-black/40" />
-    <div className="absolute top-3 right-3 z-20 border border-white/10 bg-black px-2 py-1 text-[10px] font-bold tracking-[0.3em] text-white/30 uppercase">
+    <div className="absolute top-3 right-3 z-20 border border-white/10 bg-black px-2 py-1 text-2xs font-bold tracking-[0.3em] text-white/30 uppercase">
       {label}
     </div>
     <div className="pointer-events-none overflow-hidden">{children}</div>

@@ -40,12 +40,12 @@ export const BrandAdmin = () => {
           }
         />
         {logo && (
-          <p className="mt-3 text-[10px] text-white/25">
+          <p className="mt-3 text-2xs text-white/25">
             Custom logo active — replaces the default.
           </p>
         )}
         {!logo && (
-          <p className="mt-3 text-[10px] text-white/25">
+          <p className="mt-3 text-2xs text-white/25">
             Showing default logo (satisfactionlogo.png).
           </p>
         )}

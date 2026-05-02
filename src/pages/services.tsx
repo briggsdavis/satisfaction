@@ -77,7 +77,7 @@ const SERVICES = [
       "Caption writing + brand voice development",
       "Community management (comments + DMs)",
     ],
-    minH: "min-h-[359px]",
+    minH: "min-h-[480px]",
   },
   {
     name: "Email Marketing",
@@ -113,7 +113,7 @@ const SERVICES = [
     name: "Motion Graphics",
     tag: "Video / Motion",
     color: "#F97316",
-    img: "https://images.unsplash.com/photo-1574717024453-354056afd6fc?auto=format&fit=crop&q=80&w=600&h=800",
+    img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600&h=800",
     desc: "Animated content that moves: logo animation, kinetic type, and promo templates.",
     bullets: [
       "Logo animation (transparent + background versions)",

@@ -372,7 +372,7 @@ const ImageCard = ({
     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
     {/* Expand hint on hover */}
     <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-      <span className="border border-white/40 bg-black/50 px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-white uppercase backdrop-blur-sm">
+      <span className="border border-white/40 bg-black/50 px-3 py-1 font-mono text-2xs font-bold tracking-widest text-white uppercase backdrop-blur-sm">
         View
       </span>
     </div>

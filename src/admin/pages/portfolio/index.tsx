@@ -133,7 +133,7 @@ export const PortfolioIndex = () => {
                   >
                     <div>
                       <p className="text-xs font-bold">{p.title}</p>
-                      <p className="text-[10px] text-white/30">
+                      <p className="text-2xs text-white/30">
                         /portfolio/{cat.slug}/{p.slug}
                       </p>
                     </div>
@@ -190,7 +190,7 @@ export const PortfolioIndex = () => {
               placeholder="e.g. Photography"
             />
             <div className="border-b border-white/10 py-3">
-              <p className="text-[10px] font-bold tracking-[0.3em] text-white/25 uppercase">
+              <p className="text-2xs font-bold tracking-[0.3em] text-white/25 uppercase">
                 URL Slug (auto-generated)
               </p>
               <p className="mt-1 font-mono text-xs text-white/50">

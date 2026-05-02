@@ -2,15 +2,7 @@
 
 @font-face {
   font-family: "Arian LT";
-  src: url("/fonts/arian-lt-light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Arian LT";
-  src: url("/fonts/arian-lt-demi.ttf") format("truetype");
+  src: url("/fonts/header/arian-lt-demi.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -18,7 +10,7 @@
 
 @font-face {
   font-family: "Arian LT";
-  src: url("/fonts/arian-lt-bold.ttf") format("truetype");
+  src: url("/fonts/header/arian-lt-bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -26,17 +18,69 @@
 
 @font-face {
   font-family: "Arian LT";
-  src: url("/fonts/arian-lt-heavy.ttf") format("truetype");
+  src: url("/fonts/header/arian-lt-heavy.ttf") format("truetype");
   font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Area Normal";
+  src: url("/fonts/body/area-normal-hairline.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Area Normal";
+  src: url("/fonts/body/area-normal-regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Area Normal";
+  src: url("/fonts/body/area-normal-regular-italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Area Normal";
+  src: url("/fonts/body/area-normal-bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Area Normal";
+  src: url("/fonts/body/area-normal-bold-italic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Area Normal";
+  src: url("/fonts/body/area-normal-black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Area Normal";
+  src: url("/fonts/body/area-normal-black-italic.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 @theme {
-  --font-sans: "Inter Variable", system-ui, sans-serif;
+  --font-sans: "Area Normal", "Inter Variable", system-ui, sans-serif;
   --font-display: "Arian LT", system-ui, sans-serif;
   --color-bg: #000000;
   --color-fg: #ffffff;
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 1rem;
   --text-10xl: 10rem;
   --text-10xl--line-height: 1;
   --text-11xl: 14rem;
@@ -103,7 +147,7 @@
   }
 
   .massive-text {
-    @apply font-display leading-[0.85] tracking-normal uppercase transition-opacity duration-400 ease-in-out;
+    @apply font-display leading-[0.85] font-black tracking-normal uppercase transition-opacity duration-400 ease-in-out;
   }
 
   .massive-text:hover {

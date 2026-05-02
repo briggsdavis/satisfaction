@@ -74,7 +74,7 @@ export const ProjectAdmin = () => {
 
       {/* Live URL preview */}
       <div className="mb-6 border border-white/10 bg-white/5 px-4 py-3">
-        <p className="mb-1 text-[10px] font-bold tracking-[0.3em] text-white/30 uppercase">
+        <p className="mb-1 text-2xs font-bold tracking-[0.3em] text-white/30 uppercase">
           Creates Page
         </p>
         <p className="font-mono text-xs text-white/60">

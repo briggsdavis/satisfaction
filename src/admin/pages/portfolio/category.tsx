@@ -181,7 +181,7 @@ export const CategoryAdmin = () => {
           >
             <div>
               <p className="text-sm font-bold">{p.title}</p>
-              <p className="text-[10px] text-white/30">
+              <p className="text-2xs text-white/30">
                 /portfolio/{cat.slug}/{p.slug}
               </p>
             </div>

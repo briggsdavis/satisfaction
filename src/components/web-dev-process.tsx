@@ -136,7 +136,7 @@ const ScopeVisual = () => {
                   duration: 0.25,
                   type: "spring",
                 }}
-                className="text-[9px] text-cyan-400"
+                className="text-2xs text-cyan-400"
               >
                 ✓
               </motion.span>

@@ -24,7 +24,7 @@ export const AdminTopbar = () => {
 
       <div className="flex items-center gap-3">
         {/* LOCAL ONLY badge */}
-        <span className="hidden border border-yellow-400/30 bg-yellow-400/10 px-2.5 py-1 text-[10px] font-bold tracking-[0.25em] text-yellow-400/70 uppercase md:block">
+        <span className="hidden border border-yellow-400/30 bg-yellow-400/10 px-2.5 py-1 text-2xs font-bold tracking-[0.25em] text-yellow-400/70 uppercase md:block">
           Local Preview Only
         </span>
 

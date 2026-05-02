@@ -54,7 +54,7 @@ export const FeaturedAdmin = () => {
                 />
                 <div className="p-2">
                   <p className="truncate text-xs font-bold">{p.title}</p>
-                  <p className="text-[10px] text-white/40">{p.descriptor}</p>
+                  <p className="text-2xs text-white/40">{p.descriptor}</p>
                 </div>
               </div>
             ) : null,
@@ -74,7 +74,7 @@ export const FeaturedAdmin = () => {
       <div className="space-y-0">
         {content.categories.map((cat) => (
           <div key={cat.slug} className="mb-4">
-            <p className="mb-2 text-[10px] font-bold tracking-[0.3em] text-white/30 uppercase">
+            <p className="mb-2 text-2xs font-bold tracking-[0.3em] text-white/30 uppercase">
               {cat.name}
             </p>
             {cat.projects.map((project) => {
