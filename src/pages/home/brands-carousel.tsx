@@ -37,6 +37,9 @@ const LOGO_BRANDS = [
   { name: "Coors", src: "/coorslogo.png" },
   { name: "Red Bull", src: "/redbulllogo.png" },
   { name: "Live", src: "/livelogo.png" },
+  { name: "Blue Moon", src: "/bluemoonlogo.PNG" },
+  { name: "Codigo", src: "/codigologo.PNG" },
+  { name: "Shorty's", src: "/logoshortys.PNG" },
 ]
 
 // Shared hook for the infinite carousel animation logic
