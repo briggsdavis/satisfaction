@@ -154,7 +154,7 @@ const ProjectCard = ({ project }: { project: GridProject }) => (
 )
 
 export const FeaturedCascade = () => {
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLElement>(null)
   const isDragging = useRef(false)
   const startX = useRef(0)
   const scrollLeftRef = useRef(0)
@@ -203,8 +203,9 @@ export const FeaturedCascade = () => {
       </div>
 
       {/* Horizontal scroll masonry grid */}
-      <div
+      <section
         ref={scrollRef}
+        aria-label="Featured projects"
         className="cursor-grab overflow-x-auto px-8 active:cursor-grabbing md:px-16"
         style={{ touchAction: "pan-x", overflowY: "clip" }}
         onMouseDown={onMouseDown}
@@ -308,7 +309,7 @@ export const FeaturedCascade = () => {
             </motion.div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Mobile CTA */}
       <div className="mt-10 flex justify-center px-8 md:hidden">

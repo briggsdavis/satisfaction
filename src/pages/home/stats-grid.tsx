@@ -120,7 +120,7 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
 )
 
 export const StatsGrid = () => {
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLElement>(null)
   const isPointerDown = useRef(false)
   const hasDragged = useRef(false)
   const startX = useRef(0)
@@ -163,8 +163,9 @@ export const StatsGrid = () => {
         Our Services
       </p>
       {/* Horizontal scroll track — shows ~3.5 cards with overlap */}
-      <div
+      <section
         ref={scrollRef}
+        aria-label="Services"
         className="cursor-grab overflow-x-auto px-8 py-8 select-none active:cursor-grabbing md:px-16"
         style={{ touchAction: "pan-x", overflowY: "clip" }}
         onMouseDown={onMouseDown}
@@ -184,7 +185,7 @@ export const StatsGrid = () => {
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </section>
   )
 }

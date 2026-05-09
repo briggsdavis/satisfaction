@@ -364,7 +364,7 @@ const ImageCard = ({
   >
     <img
       src={img}
-      alt={`${title} - image ${index + 1}`}
+      alt={`${title} ${index + 1}`}
       loading="lazy"
       referrerPolicy="no-referrer"
       className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"

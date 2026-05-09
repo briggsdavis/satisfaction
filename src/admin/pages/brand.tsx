@@ -53,9 +53,9 @@ export const BrandAdmin = () => {
 
       {/* Upload controls */}
       <div className="border-b border-white/10 py-4">
-        <label className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+        <p className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
           Upload New Logo
-        </label>
+        </p>
         <p className="mb-4 text-xs leading-relaxed text-white/30">
           Upload a PNG, SVG, or WebP. The uploaded image will immediately appear
           in the nav, footer, admin header, and as the browser favicon.

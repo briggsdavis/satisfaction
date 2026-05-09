@@ -100,9 +100,9 @@ export const ProjectAdmin = () => {
       />
 
       <div className="border-b border-white/10 py-4">
-        <label className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+        <p className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
           Tags (exactly 2)
-        </label>
+        </p>
         <div className="flex gap-4">
           <input
             type="text"

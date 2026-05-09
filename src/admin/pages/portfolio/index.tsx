@@ -207,9 +207,9 @@ export const PortfolioIndex = () => {
 
             {/* Bullets */}
             <div className="border-b border-white/10 py-4">
-              <label className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+              <p className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
                 Bullets (5 items)
-              </label>
+              </p>
               {draft.bullets.map((b, i) => (
                 <input
                   key={i}

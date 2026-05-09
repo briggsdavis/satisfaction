@@ -316,9 +316,9 @@ const ServiceSelect = () => {
 
   return (
     <div className="border-b border-white/10 py-5" ref={containerRef}>
-      <label className="mb-2 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+      <p className="mb-2 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
         Service
-      </label>
+      </p>
       <div className="relative">
         <button
           ref={buttonRef}

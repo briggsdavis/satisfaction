@@ -99,9 +99,9 @@ const ServiceEditor = ({
           />
 
           <div className="border-b border-white/10 py-4">
-            <label className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+            <p className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
               Bullet Points
-            </label>
+            </p>
             {service.bullets.map((bullet, i) => (
               <div key={i} className="mb-2 flex items-center gap-2">
                 <input
@@ -152,9 +152,9 @@ const ServiceEditor = ({
           </div>
 
           <div className="flex items-center gap-3 border-b border-white/10 py-4">
-            <label className="text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+            <p className="text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
               Inverted (white bg)
-            </label>
+            </p>
             <button
               onClick={() => set("inverted", !service.inverted)}
               className={`h-5 w-9 transition-colors ${service.inverted ? "bg-white" : "bg-white/20"}`}
