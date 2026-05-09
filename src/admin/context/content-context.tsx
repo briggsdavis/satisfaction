@@ -378,7 +378,7 @@ export const DEFAULT_CONTENT = {
   categories: CATEGORIES,
   services: DEFAULT_SERVICES,
   brands: DEFAULT_BRANDS,
-  logo: "", // empty = use static /satisfactionlogo.png
+  logo: "", // empty = use static /logo/satisfaction.png
   // slugs pointing into CATEGORIES[*].projects[*]
   featuredSlugs: ["harvest-menu-drop", "behind-the-menu", "logo-pack"] as [
     string,
@@ -498,7 +498,7 @@ export const AdminContentProvider = ({
       'link[rel="icon"]',
     ) as HTMLLinkElement | null
     if (!favicon) return
-    favicon.href = content.logo || "/satisfactionlogo.png"
+    favicon.href = content.logo || "/logo/satisfaction.png"
   }, [content.logo])
 
   const update = useCallback(

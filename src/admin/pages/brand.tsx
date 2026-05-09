@@ -32,7 +32,7 @@ export const BrandAdmin = () => {
           Current Logo
         </p>
         <img
-          src={logo || "/satisfactionlogo.png"}
+          src={logo || "/logo/satisfaction.png"}
           alt="Logo preview"
           className="h-14 w-auto"
           onError={(e) =>
@@ -46,7 +46,7 @@ export const BrandAdmin = () => {
         )}
         {!logo && (
           <p className="mt-3 text-2xs text-white/25">
-            Showing default logo (satisfactionlogo.png).
+            Showing default logo (logo/satisfaction.png).
           </p>
         )}
       </div>

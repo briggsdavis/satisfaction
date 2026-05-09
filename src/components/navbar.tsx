@@ -16,7 +16,7 @@ interface NavbarProps {
 export const Navbar = ({ logoRef, logoVisible = true }: NavbarProps) => {
   const [open, setOpen] = useState(false)
   const { content } = useContent()
-  const logoSrc = content.logo || "/satisfactionlogo.png"
+  const logoSrc = content.logo || "/logo/satisfaction.png"
 
   const handleLinkClick = () => setOpen(false)
 

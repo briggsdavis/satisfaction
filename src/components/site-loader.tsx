@@ -14,7 +14,7 @@ export const SiteLoader = ({
   onDone,
 }: SiteLoaderProps) => {
   const { content } = useContent()
-  const logoSrc = content.logo || "/satisfactionlogo.png"
+  const logoSrc = content.logo || "/logo/satisfaction.png"
   const bgRef = useRef<HTMLDivElement>(null)
   const logoRef = useRef<HTMLImageElement>(null)
 

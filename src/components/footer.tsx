@@ -16,7 +16,7 @@ const SOCIAL_LINKS = [
 
 export const Footer = () => {
   const { content } = useContent()
-  const logoSrc = content.logo || "/satisfactionlogo.png"
+  const logoSrc = content.logo || "/logo/satisfaction.png"
 
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-black px-8 pt-32 pb-12 md:px-16">

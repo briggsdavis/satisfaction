@@ -26,20 +26,20 @@ const BRANDS = [
 ]
 
 const LOGO_BRANDS = [
-  { name: "NFL", src: "/nfllogo.png" },
-  { name: "Absolut", src: "/absolutlogo.png" },
-  { name: "Maker's Mark", src: "/makerslogo.png" },
-  { name: "H&M", src: "/hmlogo.png" },
-  { name: "Jägermeister", src: "/jaegerlogo.png" },
-  { name: "Truly", src: "/trulylogo.png" },
-  { name: "Angles", src: "/angleslogo.png" },
-  { name: "Jim Beam", src: "/jimbeanlogo.png" },
-  { name: "Coors", src: "/coorslogo.png" },
-  { name: "Red Bull", src: "/redbulllogo.png" },
-  { name: "Live", src: "/livelogo.png" },
-  { name: "Blue Moon", src: "/bluemoonlogo.PNG" },
-  { name: "Codigo", src: "/codigologo.PNG" },
-  { name: "Shorty's", src: "/logoshortys.PNG" },
+  { name: "NFL", src: "/logo/nfl.png" },
+  { name: "Absolut", src: "/logo/absolut.png" },
+  { name: "Maker's Mark", src: "/logo/makers-mark.png" },
+  { name: "H&M", src: "/logo/h-and-m.png" },
+  { name: "Jägermeister", src: "/logo/jagermeister.png" },
+  { name: "Truly", src: "/logo/truly.png" },
+  { name: "Angles", src: "/logo/angles.png" },
+  { name: "Jim Beam", src: "/logo/jim-beam.png" },
+  { name: "Coors", src: "/logo/coors.png" },
+  { name: "Red Bull", src: "/logo/red-bull.png" },
+  { name: "Live", src: "/logo/live.png" },
+  { name: "Blue Moon", src: "/logo/blue-moon.png" },
+  { name: "Codigo", src: "/logo/codigo.png" },
+  { name: "Shorty's", src: "/logo/shortys.png" },
 ]
 
 // Shared hook for the infinite carousel animation logic

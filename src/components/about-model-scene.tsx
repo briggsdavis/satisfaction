@@ -43,7 +43,7 @@ export function AboutModelScene() {
     >
       <img
         ref={imgRef}
-        src="/satisfactionlogo.png"
+        src="/logo/satisfaction.png"
         alt="Satisfaction"
         className="w-[60vmin] max-w-[720px] select-none"
         style={{

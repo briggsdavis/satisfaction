@@ -5,7 +5,7 @@ import { useContent } from "./context/content-context"
 
 export const AdminTopbar = () => {
   const { content } = useContent()
-  const logoSrc = content.logo || "/satisfactionlogo.png"
+  const logoSrc = content.logo || "/logo/satisfaction.png"
   const [savedFeedback, setSavedFeedback] = useState(false)
 
   const handleSave = () => {
