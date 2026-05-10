@@ -76,9 +76,6 @@ export const HeroCanvas = () => {
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 export const Hero = () => {
-  const { content } = useContent()
-  const { bottomLeft } = content.hero
-
   return (
     <section
       className="relative h-[300vh]"
@@ -91,10 +88,7 @@ export const Hero = () => {
         <div className="flex-1" />
 
         {/* Bottom metadata */}
-        <div className="flex items-center justify-between px-8 py-4 md:px-16">
-          <span className="text-xs font-bold tracking-[0.35em] text-white/15 uppercase">
-            {bottomLeft}
-          </span>
+        <div className="flex items-center justify-center px-8 py-4 md:px-16">
           <span className="text-xs font-bold tracking-[0.35em] text-white/15 uppercase">
             Scroll ↓
           </span>
