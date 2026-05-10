@@ -137,7 +137,7 @@ export const CategoryAdmin = () => {
 
       <AdminConvexImageField
         label="Hero Image"
-        value={category.image}
+        value={category.image ?? null}
         onChange={(v) => v && update({ id: category._id, image: v })}
       />
 

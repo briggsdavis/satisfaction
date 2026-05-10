@@ -194,7 +194,7 @@ export const ProjectAdmin = () => {
 
       <AdminConvexImageField
         label="Cover Image"
-        value={project.coverImage}
+        value={project.coverImage ?? null}
         onChange={(v) => v && update({ id: project._id, coverImage: v })}
       />
 

@@ -56,7 +56,7 @@ const TextareaField = ({
 // ─── Contact sidebar ─────────────────────────────────────────────────────────
 const ContactSidebar = () => {
   const info = useQuery(api.contact.getInfo)
-  const i = info ?? {}
+  const i = info ?? ({} as NonNullable<typeof info>)
   const items: { label: string; value?: string; href?: string }[] = [
     {
       label: "Email",
