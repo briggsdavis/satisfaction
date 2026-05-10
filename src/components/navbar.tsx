@@ -2,7 +2,8 @@ import { Menu, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { type RefObject, useState } from "react"
 import { Link } from "react-router"
-import { useContent } from "../admin/context/content-context"
+
+const LOGO_SRC = "/logo/satisfaction.png"
 
 const NAV_LINKS = ["About", "Services", "Portfolio"]
 
@@ -15,8 +16,7 @@ interface NavbarProps {
 
 export const Navbar = ({ logoRef, logoVisible = true }: NavbarProps) => {
   const [open, setOpen] = useState(false)
-  const { content } = useContent()
-  const logoSrc = content.logo || "/logo/satisfaction.png"
+  const logoSrc = LOGO_SRC
 
   const handleLinkClick = () => setOpen(false)
 

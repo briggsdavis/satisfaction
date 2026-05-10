@@ -1,6 +1,5 @@
 import { motion, useMotionValue, useTransform } from "motion/react"
 import { useEffect, useState } from "react"
-import { useContent } from "../../admin/context/content-context"
 import { LaptopScene } from "../../components/laptop-scene"
 import { ScatteredImages } from "../../components/scattered-images"
 import { useSmoothScroll } from "../../components/smooth-scroll"

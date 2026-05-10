@@ -1,6 +1,8 @@
+import { useQuery } from "convex/react"
 import { motion, useTransform } from "motion/react"
 import { useRef } from "react"
 import { Link } from "react-router"
+import { api } from "../../../convex/_generated/api"
 import { TextReveal } from "../../components/text-reveal"
 import { usePinnedScroll } from "../../hooks/use-pinned-scroll"
 
@@ -12,6 +14,7 @@ export const WhatWeDoSection = () => {
     wrapperRef,
     whatWeDoDistance,
   )
+  const homepage = useQuery(api.homepage.get)
 
   const panel1Opacity = useTransform(progress, [0, 0.45, 0.65], [1, 1, 0])
   const panel2Opacity = useTransform(progress, [0.45, 0.65, 1], [0, 1, 1])
@@ -40,13 +43,8 @@ export const WhatWeDoSection = () => {
             />
           </div>
           <div className="flex flex-1 flex-col justify-center gap-8 px-8 py-12 md:px-16">
-            <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
-              Social Satisfaction is a creative agency specializing in bold
-              brand transformations rooted in culture and storytelling. Founded
-              by Devon Colebank, we work at the intersection of hospitality,
-              lifestyle, and experiential marketing to evolve brands through
-              striking visuals. By blending nostalgia with innovation, we create
-              identities that feel both familiar and fresh for modern audiences.
+            <p className="max-w-lg text-lg leading-relaxed font-light whitespace-pre-line text-white/70">
+              {homepage?.whatWeDoPanel1Body}
             </p>
             <Link
               to="/about"
@@ -73,26 +71,18 @@ export const WhatWeDoSection = () => {
             <div className="flex flex-col gap-8 md:flex-row md:gap-0">
               <div className="space-y-3 md:flex-1 md:pr-8">
                 <p className="text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
-                  Full-Scale Creative Campaigns
+                  {homepage?.whatWeDoPanel2Col1Label}
                 </p>
-                <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
-                  We go beyond content creation to build comprehensive,
-                  strategic campaigns. As a one-stop creative partner, we handle
-                  every stage from ideation and production to rollout and
-                  optimization. Our process ensures your marketing is cohesive,
-                  intentional, and designed for measurable impact.
+                <p className="max-w-lg text-lg leading-relaxed font-light whitespace-pre-line text-white/70">
+                  {homepage?.whatWeDoPanel2Col1Body}
                 </p>
               </div>
               <div className="space-y-3 md:flex-1 md:border-l md:border-white/10 md:pl-8">
                 <p className="text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
-                  Results-Driven Execution
+                  {homepage?.whatWeDoPanel2Col2Label}
                 </p>
-                <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
-                  We do not just deliver files. We create fully realized
-                  campaigns built to fill seats, drive reservations, and build
-                  brand loyalty. By aligning strategy with visual storytelling,
-                  we eliminate the need for multiple vendors and focus on
-                  driving real results for your business.
+                <p className="max-w-lg text-lg leading-relaxed font-light whitespace-pre-line text-white/70">
+                  {homepage?.whatWeDoPanel2Col2Body}
                 </p>
               </div>
             </div>

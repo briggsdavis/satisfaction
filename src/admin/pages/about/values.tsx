@@ -1,49 +1,63 @@
+import { useMutation, useQuery } from "convex/react"
+import { api } from "../../../../convex/_generated/api"
+import type { Id } from "../../../../convex/_generated/dataModel"
+import { AdminConvexImageField } from "../../components/convex-image-field"
 import {
-  AdminImageField,
-  AdminTextareaField,
-  AdminTextField,
-} from "../../components/fields"
+  ConvexTextareaField,
+  ConvexTextField,
+} from "../../components/convex-text-field"
 import { BackButton, SectionHeader } from "../../components/misc"
-import { useContent } from "../../context/content-context"
+
+type Value = {
+  image?: Id<"_storage">
+  label: string
+  body: string
+}
+
+const SLOT_LABELS = ["Slot 1", "Slot 2", "Slot 3"]
 
 export const ValuesAdmin = () => {
-  const { content, update } = useContent()
-  const values = content.values
+  const about = useQuery(api.about.get)
+  const upsert = useMutation(api.about.upsert)
 
-  const setItem = (i: number, key: string, value: string | number) => {
-    const next = values.map((v, idx) =>
-      idx === i ? { ...v, [key]: value } : v,
-    )
-    update("values", next)
+  if (about === undefined) return null
+
+  const current: Value[] = (about?.values ?? []).slice(0, 3)
+  while (current.length < 3) current.push({ label: "", body: "" })
+
+  const updateAt = async (i: number, patch: Partial<Value>) => {
+    const next = current.map((v, idx) => (idx === i ? { ...v, ...patch } : v))
+    await upsert({ values: next })
   }
 
   return (
     <div className="max-w-2xl">
       <BackButton to="/admin/about" label="About" />
       <SectionHeader
-        title="About — Values"
-        description="Culture, Dynamics, Creativity cards. Edit only — add/delete not available."
+        title="Values"
+        description="Three value cards on the About page (e.g. Culture / Dynamics / Creativity). Image, label, and body for each."
       />
-      {values.map((val, i) => (
-        <div key={i} className="mb-8 border border-white/10 p-6">
-          <p className="mb-4 text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
-            {val.label}
+
+      {current.map((value, i) => (
+        <div key={i} className="mb-6 border border-white/10 p-4">
+          <p className="mb-2 text-xs font-bold tracking-[0.3em] text-white/40 uppercase">
+            {SLOT_LABELS[i]}
           </p>
-          <AdminTextField
-            label="Label"
-            value={val.label}
-            onChange={(v) => setItem(i, "label", v)}
+          <ConvexTextField
+            label="Label (chip text, e.g. CULTURE)"
+            value={value.label}
+            onCommit={(v) => updateAt(i, { label: v })}
           />
-          <AdminImageField
-            label="Image URL"
-            value={val.img}
-            onChange={(v) => setItem(i, "img", v)}
-          />
-          <AdminTextareaField
-            label="Body Text"
-            value={val.body}
-            onChange={(v) => setItem(i, "body", v)}
+          <ConvexTextareaField
+            label="Body (revealed on click)"
+            value={value.body}
+            onCommit={(v) => updateAt(i, { body: v })}
             rows={4}
+          />
+          <AdminConvexImageField
+            label="Image"
+            value={value.image ?? null}
+            onChange={(v) => v && updateAt(i, { image: v })}
           />
         </div>
       ))}

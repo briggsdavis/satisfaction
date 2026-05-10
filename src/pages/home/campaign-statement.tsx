@@ -1,5 +1,7 @@
+import { useQuery } from "convex/react"
 import { motion } from "motion/react"
 import { useEffect, useRef, useState } from "react"
+import { api } from "../../../convex/_generated/api"
 
 const CAMPAIGN_WORDS = ["CAMPAIGNS", "BUILT", "TO", "PERFORM."]
 // "CAMPAIGNS" is the widest word — font size is computed to fit it, then
@@ -9,6 +11,11 @@ const WIDEST_WORD = "CAMPAIGNS"
 export const CampaignStatement = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [fontSize, setFontSize] = useState(100)
+  const homepage = useQuery(api.homepage.get)
+  const imageUrl = useQuery(
+    api.files.getUrl,
+    homepage?.campaignImage ? { storageId: homepage.campaignImage } : "skip",
+  )
 
   useEffect(() => {
     const PROBE = 200
@@ -40,15 +47,17 @@ export const CampaignStatement = () => {
 
   return (
     <section className="relative overflow-hidden border-t border-white/10 bg-black pb-8 md:pb-12">
-      <motion.img
-        src="/mock.png"
-        alt=""
-        className="pointer-events-none absolute top-1/2 left-[40%] z-10 h-[34.85rem] w-[34.85rem] -translate-x-1/2 -translate-y-[54%] rounded-lg object-cover shadow-2xl md:h-[52.27rem] md:w-[52.27rem]"
-        initial={{ opacity: 0, scale: 0.9 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, margin: "-150px" }}
-        transition={{ duration: 0.45, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      />
+      {imageUrl && (
+        <motion.img
+          src={imageUrl}
+          alt=""
+          className="pointer-events-none absolute top-1/2 left-[40%] z-10 h-[34.85rem] w-[34.85rem] -translate-x-1/2 -translate-y-[54%] rounded-lg object-cover shadow-2xl md:h-[52.27rem] md:w-[52.27rem]"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-150px" }}
+          transition={{ duration: 0.45, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        />
+      )}
 
       {/* Invisible container used to measure available width */}
       <div ref={containerRef} className="px-8 md:px-16" aria-hidden />

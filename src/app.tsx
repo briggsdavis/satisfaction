@@ -1,13 +1,14 @@
+import { useQuery } from "convex/react"
 import { motion, useMotionValue, useTransform } from "motion/react"
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
   Route,
   BrowserRouter as Router,
   Routes,
   useLocation,
 } from "react-router"
+import { api } from "../convex/_generated/api"
 import { AdminRoot } from "./admin/admin-root"
-import { AdminContentProvider } from "./admin/context/content-context"
 import { ColumnWipe, useColumnWipeLocation } from "./components/column-wipe"
 import { CustomCursor } from "./components/custom-cursor"
 import { Footer } from "./components/footer"
@@ -38,12 +39,12 @@ import { About } from "./pages/about"
 import { CategoryPage } from "./pages/category"
 import { Contact } from "./pages/contact"
 import { Credits } from "./pages/credits"
-import { BrandsCarousel, LogosCarousel } from "./pages/home/brands-carousel"
+import { LogosCarousel } from "./pages/home/brands-carousel"
 import { CampaignStatement } from "./pages/home/campaign-statement"
 import { FaqCta } from "./pages/home/faq-cta"
 import { FeaturedCascade } from "./pages/home/featured-cascade"
 import { HeroCanvas, Hero } from "./pages/home/hero"
-import { StatsGrid } from "./pages/home/stats-grid"
+import { ServicesCarousel } from "./pages/home/services-carousel"
 import { WhatWeDoSection } from "./pages/home/what-we-do"
 import { NotFound } from "./pages/not-found"
 import { Portfolio } from "./pages/portfolio"
@@ -66,9 +67,13 @@ const Home = () => (
       />
     ))}
     <Hero />
-    <BrandsCarousel />
-    <StatsGrid />
-    <LogosCarousel />
+    <LogosCarousel
+      carousel="collaboration"
+      eyebrow="Collaborations"
+      heading="Brands & creative teams we've worked with:"
+    />
+    <ServicesCarousel />
+    <LogosCarousel carousel="work" />
     <WhatWeDoSection />
     <CampaignStatement />
     <FeaturedCascade />
@@ -143,6 +148,18 @@ const SiteRoot = () => {
   // to "/" never re-initialises this state.
   const [loading, setLoading] = useState(() => window.location.pathname === "/")
   const [navLogoVisible, setNavLogoVisible] = useState(!loading)
+  const [animationDone, setAnimationDone] = useState(false)
+
+  // Critical chrome data — gate loader dismissal on these resolving.
+  const homepage = useQuery(api.homepage.get)
+  const footer = useQuery(api.footer.get)
+  const contactInfo = useQuery(api.contact.getInfo)
+  const dataReady =
+    homepage !== undefined && footer !== undefined && contactInfo !== undefined
+
+  useEffect(() => {
+    if (loading && animationDone && dataReady) setLoading(false)
+  }, [loading, animationDone, dataReady])
 
   return (
     <>
@@ -150,7 +167,7 @@ const SiteRoot = () => {
         <SiteLoader
           navLogoRef={navLogoRef}
           onNavLogoReady={() => setNavLogoVisible(true)}
-          onDone={() => setLoading(false)}
+          onDone={() => setAnimationDone(true)}
         />
       )}
       <CustomCursor />
@@ -171,13 +188,11 @@ const SiteRoot = () => {
 
 export default function App() {
   return (
-    <AdminContentProvider>
-      <Router>
-        <Routes>
-          <Route path="/admin/*" element={<AdminRoot />} />
-          <Route path="/*" element={<SiteRoot />} />
-        </Routes>
-      </Router>
-    </AdminContentProvider>
+    <Router>
+      <Routes>
+        <Route path="/admin/*" element={<AdminRoot />} />
+        <Route path="/*" element={<SiteRoot />} />
+      </Routes>
+    </Router>
   )
 }

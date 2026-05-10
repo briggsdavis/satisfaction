@@ -1,43 +1,55 @@
-import { AdminTextField } from "../../components/fields"
+import { useMutation, useQuery } from "convex/react"
+import { api } from "../../../../convex/_generated/api"
+import { ConvexTextField } from "../../components/convex-text-field"
 import { BackButton, SectionHeader } from "../../components/misc"
-import { useContent } from "../../context/content-context"
 
-// Fixed fields — editable content but the fields themselves cannot be removed
 export const ContactInfoAdmin = () => {
-  const { content, update } = useContent()
-  const info = content.contactInfo
+  const info = useQuery(api.contact.getInfo)
+  const patch = useMutation(api.contact.patchInfo)
 
-  const set = (key: keyof typeof info, value: string) =>
-    update("contactInfo", { ...info, [key]: value })
+  if (info === undefined) return null
 
   return (
     <div className="max-w-2xl">
       <BackButton to="/admin/contact" label="Contact" />
       <SectionHeader
         title="Contact Information"
-        description="These fields are fixed. You can edit the content but cannot remove the fields."
+        description="Single source of truth for the contact sidebar and footer social links. Handles only — URLs are constructed in code."
       />
-      <AdminTextField
+      <ConvexTextField
         label="Email"
-        value={info.email}
-        onChange={(v) => set("email", v)}
-        type="email"
+        value={info?.email ?? ""}
+        onCommit={(v) => patch({ email: v })}
       />
-      <AdminTextField
+      <ConvexTextField
         label="Phone"
-        value={info.phone}
-        onChange={(v) => set("phone", v)}
-        type="tel"
+        value={info?.phone ?? ""}
+        onCommit={(v) => patch({ phone: v })}
       />
-      <AdminTextField
+      <ConvexTextField
         label="Location"
-        value={info.location}
-        onChange={(v) => set("location", v)}
+        value={info?.location ?? ""}
+        onCommit={(v) => patch({ location: v })}
       />
-      <AdminTextField
-        label="Instagram Handle"
-        value={info.instagram}
-        onChange={(v) => set("instagram", v)}
+      <ConvexTextField
+        label="Instagram handle (no @)"
+        value={info?.instagram ?? ""}
+        onCommit={(v) => patch({ instagram: v.replace(/^@/, "") })}
+      />
+      <ConvexTextField
+        label="TikTok handle (no @)"
+        value={info?.tiktok ?? ""}
+        onCommit={(v) => patch({ tiktok: v.replace(/^@/, "") })}
+      />
+      <ConvexTextField
+        label="LinkedIn URL"
+        value={info?.linkedin ?? ""}
+        onCommit={(v) => patch({ linkedin: v })}
+      />
+      <ConvexTextField
+        label="YouTube handle"
+        value={info?.youtube ?? ""}
+        onCommit={(v) => patch({ youtube: v.replace(/^@/, "") })}
       />
     </div>
   )

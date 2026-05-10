@@ -1,296 +1,232 @@
+import { useMutation, useQuery } from "convex/react"
 import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
-import { AdminTextareaField, AdminTextField } from "../../components/fields"
+import { api } from "../../../../convex/_generated/api"
+import type { Doc } from "../../../../convex/_generated/dataModel"
+import {
+  ConvexTextareaField,
+  ConvexTextField,
+} from "../../components/convex-text-field"
 import { BackButton, SectionHeader } from "../../components/misc"
-import { useContent } from "../../context/content-context"
-import type { AdminContent } from "../../context/content-context"
 
-type FaqSection = AdminContent["faqSections"][number]
-type FaqItem = FaqSection["items"][number]
+type Section = Doc<"faqSections">
+type Item = Doc<"faqItems">
 
-export const FaqAdmin = () => {
-  const { content, update } = useContent()
-  const sections = content.faqSections
-  const [expandedSection, setExpandedSection] = useState<number | null>(null)
-  const [expandedItem, setExpandedItem] = useState<string | null>(null)
+const ItemEditor = ({
+  item,
+  isFirst,
+  isLast,
+  onSwap,
+}: {
+  item: Item
+  isFirst: boolean
+  isLast: boolean
+  onSwap: (dir: -1 | 1) => void
+}) => {
+  const [open, setOpen] = useState(false)
+  const update = useMutation(api.contact.updateFaqItem)
+  const remove = useMutation(api.contact.removeFaqItem)
+  return (
+    <div className="border border-white/10">
+      <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
+        <span className="truncate text-xs">{item.question || "—"}</span>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setOpen((o) => !o)}
+            className="text-2xs font-bold tracking-[0.2em] text-white/40 uppercase hover:text-white"
+          >
+            {open ? "Close" : "Edit"}
+          </button>
+          <button
+            disabled={isFirst}
+            onClick={() => onSwap(-1)}
+            className="p-1 text-white/30 hover:text-white disabled:opacity-20"
+          >
+            <ChevronUp size={12} />
+          </button>
+          <button
+            disabled={isLast}
+            onClick={() => onSwap(1)}
+            className="p-1 text-white/30 hover:text-white disabled:opacity-20"
+          >
+            <ChevronDown size={12} />
+          </button>
+          <button
+            onClick={() => remove({ id: item._id })}
+            className="p-1 text-white/20 hover:text-red-400"
+          >
+            <Trash2 size={12} />
+          </button>
+        </div>
+      </div>
+      {open && (
+        <div className="px-3 pb-2">
+          <ConvexTextField
+            label="Question"
+            value={item.question}
+            onCommit={(v) => update({ id: item._id, question: v })}
+          />
+          <ConvexTextareaField
+            label="Answer"
+            value={item.answer}
+            onCommit={(v) => update({ id: item._id, answer: v })}
+            rows={3}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
 
-  // Draft state for new section
-  const [draftSection, setDraftSection] = useState<FaqSection | null>(null)
-  // Draft state for new item within a section: { si, item }
-  const [draftItem, setDraftItem] = useState<{
-    si: number
-    item: FaqItem
-  } | null>(null)
+const SectionEditor = ({
+  section,
+  isFirst,
+  isLast,
+  onSwap,
+}: {
+  section: Section
+  isFirst: boolean
+  isLast: boolean
+  onSwap: (dir: -1 | 1) => void
+}) => {
+  const items =
+    useQuery(api.contact.listFaqItems, { sectionId: section._id }) ?? []
+  const sorted = items.toSorted((a, b) => a.order - b.order)
 
-  const updateSections = (next: FaqSection[]) => update("faqSections", next)
+  const updateSection = useMutation(api.contact.updateFaqSection)
+  const removeSection = useMutation(api.contact.removeFaqSection)
+  const createItem = useMutation(api.contact.createFaqItem)
+  const updateItem = useMutation(api.contact.updateFaqItem)
+  const [open, setOpen] = useState(true)
 
-  const updateSection = (si: number, patch: Partial<FaqSection>) =>
-    updateSections(sections.map((s, i) => (i === si ? { ...s, ...patch } : s)))
-
-  const updateItem = (si: number, ii: number, patch: Partial<FaqItem>) => {
-    const items = sections[si].items.map((item, i) =>
-      i === ii ? { ...item, ...patch } : item,
-    )
-    updateSection(si, { items })
+  const swapItems = async (a: Item, b: Item) => {
+    await updateItem({ id: a._id, order: b.order })
+    await updateItem({ id: b._id, order: a.order })
   }
 
-  const moveSection = (si: number, dir: -1 | 1) => {
-    const next = [...sections]
-    const target = si + dir
-    if (target < 0 || target >= next.length) return
-    ;[next[si], next[target]] = [next[target], next[si]]
-    updateSections(next)
-  }
-
-  const deleteSection = (si: number) =>
-    updateSections(sections.filter((_, i) => i !== si))
-
-  const confirmSection = () => {
-    if (draftSection) {
-      updateSections([...sections, draftSection])
-      setDraftSection(null)
-    }
-  }
-
-  const moveItem = (si: number, ii: number, dir: -1 | 1) => {
-    const items = [...sections[si].items]
-    const target = ii + dir
-    if (target < 0 || target >= items.length) return
-    ;[items[ii], items[target]] = [items[target], items[ii]]
-    updateSection(si, { items })
-  }
-
-  const deleteItem = (si: number, ii: number) => {
-    updateSection(si, { items: sections[si].items.filter((_, i) => i !== ii) })
-  }
-
-  const confirmItem = () => {
-    if (draftItem) {
-      const { si, item } = draftItem
-      updateSection(si, { items: [...sections[si].items, item] })
-      setDraftItem(null)
-    }
+  const addItem = async () => {
+    const maxOrder = sorted.reduce((m, x) => Math.max(m, x.order), -1)
+    await createItem({
+      sectionId: section._id,
+      question: "New question",
+      answer: "",
+      order: maxOrder + 1,
+    })
   }
 
   return (
-    <div className="max-w-3xl">
+    <div className="border border-white/10">
+      <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="flex flex-1 items-center gap-2 text-left"
+        >
+          <span className="text-sm font-bold">
+            {section.name || "Untitled section"}
+          </span>
+          <span className="text-2xs text-white/30">
+            {sorted.length} {sorted.length === 1 ? "item" : "items"}
+          </span>
+        </button>
+        <div className="flex items-center gap-1">
+          <button
+            disabled={isFirst}
+            onClick={() => onSwap(-1)}
+            className="p-1 text-white/30 hover:text-white disabled:opacity-20"
+          >
+            <ChevronUp size={14} />
+          </button>
+          <button
+            disabled={isLast}
+            onClick={() => onSwap(1)}
+            className="p-1 text-white/30 hover:text-white disabled:opacity-20"
+          >
+            <ChevronDown size={14} />
+          </button>
+          <button
+            onClick={() => {
+              if (
+                confirm(
+                  `Delete section "${section.name}" and all its questions?`,
+                )
+              )
+                removeSection({ id: section._id })
+            }}
+            className="p-1 text-white/20 hover:text-red-400"
+          >
+            <Trash2 size={14} />
+          </button>
+        </div>
+      </div>
+      {open && (
+        <div className="space-y-2 px-3 py-3">
+          <ConvexTextField
+            label="Section name"
+            value={section.name}
+            onCommit={(v) => updateSection({ id: section._id, name: v })}
+          />
+          {sorted.map((item, i) => (
+            <ItemEditor
+              key={item._id}
+              item={item}
+              isFirst={i === 0}
+              isLast={i === sorted.length - 1}
+              onSwap={(dir) => swapItems(item, sorted[i + dir])}
+            />
+          ))}
+          <button
+            onClick={addItem}
+            className="flex items-center gap-2 border border-dashed border-white/20 px-3 py-1.5 text-2xs font-bold tracking-[0.25em] text-white/40 uppercase transition-colors hover:border-white/40 hover:text-white/70"
+          >
+            <Plus size={11} />
+            Add Question
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export const FaqAdmin = () => {
+  const sections = useQuery(api.contact.listFaqSections) ?? []
+  const create = useMutation(api.contact.createFaqSection)
+  const update = useMutation(api.contact.updateFaqSection)
+
+  const swap = async (a: Section, b: Section) => {
+    await update({ id: a._id, order: b.order })
+    await update({ id: b._id, order: a.order })
+  }
+
+  const addSection = async () => {
+    const maxOrder = sections.reduce((m, x) => Math.max(m, x.order), -1)
+    await create({ name: "New Section", order: maxOrder + 1 })
+  }
+
+  return (
+    <div className="max-w-2xl">
       <BackButton to="/admin/contact" label="Contact" />
       <SectionHeader
-        title="FAQ Builder"
-        description="Add, edit, remove, and reorder FAQ sections and questions."
+        title="FAQ"
+        description="Sections alternate light/dark on the public page based on display order. Variable count of sections and questions."
       />
-
-      <div className="space-y-2">
-        {sections.map((section, si) => (
-          <div key={si} className="border border-white/10">
-            {/* Section header row */}
-            <div className="flex items-center gap-2 px-4 py-3">
-              <button
-                onClick={() =>
-                  setExpandedSection((e) => (e === si ? null : si))
-                }
-                className="flex flex-1 items-center gap-2 text-left"
-              >
-                {expandedSection === si ? (
-                  <ChevronDown size={14} className="text-white/40" />
-                ) : (
-                  <ChevronUp size={14} className="rotate-180 text-white/40" />
-                )}
-                <span className="text-sm font-bold">{section.section}</span>
-                <span className="text-xs text-white/30">
-                  ({section.items.length} items)
-                </span>
-              </button>
-              <div className="flex shrink-0 items-center gap-1">
-                <button
-                  onClick={() => moveSection(si, -1)}
-                  disabled={si === 0}
-                  className="p-1 text-white/30 transition-colors hover:text-white disabled:opacity-20"
-                >
-                  <ChevronUp size={13} />
-                </button>
-                <button
-                  onClick={() => moveSection(si, 1)}
-                  disabled={si === sections.length - 1}
-                  className="p-1 text-white/30 transition-colors hover:text-white disabled:opacity-20"
-                >
-                  <ChevronDown size={13} />
-                </button>
-                <button
-                  onClick={() => deleteSection(si)}
-                  className="p-1 text-white/20 transition-colors hover:text-red-400"
-                >
-                  <Trash2 size={13} />
-                </button>
-              </div>
-            </div>
-
-            {expandedSection === si && (
-              <div className="border-t border-white/10 px-4 pb-4">
-                <AdminTextField
-                  label="Section Title"
-                  value={section.section}
-                  onChange={(v) => updateSection(si, { section: v })}
-                />
-
-                <div className="mt-4 space-y-2">
-                  {section.items.map((item, ii) => {
-                    const key = `${si}-${ii}`
-                    const isOpen = expandedItem === key
-                    return (
-                      <div key={ii} className="border border-white/10">
-                        <div className="flex items-center gap-2 px-3 py-2">
-                          <button
-                            onClick={() =>
-                              setExpandedItem((e) => (e === key ? null : key))
-                            }
-                            className="flex-1 truncate text-left text-xs text-white/60 transition-colors hover:text-white"
-                          >
-                            {item.q || "New question"}
-                          </button>
-                          <div className="flex shrink-0 items-center gap-1">
-                            <button
-                              onClick={() => moveItem(si, ii, -1)}
-                              disabled={ii === 0}
-                              className="p-1 text-white/20 transition-colors hover:text-white disabled:opacity-20"
-                            >
-                              <ChevronUp size={12} />
-                            </button>
-                            <button
-                              onClick={() => moveItem(si, ii, 1)}
-                              disabled={ii === section.items.length - 1}
-                              className="p-1 text-white/20 transition-colors hover:text-white disabled:opacity-20"
-                            >
-                              <ChevronDown size={12} />
-                            </button>
-                            <button
-                              onClick={() => deleteItem(si, ii)}
-                              className="p-1 text-white/20 transition-colors hover:text-red-400"
-                            >
-                              <Trash2 size={12} />
-                            </button>
-                          </div>
-                        </div>
-                        {isOpen && (
-                          <div className="border-t border-white/10 px-3 pb-3">
-                            <AdminTextField
-                              label="Question"
-                              value={item.q}
-                              onChange={(v) => updateItem(si, ii, { q: v })}
-                            />
-                            <AdminTextareaField
-                              label="Answer"
-                              value={item.a}
-                              onChange={(v) => updateItem(si, ii, { a: v })}
-                              rows={3}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-
-                  {/* Draft new item form */}
-                  {draftItem?.si === si ? (
-                    <div className="border border-dashed border-white/30">
-                      <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
-                        <span className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase">
-                          New Question
-                        </span>
-                        <div className="flex items-center gap-4">
-                          <button
-                            onClick={() => setDraftItem(null)}
-                            className="text-xs font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            onClick={confirmItem}
-                            className="text-xs font-bold tracking-[0.2em] text-white uppercase transition-colors hover:text-white/60"
-                          >
-                            Create →
-                          </button>
-                        </div>
-                      </div>
-                      <div className="px-3 pb-3">
-                        <AdminTextField
-                          label="Question"
-                          value={draftItem.item.q}
-                          onChange={(v) =>
-                            setDraftItem({
-                              si,
-                              item: { ...draftItem.item, q: v },
-                            })
-                          }
-                        />
-                        <AdminTextareaField
-                          label="Answer"
-                          value={draftItem.item.a}
-                          onChange={(v) =>
-                            setDraftItem({
-                              si,
-                              item: { ...draftItem.item, a: v },
-                            })
-                          }
-                          rows={3}
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() =>
-                        setDraftItem({ si, item: { q: "", a: "" } })
-                      }
-                      className="flex items-center gap-1.5 py-2 text-xs font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white"
-                    >
-                      <Plus size={11} /> Add Question
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+      <div className="space-y-3">
+        {sections.map((s, i) => (
+          <SectionEditor
+            key={s._id}
+            section={s}
+            isFirst={i === 0}
+            isLast={i === sections.length - 1}
+            onSwap={(dir) => swap(s, sections[i + dir])}
+          />
         ))}
-      </div>
-
-      {/* Draft new section form */}
-      {draftSection !== null ? (
-        <div className="mt-4 border border-dashed border-white/30">
-          <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
-            <span className="text-xs font-bold tracking-[0.25em] text-white/40 uppercase">
-              New Section
-            </span>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setDraftSection(null)}
-                className="text-xs font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmSection}
-                className="text-xs font-bold tracking-[0.2em] text-white uppercase transition-colors hover:text-white/60"
-              >
-                Create →
-              </button>
-            </div>
-          </div>
-          <div className="px-4 pb-4">
-            <AdminTextField
-              label="Section Title"
-              value={draftSection.section}
-              onChange={(v) => setDraftSection({ ...draftSection, section: v })}
-            />
-          </div>
-        </div>
-      ) : (
         <button
-          onClick={() => setDraftSection({ section: "", items: [] })}
-          className="mt-4 flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase transition-colors hover:border-white/40 hover:text-white/70"
+          onClick={addSection}
+          className="flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase transition-colors hover:border-white/40 hover:text-white/70"
         >
-          <Plus size={12} /> Add Section
+          <Plus size={12} />
+          Add Section
         </button>
-      )}
+      </div>
     </div>
   )
 }

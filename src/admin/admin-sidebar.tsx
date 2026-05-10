@@ -1,26 +1,22 @@
 import {
   FileText,
-  Globe,
   Home,
   Image,
   Info,
   LayoutGrid,
   Mail,
-  Palette,
   Settings,
 } from "lucide-react"
 import { NavLink } from "react-router"
 
 const links = [
   { to: "/admin", label: "Dashboard", icon: Home, end: true },
-  { to: "/admin/brand", label: "Brand", icon: Palette },
   { to: "/admin/homepage", label: "Homepage", icon: LayoutGrid },
   { to: "/admin/about", label: "About", icon: Info },
   { to: "/admin/services", label: "Services", icon: Settings },
   { to: "/admin/portfolio", label: "Portfolio", icon: Image },
   { to: "/admin/contact", label: "Contact", icon: Mail },
   { to: "/admin/footer", label: "Footer", icon: FileText },
-  { to: "/admin/seo", label: "SEO", icon: Globe },
 ]
 
 export const AdminSidebar = () => (
@@ -40,7 +36,7 @@ export const AdminSidebar = () => (
               }`
             }
           >
-            <Icon size={14} />
+            <Icon size={14} className="relative -top-0.5" />
             {label}
           </NavLink>
         ))}

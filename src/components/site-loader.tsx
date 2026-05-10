@@ -1,6 +1,7 @@
 import { animate } from "motion/react"
 import { type RefObject, useEffect, useRef } from "react"
-import { useContent } from "../admin/context/content-context"
+
+const LOGO_SRC = "/logo/satisfaction.png"
 
 interface SiteLoaderProps {
   navLogoRef: RefObject<HTMLImageElement | null>
@@ -13,8 +14,7 @@ export const SiteLoader = ({
   onNavLogoReady,
   onDone,
 }: SiteLoaderProps) => {
-  const { content } = useContent()
-  const logoSrc = content.logo || "/logo/satisfaction.png"
+  const logoSrc = LOGO_SRC
   const bgRef = useRef<HTMLDivElement>(null)
   const logoRef = useRef<HTMLImageElement>(null)
 

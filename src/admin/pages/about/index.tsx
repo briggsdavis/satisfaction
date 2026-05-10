@@ -3,19 +3,19 @@ import { SectionHeader } from "../../components/misc"
 
 const sections = [
   {
-    to: "body",
-    label: "Body Copy",
-    description: "Three animated intro paragraphs",
+    to: "wheel",
+    label: "Wheel Section",
+    description: "Auto-numbered Who/How/What pinned scroll items",
   },
   {
     to: "timeline",
-    label: "Timeline",
-    description: "Past projects & clients — edit only",
+    label: "Past Projects Timeline",
+    description: "Horizontal-scroll past projects and clients",
   },
   {
     to: "values",
     label: "Values",
-    description: "Culture, Dynamics, Creativity cards — edit only",
+    description: "Three value cards (image + label + body)",
   },
 ]
 

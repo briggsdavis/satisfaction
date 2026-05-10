@@ -1,269 +1,238 @@
+import { useMutation, useQuery } from "convex/react"
 import { Plus, Trash2 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router"
+import { api } from "../../../../convex/_generated/api"
+import { AdminConvexImageField } from "../../components/convex-image-field"
 import {
-  AdminImageField,
-  AdminTextareaField,
-  AdminTextField,
-} from "../../components/fields"
-import { ConfirmDialog, SectionHeader } from "../../components/misc"
-import { useContent } from "../../context/content-context"
-import type { AdminContent } from "../../context/content-context"
+  ConvexTextareaField,
+  ConvexTextField,
+} from "../../components/convex-text-field"
+import { BackButton, SectionHeader } from "../../components/misc"
 
-type Project = AdminContent["categories"][number]["projects"][number]
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
 
-const blankProject = (): Project => ({
-  slug: "",
-  title: "",
-  tags: ["", ""],
-  descriptor: "",
-  img: "",
-  description: "",
-})
+const BulletInput = ({
+  value,
+  onCommit,
+}: {
+  value: string
+  onCommit: (v: string) => void
+}) => {
+  const [local, setLocal] = useState(value)
+  useEffect(() => setLocal(value), [value])
+  return (
+    <input
+      type="text"
+      value={local}
+      onChange={(e) => setLocal(e.target.value)}
+      onBlur={() => local !== value && onCommit(local)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") (e.target as HTMLInputElement).blur()
+      }}
+      className="flex-1 border-b border-white/20 bg-transparent pb-1 text-sm text-white outline-none focus:border-white/50"
+    />
+  )
+}
 
 export const CategoryAdmin = () => {
   const { categorySlug } = useParams<{ categorySlug: string }>()
   const navigate = useNavigate()
+  const category = useQuery(
+    api.portfolio.getCategoryBySlug,
+    categorySlug ? { slug: categorySlug } : "skip",
+  )
+  const projects = useQuery(
+    api.portfolio.listProjectsByCategory,
+    category ? { categoryId: category._id } : "skip",
+  )
 
-  const { content, update } = useContent()
-  const catIndex = content.categories.findIndex((c) => c.slug === categorySlug)
-  const cat = content.categories[catIndex]
+  const update = useMutation(api.portfolio.updateCategory)
+  const remove = useMutation(api.portfolio.removeCategory)
+  const createProject = useMutation(api.portfolio.createProject)
 
-  const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
-  const [draftProject, setDraftProject] = useState<Project | null>(null)
-
-  if (!cat) {
+  if (category === undefined) return null
+  if (!category) {
     return (
       <div className="max-w-2xl">
-        <p className="text-white/40">Category not found.</p>
-        <Link
-          to="/admin/portfolio"
-          className="btn-industrial-sm mt-4 inline-block"
-        >
-          ← Back
-        </Link>
+        <BackButton to="/admin/portfolio" label="Portfolio" />
+        <p className="text-white/50">Category not found.</p>
       </div>
     )
   }
 
-  const updateCat = (patch: Partial<typeof cat>) => {
-    const next = content.categories.map((c, i) =>
-      i === catIndex ? { ...c, ...patch } : c,
-    )
-    update("categories", next)
-  }
-
-  const updateOverview = (key: string, value: string) =>
-    updateCat({ overview: { ...cat.overview, [key]: value } })
-
   const setBullet = (i: number, v: string) => {
-    const next = [...cat.bullets]
+    const next = [...category.bullets]
     next[i] = v
-    updateCat({ bullets: next })
+    update({ id: category._id, bullets: next })
   }
+  const addBullet = () =>
+    update({ id: category._id, bullets: [...category.bullets, ""] })
+  const removeBullet = (i: number) =>
+    update({
+      id: category._id,
+      bullets: category.bullets.filter((_, idx) => idx !== i),
+    })
 
-  const confirmProject = () => {
-    if (draftProject) {
-      updateCat({ projects: [...cat.projects, draftProject] })
-      setDraftProject(null)
-      navigate(`/admin/portfolio/${cat.slug}`)
-    }
-  }
-
-  const deleteProject = (slug: string) => {
-    updateCat({ projects: cat.projects.filter((p) => p.slug !== slug) })
-    setDeleteTarget(null)
+  const handleAddProject = async () => {
+    const existing = new Set((projects ?? []).map((p) => p.slug))
+    let slug = "new-project"
+    let i = 1
+    while (existing.has(slug)) slug = `new-project-${++i}`
+    await createProject({
+      slug,
+      title: "New Project",
+      description: "",
+      approach: "",
+      execution: "",
+      results: "",
+      gallery: [],
+      featured: false,
+      categoryIds: [category._id],
+      serviceIds: [],
+    })
+    navigate(slug)
   }
 
   return (
     <div className="max-w-2xl">
-      <div className="mb-6 flex items-center gap-4">
-        <Link
-          to="/admin/portfolio"
-          className="text-xs text-white/40 transition-colors hover:text-white"
-        >
-          ← Portfolio
-        </Link>
-        <span className="text-white/20">/</span>
-        <span className="text-xs text-white/60">{cat.name}</span>
-      </div>
+      <BackButton to="/admin/portfolio" label="Portfolio" />
+      <SectionHeader
+        title={category.name || "Untitled Category"}
+        description={`URL: /portfolio/${category.slug}`}
+      />
 
-      <SectionHeader title={cat.name} description={`/portfolio/${cat.slug}`} />
-
-      {/* Category metadata */}
-      <AdminTextField
+      <ConvexTextField
         label="Name"
-        value={cat.name}
-        onChange={(v) => updateCat({ name: v })}
+        value={category.name}
+        onCommit={(v) => update({ id: category._id, name: v })}
       />
-      <AdminTextField
-        label="Slug (URL)"
-        value={cat.slug}
-        onChange={(v) => updateCat({ slug: v })}
-      />
-      <AdminImageField
-        label="Header Image"
-        value={cat.img}
-        onChange={(v) => updateCat({ img: v })}
-      />
-      <AdminTextField
-        label="Height"
-        value={cat.height}
-        onChange={(v) => updateCat({ height: v })}
+      <ConvexTextField
+        label="Slug"
+        value={category.slug}
+        onCommit={(v) => update({ id: category._id, slug: slugify(v) })}
       />
 
       <div className="border-b border-white/10 py-4">
-        <p className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
-          Bullets (5 items)
+        <p className="mb-2 text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+          Color
         </p>
-        {cat.bullets.map((b, i) => (
+        <div className="flex items-center gap-3">
           <input
-            key={i}
-            type="text"
-            value={b}
-            onChange={(e) => setBullet(i, e.target.value)}
-            placeholder={`Bullet ${i + 1}`}
-            className="mb-2 block w-full border-b border-white/20 bg-transparent pb-1 text-sm text-white outline-none focus:border-white/50"
+            type="color"
+            value={category.color}
+            onChange={(e) =>
+              update({ id: category._id, color: e.target.value })
+            }
+            className="h-8 w-12 cursor-pointer border border-white/20 bg-transparent"
           />
-        ))}
+          <span className="text-xs text-white/40">{category.color}</span>
+        </div>
       </div>
 
-      <div className="mt-6 mb-4">
-        <p className="text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
-          Overview
+      <AdminConvexImageField
+        label="Hero Image"
+        value={category.image}
+        onChange={(v) => v && update({ id: category._id, image: v })}
+      />
+
+      <div className="border-b border-white/10 py-4">
+        <p className="mb-3 text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+          Bullets (shown on hover on Portfolio page)
         </p>
+        {category.bullets.map((b, i) => (
+          <div key={i} className="mb-2 flex items-center gap-2">
+            <BulletInput value={b} onCommit={(v) => setBullet(i, v)} />
+            <button
+              onClick={() => removeBullet(i)}
+              className="text-xs text-white/20 transition-colors hover:text-red-400"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={addBullet}
+          className="mt-2 text-xs font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white"
+        >
+          + Add Bullet
+        </button>
       </div>
-      <AdminTextField
-        label="Headline"
-        value={cat.overview.headline}
-        onChange={(v) => updateOverview("headline", v)}
+
+      <ConvexTextField
+        label="Overview Headline"
+        value={category.headline}
+        onCommit={(v) => update({ id: category._id, headline: v })}
       />
-      <AdminTextareaField
-        label="Description"
-        value={cat.overview.description}
-        onChange={(v) => updateOverview("description", v)}
-        rows={3}
-      />
-      <AdminTextareaField
-        label="Problem"
-        value={cat.overview.problem}
-        onChange={(v) => updateOverview("problem", v)}
-        rows={3}
-      />
-      <AdminTextareaField
-        label="Solution"
-        value={cat.overview.solution}
-        onChange={(v) => updateOverview("solution", v)}
-        rows={3}
-      />
-      <AdminTextareaField
-        label="Execution"
-        value={cat.overview.execution}
-        onChange={(v) => updateOverview("execution", v)}
-        rows={3}
-      />
-      <AdminTextareaField
-        label="Results"
-        value={cat.overview.results}
-        onChange={(v) => updateOverview("results", v)}
-        rows={3}
+      <ConvexTextareaField
+        label="Overview Description"
+        value={category.description}
+        onCommit={(v) => update({ id: category._id, description: v })}
+        rows={4}
       />
 
       {/* Projects */}
-      <div className="mt-10 mb-4 border-t border-white/10 pt-8">
-        <p className="mb-4 text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
-          Projects ({cat.projects.length})
+      <div className="mt-10">
+        <p className="mb-3 text-xs font-bold tracking-[0.3em] text-white/50 uppercase">
+          Projects in this category
         </p>
-        {cat.projects.map((p) => (
-          <div
-            key={p.slug}
-            className="flex items-center justify-between border-b border-white/10 py-3"
-          >
-            <div>
-              <p className="text-sm font-bold">{p.title}</p>
-              <p className="text-2xs text-white/30">
-                /portfolio/{cat.slug}/{p.slug}
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link
-                to={`/admin/portfolio/${cat.slug}/${p.slug}`}
-                className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase transition-colors hover:text-white"
-              >
-                Edit
-              </Link>
-              <button
-                onClick={() => setDeleteTarget(p.slug)}
-                className="p-1 text-white/20 transition-colors hover:text-red-400"
-              >
-                <Trash2 size={13} />
-              </button>
-            </div>
-          </div>
-        ))}
-
-        {/* Draft new project form */}
-        {draftProject !== null ? (
-          <div className="mt-4 border border-dashed border-white/30">
-            <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
-              <span className="text-xs font-bold tracking-[0.25em] text-white/40 uppercase">
-                New Project
-              </span>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setDraftProject(null)}
-                  className="text-xs font-bold tracking-[0.2em] text-white/30 uppercase transition-colors hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={confirmProject}
-                  className="text-xs font-bold tracking-[0.2em] text-white uppercase transition-colors hover:text-white/60"
-                >
-                  Create →
-                </button>
+        <div className="space-y-2">
+          {(projects ?? []).map((p) => (
+            <Link
+              key={p._id}
+              to={p.slug}
+              className="flex items-center justify-between border border-white/10 px-4 py-3 transition-colors hover:bg-white/5"
+            >
+              <div className="min-w-0">
+                <p className="truncate text-sm font-bold">
+                  {p.title || "Untitled"}
+                </p>
+                <p className="font-mono text-xs text-white/30">
+                  {p.featured && (
+                    <span className="mr-2 text-yellow-400/70">★ featured</span>
+                  )}
+                  /{p.slug}
+                </p>
               </div>
-            </div>
-            <div className="px-4 pb-4">
-              <AdminTextField
-                label="Title"
-                value={draftProject.title}
-                onChange={(v) => setDraftProject({ ...draftProject, title: v })}
-                placeholder="e.g. Summer Campaign 2024"
-              />
-              <AdminTextField
-                label="Slug (URL)"
-                value={draftProject.slug}
-                onChange={(v) => setDraftProject({ ...draftProject, slug: v })}
-                placeholder="e.g. summer-campaign-2024"
-              />
-              <AdminTextField
-                label="Descriptor"
-                value={draftProject.descriptor}
-                onChange={(v) =>
-                  setDraftProject({ ...draftProject, descriptor: v })
-                }
-                placeholder="e.g. Brand Campaign"
-              />
-            </div>
-          </div>
-        ) : (
+              <span className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase">
+                Edit →
+              </span>
+            </Link>
+          ))}
+
           <button
-            onClick={() => setDraftProject(blankProject())}
-            className="mt-4 flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase transition-colors hover:border-white/40 hover:text-white/70"
+            onClick={handleAddProject}
+            className="flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase transition-colors hover:border-white/40 hover:text-white/70"
           >
-            <Plus size={12} /> Add Project
+            <Plus size={12} />
+            Add Project
           </button>
-        )}
+        </div>
       </div>
 
-      {deleteTarget && (
-        <ConfirmDialog
-          message={`Delete project "${cat.projects.find((p) => p.slug === deleteTarget)?.title}"?`}
-          onConfirm={() => deleteProject(deleteTarget)}
-          onCancel={() => setDeleteTarget(null)}
-        />
-      )}
+      <div className="mt-10 border-t border-white/10 pt-6">
+        <button
+          onClick={() => {
+            if (
+              confirm(
+                `Delete category "${category.name}"? Projects assigned to it will lose this category but won't be deleted.`,
+              )
+            ) {
+              remove({ id: category._id })
+              navigate("/admin/portfolio")
+            }
+          }}
+          className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-red-400/70 uppercase transition-colors hover:text-red-400"
+        >
+          <Trash2 size={12} />
+          Delete category
+        </button>
+      </div>
     </div>
   )
 }

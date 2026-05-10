@@ -1,34 +1,40 @@
+import { useQuery } from "convex/react"
 import { Link } from "react-router"
-import { useContent } from "../context/content-context"
+import { api } from "../../../convex/_generated/api"
 
 export const Dashboard = () => {
-  const { content } = useContent()
+  const categories = useQuery(api.portfolio.listCategories) ?? []
+  const projects = useQuery(api.portfolio.listProjects) ?? []
+  const services = useQuery(api.services.list) ?? []
+  const collaborationLogos =
+    useQuery(api.logos.list, { carousel: "collaboration" }) ?? []
+  const workLogos = useQuery(api.logos.list, { carousel: "work" }) ?? []
+  const faqSections = useQuery(api.contact.listFaqSections) ?? []
 
   const stats = [
     {
       label: "Categories",
-      count: content.categories.length,
+      count: categories.length,
       to: "/admin/portfolio",
     },
     {
       label: "Projects",
-      count: content.categories.reduce((n, c) => n + c.projects.length, 0),
+      count: projects.length,
       to: "/admin/portfolio",
     },
     {
       label: "Services",
-      count: content.services.length,
+      count: services.length,
       to: "/admin/services",
     },
-    { label: "Brands", count: content.brands.length, to: "/admin/homepage" },
     {
-      label: "FAQ Sections",
-      count: content.faqSections.length,
-      to: "/admin/contact",
+      label: "Logos",
+      count: collaborationLogos.length + workLogos.length,
+      to: "/admin/homepage",
     },
     {
-      label: "FAQ Items",
-      count: content.faqSections.reduce((n, s) => n + s.items.length, 0),
+      label: "FAQ Sections",
+      count: faqSections.length,
       to: "/admin/contact",
     },
   ]
@@ -40,8 +46,7 @@ export const Dashboard = () => {
           Dashboard
         </h1>
         <p className="mt-2 text-sm text-white/40">
-          All edits are stored locally in this browser. Changes do not affect
-          the live site until deployed.
+          All edits save instantly to Convex and appear live on the site.
         </p>
       </div>
 
@@ -71,7 +76,6 @@ export const Dashboard = () => {
           { to: "/admin/portfolio", label: "Portfolio & Projects" },
           { to: "/admin/contact", label: "Contact & FAQ" },
           { to: "/admin/footer", label: "Footer" },
-          { to: "/admin/seo", label: "SEO & Meta Tags" },
         ].map(({ to, label }) => (
           <Link
             key={to}

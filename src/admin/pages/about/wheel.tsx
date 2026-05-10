@@ -2,13 +2,14 @@ import { useMutation, useQuery } from "convex/react"
 import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react"
 import { api } from "../../../../convex/_generated/api"
 import type { Doc } from "../../../../convex/_generated/dataModel"
+import { AdminConvexImageField } from "../../components/convex-image-field"
 import {
   ConvexTextareaField,
   ConvexTextField,
 } from "../../components/convex-text-field"
 import { BackButton, SectionHeader } from "../../components/misc"
 
-type Item = Doc<"aboutTimeline">
+type Item = Doc<"aboutWheel">
 
 const ItemEditor = ({
   item,
@@ -21,18 +22,15 @@ const ItemEditor = ({
   isLast: boolean
   onSwap: (dir: -1 | 1) => void
 }) => {
-  const update = useMutation(api.about.updateTimeline)
-  const remove = useMutation(api.about.removeTimeline)
+  const update = useMutation(api.about.updateWheel)
+  const remove = useMutation(api.about.removeWheel)
 
   return (
     <div className="border border-white/10">
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
-        <div className="min-w-0">
-          <span className="block truncate text-sm font-bold">
-            {item.client || "Untitled"}
-          </span>
-          <span className="text-xs text-white/30">{item.date}</span>
-        </div>
+        <span className="truncate text-sm font-bold">
+          {item.heading || "Untitled"}
+        </span>
         <div className="flex items-center gap-1">
           <button
             disabled={isFirst}
@@ -50,7 +48,7 @@ const ItemEditor = ({
           </button>
           <button
             onClick={() => {
-              if (confirm(`Delete "${item.client || "this entry"}"?`))
+              if (confirm(`Delete "${item.heading || "this item"}"?`))
                 remove({ id: item._id })
             }}
             className="p-1 text-white/20 hover:text-red-400"
@@ -61,42 +59,30 @@ const ItemEditor = ({
       </div>
       <div className="px-4 pb-2">
         <ConvexTextField
-          label="Date (e.g. 2024–2025)"
-          value={item.date}
-          onCommit={(v) => update({ id: item._id, date: v })}
-        />
-        <ConvexTextField
-          label="Client"
-          value={item.client}
-          onCommit={(v) => update({ id: item._id, client: v })}
-        />
-        <ConvexTextField
-          label="Campaign (optional)"
-          value={item.campaign ?? ""}
-          onCommit={(v) =>
-            update({ id: item._id, campaign: v.trim() || undefined })
-          }
-        />
-        <ConvexTextField
-          label="Role"
-          value={item.role}
-          onCommit={(v) => update({ id: item._id, role: v })}
+          label="Heading"
+          value={item.heading}
+          onCommit={(v) => update({ id: item._id, heading: v })}
         />
         <ConvexTextareaField
-          label="Description"
-          value={item.description}
-          onCommit={(v) => update({ id: item._id, description: v })}
+          label="Body"
+          value={item.body}
+          onCommit={(v) => update({ id: item._id, body: v })}
           rows={4}
+        />
+        <AdminConvexImageField
+          label="Image"
+          value={item.image ?? null}
+          onChange={(v) => v && update({ id: item._id, image: v })}
         />
       </div>
     </div>
   )
 }
 
-export const TimelineAdmin = () => {
-  const items = useQuery(api.about.listTimeline) ?? []
-  const create = useMutation(api.about.createTimeline)
-  const update = useMutation(api.about.updateTimeline)
+export const WheelAdmin = () => {
+  const items = useQuery(api.about.listWheel) ?? []
+  const create = useMutation(api.about.createWheel)
+  const update = useMutation(api.about.updateWheel)
 
   const swap = async (a: Item, b: Item) => {
     await update({ id: a._id, order: b.order })
@@ -106,10 +92,8 @@ export const TimelineAdmin = () => {
   const handleAdd = async () => {
     const maxOrder = items.reduce((m, x) => Math.max(m, x.order), -1)
     await create({
-      date: "",
-      client: "New Entry",
-      role: "",
-      description: "",
+      heading: "New Item",
+      body: "",
       order: maxOrder + 1,
     })
   }
@@ -118,8 +102,8 @@ export const TimelineAdmin = () => {
     <div className="max-w-2xl">
       <BackButton to="/admin/about" label="About" />
       <SectionHeader
-        title="Past Projects Timeline"
-        description="Horizontal-scroll timeline on the About page. Variable count."
+        title="Wheel Section"
+        description="Pinned scroll section on the About page. Items auto-number 01, 02, 03 in display order. Variable count."
       />
       <div className="space-y-3">
         {items.map((item, i) => (
@@ -137,7 +121,7 @@ export const TimelineAdmin = () => {
           className="flex items-center gap-2 border border-dashed border-white/20 px-4 py-2 text-xs font-bold tracking-[0.25em] text-white/40 uppercase transition-colors hover:border-white/40 hover:text-white/70"
         >
           <Plus size={12} />
-          Add Entry
+          Add Item
         </button>
       </div>
     </div>
