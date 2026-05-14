@@ -1,62 +1,59 @@
-import { AdminTextField, AdminTextareaField } from "../../components/fields"
+import { useMutation, useQuery } from "convex/react"
+import { api } from "../../../../convex/_generated/api"
+import type { Id } from "../../../../convex/_generated/dataModel"
+import { AdminConvexImageField } from "../../components/convex-image-field"
 import { BackButton, SectionHeader } from "../../components/misc"
-import { useContent } from "../../context/content-context"
+
+const SLOT_LABELS = [
+  "Slot 1 — top-left (laptop)",
+  "Slot 2 — upper-left (workspace)",
+  "Slot 3 — top-centre (icon)",
+  "Slot 4 — top-right (UI screenshot)",
+  "Slot 5 — left (studio)",
+  "Slot 6 — centre-left (graphic)",
+  "Slot 7 — right (logo card)",
+  "Slot 8 — far-right (camera lens)",
+  "Slot 9 — bottom-left (phone mockup)",
+  "Slot 10 — bottom-right (lifestyle)",
+]
 
 export const HeroAdmin = () => {
-  const { content, update } = useContent()
-  const hero = content.hero
+  const homepage = useQuery(api.homepage.get)
+  const patch = useMutation(api.homepage.patch)
 
-  const set = (key: keyof typeof hero, value: string) =>
-    update("hero", { ...hero, [key]: value })
+  if (homepage === undefined) return null
+
+  const bySlot = new Map<number, Id<"_storage">>()
+  for (const entry of homepage?.heroImages ?? []) {
+    bySlot.set(entry.slot, entry.image as Id<"_storage">)
+  }
+
+  const setSlot = async (index: number, id: Id<"_storage"> | null) => {
+    const next = new Map(bySlot)
+    if (id) next.set(index, id)
+    else next.delete(index)
+    const heroImages = [...next.entries()]
+      .toSorted(([a], [b]) => a - b)
+      .map(([slot, image]) => ({ slot, image }))
+    await patch({ heroImages })
+  }
 
   return (
     <div className="max-w-2xl">
       <BackButton to="/admin/homepage" label="Homepage" />
       <SectionHeader
-        title="Hero Banner — Labels"
-        description="Edit the metadata text labels that frame the 3D hero. The 3D scene itself is not editable here."
+        title="Hero — Scattered Images"
+        description="Upload the 10 images that float around the hero. Layout, position, and timing are fixed in code; only the images themselves are editable."
       />
 
-      <div className="mb-6 border border-white/10 bg-black px-6 py-5">
-        <p className="mb-4 text-2xs font-bold tracking-[0.3em] text-white/20 uppercase">
-          Preview
-        </p>
-        <div className="flex justify-between text-xs font-bold tracking-[0.35em] text-white/30 uppercase">
-          <div className="whitespace-pre-line">{hero.topLeft || "—"}</div>
-          <div className="text-right whitespace-pre-line">
-            {hero.topRight || "—"}
-          </div>
-        </div>
-        <div className="mt-6 flex justify-between text-xs font-bold tracking-[0.35em] text-white/15 uppercase">
-          <span>{hero.bottomLeft || "—"}</span>
-          <span>Scroll ↓</span>
-        </div>
-      </div>
-
-      <AdminTextareaField
-        label="Top Left (each line = one row of text)"
-        value={hero.topLeft}
-        onChange={(v) => set("topLeft", v)}
-        placeholder={"Marketing Agency\nCreative Production"}
-        rows={2}
-      />
-      <AdminTextareaField
-        label="Top Right (each line = one row of text)"
-        value={hero.topRight}
-        onChange={(v) => set("topRight", v)}
-        placeholder={"Social Satisfaction\nFull-Service Agency"}
-        rows={2}
-      />
-      <AdminTextField
-        label="Bottom Left"
-        value={hero.bottomLeft}
-        onChange={(v) => set("bottomLeft", v)}
-        placeholder="Marketing Agency"
-      />
-
-      <p className="mt-6 text-xs leading-relaxed text-white/25">
-        "Scroll ↓" on the bottom right is fixed and cannot be edited.
-      </p>
+      {SLOT_LABELS.map((label, i) => (
+        <AdminConvexImageField
+          key={i}
+          label={label}
+          value={bySlot.get(i) ?? null}
+          onChange={(v) => setSlot(i, v)}
+        />
+      ))}
     </div>
   )
 }

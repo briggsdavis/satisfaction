@@ -1,13 +1,16 @@
-import { AdminTextareaField, AdminTextField } from "../../components/fields"
+import { useMutation, useQuery } from "convex/react"
+import { api } from "../../../../convex/_generated/api"
+import {
+  ConvexTextareaField,
+  ConvexTextField,
+} from "../../components/convex-text-field"
 import { BackButton, SectionHeader } from "../../components/misc"
-import { useContent } from "../../context/content-context"
 
 export const WhatWeDoAdmin = () => {
-  const { content, update } = useContent()
-  const w = content.whatWeDo
+  const homepage = useQuery(api.homepage.get)
+  const patch = useMutation(api.homepage.patch)
 
-  const set = (key: keyof typeof w, value: string) =>
-    update("whatWeDo", { ...w, [key]: value })
+  if (homepage === undefined) return null
 
   return (
     <div className="max-w-2xl">
@@ -21,10 +24,10 @@ export const WhatWeDoAdmin = () => {
         <p className="mb-4 text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
           Panel 1 — What We Do
         </p>
-        <AdminTextareaField
+        <ConvexTextareaField
           label="Body Text"
-          value={w.panel1Body}
-          onChange={(v) => set("panel1Body", v)}
+          value={homepage?.whatWeDoPanel1Body ?? ""}
+          onCommit={(v) => patch({ whatWeDoPanel1Body: v })}
           rows={5}
         />
       </div>
@@ -33,26 +36,26 @@ export const WhatWeDoAdmin = () => {
         <p className="mb-4 text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
           Panel 2 — Why We're Different
         </p>
-        <AdminTextField
+        <ConvexTextField
           label="Left Column Label"
-          value={w.panel2Col1Label}
-          onChange={(v) => set("panel2Col1Label", v)}
+          value={homepage?.whatWeDoPanel2Col1Label ?? ""}
+          onCommit={(v) => patch({ whatWeDoPanel2Col1Label: v })}
         />
-        <AdminTextareaField
+        <ConvexTextareaField
           label="Left Column Body"
-          value={w.panel2Col1Body}
-          onChange={(v) => set("panel2Col1Body", v)}
+          value={homepage?.whatWeDoPanel2Col1Body ?? ""}
+          onCommit={(v) => patch({ whatWeDoPanel2Col1Body: v })}
           rows={4}
         />
-        <AdminTextField
+        <ConvexTextField
           label="Right Column Label"
-          value={w.panel2Col2Label}
-          onChange={(v) => set("panel2Col2Label", v)}
+          value={homepage?.whatWeDoPanel2Col2Label ?? ""}
+          onCommit={(v) => patch({ whatWeDoPanel2Col2Label: v })}
         />
-        <AdminTextareaField
+        <ConvexTextareaField
           label="Right Column Body"
-          value={w.panel2Col2Body}
-          onChange={(v) => set("panel2Col2Body", v)}
+          value={homepage?.whatWeDoPanel2Col2Body ?? ""}
+          onCommit={(v) => patch({ whatWeDoPanel2Col2Body: v })}
           rows={4}
         />
       </div>

@@ -1,22 +1,28 @@
+import { useQuery } from "convex/react"
 import { Link } from "react-router"
-import { useContent } from "../admin/context/content-context"
-
-const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://www.instagram.com/socialsatisfaction" },
-  { label: "TikTok", href: "https://www.tiktok.com/@socialsatisfaction" },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/social-satisfaction/posts/?feedView=all",
-  },
-  {
-    label: "YouTube",
-    href: "https://www.youtube.com/@SocialSatisfactionAgency",
-  },
-]
+import { api } from "../../convex/_generated/api"
 
 export const Footer = () => {
-  const { content } = useContent()
-  const logoSrc = content.logo || "/logo/satisfaction.png"
+  const footer = useQuery(api.footer.get)
+  const info = useQuery(api.contact.getInfo)
+
+  const social: { label: string; href: string }[] = []
+  if (info?.instagram)
+    social.push({
+      label: "Instagram",
+      href: `https://www.instagram.com/${info.instagram}`,
+    })
+  if (info?.tiktok)
+    social.push({
+      label: "TikTok",
+      href: `https://www.tiktok.com/@${info.tiktok}`,
+    })
+  if (info?.linkedin) social.push({ label: "LinkedIn", href: info.linkedin })
+  if (info?.youtube)
+    social.push({
+      label: "YouTube",
+      href: `https://www.youtube.com/@${info.youtube}`,
+    })
 
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-black px-8 pt-32 pb-12 md:px-16">
@@ -24,14 +30,13 @@ export const Footer = () => {
         <div className="space-y-8">
           <Link to="/">
             <img
-              src={logoSrc}
+              src="/logo/satisfaction.png"
               alt="Social Satisfaction"
               className="h-12 w-auto md:h-14"
             />
           </Link>
-          <p className="max-w-xs text-sm leading-relaxed text-white/40">
-            Full-service marketing agency specialising in creative direction,
-            brand identity, and commercial production.
+          <p className="max-w-xs text-sm leading-relaxed whitespace-pre-line text-white/40">
+            {footer?.description}
           </p>
         </div>
 
@@ -58,7 +63,7 @@ export const Footer = () => {
             Social
           </h4>
           <ul className="space-y-4">
-            {SOCIAL_LINKS.map((item) => (
+            {social.map((item) => (
               <li key={item.label}>
                 <a
                   href={item.href}
@@ -77,9 +82,11 @@ export const Footer = () => {
           <h4 className="text-xs font-bold tracking-[0.3em] text-white/40 uppercase">
             Contact
           </h4>
-          <p className="text-sm font-light tracking-wide text-white/70">
-            info@socialsatisfaction.com
-          </p>
+          {info?.email && (
+            <p className="text-sm font-light tracking-wide text-white/70">
+              {info.email}
+            </p>
+          )}
           <Link to="/contact" className="btn-industrial-sm mt-4 inline-block">
             Start a Project
           </Link>

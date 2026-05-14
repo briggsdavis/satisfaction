@@ -1,167 +1,10 @@
+import { useQuery } from "convex/react"
 import { AnimatePresence, motion } from "motion/react"
 import React, { useEffect, useRef, useState } from "react"
-import { createPortal } from "react-dom"
 import { useLocation, useNavigationType, useSearchParams } from "react-router"
+import { api } from "../../convex/_generated/api"
 import { BrandingModal } from "../components/branding-modal"
 import { TextReveal } from "../components/text-reveal"
-
-// ─── FAQ Data ─────────────────────────────────────────────────────────────────
-const FAQ_SECTIONS = [
-  {
-    section: "What Am I Actually Getting?",
-    items: [
-      {
-        q: "What exactly is included in a monthly package?",
-        a: "You're getting more than content - you're getting a fully planned and executed marketing system. That includes strategy, campaign planning, production, editing, and rollout. Every piece is created with a purpose and built to work together.",
-      },
-      {
-        q: "How many photos/videos do we get?",
-        a: "We scope output based on your goals, but typically you're receiving high-volume, platform-ready content - short-form videos, photos, and campaign assets designed to last the entire month (and beyond).",
-      },
-      {
-        q: "Do we own the content?",
-        a: "Yes - you have full usage rights across your marketing channels: social, ads, website, email, etc.",
-      },
-    ],
-  },
-  {
-    section: "Pricing + Value",
-    items: [
-      {
-        q: "Why does this cost what it costs?",
-        a: "Because you're not hiring a shooter - you're hiring a full creative team. Strategy, production, editing, and campaign execution all live under one roof, which replaces multiple vendors and delivers better results.",
-      },
-      {
-        q: "Can we just do one shoot instead of a retainer?",
-        a: "You can - but one-off shoots create content. Retainers build momentum, consistency, and campaigns that actually drive results over time.",
-      },
-      {
-        q: "Can we scale up or down?",
-        a: "Yes. We can adjust production volume and campaign intensity depending on your season, goals, or budget.",
-      },
-    ],
-  },
-  {
-    section: "Strategy + Results",
-    items: [
-      {
-        q: "How will this bring in customers?",
-        a: "We don't just make content - we build campaigns designed to drive behavior. That means aligning visuals, messaging, and timing around real business goals like reservations, events, and menu pushes.",
-      },
-      {
-        q: "How do we know what's working?",
-        a: "We track performance monthly - what's driving engagement, clicks, and conversions - and adjust strategy accordingly.",
-      },
-    ],
-  },
-  {
-    section: "Production",
-    items: [
-      {
-        q: "How do shoot days work?",
-        a: "We come in with a full plan - shot lists, concepts, and direction - so everything is efficient, organized, and intentional.",
-      },
-      {
-        q: "Do we need to prepare anything?",
-        a: "We'll guide you on exactly what's needed - menu items, staff availability, setup - but we handle the heavy lifting.",
-      },
-      {
-        q: "Will you direct staff or talent?",
-        a: "Yes. We fully direct talent, staff, and scenes so everything feels natural but elevated.",
-      },
-    ],
-  },
-  {
-    section: "Social Media Management",
-    items: [
-      {
-        q: "Do you post for us or just give content?",
-        a: "We can do both. Many clients have us fully manage posting, scheduling, and rollout.",
-      },
-      {
-        q: "Do you write captions?",
-        a: "Yes - captions are written to match your brand voice and drive engagement.",
-      },
-      {
-        q: "Do you respond to comments/DMs?",
-        a: "We offer community management as part of full-service social.",
-      },
-    ],
-  },
-  {
-    section: "Campaign + Big Picture",
-    items: [
-      {
-        q: "Are you just making content or building campaigns?",
-        a: "We build campaigns. Every piece of content is part of a bigger strategy designed to drive results - not just fill your feed.",
-      },
-      {
-        q: "How do you approach launches or events?",
-        a: "We create full rollout strategies - teasers, launch content, paid support, and post-event recaps - so you get maximum visibility and impact.",
-      },
-    ],
-  },
-  {
-    section: "Creative Direction",
-    items: [
-      {
-        q: "Will you tell us what to shoot?",
-        a: "Yes - that's our job. We lead creative direction so you're never guessing.",
-      },
-      {
-        q: "What if we don't know what content we need?",
-        a: "Most clients don't - that's why we exist. We identify the opportunities and build the plan for you.",
-      },
-      {
-        q: "Can you match our brand?",
-        a: "We don't just match it - we elevate it while keeping it authentic.",
-      },
-    ],
-  },
-  {
-    section: "Logistics + Workflow",
-    items: [
-      {
-        q: "How long does it take to receive content?",
-        a: "Turnaround is typically within 1-2 weeks depending on scope.",
-      },
-      {
-        q: "Can we request revisions?",
-        a: "Yes - we include revision rounds to make sure everything aligns.",
-      },
-    ],
-  },
-  {
-    section: "The Real Questions",
-    items: [
-      {
-        q: "Will this actually make us stand out?",
-        a: "Yes - because we're not just creating content, we're building a cohesive brand presence that's designed to outperform your competition.",
-      },
-      {
-        q: "Is this going to be a headache?",
-        a: "No - we're built to take this off your plate. We handle planning, production, and execution so your team can stay focused on operations.",
-      },
-      {
-        q: "Do you actually understand restaurants?",
-        a: "Yes - this is our niche. Everything we create is built around what drives real traffic, orders, and guest experience.",
-      },
-    ],
-  },
-]
-
-// ─── Service options for dropdown ────────────────────────────────────────────
-const SERVICE_OPTIONS = [
-  { name: "Creative Direction", color: "#F59E0B" },
-  { name: "Photography", color: "#3B82F6" },
-  { name: "Branding", color: "#8B5CF6" },
-  { name: "Visual Identity", color: "#EC4899" },
-  { name: "Social Media", color: "#10B981" },
-  { name: "Email Marketing", color: "#EF4444" },
-  { name: "Graphic Design", color: "#06B6D4" },
-  { name: "Motion Graphics", color: "#F97316" },
-  { name: "Videography", color: "#6366F1" },
-]
 
 // ─── Form field components ────────────────────────────────────────────────────
 const TextField = ({
@@ -210,130 +53,107 @@ const TextareaField = ({
   </div>
 )
 
+// ─── Contact sidebar ─────────────────────────────────────────────────────────
+const ContactSidebar = () => {
+  const info = useQuery(api.contact.getInfo)
+  const i = info ?? ({} as NonNullable<typeof info>)
+  const items: { label: string; value?: string; href?: string }[] = [
+    {
+      label: "Email",
+      value: i.email,
+      href: i.email ? `mailto:${i.email}` : undefined,
+    },
+    {
+      label: "Phone",
+      value: i.phone,
+      href: i.phone ? `tel:${i.phone.replace(/\s+/g, "")}` : undefined,
+    },
+    { label: "Location", value: i.location },
+    {
+      label: "Instagram",
+      value: i.instagram ? `@${i.instagram}` : undefined,
+      href: i.instagram
+        ? `https://www.instagram.com/${i.instagram}/`
+        : undefined,
+    },
+  ]
+  return (
+    <div className="space-y-10">
+      {items.map((item) =>
+        item.value ? (
+          <div key={item.label}>
+            <p className="mb-1 text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
+              {item.label}
+            </p>
+            {item.href ? (
+              <a
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={
+                  item.href.startsWith("http")
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+                className="text-sm text-white/70 transition-colors hover:text-white"
+              >
+                {item.value}
+              </a>
+            ) : (
+              <p className="text-sm text-white/70">{item.value}</p>
+            )}
+          </div>
+        ) : null,
+      )}
+    </div>
+  )
+}
+
 // ─── Service dropdown ─────────────────────────────────────────────────────────
 const ServiceSelect = () => {
+  const services = useQuery(api.services.list) ?? []
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState<string | null>(null)
-  const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({})
-  const buttonRef = useRef<HTMLButtonElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const toggleMenu = () => {
-    if (!isOpen && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect()
-      setMenuStyle({
-        position: "fixed",
-        top: rect.bottom + 4,
-        left: rect.left,
-        width: rect.width,
-        zIndex: 99999,
-        backgroundColor: "#111111",
-        border: "1px solid rgba(255,255,255,0.2)",
-        boxShadow: "0 20px 60px rgba(0,0,0,0.95)",
-      })
-    }
-    setIsOpen((v) => !v)
-  }
-
   useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      const target = e.target as Element
+    if (!isOpen) return
+    const onPointerDown = (e: MouseEvent) => {
       if (
         containerRef.current &&
-        !containerRef.current.contains(target) &&
-        !target.closest?.("[data-service-menu]")
+        !containerRef.current.contains(e.target as Node)
       ) {
         setIsOpen(false)
       }
     }
-    document.addEventListener("mousedown", handleClick)
-    return () => document.removeEventListener("mousedown", handleClick)
-  }, [])
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false)
+    }
+    document.addEventListener("mousedown", onPointerDown)
+    document.addEventListener("keydown", onKey)
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown)
+      document.removeEventListener("keydown", onKey)
+    }
+  }, [isOpen])
 
-  const selectedOption = SERVICE_OPTIONS.find((s) => s.name === selected)
-
-  const menu = (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          data-service-menu=""
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.2 }}
-          style={menuStyle}
-        >
-          {SERVICE_OPTIONS.map((option) => (
-            <button
-              key={option.name}
-              type="button"
-              onClick={() => {
-                setSelected(option.name)
-                setIsOpen(false)
-              }}
-              style={{
-                display: "flex",
-                width: "100%",
-                alignItems: "center",
-                gap: "12px",
-                padding: "10px 16px",
-                textAlign: "left",
-                fontSize: "14px",
-                color: "rgba(255,255,255,0.6)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                ;(e.currentTarget as HTMLButtonElement).style.backgroundColor =
-                  "rgba(255,255,255,0.05)"
-                ;(e.currentTarget as HTMLButtonElement).style.color = "#fff"
-              }}
-              onMouseLeave={(e) => {
-                ;(e.currentTarget as HTMLButtonElement).style.backgroundColor =
-                  "transparent"
-                ;(e.currentTarget as HTMLButtonElement).style.color =
-                  "rgba(255,255,255,0.6)"
-              }}
-            >
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  backgroundColor: option.color,
-                  flexShrink: 0,
-                  display: "inline-block",
-                }}
-              />
-              {option.name}
-            </button>
-          ))}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
+  const selectedOption = services.find((s) => s.name === selected)
 
   return (
-    <div className="border-b border-white/10 py-5" ref={containerRef}>
+    <div className="border-b border-white/10 py-5">
       <p className="mb-2 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
         Service
       </p>
-      <div className="relative">
+      <div ref={containerRef} className="relative">
         <button
-          ref={buttonRef}
           type="button"
-          onClick={toggleMenu}
+          onClick={() => setIsOpen((v) => !v)}
           className="flex w-full items-center justify-between border-b border-white/20 pb-2 text-base transition-colors outline-none focus:border-white/50"
         >
           {selectedOption ? (
             <span className="flex items-center gap-2.5">
               <span
-                className="h-2 w-2 shrink-0"
-                style={{
-                  backgroundColor: selectedOption.color,
-                  borderRadius: "50%",
-                }}
+                className="h-2 w-2 shrink-0 rounded-full"
+                style={{ backgroundColor: selectedOption.color }}
               />
               <span className="text-white">{selectedOption.name}</span>
             </span>
@@ -349,7 +169,36 @@ const ServiceSelect = () => {
           </motion.span>
         </button>
 
-        {createPortal(menu, document.body)}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              style={{ backgroundColor: "#111111" }}
+              className="absolute top-full left-0 z-50 mt-1 w-full border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.95)]"
+            >
+              {services.map((option) => (
+                <button
+                  key={option._id}
+                  type="button"
+                  onClick={() => {
+                    setSelected(option.name)
+                    setIsOpen(false)
+                  }}
+                  className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-white"
+                >
+                  <span
+                    className="h-2 w-2 shrink-0 rounded-full"
+                    style={{ backgroundColor: option.color }}
+                  />
+                  {option.name}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <input type="hidden" name="service" value={selected ?? ""} />
       </div>
@@ -414,6 +263,88 @@ const FaqItem = ({
     </AnimatePresence>
   </div>
 )
+
+// ─── FAQ sections (Convex-backed) ─────────────────────────────────────────────
+const FaqSectionBlock = ({
+  sectionId,
+  name,
+  isLight,
+  openFaq,
+  onToggle,
+}: {
+  sectionId: import("../../convex/_generated/dataModel").Id<"faqSections">
+  name: string
+  isLight: boolean
+  openFaq: string | null
+  onToggle: (key: string) => void
+}) => {
+  const items = useQuery(api.contact.listFaqItems, { sectionId }) ?? []
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5 }}
+      className={`grid grid-cols-1 border-b lg:grid-cols-[1fr_2fr] ${
+        isLight ? "border-black/10 bg-white" : "border-white/10 bg-black"
+      }`}
+    >
+      <div
+        className={`border-b px-8 py-10 md:px-16 lg:border-r lg:border-b-0 ${
+          isLight ? "border-black/10" : "border-white/10"
+        }`}
+      >
+        <span
+          className={`text-xs font-bold tracking-[0.35em] uppercase ${
+            isLight ? "text-black/40" : "text-white/30"
+          }`}
+        >
+          {name}
+        </span>
+      </div>
+      <div className="px-8 py-10 md:px-16">
+        {items
+          .toSorted((a, b) => a.order - b.order)
+          .map((item) => {
+            const key = `${sectionId}-${item._id}`
+            return (
+              <FaqItem
+                key={item._id}
+                item={{ q: item.question, a: item.answer }}
+                isOpen={openFaq === key}
+                onToggle={() => onToggle(key)}
+                isLight={isLight}
+              />
+            )
+          })}
+      </div>
+    </motion.div>
+  )
+}
+
+const FaqSections = ({
+  openFaq,
+  onToggle,
+}: {
+  openFaq: string | null
+  onToggle: (key: string) => void
+}) => {
+  const sections = useQuery(api.contact.listFaqSections) ?? []
+  return (
+    <>
+      {sections.map((s, i) => (
+        <FaqSectionBlock
+          key={s._id}
+          sectionId={s._id}
+          name={s.name}
+          isLight={i % 2 === 0}
+          openFaq={openFaq}
+          onToggle={onToggle}
+        />
+      ))}
+    </>
+  )
+}
 
 // ─── Fit title ───────────────────────────────────────────────────────────────
 const FitTitle = ({
@@ -547,49 +478,7 @@ export const Contact = () => {
             Get In Touch
           </p>
 
-          <div className="space-y-10">
-            <div>
-              <p className="mb-1 text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
-                Email
-              </p>
-              <a
-                href="mailto:info@socialsatisfaction.com"
-                className="text-sm text-white/70 transition-colors hover:text-white"
-              >
-                info@socialsatisfaction.com
-              </a>
-            </div>
-            <div>
-              <p className="mb-1 text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
-                Phone
-              </p>
-              <a
-                href="tel:+14125550123"
-                className="text-sm text-white/70 transition-colors hover:text-white"
-              >
-                +1 (412) 555-0123
-              </a>
-            </div>
-            <div>
-              <p className="mb-1 text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
-                Location
-              </p>
-              <p className="text-sm text-white/70">Marketing Agency</p>
-            </div>
-            <div>
-              <p className="mb-1 text-xs font-bold tracking-[0.3em] text-white/30 uppercase">
-                Instagram
-              </p>
-              <a
-                href="https://www.instagram.com/socialsatisfaction/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-white/70 transition-colors hover:text-white"
-              >
-                @socialsatisfaction
-              </a>
-            </div>
-          </div>
+          <ContactSidebar />
         </BlurIn>
 
         {/* Form */}
@@ -616,7 +505,7 @@ export const Contact = () => {
                 placeholder=""
               />
             </BlurIn>
-            <BlurIn delay={0.34}>
+            <BlurIn delay={0.34} className="relative z-50">
               <ServiceSelect />
             </BlurIn>
             <BlurIn delay={0.42}>
@@ -638,6 +527,7 @@ export const Contact = () => {
       </section>
 
       {/* ── Branding Brief CTA ───────────────────────────────────────────── */}
+      {/*
       <section className="border-b border-white/10">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr]">
           <BlurIn
@@ -670,6 +560,7 @@ export const Contact = () => {
           </BlurIn>
         </div>
       </section>
+      */}
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section id="faq">
@@ -691,52 +582,7 @@ export const Contact = () => {
           <div className="hidden lg:block" />
         </div>
 
-        {/* Alternating FAQ sections — section name left, Q&A right */}
-        {FAQ_SECTIONS.map((section, i) => {
-          const isLight = i % 2 === 0
-          return (
-            <motion.div
-              key={section.section}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.5 }}
-              className={`grid grid-cols-1 border-b lg:grid-cols-[1fr_2fr] ${
-                isLight
-                  ? "border-black/10 bg-white"
-                  : "border-white/10 bg-black"
-              }`}
-            >
-              {/* Left: section label */}
-              <div
-                className={`border-b px-8 py-10 md:px-16 lg:border-r lg:border-b-0 ${
-                  isLight ? "border-black/10" : "border-white/10"
-                }`}
-              >
-                <span
-                  className={`text-xs font-bold tracking-[0.35em] uppercase ${
-                    isLight ? "text-black/40" : "text-white/30"
-                  }`}
-                >
-                  {section.section}
-                </span>
-              </div>
-
-              {/* Right: Q&A items */}
-              <div className="px-8 py-10 md:px-16">
-                {section.items.map((item, j) => (
-                  <FaqItem
-                    key={j}
-                    item={item}
-                    isOpen={openFaq === `${section.section}-${j}`}
-                    onToggle={() => toggleFaq(`${section.section}-${j}`)}
-                    isLight={isLight}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          )
-        })}
+        <FaqSections openFaq={openFaq} onToggle={toggleFaq} />
       </section>
 
       <BrandingModal

@@ -4,13 +4,13 @@ import { SectionHeader } from "../../components/misc"
 const sections = [
   {
     to: "hero",
-    label: "Hero Banner",
-    description: "Edit the corner metadata labels on the hero section",
+    label: "Hero — Scattered Images",
+    description: "Upload the 10 floating images around the hero",
   },
   {
     to: "brands",
-    label: "Brands Carousel",
-    description: "Add, edit, or remove client brand names",
+    label: "Logo Carousels",
+    description: "Manage logos in both homepage carousels",
   },
   {
     to: "what-we-do",
@@ -20,12 +20,17 @@ const sections = [
   {
     to: "campaign",
     label: "Campaign Statement",
-    description: "The 4-word animated tagline",
+    description: "The centered image behind the 'CAMPAIGNS' headline",
+  },
+  {
+    to: "faq-cta",
+    label: "FAQ CTA",
+    description: "Body paragraph in the homepage FAQ call-to-action",
   },
   {
     to: "featured",
     label: "Featured Projects",
-    description: "Choose which 3 projects appear in the homepage cascade",
+    description: "Managed via the Portfolio editor",
   },
 ]
 

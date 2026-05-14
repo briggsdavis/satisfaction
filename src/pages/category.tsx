@@ -1,13 +1,38 @@
+import { useQuery } from "convex/react"
 import { motion, useMotionValue, useTransform } from "motion/react"
 import React, { useEffect, useRef } from "react"
 import { Link, useNavigationType, useParams } from "react-router"
+import { api } from "../../convex/_generated/api"
+import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { BrandingProcess } from "../components/branding-process"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
 import { WebDevProcess } from "../components/web-dev-process"
-import { CATEGORIES, type Category, type Project } from "../lib/categories"
 
-// ─── Project card ─────────────────────────────────────────────────────────────
+type Category = Doc<"categories">
+type Project = Doc<"projects">
+
+const ProjectImage = ({
+  storageId,
+  alt,
+}: {
+  storageId: Id<"_storage"> | undefined
+  alt: string
+}) => {
+  const url = useQuery(api.files.getUrl, storageId ? { storageId } : "skip")
+  if (!url) return null
+  return (
+    <motion.img
+      src={url}
+      alt={alt}
+      loading="lazy"
+      className="h-full w-full object-cover"
+      whileHover={{ scale: 1.05 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    />
+  )
+}
+
 const ProjectCard = ({
   project,
   categorySlug,
@@ -31,15 +56,7 @@ const ProjectCard = ({
         ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       }}
     >
-      <motion.img
-        src={project.img}
-        alt={project.title}
-        loading="lazy"
-        referrerPolicy="no-referrer"
-        className="h-full w-full object-cover"
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      />
+      <ProjectImage storageId={project.coverImage} alt={project.title} />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/20" />
       <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
@@ -48,28 +65,12 @@ const ProjectCard = ({
             <span className="h-[6px] w-[6px] shrink-0 rounded-full bg-white/80" />
             {project.title}
           </span>
-          <span className="bg-black/60 px-2.5 py-1 text-xs font-bold tracking-[0.22em] text-white/50 uppercase backdrop-blur-sm">
-            {project.descriptor}
-          </span>
         </div>
       </div>
     </motion.div>
   </Link>
 )
 
-// ─── Grid item builder ────────────────────────────────────────────────────────
-// CTAs occupy "small" masonry slots (slot % 3 === 2 in the [full,small,small] repeat).
-// For 6+ projects: insert a CTA at every slot where slotIndex % 6 === 5.
-//   (5 % 3 === 2 → always a small slot ✓)
-// For fewer than 6 projects: splice one CTA at index 2 (also a small slot ✓).
-type GridItem = { kind: "project"; project: Project }
-
-function buildGridItems(projects: Project[]): GridItem[] {
-  return projects.map((project) => ({ kind: "project" as const, project }))
-}
-
-// ─── Masonry grid ─────────────────────────────────────────────────────────────
-// Renders items in the [full, small, small] repeating pattern.
 const MasonryGrid = ({
   projects,
   categorySlug,
@@ -77,17 +78,15 @@ const MasonryGrid = ({
   projects: Project[]
   categorySlug: string
 }) => {
-  const items = buildGridItems(projects)
   const rows: React.ReactNode[] = []
   let i = 0
   let animIdx = 0
 
-  while (i < items.length) {
-    // Full-width row
+  while (i < projects.length) {
     rows.push(
       <div key={`full-${i}`}>
         <ProjectCard
-          project={items[i].project}
+          project={projects[i]}
           categorySlug={categorySlug}
           className="h-[42vh]"
           index={animIdx++}
@@ -95,23 +94,22 @@ const MasonryGrid = ({
       </div>,
     )
     i++
-    if (i >= items.length) break
+    if (i >= projects.length) break
 
-    // Pair row
-    const left = items[i]
-    const right = i + 1 < items.length ? items[i + 1] : undefined
+    const left = projects[i]
+    const right = i + 1 < projects.length ? projects[i + 1] : undefined
 
     rows.push(
       <div key={`pair-${i}`} className="flex flex-col gap-4 md:flex-row">
         <ProjectCard
-          project={left.project}
+          project={left}
           categorySlug={categorySlug}
           className="h-[72vh] flex-1"
           index={animIdx++}
         />
         {right && (
           <ProjectCard
-            project={right.project}
+            project={right}
             categorySlug={categorySlug}
             className="h-[72vh] flex-1"
             index={animIdx++}
@@ -125,34 +123,21 @@ const MasonryGrid = ({
   return <>{rows}</>
 }
 
-// ─── Hero header: centered title → sticks to top on scroll ───────────────────
-//
-// Two-phase crossfade driven by SmoothScroll's smoothY MotionValue:
-//
-// Phase 1  (smoothY < crossover)
-//   Centered title has no y-transform — it scrolls up naturally with the page.
-//   viewport_y = sectionTop + vh/2 − titleH/2 − smoothY
-//
-// Phase 2  (smoothY > crossover)
-//   Pinned title: y = activeY counteracts the container's −smoothY translation,
-//   keeping the element fixed at top-0 in the viewport (content below pt-24
-//   clears the navbar).
-//
-// Crossover point: smoothY at which the centered title's top reaches navH (96px).
-//   crossover = (vh − titleH) / 2 − navH
-//
-// A 60px opacity crossfade blends the two phases seamlessly.
 const CategoryHero = ({ category }: { category: Category }) => {
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
   const navType = useNavigationType()
   const titleDelay = navType === "PUSH" ? 0.75 : 0
+  const heroUrl = useQuery(
+    api.files.getUrl,
+    category.image ? { storageId: category.image } : "skip",
+  )
 
   const centeredRef = useRef<HTMLDivElement>(null)
   const crossoverRef = useRef(0)
-  const NAV_H = 96 // px — matches pt-24
-  const FADE = 30 // px half-width of crossfade
+  const NAV_H = 96
+  const FADE = 30
 
   useEffect(() => {
     const measure = () => {
@@ -187,17 +172,17 @@ const CategoryHero = ({ category }: { category: Category }) => {
 
   return (
     <section className="relative h-screen">
-      {/* Hero image — scrolls away with normal page flow */}
       <div className="absolute inset-0">
-        <img
-          src={category.img}
-          alt={category.name}
-          className="h-full w-full object-cover"
-        />
+        {heroUrl && (
+          <img
+            src={heroUrl}
+            alt={category.name}
+            className="h-full w-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      {/* Phase 1: centered — no y-transform, scrolls with the page */}
       <motion.div
         style={{ opacity: centeredOpacity }}
         className="pointer-events-none absolute inset-0 flex items-center justify-center px-8 md:px-16"
@@ -212,7 +197,6 @@ const CategoryHero = ({ category }: { category: Category }) => {
         </div>
       </motion.div>
 
-      {/* Phase 2: pinned — y:activeY cancels -smoothY, locks element at top-0 */}
       <motion.div
         style={{ y: activeY, opacity: pinnedOpacity }}
         className="pointer-events-none absolute inset-x-0 top-0 z-50"
@@ -231,10 +215,18 @@ const CategoryHero = ({ category }: { category: Category }) => {
   )
 }
 
-// ─── Category page ────────────────────────────────────────────────────────────
 export const CategoryPage = () => {
   const { category: slug } = useParams<{ category: string }>()
-  const category = CATEGORIES.find((c) => c.slug === slug)
+  const category = useQuery(
+    api.portfolio.getCategoryBySlug,
+    slug ? { slug } : "skip",
+  )
+  const projects = useQuery(
+    api.portfolio.listProjectsByCategory,
+    category ? { categoryId: category._id } : "skip",
+  )
+
+  if (category === undefined || projects === undefined) return null
 
   if (!category) {
     return (
@@ -253,36 +245,26 @@ export const CategoryPage = () => {
 
   return (
     <div>
-      {/* Hero — full-viewport with sticky title */}
       <CategoryHero category={category} />
 
-      {/* Overview section */}
       <section className="border-b border-white/10 px-8 py-20 md:px-16">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-8">
           <h2 className="text-3xl leading-[1.15] font-bold tracking-tight md:col-span-2 md:text-4xl">
-            {category.overview.headline}
+            {category.headline}
           </h2>
           <p className="text-base leading-relaxed text-white/60 md:col-span-2 md:text-lg">
-            {category.overview.description}
+            {category.description}
           </p>
         </div>
       </section>
 
-      {/* Web development: scroll-pinned animated process section */}
       {category.slug === "web-development" && <WebDevProcess />}
-
-      {/* Branding: scroll-driven zigzag path with checkpoints */}
       {category.slug === "branding" && <BrandingProcess />}
 
-      {/* Project grid with CTA blocks */}
       <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
-        <MasonryGrid
-          projects={category.projects}
-          categorySlug={category.slug}
-        />
+        <MasonryGrid projects={projects} categorySlug={category.slug} />
       </div>
 
-      {/* Bottom nav */}
       <div className="flex items-center justify-between border-t border-white/10 px-8 py-16 md:px-16">
         <Link to="/portfolio" className="btn-industrial">
           ← All Categories

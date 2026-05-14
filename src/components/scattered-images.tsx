@@ -1,7 +1,9 @@
+import { useQuery } from "convex/react"
 import { motion, MotionValue, useTransform } from "motion/react"
+import { api } from "../../convex/_generated/api"
+import type { Id } from "../../convex/_generated/dataModel"
 
-type ImageDef = {
-  src: string
+type SlotDef = {
   top: string
   left: string
   width: string
@@ -12,12 +14,10 @@ type ImageDef = {
   rotation: number
 }
 
-// Positions, sizes, and aspect ratios derived directly from the reference mockup.
-// Heights use vw units to preserve aspect ratios across screen sizes.
-const IMAGES: ImageDef[] = [
+// Slot layout (positions/sizes/timing) is fixed in code — admin only swaps the 10 images.
+const SLOTS: SlotDef[] = [
   // A — top-left: laptop / coding photo (landscape ~3:2)
   {
-    src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80",
     top: "12vh",
     left: "16vw",
     width: "14vw",
@@ -27,9 +27,8 @@ const IMAGES: ImageDef[] = [
     zoomIn: false,
     rotation: -4,
   },
-  // J — upper-left: creative workspace (landscape ~3:2) — 5th left-side image
+  // J — upper-left: creative workspace (landscape ~3:2)
   {
-    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&q=80",
     top: "16vh",
     left: "2vw",
     width: "11vw",
@@ -41,7 +40,6 @@ const IMAGES: ImageDef[] = [
   },
   // B — top-centre: icon / UI graphic (square)
   {
-    src: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=300&q=80",
     top: "10vh",
     left: "53vw",
     width: "9.5vw",
@@ -53,7 +51,6 @@ const IMAGES: ImageDef[] = [
   },
   // C — top-right: UI / website screenshot (very wide landscape ~16:7.5)
   {
-    src: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80",
     top: "13vh",
     left: "73vw",
     width: "18vw",
@@ -65,7 +62,6 @@ const IMAGES: ImageDef[] = [
   },
   // D — left: photo / video studio (wide landscape ~5:3)
   {
-    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
     top: "36vh",
     left: "3vw",
     width: "18vw",
@@ -77,7 +73,6 @@ const IMAGES: ImageDef[] = [
   },
   // E — centre-left: graphic design card (near-square)
   {
-    src: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80",
     top: "53vh",
     left: "22vw",
     width: "11vw",
@@ -89,7 +84,6 @@ const IMAGES: ImageDef[] = [
   },
   // F — right: brand / logo card (small near-square)
   {
-    src: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=300&q=80",
     top: "35vh",
     left: "71.5vw",
     width: "6vw",
@@ -101,7 +95,6 @@ const IMAGES: ImageDef[] = [
   },
   // G — far-right: camera lens (large square)
   {
-    src: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&q=80",
     top: "32vh",
     left: "80vw",
     width: "16vw",
@@ -113,7 +106,6 @@ const IMAGES: ImageDef[] = [
   },
   // H — bottom-left: phone app mockup (portrait ~3:4)
   {
-    src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=300&q=80",
     top: "75vh",
     left: "10.5vw",
     width: "7vw",
@@ -125,7 +117,6 @@ const IMAGES: ImageDef[] = [
   },
   // I — bottom-right: portfolio / lifestyle (landscape ~16:9.5)
   {
-    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&q=80",
     top: "76vh",
     left: "76vw",
     width: "17.5vw",
@@ -138,59 +129,57 @@ const IMAGES: ImageDef[] = [
 ]
 
 const ScatteredImage = ({
-  img,
+  slot,
+  src,
   scrollProgress,
 }: {
-  img: ImageDef
+  slot: SlotDef
+  src: string
   scrollProgress: MotionValue<number>
 }) => {
   const scrollScale = useTransform(
     scrollProgress,
     [0, 1],
-    img.zoomIn ? [1, 1.5] : [1, 0.1],
+    slot.zoomIn ? [1, 1.5] : [1, 0.1],
   )
 
   const scrollOpacity = useTransform(scrollProgress, [0, 0.8], [1, 0])
-  // Blur only applies to zoomOut images (the ones that shrink as you scroll).
-  // No overflow:hidden on the wrapper so the blur bleeds past the image edges.
   const blurPx = useTransform(scrollProgress, [0, 0.8], [0, 12])
   const blurFilter = useTransform(blurPx, (b: number) =>
-    !img.zoomIn ? `blur(${b}px)` : "none",
+    !slot.zoomIn ? `blur(${b}px)` : "none",
   )
 
   return (
     <motion.div
       style={{
         position: "absolute",
-        top: img.top,
-        left: img.left,
-        width: img.width,
-        height: img.height,
+        top: slot.top,
+        left: slot.left,
+        width: slot.width,
+        height: slot.height,
         scale: scrollScale,
-        rotate: img.rotation,
+        rotate: slot.rotation,
         boxShadow: "0 20px 50px -8px rgba(0,0,0,0.75)",
-        ...(img.zoomIn ? {} : { opacity: scrollOpacity }),
+        ...(slot.zoomIn ? {} : { opacity: scrollOpacity }),
       }}
     >
-      {/* No overflow:hidden here — lets the blur filter bleed beyond the rounded edges */}
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
         <motion.img
-          src={img.src}
+          src={src}
           alt=""
           aria-hidden
           className="h-full w-full object-cover"
           style={{ borderRadius: "16px", filter: blurFilter }}
           animate={{ scale: [1, 1.03, 1], opacity: [0.72, 0.88, 0.72] }}
           transition={{
-            duration: img.duration,
-            delay: img.delay,
+            duration: slot.duration,
+            delay: slot.delay,
             repeat: Infinity,
             ease: "easeInOut",
           }}
         />
       </div>
 
-      {/* Glass-floor mirror reflection — inherits outer div rotation naturally */}
       <motion.div
         aria-hidden
         style={{
@@ -205,13 +194,11 @@ const ScatteredImage = ({
           maskImage:
             "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%)",
           pointerEvents: "none",
-          // zoomOut images: the outer div already fades the whole card (incl. reflection).
-          // zoomIn images: only the reflection fades so the card itself stays fully visible.
-          ...(img.zoomIn ? { opacity: scrollOpacity } : {}),
+          ...(slot.zoomIn ? { opacity: scrollOpacity } : {}),
         }}
       >
         <img
-          src={img.src}
+          src={src}
           alt=""
           aria-hidden
           style={{
@@ -230,16 +217,46 @@ const ScatteredImage = ({
   )
 }
 
+const ResolvedScatteredImage = ({
+  slot,
+  storageId,
+  scrollProgress,
+}: {
+  slot: SlotDef
+  storageId: Id<"_storage">
+  scrollProgress: MotionValue<number>
+}) => {
+  const url = useQuery(api.files.getUrl, { storageId })
+  if (!url) return null
+  return (
+    <ScatteredImage slot={slot} src={url} scrollProgress={scrollProgress} />
+  )
+}
+
 export function ScatteredImages({
   scrollProgress,
 }: {
   scrollProgress: MotionValue<number>
 }) {
+  const homepage = useQuery(api.homepage.get)
+  const bySlot = new Map<number, Id<"_storage">>()
+  for (const entry of homepage?.heroImages ?? []) {
+    bySlot.set(entry.slot, entry.image)
+  }
   return (
     <div className="pointer-events-none fixed inset-0 z-[3] overflow-hidden">
-      {IMAGES.map((img, i) => (
-        <ScatteredImage key={i} img={img} scrollProgress={scrollProgress} />
-      ))}
+      {SLOTS.map((slot, i) => {
+        const id = bySlot.get(i)
+        if (!id) return null
+        return (
+          <ResolvedScatteredImage
+            key={i}
+            slot={slot}
+            storageId={id}
+            scrollProgress={scrollProgress}
+          />
+        )
+      })}
     </div>
   )
 }

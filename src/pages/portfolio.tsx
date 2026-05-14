@@ -1,10 +1,34 @@
+import { useQuery } from "convex/react"
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 import { Link, useNavigationType } from "react-router"
+import { api } from "../../convex/_generated/api"
+import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { TextReveal } from "../components/text-reveal"
-import { CATEGORIES, type Category } from "../lib/categories"
 
-// ─── Single category image card ───────────────────────────────────────────────
+type Category = Doc<"categories">
+
+const CategoryImage = ({
+  storageId,
+  alt,
+}: {
+  storageId: Id<"_storage"> | undefined
+  alt: string
+}) => {
+  const url = useQuery(api.files.getUrl, storageId ? { storageId } : "skip")
+  if (!url) return null
+  return (
+    <motion.img
+      src={url}
+      alt={alt}
+      loading="lazy"
+      className="h-full w-full object-cover"
+      whileHover={{ scale: 1.05 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    />
+  )
+}
+
 const CategoryCard = ({
   category,
   className = "",
@@ -21,26 +45,12 @@ const CategoryCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Background image */}
-      <motion.img
-        src={category.img}
-        alt={category.name}
-        loading="lazy"
-        referrerPolicy="no-referrer"
-        className="h-full w-full object-cover"
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      />
+      <CategoryImage storageId={category.image} alt={category.name} />
 
-      {/* Permanent gradient from bottom */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
-
-      {/* Bottom border line */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/20" />
 
-      {/* Bottom-left overlay */}
       <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-        {/* Bullet points — expand on hover */}
         <AnimatePresence>
           {hovered && (
             <motion.div
@@ -74,7 +84,6 @@ const CategoryCard = ({
           )}
         </AnimatePresence>
 
-        {/* Category title — visible on hover for all cards */}
         <AnimatePresence>
           {hovered && (
             <motion.div
@@ -99,15 +108,83 @@ const CategoryCard = ({
   )
 }
 
-// ─── Portfolio page ───────────────────────────────────────────────────────────
-// Layout: full → split → full → split → full → split  (9 categories total)
+// Repeating layout template — capacities [1, 2, 3, 2, 1, 2] = 11 per cycle.
+// Each "group" type renders the slice of categories it consumes; renderer
+// walks the template and picks groups that fit the remaining count.
+type GroupKind =
+  | "full" // 1
+  | "pair" // 2
+  | "wideTwo" // 3 (wide top + 2 under)
+const TEMPLATE: GroupKind[] = [
+  "full",
+  "pair",
+  "wideTwo",
+  "pair",
+  "full",
+  "pair",
+]
+const GROUP_SIZE: Record<GroupKind, number> = {
+  full: 1,
+  pair: 2,
+  wideTwo: 3,
+}
+
+const renderGroup = (
+  kind: GroupKind,
+  cats: Category[],
+  key: string,
+): React.ReactNode => {
+  if (kind === "full") {
+    return <CategoryCard key={key} category={cats[0]} className="h-[42vh]" />
+  }
+  if (kind === "pair") {
+    return (
+      <div key={key} className="flex flex-col gap-4 md:flex-row">
+        <CategoryCard category={cats[0]} className="h-[56vh] flex-1" />
+        {cats[1] && (
+          <CategoryCard category={cats[1]} className="h-[56vh] flex-1" />
+        )}
+      </div>
+    )
+  }
+  return (
+    <div key={key} className="flex flex-col gap-4">
+      <CategoryCard category={cats[0]} className="h-[40vh]" />
+      <div className="flex flex-col gap-4 md:flex-row">
+        {cats[1] && (
+          <CategoryCard category={cats[1]} className="h-[34vh] flex-1" />
+        )}
+        {cats[2] && (
+          <CategoryCard category={cats[2]} className="h-[34vh] flex-1" />
+        )}
+      </div>
+    </div>
+  )
+}
+
+const renderTemplate = (cats: Category[]): React.ReactNode[] => {
+  const out: React.ReactNode[] = []
+  let i = 0
+  let t = 0
+  while (i < cats.length) {
+    const kind = TEMPLATE[t % TEMPLATE.length]
+    const size = GROUP_SIZE[kind]
+    const slice = cats.slice(i, i + size)
+    if (slice.length === 0) break
+    out.push(renderGroup(kind, slice, `${t}-${i}`))
+    i += size
+    t++
+  }
+  return out
+}
+
 export const Portfolio = () => {
   const navType = useNavigationType()
   const titleDelay = navType === "PUSH" ? 0.75 : 0
+  const categories = useQuery(api.portfolio.listCategories) ?? []
 
   return (
     <div className="pt-32">
-      {/* Page header */}
       <section className="border-b border-white/10 px-8 pb-16 text-center md:px-16">
         <span className="mb-6 block text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
           Selected Work
@@ -120,43 +197,8 @@ export const Portfolio = () => {
         />
       </section>
 
-      {/* Vertical masonry grid — mirrors FeaturedCascade pattern rotated 90° */}
       <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
-        {/* Row 1 — full width */}
-        <CategoryCard category={CATEGORIES[0]} className="h-[42vh]" />
-
-        {/* Row 2 — 2 equal columns */}
-        <div className="flex flex-col gap-4 md:flex-row">
-          <CategoryCard category={CATEGORIES[1]} className="h-[56vh] flex-1" />
-          <CategoryCard category={CATEGORIES[2]} className="h-[56vh] flex-1" />
-        </div>
-
-        {/* Row 3 — wide top + two under */}
-        <div className="flex flex-col gap-4">
-          <CategoryCard category={CATEGORIES[3]} className="h-[40vh]" />
-          <div className="flex flex-col gap-4 md:flex-row">
-            <CategoryCard
-              category={CATEGORIES[4]}
-              className="h-[34vh] flex-1"
-            />
-            <CategoryCard
-              category={CATEGORIES[5]}
-              className="h-[34vh] flex-1"
-            />
-          </div>
-        </div>
-
-        {/* Row 4 — 2 equal columns */}
-        <div className="flex flex-col gap-4 md:flex-row">
-          <CategoryCard category={CATEGORIES[6]} className="h-[56vh] flex-1" />
-          <CategoryCard category={CATEGORIES[7]} className="h-[56vh] flex-1" />
-        </div>
-
-        {/* Row 5 — 2 equal columns (web-development + motion-graphics) */}
-        <div className="flex flex-col gap-4 md:flex-row">
-          <CategoryCard category={CATEGORIES[8]} className="h-[56vh] flex-1" />
-          <CategoryCard category={CATEGORIES[9]} className="h-[56vh] flex-1" />
-        </div>
+        {renderTemplate(categories)}
       </div>
     </div>
   )

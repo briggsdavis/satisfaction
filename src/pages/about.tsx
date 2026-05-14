@@ -1,3 +1,4 @@
+import { useQuery } from "convex/react"
 import {
   AnimatePresence,
   MotionValue,
@@ -8,72 +9,56 @@ import {
 } from "motion/react"
 import React, { useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
+import { api } from "../../convex/_generated/api"
+import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { AboutHero } from "../components/about-hero"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { LogosCarousel } from "./home/brands-carousel"
 import { FeaturedCascade } from "./home/featured-cascade"
 
-// ─── Values data + card ───────────────────────────────────────────────────────
-const values = [
-  {
-    label: "CULTURE",
-    img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=600",
-    offset: "mt-20",
-    delay: 0,
-    body: "Culture isn't a backdrop, it's your product. We build content that makes people feel like they're already part of your world, translating your hospitality vision into storytelling that drives aspiration and belonging.",
-  },
-  {
-    label: "DYNAMICS",
-    img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=600",
-    offset: "mt-10",
-    delay: 0.1,
-    body: "The market doesn't wait. Our in-house production model means we can turn a campaign concept around in days, not weeks, keeping your brand responsive to trends, seasons, and competitive shifts without losing cohesion.",
-  },
-  {
-    label: "CREATIVITY",
-    img: "https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&q=80&w=600",
-    offset: "mt-32",
-    delay: 0.2,
-    body: "Originality is what makes people stop scrolling. We develop visual identities and campaign narratives unique to each brand, never templated, never recycled. Every element is intentional and designed to make your brand unmistakable.",
-  },
-]
+type ValueItem = {
+  image?: Id<"_storage">
+  label: string
+  body: string
+}
 
-const timeline = [
-  {
-    date: "2021–2025",
-    client: "BRAND ACTIVATIONS",
-    campaign: "IMMERSIVE EVENTS",
-    role: "CREATIVE DIRECTION",
-    description:
-      "Led creative direction for high-impact experiential events including the House of Balloons Halloween series and annual Singles Only campaigns. Storytelling-driven aesthetics integrated brands like Boston Beer Company, Beam Suntory, and Teremana Tequila into specific cultural moments.",
-  },
-  {
-    date: "2021–2024",
-    client: "VISUAL IDENTITY",
-    campaign: "PACKAGING & BRANDING",
-    role: "BRAND DESIGN",
-    description:
-      "Developed comprehensive brand identities and physical packaging for emerging companies including Alison Cosmetics and High End Sweets. Projects focused on bespoke logo design, strategic color palettes, and luxury positioning to establish immediate market recognition and shelf appeal.",
-  },
-  {
-    date: "2022–2023",
-    client: "COMMERCIAL CONTENT",
-    campaign: "PRODUCT CAMPAIGNS",
-    role: "CREATIVE DIRECTION",
-    description:
-      "Directed high-production photoshoots and visual narratives for legacy brands including Absolut Vodka, Blue Moon, Nike, and Maker's Mark. Each campaign translated product attributes into aspirational lifestyle content, driving organic engagement and digital amplification across social platforms.",
-  },
-  {
-    date: "2024–2025",
-    client: "HOSPITALITY REBRANDS",
-    campaign: null,
-    role: "DIGITAL & PHYSICAL TRANSFORMATION",
-    description:
-      "Executed end-to-end digital and physical transformations for hospitality clients including Yuzu Kitchen, Lilith, EYV, and Shorty's. Delivered website redesigns, SEO optimization, and social media management to increase foot traffic through cohesive storytelling.",
-  },
-]
+type WheelItem = Doc<"aboutWheel">
+type TimelineItem = Doc<"aboutTimeline">
 
-const ValueCard = ({ value }: { value: (typeof values)[0] }) => {
+// Per-card layout offsets (fixed 3) — hand-tuned non-uniform Pinterest feel
+const VALUE_OFFSETS = ["mt-20", "mt-10", "mt-32"]
+const VALUE_DELAYS = [0, 0.1, 0.2]
+
+const ValueImage = ({
+  storageId,
+  alt,
+  imgY,
+}: {
+  storageId: Id<"_storage"> | undefined
+  alt: string
+  imgY: MotionValue<string>
+}) => {
+  const url = useQuery(api.files.getUrl, storageId ? { storageId } : "skip")
+  if (!url) return null
+  return (
+    <motion.img
+      src={url}
+      alt={alt}
+      className="absolute inset-0 h-[130%] w-full object-cover will-change-transform [backface-visibility:hidden]"
+      style={{ y: imgY, top: "-15%" }}
+    />
+  )
+}
+
+const ValueCard = ({
+  value,
+  offset,
+  delay,
+}: {
+  value: ValueItem
+  offset: string
+  delay: number
+}) => {
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
@@ -84,24 +69,19 @@ const ValueCard = ({ value }: { value: (typeof values)[0] }) => {
   return (
     <motion.div
       ref={containerRef}
-      className={`relative z-[2] flex-1 ${value.offset} cursor-pointer text-left`}
+      className={`relative z-[2] flex-1 ${offset} cursor-pointer text-left`}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{
         duration: 0.7,
-        delay: value.delay,
+        delay,
         ease: [0.22, 1, 0.36, 1],
       }}
       onClick={() => setIsOpen((v) => !v)}
     >
       <div className="relative aspect-2/3 w-full overflow-hidden">
-        <motion.img
-          src={value.img}
-          alt={value.label}
-          className="absolute inset-0 h-[130%] w-full object-cover will-change-transform [backface-visibility:hidden]"
-          style={{ y: imgY, top: "-15%" }}
-        />
+        <ValueImage storageId={value.image} alt={value.label} imgY={imgY} />
         <div className="absolute bottom-3 left-3 z-10">
           <span className="flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-xs font-bold tracking-[0.22em] text-white uppercase backdrop-blur-sm">
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-white/80" />
@@ -129,43 +109,37 @@ const ValueCard = ({ value }: { value: (typeof values)[0] }) => {
 }
 
 // ─── Wheel section ────────────────────────────────────────────────────────────
-const WHEEL_PAIRS = [
-  {
-    number: "01",
-    heading: "Who We Are",
-    text: "Social Satisfaction, founded by Devon Colebank, transforms hospitality and lifestyle brands through cultural storytelling. We blend nostalgia with modern innovation to create resonant identities that bridge the gap between trend-forward messaging and striking visuals.",
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=900",
-  },
-  {
-    number: "02",
-    heading: "How We Work",
-    text: "We replace 'shoot and share' tactics with performance-driven campaigns. As an end-to-end partner, we manage everything from ideation to execution. This streamlined structure ensures every effort is intentional, cohesive, and designed to drive reservations.",
-    img: "https://images.unsplash.com/photo-1542744094-24638eff58bb?auto=format&fit=crop&q=80&w=900",
-  },
-  {
-    number: "03",
-    heading: "What We Deliver",
-    text: "By integrating strategy with internal production, we eliminate fragmented communication and multiple vendors. Every piece of content serves a business objective. The result is a consistent, optimized rollout that delivers measurable brand loyalty.",
-    img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=900",
-  },
-]
 
-// Individual wheel item — hooks called at component level (not in a loop)
+const WheelImage = ({
+  storageId,
+  alt,
+}: {
+  storageId: Id<"_storage"> | undefined
+  alt: string
+}) => {
+  const url = useQuery(api.files.getUrl, storageId ? { storageId } : "skip")
+  if (!url) return null
+  return (
+    <img
+      src={url}
+      alt={alt}
+      className="h-full w-full object-cover"
+      loading="lazy"
+    />
+  )
+}
+
 const WheelPair = ({
   item,
   index,
   n,
   progress,
 }: {
-  item: (typeof WHEEL_PAIRS)[0]
+  item: WheelItem
   index: number
   n: number
   progress: MotionValue<number>
 }) => {
-  // Sequential visibility: each section is fully invisible outside its range.
-  // The boundary between item i and i+1 is the midpoint of their centers.
-  // Item i fades out over [boundary - fade, boundary]; item i+1 fades in over
-  // [boundary, boundary + fade] — so they are never simultaneously visible.
   const leftBound = index === 0 ? 0 : (2 * index - 1) / (2 * (n - 1))
   const rightBound = index === n - 1 ? 1 : (2 * index + 1) / (2 * (n - 1))
   const fade = 0.08
@@ -179,40 +153,35 @@ const WheelPair = ({
     index === 0 ? [1, 1, 0] : index === n - 1 ? [0, 1, 1] : [0, 1, 1, 0]
   const opacity = useTransform(progress, opacityInput, opacityOutput)
 
+  // Auto-numbering "01", "02", ...
+  const number = String(index + 1).padStart(2, "0")
+
   return (
     <motion.div
       style={{ opacity }}
       className="absolute inset-0 flex flex-col items-center justify-center gap-10 px-8 pt-24 md:flex-row md:gap-16 md:px-16"
     >
-      {/* Left: text — always left-aligned */}
       <div className="flex-1">
         <p className="mb-3 text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
-          {item.number}
+          {number}
         </p>
         <h3 className="massive-text mb-6 text-4xl leading-tight font-bold uppercase md:text-6xl lg:text-7xl">
           {item.heading}
         </h3>
-        <p className="max-w-lg text-lg leading-relaxed font-light text-white/70">
-          {item.text}
+        <p className="max-w-lg text-lg leading-relaxed font-light whitespace-pre-line text-white/70">
+          {item.body}
         </p>
       </div>
 
-      {/* Right: image */}
       <div className="hidden w-[42%] shrink-0 md:block">
         <div className="aspect-[4/5] overflow-hidden">
-          <img
-            src={item.img}
-            alt={item.heading}
-            className="h-full w-full object-cover"
-            loading="lazy"
-          />
+          <WheelImage storageId={item.image} alt={item.heading} />
         </div>
       </div>
     </motion.div>
   )
 }
 
-// Progress dots (right-side indicator)
 const WheelDot = ({
   index,
   n,
@@ -241,7 +210,7 @@ const WheelDot = ({
   )
 }
 
-const WheelSection = () => {
+const WheelSection = ({ items }: { items: WheelItem[] }) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const wrapperTopRef = useRef(0)
   const pinDistRef = useRef(0)
@@ -251,9 +220,11 @@ const WheelSection = () => {
   const fallbackY = useMotionValue(0)
   const activeY = smoothY ?? fallbackY
 
+  const n = items.length
+
   useEffect(() => {
     const measure = () => {
-      const dist = window.innerHeight * (WHEEL_PAIRS.length - 1)
+      const dist = Math.max(0, window.innerHeight * (n - 1))
       pinDistRef.current = dist
       setPinDist(dist)
       if (wrapperRef.current) {
@@ -264,7 +235,7 @@ const WheelSection = () => {
     requestAnimationFrame(() => requestAnimationFrame(measure))
     window.addEventListener("resize", measure)
     return () => window.removeEventListener("resize", measure)
-  }, [smoothY])
+  }, [smoothY, n])
 
   const pinY = useTransform(activeY, (y: number) => {
     const T = wrapperTopRef.current
@@ -282,6 +253,8 @@ const WheelSection = () => {
     return (y - T) / D
   })
 
+  if (n === 0) return null
+
   return (
     <div
       ref={wrapperRef}
@@ -289,25 +262,19 @@ const WheelSection = () => {
       style={{ height: `calc(${pinDist}px + 100vh)` }}
     >
       <motion.div style={{ y: pinY }} className="relative h-screen">
-        {/* Right-side progress dots */}
         <div className="pointer-events-none absolute top-1/2 right-8 z-10 flex -translate-y-1/2 flex-col gap-3 md:right-16">
-          {WHEEL_PAIRS.map((_, i) => (
-            <WheelDot
-              key={i}
-              index={i}
-              n={WHEEL_PAIRS.length}
-              progress={progress}
-            />
+          {items.map((item, i) => (
+            <WheelDot key={item._id} index={i} n={n} progress={progress} />
           ))}
         </div>
 
         <div className="h-full">
-          {WHEEL_PAIRS.map((item, i) => (
+          {items.map((item, i) => (
             <WheelPair
-              key={i}
+              key={item._id}
               item={item}
               index={i}
-              n={WHEEL_PAIRS.length}
+              n={n}
               progress={progress}
             />
           ))}
@@ -317,11 +284,15 @@ const WheelSection = () => {
   )
 }
 
-// ─── About page ───────────────────────────────────────────────────────────────
 export const About = () => {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const horizontalRef = useRef<HTMLDivElement>(null)
   const [scrollDistance, setScrollDistance] = useState(0)
+
+  const wheelItems = useQuery(api.about.listWheel) ?? []
+  const timeline = useQuery(api.about.listTimeline) ?? []
+  const about = useQuery(api.about.get)
+  const valueItems: ValueItem[] = (about?.values ?? []).slice(0, 3)
 
   const smoothY = useSmoothScroll()
   const fallbackY = useMotionValue(0)
@@ -357,12 +328,8 @@ export const About = () => {
         setScrollDistance(dist)
       }
     }
-    // Initial measurement
     requestAnimationFrame(() => requestAnimationFrame(measure))
     window.addEventListener("resize", measure)
-    // Re-measure whenever the document height changes — this fires after child
-    // components (e.g. WheelSection) setState and re-render, so wrapperTopRef
-    // always reflects the true post-layout position of the timeline wrapper.
     const ro = new ResizeObserver(() => requestAnimationFrame(measure))
     ro.observe(document.documentElement)
     return () => {
@@ -389,7 +356,6 @@ export const About = () => {
     return -(y - T)
   })
 
-  // Progress for the timeline indicator line (0 → 1)
   const timelineProgress = useTransform(activeY, (y: number) => {
     const T = wrapperTopRef.current
     const D = scrollDistanceRef.current
@@ -402,7 +368,6 @@ export const About = () => {
     <>
       <AboutHero />
 
-      {/* Decorative column lines */}
       {[...Array(7)].map((_, i) => (
         <motion.div
           key={i}
@@ -416,10 +381,9 @@ export const About = () => {
       ))}
 
       <motion.div style={{ opacity: contentOpacity }} className="pt-[62vh]">
-        {/* ── Wheel section (new) ───────────────────────────────────────── */}
-        <WheelSection />
+        <WheelSection items={wheelItems} />
 
-        {/* ── Portfolio Timeline ────────────────────────────────────────── */}
+        {/* Past Projects timeline */}
         <div
           ref={wrapperRef}
           className="relative"
@@ -429,7 +393,6 @@ export const About = () => {
             style={{ y: pinY }}
             className="flex h-screen flex-col overflow-hidden"
           >
-            {/* Compact header */}
             <div className="flex-shrink-0 px-8 pt-40 pb-[3px] md:px-16">
               <h2 className="text-xs font-bold tracking-widest text-white/40 uppercase">
                 PORTFOLIO
@@ -439,7 +402,6 @@ export const About = () => {
               </h3>
             </div>
 
-            {/* Progress bar */}
             <div className="relative mx-8 mt-5 mb-1 h-[3px] bg-white/10 md:mx-16">
               <motion.div
                 className="absolute inset-y-0 left-0 h-full w-full bg-white/70"
@@ -450,16 +412,15 @@ export const About = () => {
               />
             </div>
 
-            {/* Scrolling cards */}
             <div className="ml-8 flex flex-1 items-start overflow-hidden pt-5 md:ml-16">
               <motion.div
                 ref={horizontalRef}
                 style={{ x }}
                 className="flex gap-24 pr-8 md:pr-16"
               >
-                {timeline.map((item) => (
+                {(timeline as TimelineItem[]).map((item) => (
                   <div
-                    key={item.date + "-" + item.client}
+                    key={item._id}
                     className="w-[85vw] flex-shrink-0 md:w-[45vw]"
                   >
                     <div>
@@ -478,7 +439,7 @@ export const About = () => {
                         {item.role}
                       </p>
                       {item.description && (
-                        <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
+                        <p className="mt-6 max-w-lg text-lg leading-relaxed whitespace-pre-line text-white/60">
                           {item.description}
                         </p>
                       )}
@@ -490,22 +451,28 @@ export const About = () => {
           </motion.div>
         </div>
 
-        {/* ── Logos carousel ────────────────────────────────────────────── */}
-        <LogosCarousel />
+        <LogosCarousel carousel="work" />
 
-        {/* ── Featured projects ─────────────────────────────────────────── */}
         <FeaturedCascade />
 
-        {/* ── Values Images ─────────────────────────────────────────────── */}
+        {/* Value cards (fixed 3) */}
         <div className="px-8 pt-[54px] pb-6 md:px-16 md:pt-[82px] md:pb-8">
           <div className="flex items-start gap-3 md:gap-5">
-            {values.map((value) => (
-              <ValueCard key={value.label} value={value} />
-            ))}
+            {[0, 1, 2].map((i) => {
+              const v = valueItems[i] ?? { label: "", body: "" }
+              return (
+                <ValueCard
+                  key={i}
+                  value={v}
+                  offset={VALUE_OFFSETS[i]}
+                  delay={VALUE_DELAYS[i]}
+                />
+              )
+            })}
           </div>
         </div>
 
-        {/* ── Branding CTA ──────────────────────────────────────────────── */}
+        {/* Branding CTA */}
         <div className="border-t border-white/10 px-8 py-16 md:px-16">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
@@ -522,7 +489,6 @@ export const About = () => {
           </div>
         </div>
 
-        {/* ── Discover CTA ──────────────────────────────────────────────── */}
         <div className="flex justify-center border-t border-white/10 py-12">
           <Link to="/services" className="btn-industrial">
             Discover Our Services

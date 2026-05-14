@@ -1,117 +1,65 @@
+import { useQuery } from "convex/react"
 import { motion } from "motion/react"
 import React, { useRef } from "react"
 import { Link } from "react-router"
+import { api } from "../../../convex/_generated/api"
+import type { Doc, Id } from "../../../convex/_generated/dataModel"
 
-type ServiceCardDef = {
-  service: string
-  inverted: boolean
-  rotate: number
-  delay: number
-  img: string
+type Service = Doc<"services">
+
+const CardImage = ({
+  storageId,
+  alt,
+}: {
+  storageId: Id<"_storage">
+  alt: string
+}) => {
+  const url = useQuery(api.files.getUrl, { storageId })
+  if (!url) return null
+  return (
+    <img
+      src={url}
+      alt={alt}
+      draggable={false}
+      className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out select-none group-hover:scale-110"
+    />
+  )
 }
 
-const ALL_SERVICES: ServiceCardDef[] = [
-  {
-    service: "Creative Direction",
-    inverted: true,
-    rotate: -2.5,
-    delay: 0,
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    service: "Photography",
-    inverted: false,
-    rotate: 2,
-    delay: 0.08,
-    img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    service: "Branding & Visual Identity",
-    inverted: true,
-    rotate: -1.5,
-    delay: 0.16,
-    img: "https://images.unsplash.com/photo-1542744094-24638eff58bb?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    service: "Social Media",
-    inverted: false,
-    rotate: 2.5,
-    delay: 0.24,
-    img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    service: "Videography",
-    inverted: true,
-    rotate: -2,
-    delay: 0.32,
-    img: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    service: "Emails",
-    inverted: false,
-    rotate: 1.75,
-    delay: 0.4,
-    img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    service: "Graphic Design",
-    inverted: true,
-    rotate: -1.75,
-    delay: 0.48,
-    img: "https://images.unsplash.com/photo-1626785774625-ddcddc3445e9?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    service: "Motion Graphics",
-    inverted: false,
-    rotate: 2.75,
-    delay: 0.56,
-    img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    service: "Web Development",
-    inverted: true,
-    rotate: -2.25,
-    delay: 0.64,
-    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=800",
-  },
-]
-
-const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
+const ServicesGridCard = ({
+  service,
+  rotate,
+  delay,
+}: {
+  service: Service
+  rotate: number
+  delay: number
+}) => (
   <Link to="/services" className="group block" draggable={false}>
     <motion.div
-      style={{ borderRadius: 0, rotate: card.rotate }}
+      style={{ borderRadius: 0, rotate }}
       className="relative aspect-[3/4] overflow-hidden ring-1 ring-white/20"
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-150px" }}
       transition={{
         duration: 0.65,
-        delay: card.delay,
+        delay,
         ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       }}
     >
-      {/* Background image */}
-      <img
-        src={card.img}
-        alt={card.service}
-        draggable={false}
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out select-none group-hover:scale-110"
-      />
-      {/* Dark overlay — uniform across all cards */}
+      <CardImage storageId={service.image} alt={service.name} />
       <div className="absolute inset-0 bg-black/65 transition-opacity duration-500 group-hover:bg-black/50" />
 
-      {/* Content */}
       <div className="relative z-10 flex h-full flex-col justify-between p-5 text-white md:p-7">
-        {/* Top spacer */}
         <div>
           <span className="block h-4" aria-hidden />
         </div>
 
-        {/* Bottom — service name + rule */}
         <div>
           <div className="mb-3 h-px w-full bg-white/25" />
           <p className="text-center font-display text-xl leading-tight uppercase md:text-2xl">
-            {card.service}
+            {service.name}
           </p>
         </div>
       </div>
@@ -119,7 +67,16 @@ const ServicesGridCard = ({ card }: { card: ServiceCardDef }) => (
   </Link>
 )
 
-export const StatsGrid = () => {
+// Per-card rotation/delay are derived from the service's index so the
+// carousel keeps its hand-tuned alternating rhythm at any service count.
+const cardRotate = (i: number) => {
+  const magnitudes = [2.5, 2, 1.5, 2.5, 2, 1.75, 1.75, 2.75, 2.25]
+  const m = magnitudes[i % magnitudes.length]
+  return i % 2 === 0 ? -m : m
+}
+
+export const ServicesCarousel = () => {
+  const services = useQuery(api.services.list) ?? []
   const scrollRef = useRef<HTMLElement>(null)
   const isPointerDown = useRef(false)
   const hasDragged = useRef(false)
@@ -162,7 +119,6 @@ export const StatsGrid = () => {
       <p className="mb-10 px-8 text-xs font-bold tracking-[0.4em] text-white/30 uppercase md:px-16">
         Our Services
       </p>
-      {/* Horizontal scroll track — shows ~3.5 cards with overlap */}
       <section
         ref={scrollRef}
         aria-label="Services"
@@ -175,13 +131,17 @@ export const StatsGrid = () => {
         onClickCapture={onClickCapture}
       >
         <div className="flex" style={{ width: "max-content" }}>
-          {ALL_SERVICES.map((card, i) => (
+          {services.map((service, i) => (
             <div
-              key={i}
+              key={service._id}
               className="relative w-[72vw] shrink-0 md:w-[26vw]"
               style={{ marginLeft: i === 0 ? 0 : "-40px", zIndex: i + 1 }}
             >
-              <ServicesGridCard card={card} />
+              <ServicesGridCard
+                service={service}
+                rotate={cardRotate(i)}
+                delay={i * 0.08}
+              />
             </div>
           ))}
         </div>

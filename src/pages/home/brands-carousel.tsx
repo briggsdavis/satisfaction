@@ -1,3 +1,4 @@
+import { useQuery } from "convex/react"
 import {
   MotionValue,
   motion,
@@ -9,38 +10,8 @@ import {
   useVelocity,
 } from "motion/react"
 import { useEffect, useRef } from "react"
-
-const BRANDS = [
-  "Coors Light",
-  "Red Bull",
-  "Maker's Mark",
-  "Heinz",
-  "Under Armour",
-  "Patagonia",
-  "New Balance",
-  "Jack Daniel's",
-  "Vans",
-  "Levi's",
-  "Pittsburgh Steelers",
-  "ESPN",
-]
-
-const LOGO_BRANDS = [
-  { name: "NFL", src: "/logo/nfl.png" },
-  { name: "Absolut", src: "/logo/absolut.png" },
-  { name: "Maker's Mark", src: "/logo/makers-mark.png" },
-  { name: "H&M", src: "/logo/h-and-m.png" },
-  { name: "Jägermeister", src: "/logo/jagermeister.png" },
-  { name: "Truly", src: "/logo/truly.png" },
-  { name: "Angles", src: "/logo/angles.png" },
-  { name: "Jim Beam", src: "/logo/jim-beam.png" },
-  { name: "Coors", src: "/logo/coors.png" },
-  { name: "Red Bull", src: "/logo/red-bull.png" },
-  { name: "Live", src: "/logo/live.png" },
-  { name: "Blue Moon", src: "/logo/blue-moon.png" },
-  { name: "Codigo", src: "/logo/codigo.png" },
-  { name: "Shorty's", src: "/logo/shortys.png" },
-]
+import { api } from "../../../convex/_generated/api"
+import type { Id } from "../../../convex/_generated/dataModel"
 
 // Shared hook for the infinite carousel animation logic
 const useCarouselAnimation = () => {
@@ -118,145 +89,86 @@ const useCarouselAnimation = () => {
   return { sectionRef, baseX, trackRef, skewTransform, counterSkewTransform }
 }
 
-export const BrandsCarousel = () => {
-  const { sectionRef, baseX, trackRef, skewTransform } = useCarouselAnimation()
-
-  return (
-    <section ref={sectionRef} className="bg-black pb-[52px] md:pb-[73px]">
-      {/* Header */}
-      <div className="border-b border-white/10 px-8 py-10 md:px-16">
-        <p className="mb-4 text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
-          Collaborations
-        </p>
-        <h2 className="text-2xl leading-[1.25] font-light md:text-3xl">
-          Brands &amp; creative teams we&apos;ve worked with:
-        </h2>
-      </div>
-
-      {/* Scrolling track */}
-      <div className="h-40 overflow-hidden border-b border-white/10">
-        <motion.div style={{ x: baseX }} className="flex h-full w-max">
-          <div ref={trackRef} className="flex h-full">
-            {BRANDS.map((brand) => (
-              <div key={brand} className="flex h-full shrink-0 items-center">
-                <div className="flex h-full w-[220px] items-center justify-center">
-                  <span className="font-display text-xl tracking-wide whitespace-nowrap text-white/40 uppercase">
-                    {brand}
-                  </span>
-                </div>
-                <motion.div
-                  className="relative h-full w-9 shrink-0"
-                  style={{ transform: skewTransform }}
-                >
-                  <div
-                    className="absolute inset-y-0 w-px bg-white/35"
-                    style={{ left: "8px" }}
-                  />
-                  <div
-                    className="absolute inset-y-0 w-px bg-white/35"
-                    style={{ left: "24px" }}
-                  />
-                </motion.div>
-              </div>
-            ))}
-          </div>
-          <div aria-hidden className="flex h-full">
-            {BRANDS.map((brand) => (
-              <div key={brand} className="flex h-full shrink-0 items-center">
-                <div className="flex h-full w-[220px] items-center justify-center">
-                  <span className="font-display text-xl tracking-wide whitespace-nowrap text-white/40 uppercase">
-                    {brand}
-                  </span>
-                </div>
-                <motion.div
-                  className="relative h-full w-9 shrink-0"
-                  style={{ transform: skewTransform }}
-                >
-                  <div
-                    className="absolute inset-y-0 w-px bg-white/35"
-                    style={{ left: "8px" }}
-                  />
-                  <div
-                    className="absolute inset-y-0 w-px bg-white/35"
-                    style={{ left: "24px" }}
-                  />
-                </motion.div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  )
+type Logo = {
+  _id: Id<"collaborationLogos"> | Id<"workLogos">
+  image: Id<"_storage">
+  alt: string
 }
 
 const LogoBrand = ({
-  brand,
+  logo,
   skewTransform,
   counterSkewTransform,
 }: {
-  brand: { name: string; src: string }
+  logo: Logo
   skewTransform: MotionValue<string>
   counterSkewTransform: MotionValue<string>
-}) => (
-  <>
-    {/* Full-height white parallelogram containing the logo image */}
-    <motion.div
-      className="flex h-full w-[220px] shrink-0 items-center justify-center bg-white"
-      style={{ transform: skewTransform }}
-    >
-      {/* Counter-skew keeps the image upright */}
-      <motion.img
-        src={brand.src}
-        alt={brand.name}
-        className="max-h-14 max-w-[160px] object-contain"
-        style={{ transform: counterSkewTransform }}
+}) => {
+  const url = useQuery(api.files.getUrl, { storageId: logo.image })
+  return (
+    <>
+      <motion.div
+        className="flex h-full w-[220px] shrink-0 items-center justify-center bg-white"
+        style={{ transform: skewTransform }}
+      >
+        {url && (
+          <motion.img
+            src={url}
+            alt={logo.alt}
+            className="max-h-14 max-w-[160px] object-contain"
+            style={{ transform: counterSkewTransform }}
+          />
+        )}
+      </motion.div>
+      <motion.div
+        className="h-full w-[3px] shrink-0 bg-black"
+        style={{ transform: skewTransform }}
       />
-    </motion.div>
-    {/* Thin black skewed separator line */}
-    <motion.div
-      className="h-full w-[3px] shrink-0 bg-black"
-      style={{ transform: skewTransform }}
-    />
-  </>
-)
+    </>
+  )
+}
 
-export const LogosCarousel = () => {
+export const LogosCarousel = ({
+  carousel,
+  eyebrow = "Our Work",
+  heading = "Logos we've designed:",
+}: {
+  carousel: "collaboration" | "work"
+  eyebrow?: string
+  heading?: string
+}) => {
   const { sectionRef, baseX, trackRef, skewTransform, counterSkewTransform } =
     useCarouselAnimation()
+  const logos = useQuery(api.logos.list, { carousel })
 
   return (
     <section ref={sectionRef} className="bg-black pb-0">
-      {/* Header */}
       <div className="border-b border-white/10 px-8 py-10 md:px-16">
         <p className="mb-4 text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
-          Our Work
+          {eyebrow}
         </p>
         <h2 className="text-2xl leading-[1.25] font-light text-white md:text-3xl">
-          Logos we&apos;ve designed:
+          {heading}
         </h2>
       </div>
 
-      {/* Scrolling track — white background so gaps between parallelograms are also white */}
       <div className="h-40 overflow-hidden border-b border-white/10 bg-white">
         <motion.div style={{ x: baseX }} className="flex h-full w-max">
-          {/* First copy — measured for wrap */}
           <div ref={trackRef} className="flex h-full">
-            {LOGO_BRANDS.map((brand) => (
+            {(logos ?? []).map((logo) => (
               <LogoBrand
-                key={brand.name}
-                brand={brand}
+                key={logo._id}
+                logo={logo}
                 skewTransform={skewTransform}
                 counterSkewTransform={counterSkewTransform}
               />
             ))}
           </div>
-          {/* Second copy — seamless loop */}
           <div aria-hidden className="flex h-full">
-            {LOGO_BRANDS.map((brand) => (
+            {(logos ?? []).map((logo) => (
               <LogoBrand
-                key={brand.name}
-                brand={brand}
+                key={`b-${logo._id}`}
+                logo={logo}
                 skewTransform={skewTransform}
                 counterSkewTransform={counterSkewTransform}
               />
