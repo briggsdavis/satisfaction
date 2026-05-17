@@ -37,7 +37,7 @@ const ServicesGridCard = ({
 }) => (
   <Link to="/services" className="group block" draggable={false}>
     <motion.div
-      style={{ borderRadius: 0, rotate }}
+      style={{ borderRadius: 16, rotate }}
       className="relative aspect-[3/4] overflow-hidden ring-1 ring-white/20"
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
