@@ -9,7 +9,7 @@ import React, {
 import { flushSync } from "react-dom"
 import { useLocation } from "react-router"
 import type { Location } from "react-router"
-import { useSmoothScroll } from "./smooth-scroll"
+import { useScrollReset } from "./smooth-scroll"
 
 const COLUMNS = 6
 const DURATION = 0.4462
@@ -24,7 +24,7 @@ export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
   const [displayedLocation, setDisplayedLocation] = useState(location)
   const pendingRef = useRef<Location>(location)
   const [phase, setPhase] = useState<"idle" | "in" | "out">("idle")
-  const smoothY = useSmoothScroll()
+  const resetScroll = useScrollReset()
 
   // When the real location changes and we're idle, start wipe-in
   useEffect(() => {
@@ -37,9 +37,7 @@ export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
   // Screen fully white → scroll to top, swap displayed location, then begin wipe-out
   const handleInComplete = () => {
     window.scrollTo(0, 0)
-    // Snap the scroll spring to 0 immediately so the new page is never rendered
-    // with a stale translateY offset from the previous page's scroll position.
-    smoothY?.jump(0)
+    resetScroll?.()
     flushSync(() => {
       setDisplayedLocation(pendingRef.current)
       setPhase("out")

@@ -8,14 +8,17 @@ import {
 } from "motion/react"
 import React, {
   createContext,
+  useCallback,
   useContext,
   useLayoutEffect,
   useRef,
 } from "react"
 
 const SmoothScrollContext = createContext<MotionValue<number> | null>(null)
+const ScrollResetContext = createContext<(() => void) | null>(null)
 
 export const useSmoothScroll = () => useContext(SmoothScrollContext)
+export const useScrollReset = () => useContext(ScrollResetContext)
 
 export const SmoothScrollProvider = ({
   children,
@@ -39,9 +42,23 @@ export const SmoothScrollProvider = ({
     skipInitialAnimation: true,
   })
 
+  // Atomically zero both the spring source and the spring itself.
+  // window.scrollTo(0,0) updates window.scrollY synchronously but fires the
+  // scroll event asynchronously, so scrollY.get() is still the old offset on
+  // the next animation frame — causing the spring to chase the old target and
+  // showing the previous page's scroll position on the new page briefly.
+  // Calling scrollY.set(0) updates the source MotionValue immediately so the
+  // spring's target is 0 at the same moment we jump its current value to 0.
+  const resetScroll = useCallback(() => {
+    scrollY.set(0)
+    smoothY.jump(0)
+  }, [scrollY, smoothY])
+
   return (
     <SmoothScrollContext.Provider value={smoothY}>
-      {children}
+      <ScrollResetContext.Provider value={resetScroll}>
+        {children}
+      </ScrollResetContext.Provider>
     </SmoothScrollContext.Provider>
   )
 }
