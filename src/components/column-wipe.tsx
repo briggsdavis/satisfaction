@@ -9,7 +9,7 @@ import React, {
 import { flushSync } from "react-dom"
 import { useLocation } from "react-router"
 import type { Location } from "react-router"
-import { useScrollReset } from "./smooth-scroll"
+import { useScrollReset, useScrollUnlock } from "./smooth-scroll"
 
 const COLUMNS = 6
 const DURATION = 0.4462
@@ -25,6 +25,7 @@ export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
   const pendingRef = useRef<Location>(location)
   const [phase, setPhase] = useState<"idle" | "in" | "out">("idle")
   const resetScroll = useScrollReset()
+  const unlockScroll = useScrollUnlock()
 
   // When the real location changes and we're idle, start wipe-in
   useEffect(() => {
@@ -87,7 +88,12 @@ export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
                 ease: [0.22, 1, 0.36, 1],
               }}
               onAnimationComplete={
-                i === COLUMNS - 1 ? () => setPhase("idle") : undefined
+                i === COLUMNS - 1
+                  ? () => {
+                      setPhase("idle")
+                      unlockScroll?.()
+                    }
+                  : undefined
               }
             />
           ))}
