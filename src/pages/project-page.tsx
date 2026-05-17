@@ -5,6 +5,7 @@ import { createPortal } from "react-dom"
 import { Link, useNavigationType, useParams } from "react-router"
 import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
+import { FitTitle } from "../components/fit-title"
 import { TextReveal } from "../components/text-reveal"
 
 type Project = Doc<"projects">
@@ -293,9 +294,8 @@ export const ProjectPage = () => {
         >
           ← {category.name}
         </Link>
-        <TextReveal
+        <FitTitle
           text={project.title.toUpperCase()}
-          className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
           slideFrom="left"
           delay={titleDelay}
         />
