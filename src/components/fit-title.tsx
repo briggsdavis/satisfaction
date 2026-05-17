@@ -29,7 +29,8 @@ export const FitTitle = ({
       document.body.removeChild(probe)
       const containerWidth = container.clientWidth
       if (textWidth > 0 && containerWidth > 0) {
-        setFontSize((containerWidth / textWidth) * PROBE)
+        // 0.97 safety margin prevents sub-pixel rounding from triggering wrap
+        setFontSize((containerWidth / textWidth) * PROBE * 0.97)
       }
     }
     const fit = () => void document.fonts.ready.then(measure)
@@ -40,10 +41,11 @@ export const FitTitle = ({
   }, [text])
 
   return (
-    <div ref={containerRef} style={fontSize ? { fontSize } : undefined}>
+    <div ref={containerRef} className="w-full" style={fontSize ? { fontSize } : undefined}>
       <TextReveal
         text={text}
         className="massive-text justify-center leading-none"
+        nowrap
         immediate={immediate}
         slideFrom={slideFrom}
         delay={delay}
