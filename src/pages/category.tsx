@@ -5,6 +5,7 @@ import { Link, useNavigationType, useParams } from "react-router"
 import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { BrandingProcess } from "../components/branding-process"
+import { FitTitle } from "../components/fit-title"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
 import { WebDevProcess } from "../components/web-dev-process"
@@ -187,10 +188,9 @@ const CategoryHero = ({ category }: { category: Category }) => {
         style={{ opacity: centeredOpacity }}
         className="pointer-events-none absolute inset-0 flex items-center justify-center px-8 md:px-16"
       >
-        <div ref={centeredRef} className="text-center">
-          <TextReveal
+        <div ref={centeredRef} className="w-full text-center">
+          <FitTitle
             text={category.name.toUpperCase()}
-            className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
             slideFrom="left"
             delay={titleDelay}
           />
@@ -202,12 +202,11 @@ const CategoryHero = ({ category }: { category: Category }) => {
         className="pointer-events-none absolute inset-x-0 top-0 z-50"
       >
         <div className="bg-gradient-to-b from-black/95 via-black/75 to-transparent px-8 pt-24 pb-20 text-center md:px-16 md:pt-28">
-          <TextReveal
+          <FitTitle
             text={category.name.toUpperCase()}
-            className="massive-text justify-center text-4xl leading-none md:text-7xl lg:text-9xl"
-            immediate
             slideFrom="left"
             delay={titleDelay}
+            immediate
           />
         </div>
       </motion.div>
