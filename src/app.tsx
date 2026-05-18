@@ -9,7 +9,7 @@ import {
 } from "react-router"
 import { api } from "../convex/_generated/api"
 import { AdminRoot } from "./admin/admin-root"
-import { ColumnWipe, useColumnWipeLocation } from "./components/column-wipe"
+import { ColumnWipe, useColumnWipeLocation, usePendingLocation } from "./components/column-wipe"
 import { CustomCursor } from "./components/custom-cursor"
 import { Footer } from "./components/footer"
 import { SiteLoader } from "./components/site-loader"
@@ -80,6 +80,23 @@ const Home = () => (
     <FaqCta />
   </>
 )
+
+// Pre-renders the incoming page in a hidden div during wipe-in so Convex queries
+// fire while the white columns are covering the screen. By the time the wipe-out
+// reveals the new page the data is cached and the page renders immediately.
+const PrefetchRoutes = () => {
+  const pendingLocation = usePendingLocation()
+  if (!pendingLocation) return null
+  return (
+    <div style={{ display: "none" }} aria-hidden="true">
+      <Routes location={pendingLocation}>
+        <Route path="/portfolio/:category" element={<CategoryPage />} />
+        <Route path="/portfolio/:category/:project" element={<ProjectPage />} />
+        <Route path="*" element={null} />
+      </Routes>
+    </div>
+  )
+}
 
 // Inner component so it can read the controlled location from ColumnWipe context
 const AppRoutes = () => {
@@ -180,6 +197,7 @@ const SiteRoot = () => {
             <AppRoutes />
             <Footer />
           </SmoothScroll>
+          <PrefetchRoutes />
         </ColumnWipe>
       </SmoothScrollProvider>
     </>

@@ -19,6 +19,11 @@ const STAGGER = 0.06006
 const ColumnWipeContext = createContext<Location | null>(null)
 export const useColumnWipeLocation = () => useContext(ColumnWipeContext)
 
+// Exposes the incoming location during wipe-in so pages can be pre-rendered
+// (and their data fetched) before the transition completes.
+const ColumnWipePendingContext = createContext<Location | null>(null)
+export const usePendingLocation = () => useContext(ColumnWipePendingContext)
+
 export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation()
   const [displayedLocation, setDisplayedLocation] = useState(location)
@@ -47,6 +52,9 @@ export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <ColumnWipeContext.Provider value={displayedLocation}>
+      <ColumnWipePendingContext.Provider
+        value={phase === "in" ? pendingRef.current : null}
+      >
       {children}
 
       {/* Wipe IN: columns drop from top, old page visible behind them */}
@@ -99,6 +107,7 @@ export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
           ))}
         </div>
       )}
+      </ColumnWipePendingContext.Provider>
     </ColumnWipeContext.Provider>
   )
 }
