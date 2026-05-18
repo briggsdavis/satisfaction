@@ -74,8 +74,18 @@ export const SmoothScrollProvider = ({
   }, [scrollY, smoothY])
 
   const unlockScroll = useCallback(() => {
+    // Re-sync before releasing the lock: the spring may have drifted during the
+    // wipe-out animation (e.g. from a batched scroll event that fired after the
+    // initial reset). Jumping to 0 here guarantees the transform stays at 0 the
+    // moment the lock is released and the spring takes over.
+    window.scrollTo(0, 0)
+    scrollY.set(0)
+    smoothY.jump(0)
+    if (scrollElRef.current) {
+      scrollElRef.current.style.transform = "translateY(0px)"
+    }
     transitionLockRef.current = false
-  }, [])
+  }, [scrollY, smoothY, scrollElRef])
 
   return (
     <ScrollElRefContext.Provider value={scrollElRef}>
