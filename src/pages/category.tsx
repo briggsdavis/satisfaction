@@ -225,7 +225,8 @@ export const CategoryPage = () => {
     category ? { categoryId: category._id } : "skip",
   )
 
-  if (category === undefined || projects === undefined) return null
+  if (category === undefined || projects === undefined)
+    return <div className="h-screen w-full" />
 
   if (!category) {
     return (
