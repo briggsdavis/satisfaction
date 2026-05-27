@@ -102,6 +102,7 @@ export const PhotographyHero = ({ category: _category }: { category: Category })
           draggable={false}
         />
         <video
+          aria-label="Photography example"
           src="/mock/photo/video.mp4"
           autoPlay
           muted

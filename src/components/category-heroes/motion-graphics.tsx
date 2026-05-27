@@ -40,6 +40,7 @@ export const MotionGraphicsHero = ({ category: _category }: { category: Category
           return (
             <video
               key={i}
+              aria-label="Motion graphics example"
               src="/mock/motion/vigilant.mp4"
               autoPlay
               muted
