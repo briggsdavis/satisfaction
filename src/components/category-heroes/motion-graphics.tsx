@@ -21,6 +21,12 @@ export const MotionGraphicsHero = ({ category: _category }: { category: Category
 
   return (
     <section className="relative flex h-screen items-center justify-center overflow-hidden bg-black">
+      <h1 className="pointer-events-none absolute top-[18vh] left-[14vw] font-display text-[clamp(5rem,15vw,18rem)] leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase">
+        Motion
+      </h1>
+      <h1 className="pointer-events-none absolute right-[14vw] bottom-[18vh] font-display text-[clamp(5rem,15vw,18rem)] leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase">
+        Graphics
+      </h1>
       <div
         ref={ref}
         className="relative"
@@ -46,7 +52,7 @@ export const MotionGraphicsHero = ({ category: _category }: { category: Category
               muted
               loop
               playsInline
-              className="absolute select-none object-cover"
+              className="absolute object-cover select-none"
               draggable={false}
               style={{
                 top: `${s.top}%`,

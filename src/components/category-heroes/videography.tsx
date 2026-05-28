@@ -54,10 +54,22 @@ function projection(sw: number, sh: number, dst: number[]) {
   const t = multmm(d, adj(s))
   for (let i = 0; i < 9; i++) t[i] /= t[8]
   return `matrix3d(${[
-    t[0], t[3], 0, t[6],
-    t[1], t[4], 0, t[7],
-    0, 0, 1, 0,
-    t[2], t[5], 0, t[8],
+    t[0],
+    t[3],
+    0,
+    t[6],
+    t[1],
+    t[4],
+    0,
+    t[7],
+    0,
+    0,
+    1,
+    0,
+    t[2],
+    t[5],
+    0,
+    t[8],
   ].join(",")})`
 }
 

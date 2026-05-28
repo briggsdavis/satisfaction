@@ -117,7 +117,7 @@ export const GraphicDesignHero = ({ category: _category }: { category: Category 
               src={item.src}
               alt=""
               draggable={false}
-              className="absolute select-none object-cover"
+              className="absolute object-cover select-none"
               initial={false}
               animate={{
                 left: `${posX(logical)}%`,
