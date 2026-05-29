@@ -1,4 +1,4 @@
-import { FileText, Home, Image, Info, LayoutGrid, Mail, Settings } from "lucide-react"
+import { FileText, FolderOpen, Home, Info, LayoutGrid, Mail, Settings } from "lucide-react"
 import { NavLink } from "react-router"
 
 const links = [
@@ -6,7 +6,7 @@ const links = [
   { to: "/admin/homepage", label: "Homepage", icon: LayoutGrid },
   { to: "/admin/about", label: "About", icon: Info },
   { to: "/admin/services", label: "Services", icon: Settings },
-  { to: "/admin/portfolio", label: "Portfolio", icon: Image },
+  { to: "/admin/projects", label: "Projects", icon: FolderOpen },
   { to: "/admin/contact", label: "Contact", icon: Mail },
   { to: "/admin/footer", label: "Footer", icon: FileText },
 ]

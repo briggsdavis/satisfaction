@@ -229,7 +229,11 @@ export const CategoryPage = () => {
     <div>
       {CustomHero ? <CustomHero category={category} /> : <CategoryHero category={category} />}
 
-      <section className="border-b border-white/10 px-8 py-20 md:px-16">
+      <section
+        className={`border-b border-white/10 px-8 py-20 md:px-16 ${
+          category.slug === "branding" ? "pt-32 md:pt-40" : ""
+        }`}
+      >
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-8">
           <h2 className="text-3xl leading-[1.15] font-bold tracking-tight md:col-span-2 md:text-4xl">
             {category.headline}

@@ -3,28 +3,22 @@ import { Link } from "react-router"
 import { api } from "../../../convex/_generated/api"
 
 export const Dashboard = () => {
-  const categories = useQuery(api.portfolio.listCategories) ?? []
+  const services = useQuery(api.portfolio.listCategories) ?? []
   const projects = useQuery(api.portfolio.listProjects) ?? []
-  const services = useQuery(api.services.list) ?? []
   const collaborationLogos = useQuery(api.logos.list, { carousel: "collaboration" }) ?? []
   const workLogos = useQuery(api.logos.list, { carousel: "work" }) ?? []
   const faqSections = useQuery(api.contact.listFaqSections) ?? []
 
   const stats = [
     {
-      label: "Categories",
-      count: categories.length,
-      to: "/admin/portfolio",
+      label: "Services",
+      count: services.length,
+      to: "/admin/services",
     },
     {
       label: "Projects",
       count: projects.length,
-      to: "/admin/portfolio",
-    },
-    {
-      label: "Services",
-      count: services.length,
-      to: "/admin/services",
+      to: "/admin/projects",
     },
     {
       label: "Logos",
@@ -70,7 +64,7 @@ export const Dashboard = () => {
           { to: "/admin/homepage", label: "Homepage Sections" },
           { to: "/admin/about", label: "About Page" },
           { to: "/admin/services", label: "Services" },
-          { to: "/admin/portfolio", label: "Portfolio & Projects" },
+          { to: "/admin/projects", label: "Projects" },
           { to: "/admin/contact", label: "Contact & FAQ" },
           { to: "/admin/footer", label: "Footer" },
         ].map(({ to, label }) => (

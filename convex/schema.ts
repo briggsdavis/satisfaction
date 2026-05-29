@@ -28,18 +28,12 @@ export default defineSchema({
     order: v.number(),
   }).index("by_order", ["order"]),
 
-  // ── Services ────────────────────────────────────────────────────────────
-  // Rendered on /services, homepage carousel, and contact form dropdown.
-  services: defineTable({
-    name: v.string(),
-    image: v.id("_storage"),
-    color: v.string(), // hex, used by hover tint + contact dropdown swatch
-    bullets: v.array(v.string()),
-    size: v.union(v.literal("short"), v.literal("medium"), v.literal("tall"), v.literal("xtall")),
-    order: v.number(),
-  }).index("by_order", ["order"]),
-
-  // ── Portfolio: categories + projects (m2m) ──────────────────────────────
+  // ── Services (formerly "categories") ────────────────────────────────────
+  // The single unified list. Rendered on /services, /portfolio, the homepage
+  // carousel, and the contact dropdown. Each one has a detail page at
+  // /portfolio/:slug listing the projects assigned to it.
+  // NOTE: `size`/`order` are optional during the services→categories migration
+  // and defaulted in the UI; backfilled to every row by convex/migrate.ts.
   categories: defineTable({
     slug: v.string(),
     name: v.string(),
@@ -48,6 +42,10 @@ export default defineSchema({
     bullets: v.array(v.string()),
     headline: v.string(),
     description: v.string(),
+    size: v.optional(
+      v.union(v.literal("short"), v.literal("medium"), v.literal("tall"), v.literal("xtall")),
+    ),
+    order: v.optional(v.number()),
   }).index("by_slug", ["slug"]),
 
   projects: defineTable({
@@ -60,8 +58,10 @@ export default defineSchema({
     coverImage: v.optional(v.id("_storage")),
     gallery: v.array(v.id("_storage")),
     featured: v.boolean(),
+    // The unified list of services this project is filed under. Also rendered
+    // as the project's chips/tags. (Field name kept as `categoryIds` since the
+    // surviving table is still physically `categories`.)
     categoryIds: v.array(v.id("categories")),
-    serviceIds: v.array(v.id("services")),
   })
     .index("by_slug", ["slug"])
     .index("by_featured", ["featured"]),

@@ -6,9 +6,9 @@ import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { TextReveal } from "../components/text-reveal"
 
-type Service = Doc<"services">
+type Service = Doc<"categories">
 
-const SIZE_HEIGHTS: Record<Service["size"], string> = {
+const SIZE_HEIGHTS: Record<NonNullable<Service["size"]>, string> = {
   short: "min-h-[360px]",
   medium: "min-h-[420px]",
   tall: "min-h-[480px]",
@@ -20,11 +20,11 @@ const ServiceImage = ({
   alt,
   isHovered,
 }: {
-  storageId: Id<"_storage">
+  storageId: Id<"_storage"> | undefined
   alt: string
   isHovered: boolean
 }) => {
-  const url = useQuery(api.files.getUrl, { storageId })
+  const url = useQuery(api.files.getUrl, storageId ? { storageId } : "skip")
   if (!url) return null
   return (
     <img
@@ -40,93 +40,92 @@ const ServiceCell = ({ service, index }: { service: Service; index: number }) =>
   const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <motion.div
-      className={`relative border-b-2 border-white/15 bg-black ${SIZE_HEIGHTS[service.size]}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-150px" }}
-      transition={{
-        duration: 0.6,
-        delay: (index % 3) * 0.1,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-      }}
-    >
+    <Link to={`/portfolio/${service.slug}`} className="group block">
       <motion.div
-        className="absolute inset-3 overflow-hidden rounded-[16px]"
-        animate={{ scale: [1, 1.0194, 1] }}
+        className={`relative border-b-2 border-white/15 bg-black ${SIZE_HEIGHTS[service.size ?? "medium"]}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-150px" }}
         transition={{
-          duration: 3.5 + (index % 4) * 0.65,
-          repeat: Infinity,
-          ease: "easeInOut",
-          times: [0, 0.5, 1],
-          delay: index * 0.45,
+          duration: 0.6,
+          delay: (index % 3) * 0.1,
+          ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
         }}
       >
-        <ServiceImage storageId={service.image} alt={service.name} isHovered={isHovered} />
-
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" />
-
         <motion.div
-          className="pointer-events-none absolute inset-0 bg-black"
-          animate={{ opacity: isHovered ? 0.4 : 0 }}
-          transition={{ duration: 0.35 }}
-        />
+          className="absolute inset-3 overflow-hidden rounded-[16px]"
+          animate={{ scale: [1, 1.0194, 1] }}
+          transition={{
+            duration: 3.5 + (index % 4) * 0.65,
+            repeat: Infinity,
+            ease: "easeInOut",
+            times: [0, 0.5, 1],
+            delay: index * 0.45,
+          }}
+        >
+          <ServiceImage storageId={service.image} alt={service.name} isHovered={isHovered} />
 
-        <div className="absolute inset-0 flex flex-col p-5 md:p-6">
-          <div className="flex flex-1 flex-col justify-end">
-            <AnimatePresence>
-              {isHovered && (
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 12 }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  className="mb-4"
-                >
-                  <ul className="space-y-1.5">
-                    {service.bullets.map((bullet, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -8 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{
-                          delay: i * 0.04,
-                          duration: 0.3,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="flex list-none items-start gap-2 text-xs leading-relaxed text-white/80 lowercase"
-                      >
-                        <span className="mt-[3px] shrink-0 text-white/40">–</span>
-                        {bullet}
-                      </motion.li>
-                    ))}
-                  </ul>
-                  <Link
-                    to="/portfolio"
-                    className="mt-4 inline-block text-xs font-bold tracking-[0.2em] text-white/70 lowercase underline underline-offset-4 transition-opacity hover:text-white"
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" />
+
+          <motion.div
+            className="pointer-events-none absolute inset-0 bg-black"
+            animate={{ opacity: isHovered ? 0.4 : 0 }}
+            transition={{ duration: 0.35 }}
+          />
+
+          <div className="absolute inset-0 flex flex-col p-5 md:p-6">
+            <div className="flex flex-1 flex-col justify-end">
+              <AnimatePresence>
+                {isHovered && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 12 }}
+                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    className="mb-4"
                   >
-                    see portfolio
-                  </Link>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    <ul className="space-y-1.5">
+                      {service.bullets.map((bullet, i) => (
+                        <motion.li
+                          key={i}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{
+                            delay: i * 0.04,
+                            duration: 0.3,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="flex list-none items-start gap-2 text-xs leading-relaxed text-white/80 lowercase"
+                        >
+                          <span className="mt-[3px] shrink-0 text-white/40">–</span>
+                          {bullet}
+                        </motion.li>
+                      ))}
+                    </ul>
+                    <span className="mt-4 inline-block text-xs font-bold tracking-[0.2em] text-white/70 lowercase underline underline-offset-4 transition-opacity group-hover:text-white">
+                      see portfolio
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-            <span className="block font-display text-3xl leading-[0.85] text-white uppercase md:text-4xl">
-              {service.name}
-            </span>
+              <span className="block font-display text-3xl leading-[0.85] text-white uppercase md:text-4xl">
+                {service.name}
+              </span>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </Link>
   )
 }
 
 export const Services = () => {
   const navType = useNavigationType()
   const titleDelay = navType === "PUSH" ? 0.75 : 0
-  const services = useQuery(api.services.list) ?? []
+  const services = useQuery(api.portfolio.listCategories) ?? []
 
   return (
     <div className="pt-32">

@@ -6,13 +6,13 @@ export const FeaturedAdmin = () => (
     <BackButton to="/admin/homepage" label="Homepage" />
     <SectionHeader
       title="Featured Projects"
-      description="The homepage Featured Cascade renders every project with the 'Featured' flag turned on. Manage that flag from the Portfolio editor."
+      description="The homepage Featured Cascade renders every project with the 'Featured' flag turned on. Manage that flag from the Projects editor."
     />
     <Link
-      to="/admin/portfolio"
+      to="/admin/projects"
       className="inline-block border border-white/20 px-4 py-2 text-xs font-bold tracking-[0.2em] text-white/70 uppercase transition-colors hover:border-white hover:text-white"
     >
-      Open Portfolio →
+      Open Projects →
     </Link>
   </div>
 )

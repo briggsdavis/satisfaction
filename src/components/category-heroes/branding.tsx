@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
 import type { Doc } from "../../../convex/_generated/dataModel"
+import { FitTitle } from "../fit-title"
 
 type Category = Doc<"categories">
 
@@ -8,7 +9,7 @@ const COUNT = 10
 const INTERVAL_MS = 3000
 const images = Array.from({ length: COUNT }, (_, i) => `/mock/branding/billboard-${i + 1}.jpg`)
 
-export const BrandingHero = ({ category: _category }: { category: Category }) => {
+export const BrandingHero = ({ category }: { category: Category }) => {
   const [i, setI] = useState(0)
 
   useEffect(() => {
@@ -38,9 +39,9 @@ export const BrandingHero = ({ category: _category }: { category: Category }) =>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-black to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black to-transparent" />
       </div>
-      <h1 className="pointer-events-none absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-1/2 font-display text-[clamp(4rem,11vw,11rem)] leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase">
-        Branding
-      </h1>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 translate-y-1/2 text-white">
+        <FitTitle text={category.name} immediate />
+      </div>
     </section>
   )
 }

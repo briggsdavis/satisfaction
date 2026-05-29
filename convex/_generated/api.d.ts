@@ -15,7 +15,6 @@ import type * as footer from "../footer.js";
 import type * as homepage from "../homepage.js";
 import type * as logos from "../logos.js";
 import type * as portfolio from "../portfolio.js";
-import type * as services from "../services.js";
 
 import type {
   ApiFromModules,
@@ -31,7 +30,6 @@ declare const fullApi: ApiFromModules<{
   homepage: typeof homepage;
   logos: typeof logos;
   portfolio: typeof portfolio;
-  services: typeof services;
 }>;
 
 /**

@@ -215,11 +215,11 @@ const buildGalleryRows = (ids: Id<"_storage">[]): GalleryRow[] => {
   return rows
 }
 
-// ─── Service chips (resolves serviceIds → names + colors) ────────────────────
+// ─── Service chips (resolves the project's services → names + colors) ────────
 const ServiceChips = ({ project }: { project: Project }) => {
-  const allServices = useQuery(api.services.list) ?? []
+  const allServices = useQuery(api.portfolio.listCategories) ?? []
   const map = new Map(allServices.map((s) => [s._id, s] as const))
-  const chips = project.serviceIds
+  const chips = project.categoryIds
     .map((id) => map.get(id))
     .filter((s): s is NonNullable<typeof s> => !!s)
   return (

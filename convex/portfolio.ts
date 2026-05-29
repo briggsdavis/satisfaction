@@ -6,7 +6,13 @@ import { mutation, query } from "./_generated/server"
 export const listCategories = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("categories").take(100)
+    const categories = await ctx.db.query("categories").take(100)
+    // Sort by `order` (rows missing it sort last, then by creation time).
+    return categories.sort((a, b) => {
+      const ao = a.order ?? Number.MAX_SAFE_INTEGER
+      const bo = b.order ?? Number.MAX_SAFE_INTEGER
+      return ao - bo || a._creationTime - b._creationTime
+    })
   },
 })
 
@@ -20,6 +26,13 @@ export const getCategoryBySlug = query({
   },
 })
 
+const sizeValidator = v.union(
+  v.literal("short"),
+  v.literal("medium"),
+  v.literal("tall"),
+  v.literal("xtall"),
+)
+
 export const createCategory = mutation({
   args: {
     slug: v.string(),
@@ -29,6 +42,8 @@ export const createCategory = mutation({
     bullets: v.array(v.string()),
     headline: v.string(),
     description: v.string(),
+    size: v.optional(sizeValidator),
+    order: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("categories", args)
@@ -45,6 +60,8 @@ export const updateCategory = mutation({
     bullets: v.optional(v.array(v.string())),
     headline: v.optional(v.string()),
     description: v.optional(v.string()),
+    size: v.optional(sizeValidator),
+    order: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const { id, ...patch } = args
@@ -111,7 +128,6 @@ export const createProject = mutation({
     gallery: v.array(v.id("_storage")),
     featured: v.boolean(),
     categoryIds: v.array(v.id("categories")),
-    serviceIds: v.array(v.id("services")),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("projects", args)
@@ -131,7 +147,6 @@ export const updateProject = mutation({
     gallery: v.optional(v.array(v.id("_storage"))),
     featured: v.optional(v.boolean()),
     categoryIds: v.optional(v.array(v.id("categories"))),
-    serviceIds: v.optional(v.array(v.id("services"))),
   },
   handler: async (ctx, args) => {
     const { id, ...patch } = args

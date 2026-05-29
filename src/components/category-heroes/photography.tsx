@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import type { Doc } from "../../../convex/_generated/dataModel"
+import { ScrollingTextHero } from "./scrolling-text-hero"
 
 type Category = Doc<"categories">
 
@@ -74,7 +75,7 @@ function projection(sw: number, sh: number, dst: number[]) {
   ].join(",")})`
 }
 
-export const PhotographyHero = ({ category: _category }: { category: Category }) => {
+export const PhotographyHero = ({ category }: { category: Category }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ w: 0, h: 0 })
 
@@ -99,9 +100,12 @@ export const PhotographyHero = ({ category: _category }: { category: Category })
 
   return (
     <section className="relative flex h-screen items-center justify-center overflow-hidden bg-black">
+      <div className="absolute inset-0 z-0">
+        <ScrollingTextHero text={category.name} />
+      </div>
       <div
         ref={containerRef}
-        className="relative"
+        className="relative z-10"
         style={{
           aspectRatio: `${IMG_W} / ${IMG_H}`,
           width: `min(100%, calc(100vh * ${IMG_W} / ${IMG_H}))`,

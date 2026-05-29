@@ -1,6 +1,7 @@
 import { motion } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import type { Doc } from "../../../convex/_generated/dataModel"
+import { ScrollingTextHero } from "./scrolling-text-hero"
 
 type Category = Doc<"categories">
 
@@ -57,7 +58,7 @@ const designs = [
   "wraps-v1.jpg",
 ].map((f) => `/mock/graphic/${f}`)
 
-const TICK_MS = 3000
+const TICK_MS = 2000
 const SLIDE_MS = 800
 
 function shuffled<T>(arr: T[]): T[] {
@@ -71,7 +72,7 @@ function shuffled<T>(arr: T[]): T[] {
 
 type Item = { id: number; src: string }
 
-export const GraphicDesignHero = ({ category: _category }: { category: Category }) => {
+export const GraphicDesignHero = ({ category }: { category: Category }) => {
   const [queue] = useState(() => shuffled(designs))
   const cursor = useRef(0)
   const [track, setTrack] = useState<Item[]>(() => {
@@ -96,8 +97,11 @@ export const GraphicDesignHero = ({ category: _category }: { category: Category 
 
   return (
     <section className="relative flex h-screen items-center justify-center overflow-hidden bg-black">
+      <div className="absolute inset-0 z-0">
+        <ScrollingTextHero text={category.name} />
+      </div>
       <div
-        className="relative overflow-hidden"
+        className="relative z-10 overflow-hidden"
         style={{
           aspectRatio: `${IMG_W} / ${IMG_H}`,
           width: `min(85%, calc(85vh * ${IMG_W} / ${IMG_H}))`,

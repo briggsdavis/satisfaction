@@ -64,17 +64,13 @@ const GalleryThumb = ({
 }
 
 export const ProjectAdmin = () => {
-  const { categorySlug, projectSlug } = useParams<{
-    categorySlug: string
-    projectSlug: string
-  }>()
+  const { projectSlug } = useParams<{ projectSlug: string }>()
   const navigate = useNavigate()
   const project = useQuery(
     api.portfolio.getProjectBySlug,
     projectSlug ? { slug: projectSlug } : "skip",
   )
-  const allCategories = useQuery(api.portfolio.listCategories) ?? []
-  const allServices = useQuery(api.services.list) ?? []
+  const allServices = useQuery(api.portfolio.listCategories) ?? []
 
   const update = useMutation(api.portfolio.updateProject)
   const remove = useMutation(api.portfolio.removeProject)
@@ -87,23 +83,20 @@ export const ProjectAdmin = () => {
   if (!project) {
     return (
       <div className="max-w-2xl">
-        <BackButton to={`/admin/portfolio/${categorySlug ?? ""}`} label="Category" />
+        <BackButton to="/admin/projects" label="Projects" />
         <p className="text-white/50">Project not found.</p>
       </div>
     )
   }
 
-  const toggleCategory = (id: Id<"categories">) => {
+  // Primary service drives the public URL (/portfolio/[service]/[project]).
+  const primary = allServices.find((s) => s._id === project.categoryIds[0])
+
+  const toggleService = (id: Id<"categories">) => {
     const has = project.categoryIds.includes(id)
     const next = has ? project.categoryIds.filter((x) => x !== id) : [...project.categoryIds, id]
     if (next.length === 0) return // require at least one
     update({ id: project._id, categoryIds: next })
-  }
-
-  const toggleService = (id: Id<"services">) => {
-    const has = project.serviceIds.includes(id)
-    const next = has ? project.serviceIds.filter((x) => x !== id) : [...project.serviceIds, id]
-    update({ id: project._id, serviceIds: next })
   }
 
   const handleAddGallery = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,10 +147,10 @@ export const ProjectAdmin = () => {
 
   return (
     <div className="max-w-2xl">
-      <BackButton to={`/admin/portfolio/${categorySlug ?? ""}`} label="Category" />
+      <BackButton to="/admin/projects" label="Projects" />
       <SectionHeader
         title={project.title || "Untitled Project"}
-        description={`URL: /portfolio/${categorySlug}/${project.slug}`}
+        description={`URL: /portfolio/${primary?.slug ?? "—"}/${project.slug}`}
       />
 
       <ConvexTextField
@@ -217,43 +210,16 @@ export const ProjectAdmin = () => {
         rows={3}
       />
 
-      {/* Categories — m2m */}
+      {/* Services — m2m. Each selected service lists this project and renders as a tag. */}
       <div className="border-b border-white/10 py-5">
-        <p className="mb-3 text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
-          Categories (project shows under each)
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {allCategories.map((c) => {
-            const on = project.categoryIds.includes(c._id)
-            return (
-              <button
-                key={c._id}
-                onClick={() => toggleCategory(c._id)}
-                className={`flex items-center gap-2 border px-3 py-1.5 text-xs font-bold tracking-[0.2em] uppercase transition-colors ${
-                  on
-                    ? "border-white bg-white text-black"
-                    : "border-white/20 text-white/50 hover:border-white/50 hover:text-white"
-                }`}
-              >
-                <span
-                  className="h-2 w-2 shrink-0 rounded-full"
-                  style={{ backgroundColor: c.color }}
-                />
-                {c.name}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Services — m2m */}
-      <div className="border-b border-white/10 py-5">
-        <p className="mb-3 text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
-          Tags / Services (rendered as chips on project page)
+        <p className="mb-1 text-xs font-bold tracking-[0.35em] text-white/40 uppercase">Services</p>
+        <p className="mb-3 text-xs text-white/30">
+          Project appears under each selected service and shows them as tags. The first selected
+          drives the URL.
         </p>
         <div className="flex flex-wrap gap-2">
           {allServices.map((s) => {
-            const on = project.serviceIds.includes(s._id)
+            const on = project.categoryIds.includes(s._id)
             return (
               <button
                 key={s._id}
@@ -317,7 +283,7 @@ export const ProjectAdmin = () => {
           onClick={() => {
             if (confirm(`Delete project "${project.title}"?`)) {
               remove({ id: project._id })
-              navigate(`/admin/portfolio/${categorySlug ?? ""}`)
+              navigate("/admin/projects")
             }
           }}
           className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-red-400/70 uppercase transition-colors hover:text-red-400"

@@ -17,10 +17,10 @@ import { FeaturedAdmin } from "./pages/homepage/featured"
 import { HeroAdmin } from "./pages/homepage/hero"
 import { HomepageIndex } from "./pages/homepage/index"
 import { WhatWeDoAdmin } from "./pages/homepage/what-we-do"
-import { CategoryAdmin } from "./pages/portfolio/category"
-import { PortfolioIndex } from "./pages/portfolio/index"
-import { ProjectAdmin } from "./pages/portfolio/project"
-import { ServicesAdmin } from "./pages/services"
+import { ProjectsIndex } from "./pages/projects/index"
+import { ProjectAdmin } from "./pages/projects/project"
+import { ServicesIndex } from "./pages/services/index"
+import { ServiceAdmin } from "./pages/services/service"
 
 const AdminApp = () => {
   // Restore standard cursor for admin context
@@ -44,10 +44,10 @@ const AdminApp = () => {
         <Route path="about/wheel" element={<WheelAdmin />} />
         <Route path="about/timeline" element={<TimelineAdmin />} />
         <Route path="about/values" element={<ValuesAdmin />} />
-        <Route path="services" element={<ServicesAdmin />} />
-        <Route path="portfolio" element={<PortfolioIndex />} />
-        <Route path="portfolio/:categorySlug" element={<CategoryAdmin />} />
-        <Route path="portfolio/:categorySlug/:projectSlug" element={<ProjectAdmin />} />
+        <Route path="services" element={<ServicesIndex />} />
+        <Route path="services/:serviceSlug" element={<ServiceAdmin />} />
+        <Route path="projects" element={<ProjectsIndex />} />
+        <Route path="projects/:projectSlug" element={<ProjectAdmin />} />
         <Route path="contact" element={<ContactIndex />} />
         <Route path="contact/info" element={<ContactInfoAdmin />} />
         <Route path="contact/faq" element={<FaqAdmin />} />

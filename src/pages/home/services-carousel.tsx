@@ -6,10 +6,10 @@ import { api } from "../../../convex/_generated/api"
 import type { Doc, Id } from "../../../convex/_generated/dataModel"
 import { useDragScroll } from "../../hooks/use-drag-scroll"
 
-type Service = Doc<"services">
+type Service = Doc<"categories">
 
-const CardImage = ({ storageId, alt }: { storageId: Id<"_storage">; alt: string }) => {
-  const url = useQuery(api.files.getUrl, { storageId })
+const CardImage = ({ storageId, alt }: { storageId: Id<"_storage"> | undefined; alt: string }) => {
+  const url = useQuery(api.files.getUrl, storageId ? { storageId } : "skip")
   if (!url) return null
   return (
     <img
@@ -30,7 +30,7 @@ const ServicesGridCard = ({
   rotate: number
   delay: number
 }) => (
-  <Link to="/services" className="group block" draggable={false}>
+  <Link to={`/portfolio/${service.slug}`} className="group block" draggable={false}>
     <motion.div
       style={{ borderRadius: 16, rotate }}
       className="relative aspect-[3/4] overflow-hidden ring-1 ring-white/20"
@@ -71,7 +71,7 @@ const cardRotate = (i: number) => {
 }
 
 export const ServicesCarousel = () => {
-  const services = useQuery(api.services.list) ?? []
+  const services = useQuery(api.portfolio.listCategories) ?? []
   const scrollRef = useRef<HTMLElement>(null)
   useDragScroll(scrollRef, { threshold: 5 })
 

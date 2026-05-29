@@ -114,7 +114,7 @@ const ContactSidebar = () => {
 
 // ─── Service dropdown ─────────────────────────────────────────────────────────
 const ServiceSelect = () => {
-  const services = useQuery(api.services.list) ?? []
+  const services = useQuery(api.portfolio.listCategories) ?? []
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import type { Doc } from "../../../convex/_generated/dataModel"
+import { ScrollingTextHero } from "./scrolling-text-hero"
 
 type Category = Doc<"categories">
 
@@ -8,7 +9,7 @@ const screens = [
   { top: 74.7, left: 34.07, width: 19.62, height: 13.83, rotation: -3.55, radius: 6.2 },
 ]
 
-export const MotionGraphicsHero = ({ category: _category }: { category: Category }) => {
+export const MotionGraphicsHero = ({ category }: { category: Category }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [containerW, setContainerW] = useState(0)
 
@@ -21,15 +22,12 @@ export const MotionGraphicsHero = ({ category: _category }: { category: Category
 
   return (
     <section className="relative flex h-screen items-center justify-center overflow-hidden bg-black">
-      <h1 className="pointer-events-none absolute top-[18vh] left-[14vw] font-display text-[clamp(5rem,15vw,18rem)] leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase">
-        Motion
-      </h1>
-      <h1 className="pointer-events-none absolute right-[14vw] bottom-[18vh] font-display text-[clamp(5rem,15vw,18rem)] leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase">
-        Graphics
-      </h1>
+      <div className="absolute inset-0 z-0">
+        <ScrollingTextHero text={category.name} />
+      </div>
       <div
         ref={ref}
-        className="relative"
+        className="relative z-10"
         style={{
           aspectRatio: "4500 / 3000",
           width: "min(100%, calc(100vh * 4500 / 3000))",
