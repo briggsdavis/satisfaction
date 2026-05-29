@@ -1,5 +1,6 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
+import { requireAuth } from "./lib/auth"
 
 const valueObject = v.object({
   image: v.optional(v.id("_storage")),
@@ -19,6 +20,7 @@ export const get = query({
 export const upsert = mutation({
   args: { values: v.array(valueObject) },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const existing = await ctx.db.query("about").first()
     if (existing) {
       await ctx.db.replace(existing._id, args)
@@ -45,6 +47,7 @@ export const createWheel = mutation({
     order: v.number(),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     return await ctx.db.insert("aboutWheel", args)
   },
 })
@@ -58,6 +61,7 @@ export const updateWheel = mutation({
     order: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const { id, ...patch } = args
     await ctx.db.patch(id, patch)
   },
@@ -66,6 +70,7 @@ export const updateWheel = mutation({
 export const removeWheel = mutation({
   args: { id: v.id("aboutWheel") },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     await ctx.db.delete(args.id)
   },
 })
@@ -89,6 +94,7 @@ export const createTimeline = mutation({
     order: v.number(),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     return await ctx.db.insert("aboutTimeline", args)
   },
 })
@@ -104,6 +110,7 @@ export const updateTimeline = mutation({
     order: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const { id, ...patch } = args
     await ctx.db.patch(id, patch)
   },
@@ -112,6 +119,7 @@ export const updateTimeline = mutation({
 export const removeTimeline = mutation({
   args: { id: v.id("aboutTimeline") },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     await ctx.db.delete(args.id)
   },
 })

@@ -1,5 +1,6 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
+import { requireAuth } from "./lib/auth"
 
 const carousel = v.union(v.literal("collaboration"), v.literal("work"))
 const tableFor = (c: "collaboration" | "work") =>
@@ -20,6 +21,7 @@ export const add = mutation({
     order: v.number(),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const { carousel: c, ...data } = args
     return await ctx.db.insert(tableFor(c), data)
   },
@@ -34,6 +36,7 @@ export const update = mutation({
     order: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const { carousel: _, id, ...patch } = args
     await ctx.db.patch(id, patch)
   },
@@ -44,6 +47,7 @@ export const remove = mutation({
     id: v.union(v.id("collaborationLogos"), v.id("workLogos")),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     await ctx.db.delete(args.id)
   },
 })

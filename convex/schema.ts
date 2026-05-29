@@ -1,7 +1,11 @@
+import { authTables } from "@convex-dev/auth/server"
 import { defineSchema, defineTable } from "convex/server"
 import { v } from "convex/values"
 
 export default defineSchema({
+  // Convex Auth tables (users, authSessions, authAccounts, etc.)
+  ...authTables,
+
   // ── Homepage (singleton) ────────────────────────────────────────────────
   // All fields optional so the admin can populate the page incrementally.
   homepage: defineTable({

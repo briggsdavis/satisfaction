@@ -1,5 +1,6 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
+import { requireAuth } from "./lib/auth"
 
 // ── Contact info singleton (also feeds the footer) ──────────────────────
 
@@ -21,6 +22,7 @@ export const patchInfo = mutation({
     youtube: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const existing = await ctx.db.query("contactInfo").first()
     if (existing) {
       await ctx.db.patch(existing._id, args)
@@ -42,6 +44,7 @@ export const listFaqSections = query({
 export const createFaqSection = mutation({
   args: { name: v.string(), order: v.number() },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     return await ctx.db.insert("faqSections", args)
   },
 })
@@ -53,6 +56,7 @@ export const updateFaqSection = mutation({
     order: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const { id, ...patch } = args
     await ctx.db.patch(id, patch)
   },
@@ -61,6 +65,7 @@ export const updateFaqSection = mutation({
 export const removeFaqSection = mutation({
   args: { id: v.id("faqSections") },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     // Cascade-delete items in this section.
     const items = await ctx.db
       .query("faqItems")
@@ -93,6 +98,7 @@ export const createFaqItem = mutation({
     order: v.number(),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     return await ctx.db.insert("faqItems", args)
   },
 })
@@ -105,6 +111,7 @@ export const updateFaqItem = mutation({
     order: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const { id, ...patch } = args
     await ctx.db.patch(id, patch)
   },
@@ -113,6 +120,7 @@ export const updateFaqItem = mutation({
 export const removeFaqItem = mutation({
   args: { id: v.id("faqItems") },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     await ctx.db.delete(args.id)
   },
 })

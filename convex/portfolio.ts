@@ -1,5 +1,6 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
+import { requireAuth } from "./lib/auth"
 
 // ── Categories ──────────────────────────────────────────────────────────
 
@@ -46,6 +47,7 @@ export const createCategory = mutation({
     order: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     return await ctx.db.insert("categories", args)
   },
 })
@@ -64,6 +66,7 @@ export const updateCategory = mutation({
     order: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const { id, ...patch } = args
     await ctx.db.patch(id, patch)
   },
@@ -72,6 +75,7 @@ export const updateCategory = mutation({
 export const removeCategory = mutation({
   args: { id: v.id("categories") },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     await ctx.db.delete(args.id)
   },
 })
@@ -130,6 +134,7 @@ export const createProject = mutation({
     categoryIds: v.array(v.id("categories")),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     return await ctx.db.insert("projects", args)
   },
 })
@@ -149,6 +154,7 @@ export const updateProject = mutation({
     categoryIds: v.optional(v.array(v.id("categories"))),
   },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     const { id, ...patch } = args
     await ctx.db.patch(id, patch)
   },
@@ -157,6 +163,7 @@ export const updateProject = mutation({
 export const removeProject = mutation({
   args: { id: v.id("projects") },
   handler: async (ctx, args) => {
+    await requireAuth(ctx)
     await ctx.db.delete(args.id)
   },
 })
