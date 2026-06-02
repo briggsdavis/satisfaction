@@ -8,9 +8,12 @@ type Props = {
   label: string
   value: Id<"_storage"> | null
   onChange: (id: Id<"_storage"> | null) => void
+  // Short note describing the aspect ratio the image is displayed at on
+  // desktop (e.g. "1:1 (square)"). Rendered under the label as guidance.
+  aspectHint?: string
 }
 
-export const AdminConvexImageField = ({ label, value, onChange }: Props) => {
+export const AdminConvexImageField = ({ label, value, onChange, aspectHint }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const generateUploadUrl = useMutation(api.files.generateUploadUrl)
@@ -47,9 +50,16 @@ export const AdminConvexImageField = ({ label, value, onChange }: Props) => {
 
   return (
     <div className="border-b border-white/10 py-4">
-      <label className="mb-3 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+      <label
+        className={`block text-xs font-bold tracking-[0.35em] text-white/40 uppercase ${
+          aspectHint ? "mb-1" : "mb-3"
+        }`}
+      >
         {label}
       </label>
+      {aspectHint && (
+        <p className="mb-3 text-xs text-white/30">Desktop aspect ratio: {aspectHint}</p>
+      )}
       <div className="flex items-center gap-3">
         <button
           type="button"

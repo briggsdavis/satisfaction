@@ -166,6 +166,7 @@ export const ProjectAdmin = () => {
 
       <AdminConvexImageField
         label="Cover Image"
+        aspectHint="varies — cropped to fit portrait, square, and wide slots across the homepage cascade, category, and project pages"
         value={project.coverImage ?? null}
         onChange={(v) => v && update({ id: project._id, coverImage: v })}
       />
@@ -243,8 +244,12 @@ export const ProjectAdmin = () => {
 
       {/* Gallery */}
       <div className="border-b border-white/10 py-5">
-        <p className="mb-3 text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+        <p className="mb-1 text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
           Gallery ({project.gallery.length})
+        </p>
+        <p className="mb-3 text-xs text-white/30">
+          Desktop aspect ratio: varies — cropped to full-width, paired, and wide slots in the grid;
+          shown uncropped in the fullscreen lightbox.
         </p>
         <div className="grid grid-cols-3 gap-2">
           {project.gallery.map((id, i) => (

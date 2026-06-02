@@ -115,6 +115,7 @@ const CarouselEditor = ({
               />
               <AdminConvexImageField
                 label="Logo Image"
+                aspectHint="not cropped — scaled to fit a ~160×56 box; any aspect ratio works (transparent PNG recommended)"
                 value={logo.image}
                 onChange={(v) => v && update({ carousel, id: logo._id, image: v })}
               />
