@@ -20,6 +20,7 @@ export const CampaignAdmin = () => {
 
       <AdminConvexImageField
         label="Centered Image"
+        aspectHint="1:1 (square) — cropped to fit"
         value={(homepage?.campaignImage as Id<"_storage"> | undefined) ?? null}
         onChange={(v) => {
           if (v) patch({ campaignImage: v })

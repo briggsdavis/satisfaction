@@ -7,6 +7,7 @@ import type { Id } from "../../../../convex/_generated/dataModel"
 import { AdminConvexImageField } from "../../components/convex-image-field"
 import { ConvexTextareaField, ConvexTextField } from "../../components/convex-text-field"
 import { BackButton, SectionHeader } from "../../components/misc"
+import { categoryCoverHint, galleryImageHint } from "../../masonry-hints"
 
 const slugify = (s: string) =>
   s
@@ -17,6 +18,7 @@ const slugify = (s: string) =>
 
 const GalleryThumb = ({
   storageId,
+  hint,
   onRemove,
   onUp,
   onDown,
@@ -24,6 +26,7 @@ const GalleryThumb = ({
   isLast,
 }: {
   storageId: Id<"_storage">
+  hint: string
   onRemove: () => void
   onUp: () => void
   onDown: () => void
@@ -32,33 +35,36 @@ const GalleryThumb = ({
 }) => {
   const url = useQuery(api.files.getUrl, { storageId })
   return (
-    <div className="relative">
-      {url ? (
-        <img src={url} alt="" className="h-24 w-full border border-white/10 object-cover" />
-      ) : (
-        <div className="h-24 w-full border border-white/10 bg-white/5" />
-      )}
-      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-black/70 px-1">
-        <div className="flex">
-          <button
-            disabled={isFirst}
-            onClick={onUp}
-            className="p-1 text-white/40 hover:text-white disabled:opacity-20"
-          >
-            <ChevronUp size={12} />
-          </button>
-          <button
-            disabled={isLast}
-            onClick={onDown}
-            className="p-1 text-white/40 hover:text-white disabled:opacity-20"
-          >
-            <ChevronDown size={12} />
+    <div>
+      <div className="relative">
+        {url ? (
+          <img src={url} alt="" className="h-24 w-full border border-white/10 object-cover" />
+        ) : (
+          <div className="h-24 w-full border border-white/10 bg-white/5" />
+        )}
+        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-black/70 px-1">
+          <div className="flex">
+            <button
+              disabled={isFirst}
+              onClick={onUp}
+              className="p-1 text-white/40 hover:text-white disabled:opacity-20"
+            >
+              <ChevronUp size={12} />
+            </button>
+            <button
+              disabled={isLast}
+              onClick={onDown}
+              className="p-1 text-white/40 hover:text-white disabled:opacity-20"
+            >
+              <ChevronDown size={12} />
+            </button>
+          </div>
+          <button onClick={onRemove} className="p-1 text-white/40 hover:text-red-400">
+            <Trash2 size={12} />
           </button>
         </div>
-        <button onClick={onRemove} className="p-1 text-white/40 hover:text-red-400">
-          <Trash2 size={12} />
-        </button>
       </div>
+      <p className="mt-1 text-2xs leading-tight text-white/30">{hint}</p>
     </div>
   )
 }
@@ -71,6 +77,13 @@ export const ProjectAdmin = () => {
     projectSlug ? { slug: projectSlug } : "skip",
   )
   const allServices = useQuery(api.portfolio.listCategories) ?? []
+  // Projects in the primary category, in the same order the public masonry
+  // uses — lets us show the alternating cover aspect ratio for this position.
+  const primaryCategoryId = project?.categoryIds?.[0]
+  const categoryProjects = useQuery(
+    api.portfolio.listProjectsByCategory,
+    primaryCategoryId ? { categoryId: primaryCategoryId } : "skip",
+  )
 
   const update = useMutation(api.portfolio.updateProject)
   const remove = useMutation(api.portfolio.removeProject)
@@ -91,6 +104,15 @@ export const ProjectAdmin = () => {
 
   // Primary service drives the public URL (/portfolio/[service]/[project]).
   const primary = allServices.find((s) => s._id === project.categoryIds[0])
+
+  const coverHint =
+    primary && categoryProjects
+      ? categoryCoverHint(
+          categoryProjects.map((p) => p._id),
+          project._id,
+          primary.name,
+        )
+      : "varies by position in the portfolio masonry (recalculates as projects are added)"
 
   const toggleService = (id: Id<"categories">) => {
     const has = project.categoryIds.includes(id)
@@ -166,6 +188,7 @@ export const ProjectAdmin = () => {
 
       <AdminConvexImageField
         label="Cover Image"
+        aspectHint={coverHint}
         value={project.coverImage ?? null}
         onChange={(v) => v && update({ id: project._id, coverImage: v })}
       />
@@ -243,14 +266,19 @@ export const ProjectAdmin = () => {
 
       {/* Gallery */}
       <div className="border-b border-white/10 py-5">
-        <p className="mb-3 text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
+        <p className="mb-1 text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
           Gallery ({project.gallery.length})
+        </p>
+        <p className="mb-3 text-xs text-white/30">
+          Desktop aspect ratio alternates by position (full → pair → wide+pair). The ratio under
+          each image updates as you add, remove, or reorder — shown uncropped in the lightbox.
         </p>
         <div className="grid grid-cols-3 gap-2">
           {project.gallery.map((id, i) => (
             <GalleryThumb
               key={`${id}-${i}`}
               storageId={id}
+              hint={galleryImageHint(project.gallery.length, i)}
               onRemove={() => removeGalleryAt(i)}
               onUp={() => moveGallery(i, -1)}
               onDown={() => moveGallery(i, 1)}

@@ -53,6 +53,7 @@ export const ValuesAdmin = () => {
           />
           <AdminConvexImageField
             label="Image"
+            aspectHint="2:3 (portrait) — cropped to fit"
             value={value.image ?? null}
             onChange={(v) => v && updateAt(i, { image: v })}
           />

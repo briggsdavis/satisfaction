@@ -65,6 +65,7 @@ const ItemEditor = ({
         />
         <AdminConvexImageField
           label="Image"
+          aspectHint="4:5 (portrait) — cropped to fit"
           value={item.image ?? null}
           onChange={(v) => v && update({ id: item._id, image: v })}
         />

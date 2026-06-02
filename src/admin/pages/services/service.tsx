@@ -133,6 +133,7 @@ export const ServiceAdmin = () => {
 
       <AdminConvexImageField
         label="Image"
+        aspectHint="3:4 (portrait) in the homepage carousel; cropped to taller/wider shapes on the Services, Portfolio, and category pages"
         value={service.image ?? null}
         onChange={(v) => v && update({ id: service._id, image: v })}
       />
