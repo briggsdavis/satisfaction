@@ -10,15 +10,15 @@
     "lint": "oxlint"
   },
   "dependencies": {
-    "@convex-dev/auth": "0.0.92",
+    "@convex-dev/auth": "0.0.93",
     "@react-three/drei": "10.7.7",
     "@react-three/fiber": "9.6.1",
     "clsx": "2.1.1",
-    "convex": "1.39.1",
+    "convex": "1.40.0",
     "lucide-react": "1.17.0",
     "motion": "12.40.0",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "react-router": "7.16.0",
     "tailwind-merge": "3.6.0",
     "three": "0.184.0"
@@ -26,14 +26,14 @@
   "devDependencies": {
     "@tailwindcss/vite": "4.3.0",
     "@types/node": "25.9.1",
-    "@types/react": "19.2.15",
+    "@types/react": "19.2.16",
     "@types/react-dom": "19.2.3",
     "@types/three": "0.184.1",
     "@vitejs/plugin-react": "6.0.2",
-    "oxfmt": "0.52.0",
-    "oxlint": "1.67.0",
+    "oxfmt": "0.53.0",
+    "oxlint": "1.68.0",
     "tailwindcss": "4.3.0",
     "typescript": "6.0.3",
-    "vite": "8.0.14"
+    "vite": "8.0.16"
   }
 }
