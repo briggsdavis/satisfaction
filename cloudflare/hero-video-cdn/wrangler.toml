@@ -1,0 +1,10 @@
+name = "hero-video-cdn"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# The PRODUCTION Convex deployment's HTTP Actions URL (the *.convex.site one,
+# NOT *.convex.cloud). Find it in the Convex dashboard → Settings → URL & Deploy
+# Key → "HTTP Actions URL", or via `npx convex env` on the prod deployment.
+# This is the origin the Worker pulls the video bytes from on a cache miss.
+[vars]
+CONVEX_SITE_URL = "https://disciplined-chipmunk-897.convex.site"
