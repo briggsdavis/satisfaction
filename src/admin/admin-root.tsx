@@ -15,6 +15,7 @@ import { CampaignAdmin } from "./pages/homepage/campaign"
 import { FaqCtaAdmin } from "./pages/homepage/faq-cta"
 import { FeaturedAdmin } from "./pages/homepage/featured"
 import { HeroAdmin } from "./pages/homepage/hero"
+import { HeroVideoAdmin } from "./pages/homepage/hero-video"
 import { HomepageIndex } from "./pages/homepage/index"
 import { WhatWeDoAdmin } from "./pages/homepage/what-we-do"
 import { ProjectsIndex } from "./pages/projects/index"
@@ -37,6 +38,7 @@ const AdminApp = () => {
           <Route index element={<Dashboard />} />
           <Route path="homepage" element={<HomepageIndex />} />
           <Route path="homepage/hero" element={<HeroAdmin />} />
+          <Route path="homepage/hero-video" element={<HeroVideoAdmin />} />
           <Route path="homepage/brands" element={<BrandsAdmin />} />
           <Route path="homepage/what-we-do" element={<WhatWeDoAdmin />} />
           <Route path="homepage/campaign" element={<CampaignAdmin />} />

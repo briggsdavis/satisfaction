@@ -10,6 +10,10 @@ export default defineSchema({
   // All fields optional so the admin can populate the page incrementally.
   homepage: defineTable({
     heroImages: v.optional(v.array(v.object({ slot: v.number(), image: v.id("_storage") }))),
+    // The video shown on the 3D iMac screen in the hero. Served (and CDN-cached)
+    // via the /hero-video HTTP route. Unset → the iMac keeps its baked-in GLB
+    // screen texture (no video).
+    heroVideo: v.optional(v.id("_storage")),
     whatWeDoPanel1Body: v.optional(v.string()),
     whatWeDoPanel2Col1Label: v.optional(v.string()),
     whatWeDoPanel2Col1Body: v.optional(v.string()),

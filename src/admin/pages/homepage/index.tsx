@@ -8,6 +8,11 @@ const sections = [
     description: "Upload the 10 floating images around the hero",
   },
   {
+    to: "hero-video",
+    label: "Hero — iMac Screen Video",
+    description: "The video that plays on the 3D iMac screen",
+  },
+  {
     to: "brands",
     label: "Logo Carousels",
     description: "Manage logos in both homepage carousels",
