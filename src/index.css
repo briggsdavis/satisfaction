@@ -230,6 +230,22 @@
   }
 }
 
+/*
+ * Area Normal's cap-height sits slightly high inside its line box. Keep the
+ * button dimensions unchanged while lowering labels by one optical pixel.
+ */
+.btn-industrial {
+  line-height: 1;
+  padding-top: calc(0.75rem + 1px);
+  padding-bottom: calc(0.75rem - 1px);
+}
+
+.btn-industrial-sm {
+  line-height: 1;
+  padding-top: calc(0.5rem + 1px);
+  padding-bottom: calc(0.5rem - 1px);
+}
+
 .hero-shine-text {
   background: linear-gradient(
     90deg,
