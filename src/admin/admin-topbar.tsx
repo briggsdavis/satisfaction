@@ -1,14 +1,24 @@
 import { useAuthActions } from "@convex-dev/auth/react"
-import { ExternalLink, LogOut } from "lucide-react"
+import { ExternalLink, LogOut, Moon, Sun } from "lucide-react"
 import { Link } from "react-router"
 
-export const AdminTopbar = () => {
+export const AdminTopbar = ({
+  theme,
+  onToggleTheme,
+}: {
+  theme: "dark" | "light"
+  onToggleTheme: () => void
+}) => {
   const { signOut } = useAuthActions()
 
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-white/10 bg-black px-6">
       <div className="flex items-center gap-4">
-        <img src="/logo/satisfaction.png" alt="Social Satisfaction" className="h-7 w-auto" />
+        <img
+          src="/logo/satisfaction.png"
+          alt="Social Satisfaction"
+          className="admin-brand-logo h-7 w-auto"
+        />
       </div>
 
       <div className="flex items-center gap-5">
@@ -21,6 +31,15 @@ export const AdminTopbar = () => {
           <ExternalLink size={12} className="relative -top-0.5" />
           View Site
         </Link>
+        <button
+          type="button"
+          onClick={onToggleTheme}
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          className="flex items-center gap-1.5 text-xs font-bold tracking-[0.2em] text-white/40 uppercase transition-colors hover:text-white"
+        >
+          {theme === "dark" ? <Sun size={12} /> : <Moon size={12} />}
+          {theme === "dark" ? "Light Mode" : "Dark Mode"}
+        </button>
         <button
           type="button"
           onClick={() => void signOut()}

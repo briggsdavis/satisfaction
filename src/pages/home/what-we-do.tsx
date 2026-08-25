@@ -6,7 +6,7 @@ import { api } from "../../../convex/_generated/api"
 import { TextReveal } from "../../components/text-reveal"
 import { usePinnedScroll } from "../../hooks/use-pinned-scroll"
 
-const whatWeDoDistance = () => window.innerHeight
+const whatWeDoDistance = () => window.innerHeight * 0.25
 
 export const WhatWeDoSection = () => {
   const wrapperRef = useRef<HTMLDivElement>(null)

@@ -255,6 +255,223 @@ body.admin-mode [role="button"] {
   cursor: auto !important;
 }
 
+/* Admin-only readability and theme layer. Public-site styling is unaffected. */
+.admin-shell {
+  background: #000;
+  color: #fff;
+  font-size: 1.15rem;
+}
+
+.admin-shell main {
+  padding: 2.5rem;
+}
+
+/* The working column is 10% wider than the original admin layout. */
+.admin-shell .max-w-2xl {
+  max-width: 46.2rem;
+}
+
+.admin-shell .max-w-4xl {
+  max-width: 61.6rem;
+}
+
+/* Increase the admin type scale by approximately 15%. */
+.admin-shell .text-2xs {
+  font-size: 0.71875rem;
+  line-height: 1.15rem;
+}
+
+.admin-shell .text-xs {
+  font-size: 0.8625rem;
+  line-height: 1.15rem;
+}
+
+.admin-shell .text-sm {
+  font-size: 1.00625rem;
+  line-height: 1.4375rem;
+}
+
+.admin-shell .text-lg {
+  font-size: 1.29375rem;
+  line-height: 2.0125rem;
+}
+
+.admin-shell .text-2xl {
+  font-size: 1.725rem;
+  line-height: 2.3rem;
+}
+
+.admin-shell .text-3xl {
+  font-size: 2.15625rem;
+  line-height: 2.5875rem;
+}
+
+/* Add breathing room around fields, lists, and major section breaks. */
+.admin-shell .py-4 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.admin-shell .py-5 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.admin-shell .mb-6 {
+  margin-bottom: 1.75rem;
+}
+
+.admin-shell .mb-8 {
+  margin-bottom: 2.3rem;
+}
+
+.admin-shell .mb-10 {
+  margin-bottom: 2.875rem;
+}
+
+.admin-shell .mb-12 {
+  margin-bottom: 3.45rem;
+}
+
+.admin-shell .space-y-2 > :not(:last-child) {
+  margin-block-end: 0.625rem;
+}
+
+.admin-shell .space-y-3 > :not(:last-child) {
+  margin-block-end: 0.9375rem;
+}
+
+/* Light mode remains fully scoped to the admin shell. */
+.admin-shell[data-admin-theme="light"] {
+  background: #f4f3ef;
+  color: #1a1a1a;
+}
+
+.admin-shell[data-admin-theme="light"] .bg-black {
+  background-color: #f4f3ef;
+}
+
+.admin-shell[data-admin-theme="light"] .bg-black\/70 {
+  background-color: rgb(244 243 239 / 0.88);
+}
+
+.admin-shell[data-admin-theme="light"] .bg-white {
+  background-color: #1a1a1a;
+}
+
+.admin-shell[data-admin-theme="light"] .bg-white\/5 {
+  background-color: rgb(26 26 26 / 0.05);
+}
+
+.admin-shell[data-admin-theme="light"] .bg-white\/20 {
+  background-color: rgb(26 26 26 / 0.2);
+}
+
+.admin-shell[data-admin-theme="light"] .text-white {
+  color: #1a1a1a;
+}
+
+.admin-shell[data-admin-theme="light"] .text-black {
+  color: #fff;
+}
+
+.admin-shell[data-admin-theme="light"] .text-white\/15 {
+  color: rgb(26 26 26 / 0.3);
+}
+
+.admin-shell[data-admin-theme="light"] .text-white\/20 {
+  color: rgb(26 26 26 / 0.32);
+}
+
+.admin-shell[data-admin-theme="light"] .text-white\/25 {
+  color: rgb(26 26 26 / 0.38);
+}
+
+.admin-shell[data-admin-theme="light"] .text-white\/30 {
+  color: rgb(26 26 26 / 0.48);
+}
+
+.admin-shell[data-admin-theme="light"] .text-white\/40 {
+  color: rgb(26 26 26 / 0.62);
+}
+
+.admin-shell[data-admin-theme="light"] .text-white\/50 {
+  color: rgb(26 26 26 / 0.7);
+}
+
+.admin-shell[data-admin-theme="light"] .text-white\/60 {
+  color: rgb(26 26 26 / 0.76);
+}
+
+.admin-shell[data-admin-theme="light"] .text-white\/70 {
+  color: rgb(26 26 26 / 0.82);
+}
+
+.admin-shell[data-admin-theme="light"] .border-white {
+  border-color: #1a1a1a;
+}
+
+.admin-shell[data-admin-theme="light"] .border-white\/10 {
+  border-color: rgb(26 26 26 / 0.12);
+}
+
+.admin-shell[data-admin-theme="light"] .border-white\/15 {
+  border-color: rgb(26 26 26 / 0.16);
+}
+
+.admin-shell[data-admin-theme="light"] .border-white\/20 {
+  border-color: rgb(26 26 26 / 0.22);
+}
+
+.admin-shell[data-admin-theme="light"] .border-white\/30 {
+  border-color: rgb(26 26 26 / 0.32);
+}
+
+.admin-shell[data-admin-theme="light"] .border-white\/40 {
+  border-color: rgb(26 26 26 / 0.42);
+}
+
+.admin-shell[data-admin-theme="light"] .border-white\/50 {
+  border-color: rgb(26 26 26 / 0.52);
+}
+
+.admin-shell[data-admin-theme="light"] .placeholder\:text-white\/15::placeholder {
+  color: rgb(26 26 26 / 0.3);
+}
+
+.admin-shell[data-admin-theme="light"] .hover\:bg-white\/5:hover {
+  background-color: rgb(26 26 26 / 0.06);
+}
+
+.admin-shell[data-admin-theme="light"] .hover\:text-white:hover {
+  color: #1a1a1a;
+}
+
+.admin-shell[data-admin-theme="light"] .hover\:text-white\/70:hover {
+  color: rgb(26 26 26 / 0.82);
+}
+
+.admin-shell[data-admin-theme="light"] .hover\:border-white:hover {
+  border-color: #1a1a1a;
+}
+
+.admin-shell[data-admin-theme="light"] .hover\:border-white\/30:hover {
+  border-color: rgb(26 26 26 / 0.32);
+}
+
+.admin-shell[data-admin-theme="light"] .hover\:border-white\/40:hover {
+  border-color: rgb(26 26 26 / 0.42);
+}
+
+.admin-shell[data-admin-theme="light"] .hover\:border-white\/50:hover,
+.admin-shell[data-admin-theme="light"] .focus\:border-white\/50:focus {
+  border-color: rgb(26 26 26 / 0.52);
+}
+
+.admin-shell[data-admin-theme="light"] .admin-brand-logo {
+  filter: invert(1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
