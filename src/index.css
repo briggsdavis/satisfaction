@@ -275,62 +275,144 @@ body.admin-mode [role="button"] {
 .admin-shell {
   background: #000;
   color: #fff;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
 }
 
 .admin-shell main {
-  padding: 2.5rem;
+  padding: 3rem;
 }
 
-/* The working column is 10% wider than the original admin layout. */
+/* Give content editors a wider, calmer working column. */
 .admin-shell .max-w-2xl {
-  max-width: 46.2rem;
+  max-width: 54rem;
 }
 
 .admin-shell .max-w-4xl {
-  max-width: 61.6rem;
+  max-width: 72rem;
 }
 
-/* Increase the admin type scale by approximately 15%. */
+/* Increase the admin type scale by 10%. */
 .admin-shell .text-2xs {
-  font-size: 0.71875rem;
-  line-height: 1.15rem;
+  font-size: 0.6875rem;
+  line-height: 1.1rem;
 }
 
 .admin-shell .text-xs {
-  font-size: 0.8625rem;
-  line-height: 1.15rem;
+  font-size: 0.825rem;
+  line-height: 1.1rem;
 }
 
 .admin-shell .text-sm {
-  font-size: 1.00625rem;
-  line-height: 1.4375rem;
+  font-size: 0.9625rem;
+  line-height: 1.375rem;
 }
 
 .admin-shell .text-lg {
-  font-size: 1.29375rem;
-  line-height: 2.0125rem;
+  font-size: 1.2375rem;
+  line-height: 1.925rem;
 }
 
 .admin-shell .text-2xl {
-  font-size: 1.725rem;
-  line-height: 2.3rem;
+  font-size: 1.65rem;
+  line-height: 2.2rem;
 }
 
 .admin-shell .text-3xl {
-  font-size: 2.15625rem;
-  line-height: 2.5875rem;
+  font-size: 2.0625rem;
+  line-height: 2.475rem;
 }
 
-/* Add breathing room around fields, lists, and major section breaks. */
+/* Make the admin's structural rules easier to follow in both themes. */
+.admin-shell .border {
+  border-width: 1.5px;
+}
+
+.admin-shell .border-t {
+  border-top-width: 1.5px;
+}
+
+.admin-shell .border-r {
+  border-right-width: 1.5px;
+}
+
+.admin-shell .border-b {
+  border-bottom-width: 1.5px;
+}
+
+.admin-shell .border-l {
+  border-left-width: 1.5px;
+}
+
+.admin-shell:not([data-admin-theme="light"]) .border-white\/10 {
+  border-color: rgb(255 255 255 / 0.24);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .border-white\/15 {
+  border-color: rgb(255 255 255 / 0.28);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .border-white\/20 {
+  border-color: rgb(255 255 255 / 0.34);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .border-white\/30 {
+  border-color: rgb(255 255 255 / 0.44);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .border-white\/40 {
+  border-color: rgb(255 255 255 / 0.54);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .border-white\/50 {
+  border-color: rgb(255 255 255 / 0.64);
+}
+
+/* Keep secondary copy grey while lifting it away from the black background. */
+.admin-shell:not([data-admin-theme="light"]) .text-white\/15 {
+  color: rgb(255 255 255 / 0.32);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .text-white\/20 {
+  color: rgb(255 255 255 / 0.36);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .text-white\/25 {
+  color: rgb(255 255 255 / 0.42);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .text-white\/30 {
+  color: rgb(255 255 255 / 0.5);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .text-white\/40 {
+  color: rgb(255 255 255 / 0.62);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .text-white\/50 {
+  color: rgb(255 255 255 / 0.72);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .text-white\/60 {
+  color: rgb(255 255 255 / 0.8);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .text-white\/70 {
+  color: rgb(255 255 255 / 0.86);
+}
+
+.admin-shell:not([data-admin-theme="light"]) .placeholder\:text-white\/15::placeholder {
+  color: rgb(255 255 255 / 0.36);
+}
+
+/* Add breathing room around fields, lists, controls, and major section breaks. */
 .admin-shell .py-4 {
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .admin-shell .py-5 {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
 }
 
 .admin-shell .mb-6 {
@@ -350,11 +432,11 @@ body.admin-mode [role="button"] {
 }
 
 .admin-shell .space-y-2 > :not(:last-child) {
-  margin-block-end: 0.625rem;
+  margin-block-end: 0.75rem;
 }
 
 .admin-shell .space-y-3 > :not(:last-child) {
-  margin-block-end: 0.9375rem;
+  margin-block-end: 1.125rem;
 }
 
 /* Light mode remains fully scoped to the admin shell. */
@@ -428,27 +510,27 @@ body.admin-mode [role="button"] {
 }
 
 .admin-shell[data-admin-theme="light"] .border-white\/10 {
-  border-color: rgb(26 26 26 / 0.12);
+  border-color: rgb(26 26 26 / 0.2);
 }
 
 .admin-shell[data-admin-theme="light"] .border-white\/15 {
-  border-color: rgb(26 26 26 / 0.16);
+  border-color: rgb(26 26 26 / 0.26);
 }
 
 .admin-shell[data-admin-theme="light"] .border-white\/20 {
-  border-color: rgb(26 26 26 / 0.22);
-}
-
-.admin-shell[data-admin-theme="light"] .border-white\/30 {
   border-color: rgb(26 26 26 / 0.32);
 }
 
-.admin-shell[data-admin-theme="light"] .border-white\/40 {
+.admin-shell[data-admin-theme="light"] .border-white\/30 {
   border-color: rgb(26 26 26 / 0.42);
 }
 
-.admin-shell[data-admin-theme="light"] .border-white\/50 {
+.admin-shell[data-admin-theme="light"] .border-white\/40 {
   border-color: rgb(26 26 26 / 0.52);
+}
+
+.admin-shell[data-admin-theme="light"] .border-white\/50 {
+  border-color: rgb(26 26 26 / 0.62);
 }
 
 .admin-shell[data-admin-theme="light"] .placeholder\:text-white\/15::placeholder {
@@ -486,6 +568,12 @@ body.admin-mode [role="button"] {
 
 .admin-shell[data-admin-theme="light"] .admin-brand-logo {
   filter: invert(1);
+}
+
+@media (max-width: 900px) {
+  .admin-shell main {
+    padding: 2rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
