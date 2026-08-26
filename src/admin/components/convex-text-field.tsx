@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react"
+import { useId } from "react"
 
 // Text/textarea that commits to its onChange handler on blur (or Cmd/Ctrl-Enter
 // for textareas), so we don't fire a Convex mutation on every keystroke.
@@ -18,8 +18,6 @@ export const ConvexTextField = ({
   type = "text",
 }: BaseProps & { type?: string }) => {
   const id = useId()
-  const [local, setLocal] = useState(value)
-  useEffect(() => setLocal(value), [value])
   return (
     <div className="border-b border-white/10 py-4">
       <label
@@ -30,11 +28,11 @@ export const ConvexTextField = ({
       </label>
       <input
         id={id}
+        key={value}
         aria-label={label}
         type={type}
-        value={local}
-        onChange={(e) => setLocal(e.target.value)}
-        onBlur={() => local !== value && onCommit(local)}
+        defaultValue={value}
+        onBlur={(e) => e.currentTarget.value !== value && onCommit(e.currentTarget.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") (e.target as HTMLInputElement).blur()
         }}
@@ -53,8 +51,6 @@ export const ConvexTextareaField = ({
   rows = 4,
 }: BaseProps & { rows?: number }) => {
   const id = useId()
-  const [local, setLocal] = useState(value)
-  useEffect(() => setLocal(value), [value])
   return (
     <div className="border-b border-white/10 py-4">
       <label
@@ -65,11 +61,11 @@ export const ConvexTextareaField = ({
       </label>
       <textarea
         id={id}
+        key={value}
         aria-label={label}
         rows={rows}
-        value={local}
-        onChange={(e) => setLocal(e.target.value)}
-        onBlur={() => local !== value && onCommit(local)}
+        defaultValue={value}
+        onBlur={(e) => e.currentTarget.value !== value && onCommit(e.currentTarget.value)}
         placeholder={placeholder}
         className="w-full resize-none border-b border-white/20 bg-transparent pb-2 text-sm text-white transition-colors outline-none placeholder:text-white/15 focus:border-white/50"
       />

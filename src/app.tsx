@@ -1,6 +1,6 @@
 import { useQuery } from "convex/react"
 import { motion, useMotionValue, useTransform } from "motion/react"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router"
 import { api } from "../convex/_generated/api"
 import { AdminRoot } from "./admin/admin-root"
@@ -150,8 +150,8 @@ const SiteRoot = () => {
   // Show loader only when the browser hard-loads directly to "/".
   // SiteRoot stays mounted for the whole session, so client-side navigation
   // to "/" never re-initialises this state.
-  const [loading, setLoading] = useState(() => window.location.pathname === "/")
-  const [navLogoVisible, setNavLogoVisible] = useState(!loading)
+  const [loadOnStartup] = useState(() => window.location.pathname === "/")
+  const [navLogoVisible, setNavLogoVisible] = useState(!loadOnStartup)
   const [animationDone, setAnimationDone] = useState(false)
 
   // Critical chrome data — gate loader dismissal on these resolving.
@@ -159,10 +159,7 @@ const SiteRoot = () => {
   const footer = useQuery(api.footer.get)
   const contactInfo = useQuery(api.contact.getInfo)
   const dataReady = homepage !== undefined && footer !== undefined && contactInfo !== undefined
-
-  useEffect(() => {
-    if (loading && animationDone && dataReady) setLoading(false)
-  }, [loading, animationDone, dataReady])
+  const loading = loadOnStartup && !(animationDone && dataReady)
 
   return (
     <>

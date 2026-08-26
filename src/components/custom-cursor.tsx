@@ -5,7 +5,7 @@ const hasPointer = () =>
   typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches
 
 export const CustomCursor = () => {
-  const [enabled, setEnabled] = useState(false)
+  const [enabled] = useState(hasPointer)
   const [hasMoved, setHasMoved] = useState(false)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -19,8 +19,7 @@ export const CustomCursor = () => {
   const cursorY = mouseY
 
   useEffect(() => {
-    if (!hasPointer()) return
-    setEnabled(true)
+    if (!enabled) return
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX)
@@ -46,7 +45,7 @@ export const CustomCursor = () => {
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("mouseover", handleMouseOver)
     }
-  }, [mouseX, mouseY])
+  }, [enabled, mouseX, mouseY])
 
   if (!enabled || !hasMoved) return null
 

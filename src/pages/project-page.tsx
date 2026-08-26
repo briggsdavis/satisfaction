@@ -188,10 +188,11 @@ const ImageCard = ({
 )
 
 // Repeating gallery layout: full → pair → wide+pair  → repeat
-type GalleryRow =
-  | { kind: "full"; ids: Id<"_storage">[] }
-  | { kind: "pair"; ids: Id<"_storage">[] }
-  | { kind: "wideTwo"; ids: Id<"_storage">[] }
+type GalleryRow = {
+  kind: "full" | "pair" | "wideTwo"
+  ids: Id<"_storage">[]
+  startIndex: number
+}
 
 const GALLERY_TEMPLATE: GalleryRow["kind"][] = ["full", "pair", "wideTwo"]
 const GALLERY_SIZE: Record<GalleryRow["kind"], number> = {
@@ -208,7 +209,7 @@ const buildGalleryRows = (ids: Id<"_storage">[]): GalleryRow[] => {
     const kind = GALLERY_TEMPLATE[t % GALLERY_TEMPLATE.length]
     const slice = ids.slice(i, i + GALLERY_SIZE[kind])
     if (slice.length === 0) break
-    rows.push({ kind, ids: slice } as GalleryRow)
+    rows.push({ kind, ids: slice, startIndex: i })
     i += slice.length
     t++
   }
@@ -278,7 +279,6 @@ export const ProjectPage = () => {
   }
 
   const galleryRows = buildGalleryRows(project.gallery)
-  let animIdx = 0
 
   return (
     <div className="pt-32">
@@ -340,8 +340,7 @@ export const ProjectPage = () => {
         <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
           {galleryRows.map((row, ri) => {
             if (row.kind === "full") {
-              const i = animIdx
-              animIdx++
+              const i = row.startIndex
               return (
                 <ImageCard
                   key={`r-${ri}`}
@@ -354,9 +353,8 @@ export const ProjectPage = () => {
               )
             }
             if (row.kind === "pair") {
-              const left = animIdx
-              const right = animIdx + 1
-              animIdx += row.ids.length
+              const left = row.startIndex
+              const right = row.startIndex + 1
               return (
                 <div key={`r-${ri}`} className="flex flex-col gap-4 md:flex-row">
                   <ImageCard
@@ -379,10 +377,9 @@ export const ProjectPage = () => {
               )
             }
             // wideTwo
-            const top = animIdx
-            const bl = animIdx + 1
-            const br = animIdx + 2
-            animIdx += row.ids.length
+            const top = row.startIndex
+            const bl = row.startIndex + 1
+            const br = row.startIndex + 2
             return (
               <div key={`r-${ri}`} className="flex flex-col gap-4">
                 <ImageCard

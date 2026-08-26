@@ -1,5 +1,5 @@
 import { useMotionValue, useTransform } from "motion/react"
-import { type RefObject, useEffect, useRef, useState } from "react"
+import { type RefObject, useEffect, useEffectEvent, useRef, useState } from "react"
 import { useSmoothScroll } from "../components/smooth-scroll"
 
 export function usePinnedScroll(
@@ -13,15 +13,14 @@ export function usePinnedScroll(
   const [pinDistance, setPinDistance] = useState(0)
   const wrapperTopRef = useRef(0)
   const pinDistanceRef = useRef(0)
-  const getDistanceRef = useRef(getDistance)
-  getDistanceRef.current = getDistance
+  const measureDistance = useEffectEvent(getDistance)
 
   useEffect(() => {
     const measure = () => {
       if (!wrapperRef.current) return
       const rect = wrapperRef.current.getBoundingClientRect()
       wrapperTopRef.current = rect.top + (smoothY?.get() ?? 0)
-      const dist = getDistanceRef.current()
+      const dist = measureDistance()
       pinDistanceRef.current = dist
       setPinDistance(dist)
     }

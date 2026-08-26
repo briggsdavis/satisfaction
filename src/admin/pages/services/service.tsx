@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from "convex/react"
-import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { api } from "../../../../convex/_generated/api"
 import type { Doc } from "../../../../convex/_generated/dataModel"
@@ -18,15 +17,13 @@ const slugify = (s: string) =>
     .replace(/^-+|-+$/g, "")
 
 const BulletInput = ({ value, onCommit }: { value: string; onCommit: (v: string) => void }) => {
-  const [local, setLocal] = useState(value)
-  useEffect(() => setLocal(value), [value])
   return (
     <input
+      key={value}
       type="text"
       aria-label="Bullet"
-      value={local}
-      onChange={(e) => setLocal(e.target.value)}
-      onBlur={() => local !== value && onCommit(local)}
+      defaultValue={value}
+      onBlur={(e) => e.currentTarget.value !== value && onCommit(e.currentTarget.value)}
       onKeyDown={(e) => {
         if (e.key === "Enter") (e.target as HTMLInputElement).blur()
       }}

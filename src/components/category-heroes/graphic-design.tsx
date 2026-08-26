@@ -1,5 +1,5 @@
 import { motion } from "motion/react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import type { Doc } from "../../../convex/_generated/dataModel"
 import { ScrollingTextHero } from "./scrolling-text-hero"
 
@@ -74,21 +74,19 @@ type Item = { id: number; src: string }
 
 export const GraphicDesignHero = ({ category }: { category: Category }) => {
   const [queue] = useState(() => shuffled(designs))
-  const cursor = useRef(0)
   const [track, setTrack] = useState<Item[]>(() => {
     const items: Item[] = []
     for (let i = 0; i < N + 2; i++) {
       items.push({ id: i, src: queue[i % queue.length] })
     }
-    cursor.current = N + 2
     return items
   })
 
   useEffect(() => {
     const id = setInterval(() => {
       setTrack((prev) => {
-        const next: Item = { id: cursor.current, src: queue[cursor.current % queue.length] }
-        cursor.current += 1
+        const nextId = prev.at(-1)!.id + 1
+        const next: Item = { id: nextId, src: queue[nextId % queue.length] }
         return [...prev.slice(1), next]
       })
     }, TICK_MS)
