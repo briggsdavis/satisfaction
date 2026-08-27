@@ -226,16 +226,18 @@ const ServiceChips = ({ project }: { project: Project }) => {
   return (
     <>
       {chips.map((s) => (
-        <span
+        <Link
           key={s._id}
-          className="flex items-center gap-2 border border-white/20 px-3 py-1 text-xs font-bold tracking-[0.3em] text-white/70 uppercase"
+          to={`/portfolio/${s.slug}`}
+          className="group relative flex items-center gap-2 overflow-hidden border border-white/20 px-3 py-1 text-xs font-bold tracking-[0.3em] text-white/70 uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/5 hover:text-white hover:shadow-lg hover:shadow-white/5 focus-visible:-translate-y-0.5 focus-visible:border-white/50 focus-visible:bg-white/5 focus-visible:text-white"
         >
+          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
           <span
-            className="h-[6px] w-[6px] shrink-0 rounded-full"
-            style={{ backgroundColor: s.color }}
+            className="relative h-1.5 w-1.5 shrink-0 rounded-full bg-current transition-transform duration-300 group-hover:scale-150"
+            style={{ color: s.color }}
           />
-          {s.name}
-        </span>
+          <span className="relative translate-y-0.25">{s.name}</span>
+        </Link>
       ))}
     </>
   )
