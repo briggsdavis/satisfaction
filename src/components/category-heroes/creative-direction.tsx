@@ -58,7 +58,7 @@ export const CreativeDirectionHero = ({ category: _category }: { category: Categ
         {frames.map((f, i) => (
           <div key={i}>
             <div
-              className="absolute overflow-hidden"
+              className="absolute overflow-hidden bg-black"
               style={{
                 top: `${f.top}%`,
                 left: `${f.left}%`,
@@ -66,7 +66,7 @@ export const CreativeDirectionHero = ({ category: _category }: { category: Categ
                 height: `${f.height}%`,
               }}
             >
-              <AnimatePresence>
+              <AnimatePresence initial={false}>
                 <motion.video
                   key={indices[i]}
                   src={queue[indices[i]]}
@@ -96,7 +96,7 @@ export const CreativeDirectionHero = ({ category: _category }: { category: Categ
                 opacity: REFLECTION_OPACITY,
               }}
             >
-              <AnimatePresence>
+              <AnimatePresence initial={false}>
                 <motion.video
                   key={indices[i]}
                   src={queue[indices[i]]}

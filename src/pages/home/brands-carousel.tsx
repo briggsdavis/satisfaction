@@ -46,17 +46,23 @@ const useCarouselAnimation = () => {
   const baseX = useMotionValue(0)
   const trackRef = useRef<HTMLDivElement>(null)
   const copyWidthRef = useRef(0)
+  const initializedRef = useRef(false)
 
   useEffect(() => {
-    const measure = () => {
-      if (trackRef.current) {
-        copyWidthRef.current = trackRef.current.offsetWidth
+    const track = trackRef.current
+    if (!track) return
+
+    const observer = new ResizeObserver(([entry]) => {
+      const width = entry.borderBoxSize[0]?.inlineSize ?? entry.contentRect.width
+      copyWidthRef.current = width
+      if (width > 0 && !initializedRef.current) {
+        baseX.set(-width)
+        initializedRef.current = true
       }
-    }
-    requestAnimationFrame(measure)
-    window.addEventListener("resize", measure)
-    return () => window.removeEventListener("resize", measure)
-  }, [])
+    })
+    observer.observe(track)
+    return () => observer.disconnect()
+  }, [baseX])
 
   const directionRef = useRef<1 | -1>(-1)
 
@@ -80,8 +86,8 @@ const useCarouselAnimation = () => {
     const dir = directionRef.current
     let next = baseX.get() + dir * speed * (delta / 1000)
     if (copyWidthRef.current > 0) {
-      if (next < -copyWidthRef.current) next += copyWidthRef.current
-      if (next > 0) next -= copyWidthRef.current
+      if (next < -copyWidthRef.current * 2) next += copyWidthRef.current
+      if (next > -copyWidthRef.current) next -= copyWidthRef.current
     }
     baseX.set(next)
   })
@@ -150,6 +156,16 @@ export const LogosCarousel = ({
 
       <div className="h-40 overflow-hidden border-b border-white/10 bg-white">
         <motion.div style={{ x: baseX }} className="flex h-full w-max">
+          <div aria-hidden className="flex h-full">
+            {(logos ?? []).map((logo) => (
+              <LogoBrand
+                key={`a-${logo._id}`}
+                logo={logo}
+                skewTransform={skewTransform}
+                counterSkewTransform={counterSkewTransform}
+              />
+            ))}
+          </div>
           <div ref={trackRef} className="flex h-full">
             {(logos ?? []).map((logo) => (
               <LogoBrand
@@ -163,7 +179,7 @@ export const LogosCarousel = ({
           <div aria-hidden className="flex h-full">
             {(logos ?? []).map((logo) => (
               <LogoBrand
-                key={`b-${logo._id}`}
+                key={`c-${logo._id}`}
                 logo={logo}
                 skewTransform={skewTransform}
                 counterSkewTransform={counterSkewTransform}
