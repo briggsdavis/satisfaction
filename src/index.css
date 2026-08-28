@@ -134,6 +134,42 @@
 }
 
 @layer components {
+  .rich-text-editor .tiptap {
+    @apply min-h-32 px-3 py-3 text-sm text-white outline-none;
+  }
+
+  .rich-text-editor .tiptap p.is-editor-empty:first-child::before {
+    @apply pointer-events-none float-left h-0 text-white/20;
+    content: "Write something…";
+  }
+
+  .rich-text-editor .tiptap h2,
+  .rich-text-content h2 {
+    @apply mt-6 mb-2 text-xl font-bold first:mt-0;
+  }
+
+  .rich-text-editor .tiptap p,
+  .rich-text-content p {
+    @apply mb-3 last:mb-0;
+  }
+
+  .rich-text-editor .tiptap ul,
+  .rich-text-content ul {
+    @apply mb-3 list-disc pl-5;
+  }
+
+  .rich-text-editor .tiptap ol,
+  .rich-text-content ol {
+    @apply mb-3 list-decimal pl-5;
+  }
+
+  .rich-text-editor .tiptap blockquote,
+  .rich-text-content blockquote {
+    @apply my-3 border-l-2 border-white/30 pl-4 italic;
+  }
+}
+
+@layer components {
   .btn-industrial {
     @apply rounded-none border border-white/40 bg-transparent px-8 py-3 text-xs font-bold tracking-[0.3em] uppercase transition-all hover:bg-white hover:text-black;
   }

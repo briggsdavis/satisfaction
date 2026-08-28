@@ -4,11 +4,24 @@ import { useCallback, useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { Link, useNavigationType, useParams } from "react-router"
 import { api } from "../../convex/_generated/api"
+import DOMPurify from "dompurify"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { FitTitle } from "../components/fit-title"
 import { TextReveal } from "../components/text-reveal"
 
 type Project = Doc<"projects">
+
+const RichText = ({ value, className }: { value: string; className: string }) => {
+  if (!/<[a-z][\s\S]*>/i.test(value)) {
+    return <p className={`${className} whitespace-pre-line`}>{value}</p>
+  }
+  return (
+    <div
+      className={`rich-text-content ${className}`}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(value) }}
+    />
+  )
+}
 
 const Lightbox = ({
   images,
@@ -308,15 +321,15 @@ export const ProjectPage = () => {
             <span className="mb-4 block text-xs font-bold tracking-[0.4em] text-white/40 uppercase">
               Project Overview
             </span>
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-150px" }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-base leading-relaxed whitespace-pre-line text-white/60 md:text-lg"
+              className="text-base leading-relaxed text-white/60 md:text-lg"
             >
-              {project.description}
-            </motion.p>
+              <RichText value={project.description} className="text-base leading-relaxed md:text-lg" />
+            </motion.div>
           </div>
         </div>
 
@@ -332,7 +345,7 @@ export const ProjectPage = () => {
               <span className="mb-5 block text-xs font-bold tracking-[0.4em] text-white/40 uppercase">
                 {label}
               </span>
-              <p className="text-sm leading-relaxed whitespace-pre-line text-white/60">{body}</p>
+              <RichText value={body} className="text-sm leading-relaxed text-white/60" />
             </div>
           ))}
         </div>

@@ -5,8 +5,9 @@ import { useNavigate, useParams } from "react-router"
 import { api } from "../../../../convex/_generated/api"
 import type { Id } from "../../../../convex/_generated/dataModel"
 import { AdminConvexImageField } from "../../components/convex-image-field"
-import { ConvexTextareaField, ConvexTextField } from "../../components/convex-text-field"
+import { ConvexTextField } from "../../components/convex-text-field"
 import { BackButton, SectionHeader } from "../../components/misc"
+import { RichTextField } from "../../components/rich-text-field"
 import { categoryCoverHint, galleryImageHint } from "../../masonry-hints"
 
 const slugify = (s: string) =>
@@ -208,29 +209,25 @@ export const ProjectAdmin = () => {
         </span>
       </div>
 
-      <ConvexTextareaField
-        label="Project Overview (description)"
+      <RichTextField
+        label="Project Overview"
         value={project.description}
         onCommit={(v) => update({ id: project._id, description: v })}
-        rows={4}
       />
-      <ConvexTextareaField
+      <RichTextField
         label="Approach"
         value={project.approach}
         onCommit={(v) => update({ id: project._id, approach: v })}
-        rows={3}
       />
-      <ConvexTextareaField
+      <RichTextField
         label="Execution"
         value={project.execution}
         onCommit={(v) => update({ id: project._id, execution: v })}
-        rows={3}
       />
-      <ConvexTextareaField
+      <RichTextField
         label="Results"
         value={project.results}
         onCommit={(v) => update({ id: project._id, results: v })}
-        rows={3}
       />
 
       {/* Services — m2m. Each selected service lists this project and renders as a tag. */}
