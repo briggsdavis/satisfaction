@@ -6,11 +6,13 @@ export const FitTitle = ({
   slideFrom = "bottom",
   delay = 0,
   immediate,
+  onCommit,
 }: {
   text: string
   slideFrom?: "bottom" | "left"
   delay?: number
   immediate?: boolean
+  onCommit?: (value: string) => void
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [fontSize, setFontSize] = useState<number | null>(null)
@@ -42,14 +44,28 @@ export const FitTitle = ({
 
   return (
     <div ref={containerRef} className="w-full" style={fontSize ? { fontSize } : undefined}>
-      <TextReveal
-        text={text}
-        className="massive-text justify-center leading-none"
-        nowrap
-        immediate={immediate}
-        slideFrom={slideFrom}
-        delay={delay}
-      />
+      {onCommit ? (
+        <span
+          contentEditable
+          suppressContentEditableWarning
+          className="massive-text block leading-none whitespace-nowrap outline-1 outline-white/30 transition-colors outline-dashed hover:outline-white/70 focus:outline-white"
+          onBlur={(event) => {
+            const value = event.currentTarget.textContent?.trim()
+            if (value && value !== text) onCommit(value)
+          }}
+        >
+          {text}
+        </span>
+      ) : (
+        <TextReveal
+          text={text}
+          className="massive-text justify-center leading-none"
+          nowrap
+          immediate={immediate}
+          slideFrom={slideFrom}
+          delay={delay}
+        />
+      )}
     </div>
   )
 }

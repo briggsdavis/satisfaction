@@ -1,15 +1,23 @@
-import { useQuery } from "convex/react"
-import { AnimatePresence, motion } from "motion/react"
-import { useCallback, useEffect, useState } from "react"
-import { createPortal } from "react-dom"
-import { Link, useNavigationType, useParams } from "react-router"
-import { api } from "../../convex/_generated/api"
+import { useMutation, useQuery } from "convex/react"
 import DOMPurify from "dompurify"
+import { ImagePlus, Plus, X } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
+import { Link, useNavigationType, useParams, useSearchParams } from "react-router"
+import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { FitTitle } from "../components/fit-title"
 import { TextReveal } from "../components/text-reveal"
 
 type Project = Doc<"projects">
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
 
 const RichText = ({ value, className }: { value: string; className: string }) => {
   if (!/<[a-z][\s\S]*>/i.test(value)) {
@@ -22,6 +30,29 @@ const RichText = ({ value, className }: { value: string; className: string }) =>
     />
   )
 }
+
+const EditableRichText = ({
+  value,
+  className,
+  onCommit,
+}: {
+  value: string
+  className: string
+  onCommit: (value: string) => void
+}) => (
+  <div
+    contentEditable
+    suppressContentEditableWarning
+    className={`rich-text-content rounded-sm outline-1 outline-white/30 transition-colors outline-dashed hover:outline-white/70 focus:outline-white ${className}`}
+    dangerouslySetInnerHTML={{
+      __html: DOMPurify.sanitize(value).replaceAll("\n", "<br>"),
+    }}
+    onBlur={(event) => {
+      const next = event.currentTarget.innerHTML
+      if (next !== value) onCommit(next)
+    }}
+  />
+)
 
 const Lightbox = ({
   images,
@@ -163,12 +194,14 @@ const ImageCard = ({
   index,
   className = "",
   onClick,
+  editing = false,
 }: {
   storageId: Id<"_storage">
   title: string
   index: number
   className?: string
   onClick?: () => void
+  editing?: boolean
 }) => (
   <motion.div
     className={`group relative block cursor-pointer overflow-hidden rounded-[16px] ${className}`}
@@ -191,7 +224,7 @@ const ImageCard = ({
     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
     <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
       <span className="border border-white/40 bg-black/50 px-3 py-1 font-mono text-2xs font-bold tracking-widest text-white uppercase backdrop-blur-sm">
-        View
+        {editing ? "Change image" : "View"}
       </span>
     </div>
     <span className="absolute right-4 bottom-4 font-mono text-xs font-bold tracking-widest text-white/30">
@@ -230,29 +263,78 @@ const buildGalleryRows = (ids: Id<"_storage">[]): GalleryRow[] => {
 }
 
 // ─── Service chips (resolves the project's services → names + colors) ────────
-const ServiceChips = ({ project }: { project: Project }) => {
+const ServiceChips = ({ project, editing }: { project: Project; editing: boolean }) => {
   const allServices = useQuery(api.portfolio.listCategories) ?? []
+  const updateProject = useMutation(api.portfolio.updateProject)
+  const [adding, setAdding] = useState(false)
   const map = new Map(allServices.map((s) => [s._id, s] as const))
   const chips = project.categoryIds
     .map((id) => map.get(id))
     .filter((s): s is NonNullable<typeof s> => !!s)
   return (
-    <>
+    <div className="relative flex flex-wrap gap-3">
       {chips.map((s) => (
-        <Link
-          key={s._id}
-          to={`/portfolio/${s.slug}`}
-          className="group relative flex items-center gap-2 overflow-hidden border border-white/20 px-3 py-1 text-xs font-bold tracking-[0.3em] text-white/70 uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/5 hover:text-white hover:shadow-lg hover:shadow-white/5 focus-visible:-translate-y-0.5 focus-visible:border-white/50 focus-visible:bg-white/5 focus-visible:text-white"
-        >
-          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
-          <span
-            className="relative h-1.5 w-1.5 shrink-0 rounded-full bg-current transition-transform duration-300 group-hover:scale-150"
-            style={{ color: s.color }}
-          />
-          <span className="relative translate-y-0.25">{s.name}</span>
-        </Link>
+        <div key={s._id} className="group relative">
+          <Link
+            to={`/portfolio/${s.slug}`}
+            className="relative flex items-center gap-2 overflow-hidden border border-white/20 px-3 py-1 text-xs font-bold tracking-[0.3em] text-white/70 uppercase transition-all duration-300 hover:border-white/50 hover:bg-white/5 hover:text-white"
+          >
+            <span
+              className="relative h-1.5 w-1.5 shrink-0 rounded-full bg-current transition-transform duration-300 group-hover:scale-150"
+              style={{ color: s.color }}
+            />
+            <span className="relative translate-y-0.25">{s.name}</span>
+          </Link>
+          {editing && project.categoryIds.length > 1 && (
+            <button
+              type="button"
+              aria-label={`Remove ${s.name}`}
+              onClick={() =>
+                updateProject({
+                  id: project._id,
+                  categoryIds: project.categoryIds.filter((id) => id !== s._id),
+                })
+              }
+              className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-white text-black opacity-0 transition-opacity group-hover:opacity-100"
+            >
+              <X size={11} />
+            </button>
+          )}
+        </div>
       ))}
-    </>
+      {editing && (
+        <button
+          type="button"
+          aria-label="Add service"
+          onClick={() => setAdding((value) => !value)}
+          className="flex h-7 w-7 items-center justify-center border border-dashed border-white/30 text-white/50 hover:border-white hover:text-white"
+        >
+          <Plus size={14} />
+        </button>
+      )}
+      {editing && adding && (
+        <div className="absolute top-full left-0 z-20 mt-2 min-w-48 border border-white/20 bg-black p-1 shadow-xl">
+          {allServices
+            .filter((service) => !project.categoryIds.includes(service._id))
+            .map((service) => (
+              <button
+                key={service._id}
+                type="button"
+                onClick={() => {
+                  updateProject({
+                    id: project._id,
+                    categoryIds: [...project.categoryIds, service._id],
+                  })
+                  setAdding(false)
+                }}
+                className="block w-full px-3 py-2 text-left text-xs font-bold tracking-wider text-white/60 uppercase hover:bg-white hover:text-black"
+              >
+                {service.name}
+              </button>
+            ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -262,7 +344,15 @@ export const ProjectPage = () => {
     project: string
   }>()
   const navType = useNavigationType()
+  const [searchParams] = useSearchParams()
+  const editing = searchParams.get("edit") === "1"
   const titleDelay = navType === "PUSH" ? 0.75 : 0
+  const updateProject = useMutation(api.portfolio.updateProject)
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl)
+  const coverFileRef = useRef<HTMLInputElement>(null)
+  const galleryFileRef = useRef<HTMLInputElement>(null)
+  const addGalleryFileRef = useRef<HTMLInputElement>(null)
+  const [replaceGalleryIndex, setReplaceGalleryIndex] = useState<number | null>(null)
 
   const project = useQuery(
     api.portfolio.getProjectBySlug,
@@ -294,9 +384,52 @@ export const ProjectPage = () => {
   }
 
   const galleryRows = buildGalleryRows(project.gallery)
+  const commit = (
+    patch: Partial<Pick<Project, "title" | "description" | "approach" | "execution" | "results">>,
+  ) => updateProject({ id: project._id, ...patch })
+  const uploadFile = async (file: File) => {
+    const uploadUrl = await generateUploadUrl()
+    const response = await fetch(uploadUrl, {
+      method: "POST",
+      headers: { "Content-Type": file.type },
+      body: file,
+    })
+    return ((await response.json()) as { storageId: Id<"_storage"> }).storageId
+  }
+  const updateCover = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ""
+    if (!file) return
+    await updateProject({ id: project._id, coverImage: await uploadFile(file) })
+  }
+  const addGalleryImages = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? [])
+    event.target.value = ""
+    if (files.length === 0) return
+    const storageIds = await Promise.all(files.map(uploadFile))
+    await updateProject({ id: project._id, gallery: [...project.gallery, ...storageIds] })
+  }
+  const chooseGalleryImage = (index: number) => {
+    setReplaceGalleryIndex(index)
+    galleryFileRef.current?.click()
+  }
+  const replaceGalleryImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ""
+    if (!file || replaceGalleryIndex === null) return
+    const gallery = [...project.gallery]
+    gallery[replaceGalleryIndex] = await uploadFile(file)
+    await updateProject({ id: project._id, gallery })
+    setReplaceGalleryIndex(null)
+  }
 
   return (
-    <div className="pt-32">
+    <div
+      className="pt-32"
+      onClickCapture={(event) => {
+        if (editing && (event.target as Element).closest("a")) event.preventDefault()
+      }}
+    >
       <section className="border-b border-white/10 px-8 pb-16 md:px-16">
         <Link
           to={`/portfolio/${category.slug}`}
@@ -304,7 +437,38 @@ export const ProjectPage = () => {
         >
           ← {category.name}
         </Link>
-        <FitTitle text={project.title.toUpperCase()} slideFrom="left" delay={titleDelay} />
+        <FitTitle
+          text={project.title.toUpperCase()}
+          slideFrom="left"
+          delay={titleDelay}
+          onCommit={
+            editing
+              ? async (title) => {
+                  const slug = slugify(title)
+                  await updateProject({ id: project._id, title, slug })
+                  window.parent.postMessage({ type: "project-slug", slug }, window.location.origin)
+                }
+              : undefined
+          }
+        />
+        {editing && (
+          <button
+            type="button"
+            onClick={() => coverFileRef.current?.click()}
+            className="group relative mt-8 flex aspect-video w-full items-center justify-center overflow-hidden border border-dashed border-white/30 bg-white/5 text-white/50 hover:border-white/70 hover:text-white"
+          >
+            {project.coverImage ? (
+              <StorageImg
+                storageId={project.coverImage}
+                className="absolute inset-0 h-full w-full object-cover opacity-60 transition-opacity group-hover:opacity-40"
+              />
+            ) : null}
+            <span className="relative flex items-center gap-2 bg-black/70 px-4 py-2 text-xs font-bold tracking-wider uppercase">
+              <ImagePlus size={14} />
+              {project.coverImage ? "Change cover" : "Add cover"}
+            </span>
+          </button>
+        )}
       </section>
 
       <section className="border-b border-white/10 px-8 py-20 md:px-16">
@@ -313,9 +477,7 @@ export const ProjectPage = () => {
             <span className="mb-3 block text-xs font-bold tracking-[0.4em] text-white/40 uppercase">
               Tags
             </span>
-            <div className="flex flex-wrap gap-3">
-              <ServiceChips project={project} />
-            </div>
+            <ServiceChips project={project} editing={editing} />
           </div>
           <div className="md:col-span-2">
             <span className="mb-4 block text-xs font-bold tracking-[0.4em] text-white/40 uppercase">
@@ -328,7 +490,18 @@ export const ProjectPage = () => {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               className="text-base leading-relaxed text-white/60 md:text-lg"
             >
-              <RichText value={project.description} className="text-base leading-relaxed md:text-lg" />
+              {editing ? (
+                <EditableRichText
+                  value={project.description}
+                  className="text-base leading-relaxed md:text-lg"
+                  onCommit={(description) => commit({ description })}
+                />
+              ) : (
+                <RichText
+                  value={project.description}
+                  className="text-base leading-relaxed md:text-lg"
+                />
+              )}
             </motion.div>
           </div>
         </div>
@@ -345,13 +518,23 @@ export const ProjectPage = () => {
               <span className="mb-5 block text-xs font-bold tracking-[0.4em] text-white/40 uppercase">
                 {label}
               </span>
-              <RichText value={body} className="text-sm leading-relaxed text-white/60" />
+              {editing ? (
+                <EditableRichText
+                  value={body}
+                  className="text-sm leading-relaxed text-white/60"
+                  onCommit={(value) =>
+                    commit({ [label.toLowerCase() as "approach" | "execution" | "results"]: value })
+                  }
+                />
+              ) : (
+                <RichText value={body} className="text-sm leading-relaxed text-white/60" />
+              )}
             </div>
           ))}
         </div>
       </section>
 
-      {project.gallery.length > 0 && (
+      {(editing || project.gallery.length > 0) && (
         <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
           {galleryRows.map((row, ri) => {
             if (row.kind === "full") {
@@ -362,8 +545,9 @@ export const ProjectPage = () => {
                   storageId={row.ids[0]}
                   title={project.title}
                   index={i}
-                  className="h-[48vh]"
-                  onClick={() => setLightboxIdx(i)}
+                  className="aspect-4/3 md:aspect-auto md:h-[48vh]"
+                  onClick={() => (editing ? chooseGalleryImage(i) : setLightboxIdx(i))}
+                  editing={editing}
                 />
               )
             }
@@ -371,21 +555,23 @@ export const ProjectPage = () => {
               const left = row.startIndex
               const right = row.startIndex + 1
               return (
-                <div key={`r-${ri}`} className="flex flex-col gap-4 md:flex-row">
+                <div key={`r-${ri}`} className="flex gap-4">
                   <ImageCard
                     storageId={row.ids[0]}
                     title={project.title}
                     index={left}
-                    className="h-[58vh] flex-1"
-                    onClick={() => setLightboxIdx(left)}
+                    className={`${row.ids[1] ? "aspect-3/4" : "aspect-4/3"} flex-1 md:aspect-auto md:h-[58vh]`}
+                    onClick={() => (editing ? chooseGalleryImage(left) : setLightboxIdx(left))}
+                    editing={editing}
                   />
                   {row.ids[1] && (
                     <ImageCard
                       storageId={row.ids[1]}
                       title={project.title}
                       index={right}
-                      className="h-[58vh] flex-1"
-                      onClick={() => setLightboxIdx(right)}
+                      className="aspect-3/4 flex-1 md:aspect-auto md:h-[58vh]"
+                      onClick={() => (editing ? chooseGalleryImage(right) : setLightboxIdx(right))}
+                      editing={editing}
                     />
                   )}
                 </div>
@@ -401,17 +587,19 @@ export const ProjectPage = () => {
                   storageId={row.ids[0]}
                   title={project.title}
                   index={top}
-                  className="h-[42vh]"
-                  onClick={() => setLightboxIdx(top)}
+                  className="aspect-video md:aspect-auto md:h-[42vh]"
+                  onClick={() => (editing ? chooseGalleryImage(top) : setLightboxIdx(top))}
+                  editing={editing}
                 />
-                <div className="flex flex-col gap-4 md:flex-row">
+                <div className="flex gap-4">
                   {row.ids[1] && (
                     <ImageCard
                       storageId={row.ids[1]}
                       title={project.title}
                       index={bl}
-                      className="h-[36vh] flex-1"
-                      onClick={() => setLightboxIdx(bl)}
+                      className={`${row.ids[2] ? "aspect-square" : "aspect-4/3"} flex-1 md:aspect-auto md:h-[36vh]`}
+                      onClick={() => (editing ? chooseGalleryImage(bl) : setLightboxIdx(bl))}
+                      editing={editing}
                     />
                   )}
                   {row.ids[2] && (
@@ -419,14 +607,25 @@ export const ProjectPage = () => {
                       storageId={row.ids[2]}
                       title={project.title}
                       index={br}
-                      className="h-[36vh] flex-1"
-                      onClick={() => setLightboxIdx(br)}
+                      className="aspect-square flex-1 md:aspect-auto md:h-[36vh]"
+                      onClick={() => (editing ? chooseGalleryImage(br) : setLightboxIdx(br))}
+                      editing={editing}
                     />
                   )}
                 </div>
               </div>
             )
           })}
+          {editing && (
+            <button
+              type="button"
+              onClick={() => addGalleryFileRef.current?.click()}
+              className="flex h-48 items-center justify-center gap-2 rounded-[16px] border border-dashed border-white/30 text-xs font-bold tracking-wider text-white/50 uppercase hover:border-white/70 hover:text-white"
+            >
+              <ImagePlus size={16} />
+              Add gallery images
+            </button>
+          )}
         </div>
       )}
 
@@ -449,6 +648,35 @@ export const ProjectPage = () => {
           />
         )}
       </AnimatePresence>
+      {editing && (
+        <>
+          <input
+            ref={coverFileRef}
+            type="file"
+            accept="image/*"
+            aria-label="Upload cover image"
+            className="hidden"
+            onChange={updateCover}
+          />
+          <input
+            ref={galleryFileRef}
+            type="file"
+            accept="image/*"
+            aria-label="Replace gallery image"
+            className="hidden"
+            onChange={replaceGalleryImage}
+          />
+          <input
+            ref={addGalleryFileRef}
+            type="file"
+            accept="image/*"
+            multiple
+            aria-label="Add gallery images"
+            className="hidden"
+            onChange={addGalleryImages}
+          />
+        </>
+      )}
     </div>
   )
 }

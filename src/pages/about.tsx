@@ -13,6 +13,7 @@ import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { AboutHero } from "../components/about-hero"
 import { useSmoothScroll } from "../components/smooth-scroll"
+import { Faq } from "./faq"
 import { LogosCarousel } from "./home/brands-carousel"
 import { FeaturedCascade } from "./home/featured-cascade"
 
@@ -424,6 +425,8 @@ export const About = () => {
             })}
           </div>
         </div>
+
+        <Faq />
 
         {/* Branding CTA */}
         <div className="border-t border-white/10 px-8 py-16 md:px-16">

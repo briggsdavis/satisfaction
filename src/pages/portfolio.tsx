@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Link, useNavigationType } from "react-router"
 import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
-import { TextReveal } from "../components/text-reveal"
+import { FitTitle } from "../components/fit-title"
 
 type Category = Doc<"categories">
 
@@ -116,22 +116,46 @@ const GROUP_SIZE: Record<GroupKind, number> = {
 
 const renderGroup = (kind: GroupKind, cats: Category[], key: string): React.ReactNode => {
   if (kind === "full") {
-    return <CategoryCard key={key} category={cats[0]} className="h-[42vh]" />
+    return (
+      <CategoryCard
+        key={key}
+        category={cats[0]}
+        className="aspect-4/3 md:aspect-auto md:h-[42vh]"
+      />
+    )
   }
   if (kind === "pair") {
     return (
-      <div key={key} className="flex flex-col gap-4 md:flex-row">
-        <CategoryCard category={cats[0]} className="h-[56vh] flex-1" />
-        {cats[1] && <CategoryCard category={cats[1]} className="h-[56vh] flex-1" />}
+      <div key={key} className="flex gap-4">
+        <CategoryCard
+          category={cats[0]}
+          className={`${cats[1] ? "aspect-3/4" : "aspect-4/3"} flex-1 md:aspect-auto md:h-[56vh]`}
+        />
+        {cats[1] && (
+          <CategoryCard
+            category={cats[1]}
+            className="aspect-3/4 flex-1 md:aspect-auto md:h-[56vh]"
+          />
+        )}
       </div>
     )
   }
   return (
     <div key={key} className="flex flex-col gap-4">
-      <CategoryCard category={cats[0]} className="h-[40vh]" />
-      <div className="flex flex-col gap-4 md:flex-row">
-        {cats[1] && <CategoryCard category={cats[1]} className="h-[34vh] flex-1" />}
-        {cats[2] && <CategoryCard category={cats[2]} className="h-[34vh] flex-1" />}
+      <CategoryCard category={cats[0]} className="aspect-video md:aspect-auto md:h-[40vh]" />
+      <div className="flex gap-4">
+        {cats[1] && (
+          <CategoryCard
+            category={cats[1]}
+            className={`${cats[2] ? "aspect-square" : "aspect-4/3"} flex-1 md:aspect-auto md:h-[34vh]`}
+          />
+        )}
+        {cats[2] && (
+          <CategoryCard
+            category={cats[2]}
+            className="aspect-square flex-1 md:aspect-auto md:h-[34vh]"
+          />
+        )}
       </div>
     </div>
   )
@@ -164,12 +188,7 @@ export const Portfolio = () => {
         <span className="mb-6 block text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
           Selected Work
         </span>
-        <TextReveal
-          text="PORTFOLIO"
-          className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
-          slideFrom="left"
-          delay={titleDelay}
-        />
+        <FitTitle text="PORTFOLIO" slideFrom="left" delay={titleDelay} />
       </section>
 
       <div className="flex flex-col gap-4 px-8 py-8 md:px-16">{renderTemplate(categories)}</div>

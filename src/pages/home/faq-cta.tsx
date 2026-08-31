@@ -22,7 +22,7 @@ export const FaqCta = () => {
           {homepage?.faqCtaBody}
         </p>
         <div>
-          <Link to="/contact#faq" className="btn-industrial">
+          <Link to="/about#faq" className="btn-industrial">
             View FAQ →
           </Link>
         </div>

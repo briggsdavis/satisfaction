@@ -11,9 +11,18 @@ type Props = {
   // Short note describing the aspect ratio the image is displayed at on
   // desktop (e.g. "1:1 (square)"). Rendered under the label as guidance.
   aspectHint?: string
+  compact?: boolean
+  allowRemove?: boolean
 }
 
-export const AdminConvexImageField = ({ label, value, onChange, aspectHint }: Props) => {
+export const AdminConvexImageField = ({
+  label,
+  value,
+  onChange,
+  aspectHint,
+  compact,
+  allowRemove = true,
+}: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const generateUploadUrl = useMutation(api.files.generateUploadUrl)
@@ -49,7 +58,7 @@ export const AdminConvexImageField = ({ label, value, onChange, aspectHint }: Pr
   }
 
   return (
-    <div className="border-b border-white/10 py-4">
+    <div className={compact ? "" : "border-b border-white/10 py-4"}>
       <label
         className={`block text-xs font-bold tracking-[0.35em] text-white/40 uppercase ${
           aspectHint ? "mb-1" : "mb-3"
@@ -70,7 +79,7 @@ export const AdminConvexImageField = ({ label, value, onChange, aspectHint }: Pr
           <Upload size={11} />
           {uploading ? "Uploading…" : value ? "Change Image" : "Upload Image"}
         </button>
-        {value && (
+        {value && allowRemove && (
           <button
             type="button"
             onClick={handleRemove}
@@ -93,7 +102,7 @@ export const AdminConvexImageField = ({ label, value, onChange, aspectHint }: Pr
         <img
           src={url}
           alt="preview"
-          className="mt-3 h-24 w-40 border border-white/10 object-cover"
+          className={`${compact ? "h-20 w-full" : "mt-3 h-24 w-40"} border border-white/10 object-cover`}
         />
       )}
     </div>

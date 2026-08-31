@@ -10,7 +10,13 @@ import { VideographyHero } from "./videography"
 
 type Category = Doc<"categories">
 
-export const customCategoryHeroes: Record<string, ComponentType<{ category: Category }>> = {
+type CategoryHeroProps = {
+  category: Category
+  editing?: boolean
+  onNameCommit?: (name: string) => void
+}
+
+export const customCategoryHeroes: Record<string, ComponentType<CategoryHeroProps>> = {
   "social-media": SocialMediaHero,
   branding: BrandingHero,
   "motion-graphics": MotionGraphicsHero,

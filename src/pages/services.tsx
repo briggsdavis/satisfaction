@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Link, useNavigationType } from "react-router"
 import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
-import { TextReveal } from "../components/text-reveal"
+import { FitTitle } from "../components/fit-title"
 
 type Service = Doc<"categories">
 
@@ -133,12 +133,7 @@ export const Services = () => {
         <span className="mb-6 block text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
           What We Do
         </span>
-        <TextReveal
-          text="SERVICES"
-          className="massive-text justify-center text-6xl leading-none md:text-10xl lg:text-11xl"
-          slideFrom="left"
-          delay={titleDelay}
-        />
+        <FitTitle text="SERVICES" slideFrom="left" delay={titleDelay} />
       </section>
 
       <div className="flex flex-col divide-y-2 divide-white/15 md:flex-row md:divide-x-2 md:divide-y-0">
