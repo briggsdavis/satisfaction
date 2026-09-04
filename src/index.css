@@ -95,10 +95,10 @@
   }
 
   @media (pointer: fine) {
-    body,
-    a,
-    button,
-    [role="button"] {
+    body.custom-cursor,
+    body.custom-cursor a,
+    body.custom-cursor button,
+    body.custom-cursor [role="button"] {
       cursor: none;
     }
   }
@@ -296,15 +296,6 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: hero-text-shine 6s linear infinite;
-}
-
-/* Restore standard cursor inside the admin */
-body.admin-mode,
-body.admin-mode *,
-body.admin-mode a,
-body.admin-mode button,
-body.admin-mode [role="button"] {
-  cursor: auto !important;
 }
 
 /* Admin-only readability and theme layer. Public-site styling is unaffected. */

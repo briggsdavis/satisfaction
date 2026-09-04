@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Route, Routes } from "react-router"
 import { AdminLayout } from "./admin-layout"
 import { AboutIndex } from "./pages/about/index"
@@ -24,42 +23,32 @@ import { ServicesIndex } from "./pages/services/index"
 import { ServiceAdmin } from "./pages/services/service"
 import { RequireAuth } from "./require-auth"
 
-const AdminApp = () => {
-  // Restore standard cursor for admin context
-  useEffect(() => {
-    document.body.classList.add("admin-mode")
-    return () => document.body.classList.remove("admin-mode")
-  }, [])
-
-  return (
-    <RequireAuth>
-      <Routes>
-        <Route element={<AdminLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="homepage" element={<HomepageIndex />} />
-          <Route path="homepage/hero" element={<HeroAdmin />} />
-          <Route path="homepage/hero-video" element={<HeroVideoAdmin />} />
-          <Route path="homepage/brands" element={<BrandsAdmin />} />
-          <Route path="homepage/what-we-do" element={<WhatWeDoAdmin />} />
-          <Route path="homepage/campaign" element={<CampaignAdmin />} />
-          <Route path="homepage/faq-cta" element={<FaqCtaAdmin />} />
-          <Route path="homepage/featured" element={<FeaturedAdmin />} />
-          <Route path="about" element={<AboutIndex />} />
-          <Route path="about/wheel" element={<WheelAdmin />} />
-          <Route path="about/timeline" element={<TimelineAdmin />} />
-          <Route path="about/values" element={<ValuesAdmin />} />
-          <Route path="services" element={<ServicesIndex />} />
-          <Route path="services/:serviceSlug" element={<ServiceAdmin />} />
-          <Route path="projects" element={<ProjectsIndex />} />
-          <Route path="projects/:projectSlug" element={<ProjectAdmin />} />
-          <Route path="contact" element={<ContactIndex />} />
-          <Route path="contact/info" element={<ContactInfoAdmin />} />
-          <Route path="contact/faq" element={<FaqAdmin />} />
-          <Route path="footer" element={<FooterAdmin />} />
-        </Route>
-      </Routes>
-    </RequireAuth>
-  )
-}
-
-export const AdminRoot = () => <AdminApp />
+export const AdminRoot = () => (
+  <RequireAuth>
+    <Routes>
+      <Route element={<AdminLayout />}>
+        <Route index element={<Dashboard />} />
+        <Route path="homepage" element={<HomepageIndex />} />
+        <Route path="homepage/hero" element={<HeroAdmin />} />
+        <Route path="homepage/hero-video" element={<HeroVideoAdmin />} />
+        <Route path="homepage/brands" element={<BrandsAdmin />} />
+        <Route path="homepage/what-we-do" element={<WhatWeDoAdmin />} />
+        <Route path="homepage/campaign" element={<CampaignAdmin />} />
+        <Route path="homepage/faq-cta" element={<FaqCtaAdmin />} />
+        <Route path="homepage/featured" element={<FeaturedAdmin />} />
+        <Route path="about" element={<AboutIndex />} />
+        <Route path="about/wheel" element={<WheelAdmin />} />
+        <Route path="about/timeline" element={<TimelineAdmin />} />
+        <Route path="about/values" element={<ValuesAdmin />} />
+        <Route path="services" element={<ServicesIndex />} />
+        <Route path="services/:serviceSlug" element={<ServiceAdmin />} />
+        <Route path="projects" element={<ProjectsIndex />} />
+        <Route path="projects/:projectSlug" element={<ProjectAdmin />} />
+        <Route path="contact" element={<ContactIndex />} />
+        <Route path="contact/info" element={<ContactInfoAdmin />} />
+        <Route path="contact/faq" element={<FaqAdmin />} />
+        <Route path="footer" element={<FooterAdmin />} />
+      </Route>
+    </Routes>
+  </RequireAuth>
+)

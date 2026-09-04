@@ -8,6 +8,7 @@ import { Link, useNavigationType, useParams, useSearchParams } from "react-route
 import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { FitTitle } from "../components/fit-title"
+import { MasonryGrid } from "../components/masonry-grid"
 import { TextReveal } from "../components/text-reveal"
 
 type Project = Doc<"projects">
@@ -192,19 +193,17 @@ const ImageCard = ({
   storageId,
   title,
   index,
-  className = "",
   onClick,
   editing = false,
 }: {
   storageId: Id<"_storage">
   title: string
   index: number
-  className?: string
   onClick?: () => void
   editing?: boolean
 }) => (
   <motion.div
-    className={`group relative block cursor-pointer overflow-hidden rounded-[16px] ${className}`}
+    className="group relative block h-full w-full cursor-pointer overflow-hidden rounded-[16px]"
     initial={{ opacity: 0, y: 24 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-150px" }}
@@ -232,35 +231,6 @@ const ImageCard = ({
     </span>
   </motion.div>
 )
-
-// Repeating gallery layout: full → pair → wide+pair  → repeat
-type GalleryRow = {
-  kind: "full" | "pair" | "wideTwo"
-  ids: Id<"_storage">[]
-  startIndex: number
-}
-
-const GALLERY_TEMPLATE: GalleryRow["kind"][] = ["full", "pair", "wideTwo"]
-const GALLERY_SIZE: Record<GalleryRow["kind"], number> = {
-  full: 1,
-  pair: 2,
-  wideTwo: 3,
-}
-
-const buildGalleryRows = (ids: Id<"_storage">[]): GalleryRow[] => {
-  const rows: GalleryRow[] = []
-  let i = 0
-  let t = 0
-  while (i < ids.length) {
-    const kind = GALLERY_TEMPLATE[t % GALLERY_TEMPLATE.length]
-    const slice = ids.slice(i, i + GALLERY_SIZE[kind])
-    if (slice.length === 0) break
-    rows.push({ kind, ids: slice, startIndex: i })
-    i += slice.length
-    t++
-  }
-  return rows
-}
 
 // ─── Service chips (resolves the project's services → names + colors) ────────
 const ServiceChips = ({ project, editing }: { project: Project; editing: boolean }) => {
@@ -383,7 +353,6 @@ export const ProjectPage = () => {
     )
   }
 
-  const galleryRows = buildGalleryRows(project.gallery)
   const commit = (
     patch: Partial<Pick<Project, "title" | "description" | "approach" | "execution" | "results">>,
   ) => updateProject({ id: project._id, ...patch })
@@ -536,86 +505,18 @@ export const ProjectPage = () => {
 
       {(editing || project.gallery.length > 0) && (
         <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
-          {galleryRows.map((row, ri) => {
-            if (row.kind === "full") {
-              const i = row.startIndex
-              return (
-                <ImageCard
-                  key={`r-${ri}`}
-                  storageId={row.ids[0]}
-                  title={project.title}
-                  index={i}
-                  className="aspect-4/3 md:aspect-auto md:h-[48vh]"
-                  onClick={() => (editing ? chooseGalleryImage(i) : setLightboxIdx(i))}
-                  editing={editing}
-                />
-              )
-            }
-            if (row.kind === "pair") {
-              const left = row.startIndex
-              const right = row.startIndex + 1
-              return (
-                <div key={`r-${ri}`} className="flex gap-4">
-                  <ImageCard
-                    storageId={row.ids[0]}
-                    title={project.title}
-                    index={left}
-                    className={`${row.ids[1] ? "aspect-3/4" : "aspect-4/3"} flex-1 md:aspect-auto md:h-[58vh]`}
-                    onClick={() => (editing ? chooseGalleryImage(left) : setLightboxIdx(left))}
-                    editing={editing}
-                  />
-                  {row.ids[1] && (
-                    <ImageCard
-                      storageId={row.ids[1]}
-                      title={project.title}
-                      index={right}
-                      className="aspect-3/4 flex-1 md:aspect-auto md:h-[58vh]"
-                      onClick={() => (editing ? chooseGalleryImage(right) : setLightboxIdx(right))}
-                      editing={editing}
-                    />
-                  )}
-                </div>
-              )
-            }
-            // wideTwo
-            const top = row.startIndex
-            const bl = row.startIndex + 1
-            const br = row.startIndex + 2
-            return (
-              <div key={`r-${ri}`} className="flex flex-col gap-4">
-                <ImageCard
-                  storageId={row.ids[0]}
-                  title={project.title}
-                  index={top}
-                  className="aspect-video md:aspect-auto md:h-[42vh]"
-                  onClick={() => (editing ? chooseGalleryImage(top) : setLightboxIdx(top))}
-                  editing={editing}
-                />
-                <div className="flex gap-4">
-                  {row.ids[1] && (
-                    <ImageCard
-                      storageId={row.ids[1]}
-                      title={project.title}
-                      index={bl}
-                      className={`${row.ids[2] ? "aspect-square" : "aspect-4/3"} flex-1 md:aspect-auto md:h-[36vh]`}
-                      onClick={() => (editing ? chooseGalleryImage(bl) : setLightboxIdx(bl))}
-                      editing={editing}
-                    />
-                  )}
-                  {row.ids[2] && (
-                    <ImageCard
-                      storageId={row.ids[2]}
-                      title={project.title}
-                      index={br}
-                      className="aspect-square flex-1 md:aspect-auto md:h-[36vh]"
-                      onClick={() => (editing ? chooseGalleryImage(br) : setLightboxIdx(br))}
-                      editing={editing}
-                    />
-                  )}
-                </div>
-              </div>
-            )
-          })}
+          <MasonryGrid key={project._id}>
+            {project.gallery.map((storageId, index) => (
+              <ImageCard
+                key={`${storageId}:${index}`}
+                storageId={storageId}
+                title={project.title}
+                index={index}
+                onClick={() => (editing ? chooseGalleryImage(index) : setLightboxIdx(index))}
+                editing={editing}
+              />
+            ))}
+          </MasonryGrid>
           {editing && (
             <button
               type="button"

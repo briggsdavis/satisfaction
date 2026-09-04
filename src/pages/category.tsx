@@ -8,9 +8,10 @@ import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { BrandingProcess } from "../components/branding-process"
 import { customCategoryHeroes } from "../components/category-heroes"
 import { FitTitle } from "../components/fit-title"
+import { MasonryGrid } from "../components/masonry-grid"
 import { useSmoothScroll } from "../components/smooth-scroll"
 import { TextReveal } from "../components/text-reveal"
-import { WebDevProcess } from "../components/web-dev-process"
+// import { WebDevProcess } from "../components/web-dev-process"
 
 type Category = Doc<"categories">
 type Project = Doc<"projects">
@@ -46,17 +47,15 @@ const ProjectImage = ({
 const ProjectCard = ({
   project,
   categorySlug,
-  className = "",
   index = 0,
 }: {
   project: Project
   categorySlug: string
-  className?: string
   index?: number
 }) => (
-  <Link to={`/portfolio/${categorySlug}/${project.slug}`} className="min-w-0 flex-1">
+  <Link to={`/portfolio/${categorySlug}/${project.slug}`} className="block h-full w-full min-w-0">
     <motion.div
-      className={`group relative overflow-hidden rounded-[16px] [backface-visibility:hidden] ${className}`}
+      className="group relative h-full w-full overflow-hidden rounded-[16px] [backface-visibility:hidden]"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-150px" }}
@@ -80,52 +79,6 @@ const ProjectCard = ({
     </motion.div>
   </Link>
 )
-
-const MasonryGrid = ({ projects, categorySlug }: { projects: Project[]; categorySlug: string }) => {
-  const rows: React.ReactNode[] = []
-  let i = 0
-  let animIdx = 0
-
-  while (i < projects.length) {
-    rows.push(
-      <div key={`full-${i}`}>
-        <ProjectCard
-          project={projects[i]}
-          categorySlug={categorySlug}
-          className="aspect-4/3 md:aspect-auto md:h-[42vh]"
-          index={animIdx++}
-        />
-      </div>,
-    )
-    i++
-    if (i >= projects.length) break
-
-    const left = projects[i]
-    const right = i + 1 < projects.length ? projects[i + 1] : undefined
-
-    rows.push(
-      <div key={`pair-${i}`} className="flex gap-4">
-        <ProjectCard
-          project={left}
-          categorySlug={categorySlug}
-          className={`${right ? "aspect-3/4" : "aspect-4/3"} flex-1 md:aspect-auto md:h-[72vh]`}
-          index={animIdx++}
-        />
-        {right && (
-          <ProjectCard
-            project={right}
-            categorySlug={categorySlug}
-            className="aspect-3/4 flex-1 md:aspect-auto md:h-[72vh]"
-            index={animIdx++}
-          />
-        )}
-      </div>,
-    )
-    i += right ? 2 : 1
-  }
-
-  return <>{rows}</>
-}
 
 const CategoryHero = ({
   category,
@@ -344,11 +297,20 @@ export const CategoryPage = () => {
         </div>
       </section>
 
-      {category.slug === "web-development" && <WebDevProcess />}
+      {/* {category.slug === "web-development" && <WebDevProcess />} */}
       {category.slug === "branding" && <BrandingProcess />}
 
-      <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
-        <MasonryGrid projects={projects} categorySlug={category.slug} />
+      <div className="px-8 py-8 md:px-16">
+        <MasonryGrid key={category._id}>
+          {projects.map((project, index) => (
+            <ProjectCard
+              key={project._id}
+              project={project}
+              categorySlug={category.slug}
+              index={index}
+            />
+          ))}
+        </MasonryGrid>
       </div>
 
       <div className="flex items-center justify-between border-t border-white/10 px-8 py-16 md:px-16">

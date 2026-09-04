@@ -1,5 +1,5 @@
 import { motion, useMotionValue } from "motion/react"
-import { useEffect, useState } from "react"
+import { useLayoutEffect, useState } from "react"
 
 const hasPointer = () =>
   typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches
@@ -12,14 +12,10 @@ export const CustomCursor = () => {
   const [isHovering, setIsHovering] = useState(false)
   const [hoverText, setHoverText] = useState("")
 
-  // const springConfig = { damping: 31, stiffness: 250 }
-  // const cursorX = useSpring(mouseX, springConfig)
-  // const cursorY = useSpring(mouseY, springConfig)
-  const cursorX = mouseX
-  const cursorY = mouseY
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!enabled) return
+
+    document.body.classList.add("custom-cursor")
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX)
@@ -42,6 +38,7 @@ export const CustomCursor = () => {
     window.addEventListener("mouseover", handleMouseOver)
 
     return () => {
+      document.body.classList.remove("custom-cursor")
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("mouseover", handleMouseOver)
     }
@@ -53,8 +50,8 @@ export const CustomCursor = () => {
     <motion.div
       className="pointer-events-none fixed top-0 left-0 z-10000 flex h-5 w-5 items-center justify-center overflow-hidden rounded-full bg-white mix-blend-difference"
       style={{
-        x: cursorX,
-        y: cursorY,
+        x: mouseX,
+        y: mouseY,
         translateX: "-50%",
         translateY: "-50%",
       }}

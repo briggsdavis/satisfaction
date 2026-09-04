@@ -1,6 +1,7 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
 import { requireAuth } from "./lib/auth"
+import schema from "./schema"
 
 // ── Categories ──────────────────────────────────────────────────────────
 
@@ -77,6 +78,63 @@ export const removeCategory = mutation({
   handler: async (ctx, args) => {
     await requireAuth(ctx)
     await ctx.db.delete(args.id)
+  },
+})
+
+// ── Web development showcase ───────────────────────────────────────────
+
+const mediaType = v.union(v.literal("image"), v.literal("video"))
+
+export const listWebShowcases = query({
+  args: { categoryId: v.id("categories") },
+  returns: v.array(schema.doc("webShowcases")),
+  handler: async (ctx, { categoryId }) =>
+    await ctx.db
+      .query("webShowcases")
+      .withIndex("by_categoryId_and_order", (q) => q.eq("categoryId", categoryId))
+      .take(24),
+})
+
+export const createWebShowcase = mutation({
+  args: { categoryId: v.id("categories"), media: v.id("_storage"), mediaType },
+  returns: v.id("webShowcases"),
+  handler: async (ctx, args) => {
+    await requireAuth(ctx)
+    const last = await ctx.db
+      .query("webShowcases")
+      .withIndex("by_categoryId_and_order", (q) => q.eq("categoryId", args.categoryId))
+      .order("desc")
+      .first()
+    return await ctx.db.insert("webShowcases", {
+      ...args,
+      supportImages: [],
+      order: (last?.order ?? -1) + 1,
+    })
+  },
+})
+
+export const updateWebShowcase = mutation({
+  args: {
+    id: v.id("webShowcases"),
+    media: v.optional(v.id("_storage")),
+    mediaType: v.optional(mediaType),
+    supportImages: v.optional(v.array(v.id("_storage"))),
+  },
+  returns: v.null(),
+  handler: async (ctx, { id, ...patch }) => {
+    await requireAuth(ctx)
+    await ctx.db.patch(id, patch)
+    return null
+  },
+})
+
+export const removeWebShowcase = mutation({
+  args: { id: v.id("webShowcases") },
+  returns: v.null(),
+  handler: async (ctx, { id }) => {
+    await requireAuth(ctx)
+    await ctx.db.delete(id)
+    return null
   },
 })
 

@@ -67,7 +67,20 @@ function Laptop({
 }) {
   const groupRef = useRef<THREE.Group>(null)
   const { scene: originalScene } = useGLTF("/imac.glb")
-  const scene = useMemo(() => originalScene.clone(true), [originalScene])
+  const scene = useMemo(() => {
+    const clone = originalScene.clone(true)
+    clone.traverse((obj) => {
+      if (!(obj instanceof THREE.Mesh)) return
+      const makeBlack = (material: THREE.Material) =>
+        material.name === "GlassBlack"
+          ? new THREE.MeshBasicMaterial({ color: 0x000000, side: material.side })
+          : material
+      obj.material = Array.isArray(obj.material)
+        ? obj.material.map(makeBlack)
+        : makeBlack(obj.material)
+    })
+    return clone
+  }, [originalScene])
   const screen = useScreenVideoTexture(videoSrc)
 
   // Swap the "DisplayImage" material's textures for the live video texture.
@@ -77,12 +90,24 @@ function Laptop({
   useEffect(() => {
     if (!screen) return
     const { video, texture } = screen
+    const backings: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>[] = []
     scene.traverse((obj) => {
       if (!(obj instanceof THREE.Mesh)) return
       const materials = Array.isArray(obj.material) ? obj.material : [obj.material]
       for (const material of materials) {
         if (material?.name !== "DisplayImage") continue
         const m = material as THREE.MeshStandardMaterial
+        obj.geometry.computeBoundingBox()
+        const displayWidth = obj.geometry.boundingBox?.getSize(new THREE.Vector3()).x ?? 0
+        const backing = new THREE.Mesh(
+          obj.geometry,
+          new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide }),
+        )
+        backing.position.y = -displayWidth * 0.0005
+        obj.parent?.add(backing)
+        backings.push(backing)
+        obj.position.x = -displayWidth * 0.005
+        obj.position.y = -displayWidth * 0.001
         m.map = texture
         m.emissiveMap = texture
         m.emissive = new THREE.Color(0xffffff)
@@ -92,6 +117,10 @@ function Laptop({
     })
 
     return () => {
+      for (const backing of backings) {
+        backing.removeFromParent()
+        backing.material.dispose()
+      }
       texture.dispose()
       video.pause()
       video.removeAttribute("src")

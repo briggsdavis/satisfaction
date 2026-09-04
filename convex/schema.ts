@@ -56,6 +56,14 @@ export default defineSchema({
     order: v.optional(v.number()),
   }).index("by_slug", ["slug"]),
 
+  webShowcases: defineTable({
+    categoryId: v.id("categories"),
+    media: v.id("_storage"),
+    mediaType: v.union(v.literal("image"), v.literal("video")),
+    supportImages: v.array(v.id("_storage")),
+    order: v.number(),
+  }).index("by_categoryId_and_order", ["categoryId", "order"]),
+
   projects: defineTable({
     slug: v.string(),
     title: v.string(),

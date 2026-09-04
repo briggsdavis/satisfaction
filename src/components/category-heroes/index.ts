@@ -7,6 +7,7 @@ import { MotionGraphicsHero } from "./motion-graphics"
 import { PhotographyHero } from "./photography"
 import { SocialMediaHero } from "./social-media"
 import { VideographyHero } from "./videography"
+import { WebDevelopmentHero } from "./web-development"
 
 type Category = Doc<"categories">
 
@@ -24,4 +25,5 @@ export const customCategoryHeroes: Record<string, ComponentType<CategoryHeroProp
   photography: PhotographyHero,
   videography: VideographyHero,
   "graphic-design": GraphicDesignHero,
+  "web-development": WebDevelopmentHero,
 }
