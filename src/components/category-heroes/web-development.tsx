@@ -79,7 +79,7 @@ export const WebDevelopmentHero = ({
 
   useEffect(() => {
     if (editing || !visible || items.length < 2) return
-    const id = setTimeout(() => setActive((i) => (i + 1) % items.length), 5000)
+    const id = setTimeout(() => setActive((i) => (i + 1) % items.length), 4000)
     return () => clearTimeout(id)
   }, [active, editing, items.length, visible])
 

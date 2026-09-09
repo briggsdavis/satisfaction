@@ -6,7 +6,7 @@ export const FeaturedAdmin = () => (
     <BackButton to="/admin/homepage" label="Homepage" />
     <SectionHeader
       title="Featured Projects"
-      description="The homepage Featured Cascade renders every project with the 'Featured' flag turned on. Manage that flag from the Projects editor."
+      description="Choose which projects appear on the homepage using the Featured toggles in the Projects list."
     />
     <Link
       to="/admin/projects"

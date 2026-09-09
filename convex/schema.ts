@@ -1,6 +1,7 @@
 import { authTables } from "@convex-dev/auth/server"
 import { defineSchema, defineTable } from "convex/server"
 import { v } from "convex/values"
+import { galleryLayout } from "./lib/gallery"
 
 export default defineSchema({
   // Convex Auth tables (users, authSessions, authAccounts, etc.)
@@ -73,6 +74,7 @@ export default defineSchema({
     results: v.string(),
     coverImage: v.optional(v.id("_storage")),
     gallery: v.array(v.id("_storage")),
+    galleryLayout: v.optional(galleryLayout),
     featured: v.boolean(),
     // The unified list of services this project is filed under. Also rendered
     // as the project's chips/tags. (Field name kept as `categoryIds` since the

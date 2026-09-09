@@ -1,6 +1,7 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
 import { requireAuth } from "./lib/auth"
+import { editGallery, galleryEdit, getGalleryLayout } from "./lib/gallery"
 import schema from "./schema"
 
 // ── Categories ──────────────────────────────────────────────────────────
@@ -223,5 +224,37 @@ export const removeProject = mutation({
   handler: async (ctx, args) => {
     await requireAuth(ctx)
     await ctx.db.delete(args.id)
+  },
+})
+
+export const getProjectGallery = query({
+  args: { id: v.id("projects") },
+  handler: async (ctx, { id }) => {
+    const project = await ctx.db.get("projects", id)
+    if (!project) return []
+    return await Promise.all(
+      getGalleryLayout(project).map(
+        async (column) =>
+          await Promise.all(
+            column.map(async (slot) => ({
+              ...slot,
+              url: slot.image ? await ctx.storage.getUrl(slot.image) : null,
+            })),
+          ),
+      ),
+    )
+  },
+})
+
+export const editProjectGallery = mutation({
+  args: { id: v.id("projects"), edit: galleryEdit },
+  returns: v.null(),
+  handler: async (ctx, { id, edit }) => {
+    await requireAuth(ctx)
+    const project = await ctx.db.get("projects", id)
+    if (!project) throw new Error("Project not found")
+    const layout = editGallery(getGalleryLayout(project), edit)
+    await ctx.db.patch("projects", id, { galleryLayout: layout })
+    return null
   },
 })

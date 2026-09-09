@@ -16,6 +16,7 @@ import type * as footer from "../footer.js";
 import type * as homepage from "../homepage.js";
 import type * as http from "../http.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as lib_gallery from "../lib/gallery.js";
 import type * as logos from "../logos.js";
 import type * as portfolio from "../portfolio.js";
 
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   homepage: typeof homepage;
   http: typeof http;
   "lib/auth": typeof lib_auth;
+  "lib/gallery": typeof lib_gallery;
   logos: typeof logos;
   portfolio: typeof portfolio;
 }>;

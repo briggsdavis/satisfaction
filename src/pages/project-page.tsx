@@ -8,7 +8,7 @@ import { Link, useNavigationType, useParams, useSearchParams } from "react-route
 import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { FitTitle } from "../components/fit-title"
-import { MasonryGrid } from "../components/masonry-grid"
+import { ProjectGallery } from "../components/project-gallery"
 import { TextReveal } from "../components/text-reveal"
 
 type Project = Doc<"projects">
@@ -189,49 +189,6 @@ const StorageImg = ({
   return <img alt="" src={url} {...props} />
 }
 
-const ImageCard = ({
-  storageId,
-  title,
-  index,
-  onClick,
-  editing = false,
-}: {
-  storageId: Id<"_storage">
-  title: string
-  index: number
-  onClick?: () => void
-  editing?: boolean
-}) => (
-  <motion.div
-    className="group relative block h-full w-full cursor-pointer overflow-hidden rounded-[16px]"
-    initial={{ opacity: 0, y: 24 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-150px" }}
-    transition={{
-      duration: 0.7,
-      delay: (index % 3) * 0.08,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-    }}
-    onClick={onClick}
-  >
-    <StorageImg
-      storageId={storageId}
-      alt={`${title} ${index + 1}`}
-      loading="lazy"
-      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-    />
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
-    <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-      <span className="border border-white/40 bg-black/50 px-3 py-1 font-mono text-2xs font-bold tracking-widest text-white uppercase backdrop-blur-sm">
-        {editing ? "Change image" : "View"}
-      </span>
-    </div>
-    <span className="absolute right-4 bottom-4 font-mono text-xs font-bold tracking-widest text-white/30">
-      {String(index + 1).padStart(2, "0")}
-    </span>
-  </motion.div>
-)
-
 // ─── Service chips (resolves the project's services → names + colors) ────────
 const ServiceChips = ({ project, editing }: { project: Project; editing: boolean }) => {
   const allServices = useQuery(api.portfolio.listCategories) ?? []
@@ -320,9 +277,6 @@ export const ProjectPage = () => {
   const updateProject = useMutation(api.portfolio.updateProject)
   const generateUploadUrl = useMutation(api.files.generateUploadUrl)
   const coverFileRef = useRef<HTMLInputElement>(null)
-  const galleryFileRef = useRef<HTMLInputElement>(null)
-  const addGalleryFileRef = useRef<HTMLInputElement>(null)
-  const [replaceGalleryIndex, setReplaceGalleryIndex] = useState<number | null>(null)
 
   const project = useQuery(
     api.portfolio.getProjectBySlug,
@@ -333,8 +287,7 @@ export const ProjectPage = () => {
     categorySlug ? { slug: categorySlug } : "skip",
   )
 
-  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null)
-  const galleryUrls = useGalleryUrls(project?.gallery ?? [])
+  const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null)
 
   if (project === undefined || category === undefined) return null
 
@@ -370,26 +323,6 @@ export const ProjectPage = () => {
     event.target.value = ""
     if (!file) return
     await updateProject({ id: project._id, coverImage: await uploadFile(file) })
-  }
-  const addGalleryImages = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files ?? [])
-    event.target.value = ""
-    if (files.length === 0) return
-    const storageIds = await Promise.all(files.map(uploadFile))
-    await updateProject({ id: project._id, gallery: [...project.gallery, ...storageIds] })
-  }
-  const chooseGalleryImage = (index: number) => {
-    setReplaceGalleryIndex(index)
-    galleryFileRef.current?.click()
-  }
-  const replaceGalleryImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    event.target.value = ""
-    if (!file || replaceGalleryIndex === null) return
-    const gallery = [...project.gallery]
-    gallery[replaceGalleryIndex] = await uploadFile(file)
-    await updateProject({ id: project._id, gallery })
-    setReplaceGalleryIndex(null)
   }
 
   return (
@@ -503,32 +436,13 @@ export const ProjectPage = () => {
         </div>
       </section>
 
-      {(editing || project.gallery.length > 0) && (
-        <div className="flex flex-col gap-4 px-8 py-8 md:px-16">
-          <MasonryGrid key={project._id}>
-            {project.gallery.map((storageId, index) => (
-              <ImageCard
-                key={`${storageId}:${index}`}
-                storageId={storageId}
-                title={project.title}
-                index={index}
-                onClick={() => (editing ? chooseGalleryImage(index) : setLightboxIdx(index))}
-                editing={editing}
-              />
-            ))}
-          </MasonryGrid>
-          {editing && (
-            <button
-              type="button"
-              onClick={() => addGalleryFileRef.current?.click()}
-              className="flex h-48 items-center justify-center gap-2 rounded-[16px] border border-dashed border-white/30 text-xs font-bold tracking-wider text-white/50 uppercase hover:border-white/70 hover:text-white"
-            >
-              <ImagePlus size={16} />
-              Add gallery images
-            </button>
-          )}
-        </div>
-      )}
+      <ProjectGallery
+        key={project._id}
+        projectId={project._id}
+        title={project.title}
+        editing={editing}
+        onView={(images, index) => setLightbox({ images, index })}
+      />
 
       <div className="flex items-center justify-between border-t border-white/10 px-8 py-16 md:px-16">
         <Link to={`/portfolio/${category.slug}`} className="btn-industrial">
@@ -540,12 +454,12 @@ export const ProjectPage = () => {
       </div>
 
       <AnimatePresence>
-        {lightboxIdx !== null && galleryUrls.length > 0 && (
+        {lightbox !== null && (
           <Lightbox
-            images={galleryUrls}
-            startIndex={lightboxIdx}
+            images={lightbox.images}
+            startIndex={lightbox.index}
             title={project.title}
-            onClose={() => setLightboxIdx(null)}
+            onClose={() => setLightbox(null)}
           />
         )}
       </AnimatePresence>
@@ -559,48 +473,8 @@ export const ProjectPage = () => {
             className="hidden"
             onChange={updateCover}
           />
-          <input
-            ref={galleryFileRef}
-            type="file"
-            accept="image/*"
-            aria-label="Replace gallery image"
-            className="hidden"
-            onChange={replaceGalleryImage}
-          />
-          <input
-            ref={addGalleryFileRef}
-            type="file"
-            accept="image/*"
-            multiple
-            aria-label="Add gallery images"
-            className="hidden"
-            onChange={addGalleryImages}
-          />
         </>
       )}
     </div>
   )
-}
-
-// Resolve all gallery storage IDs to URLs once for the lightbox.
-// Convex's useQuery rules-of-hooks compatibility: we can't loop useQuery,
-// so this hook uses a single approach — render N child resolvers and
-// collect via a context. Simpler: do the resolution inside Lightbox's
-// own children (each thumbnail/main). But the lightbox needs an array of
-// URL strings up-front. To stay rules-compliant with a known list, we
-// just call useQuery on a fixed-size array — but the size varies per
-// project. Workaround: call useQuery with a stable query name and skip
-// for unused slots, capping at MAX_GALLERY.
-const MAX_GALLERY = 24
-
-const useGalleryUrls = (ids: Id<"_storage">[]): string[] => {
-  // Always call MAX_GALLERY hooks — values past ids.length pass "skip".
-  const urls: (string | null)[] = []
-  for (let i = 0; i < MAX_GALLERY; i++) {
-    const id = ids[i]
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const url = useQuery(api.files.getUrl, id ? { storageId: id } : "skip")
-    urls.push(url ?? null)
-  }
-  return urls.filter((u): u is string => !!u).slice(0, ids.length)
 }
