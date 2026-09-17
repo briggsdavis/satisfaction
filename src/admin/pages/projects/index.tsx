@@ -64,7 +64,7 @@ const ProjectRow = ({ project }: { project: Doc<"projects"> }) => {
             onChange={(event) => void setFeatured(event.target.checked)}
             className="peer sr-only"
           />
-          <span className="relative h-5 w-9 rounded-full bg-white/20 transition-colors peer-checked:bg-yellow-500 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-white peer-disabled:opacity-40 after:absolute after:top-0.5 after:left-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-4" />
+          <span className="relative h-5 w-9 rounded-full! bg-white/20 transition-colors peer-checked:bg-yellow-500 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-white peer-disabled:opacity-40 after:absolute after:top-0.5 after:left-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-4" />
           <span>{saving ? "Saving…" : "Featured"}</span>
         </label>
         <button

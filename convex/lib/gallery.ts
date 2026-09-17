@@ -1,14 +1,66 @@
 import { v, type Infer } from "convex/values"
 import type { Doc } from "../_generated/dataModel"
 
-export const aspectRatios = ["16:9", "9:16", "4:5", "5:4", "1:1"] as const
 export const aspectRatio = v.union(
   v.literal("16:9"),
   v.literal("9:16"),
   v.literal("4:5"),
   v.literal("5:4"),
   v.literal("1:1"),
+  v.literal("3:2"),
+  v.literal("2:3"),
+  v.literal("4:3"),
 )
+export const galleryOrientation = v.union(
+  v.literal("original"),
+  v.literal("horizontal"),
+  v.literal("vertical"),
+  v.literal("both"),
+)
+export type GalleryOrientation = Infer<typeof galleryOrientation>
+
+export const galleryTemplateId = v.union(v.literal("long"), v.literal("short"))
+export type GalleryTemplateId = Infer<typeof galleryTemplateId>
+
+export const galleryTemplates = {
+  long: {
+    width: 1000,
+    height: 2264,
+    gutter: 16,
+    frames: [
+      { x: 0, y: 0, width: 560, height: 400, ratio: "3:2" },
+      { x: 576, y: 0, width: 424, height: 650, ratio: "2:3" },
+      { x: 0, y: 416, width: 320, height: 340, ratio: "1:1" },
+      { x: 336, y: 416, width: 224, height: 340, ratio: "2:3" },
+      { x: 576, y: 666, width: 424, height: 318, ratio: "4:3" },
+      { x: 0, y: 772, width: 560, height: 1120 / 3, ratio: "3:2" },
+      { x: 576, y: 1000, width: 424, height: 424, ratio: "1:1" },
+      { x: 0, y: 3484 / 3, width: 272, height: 408, ratio: "2:3" },
+      { x: 288, y: 3484 / 3, width: 272, height: 788 / 3, ratio: "1:1" },
+      { x: 288, y: 1440, width: 712, height: 400.5, ratio: "16:9" },
+      { x: 0, y: 4756 / 3, width: 272, height: 340, ratio: "4:5" },
+      { x: 0, y: 5824 / 3, width: 272, height: 968 / 3, ratio: "4:5" },
+      { x: 288, y: 1856.5, width: 440, height: 407.5, ratio: "1:1" },
+      { x: 744, y: 1856.5, width: 256, height: 407.5, ratio: "2:3" },
+    ],
+  },
+  short: {
+    width: 1000,
+    height: 1450,
+    gutter: 16,
+    frames: [
+      { x: 0, y: 0, width: 560, height: 400, ratio: "3:2" },
+      { x: 576, y: 0, width: 424, height: 686, ratio: "2:3" },
+      { x: 0, y: 416, width: 272, height: 408, ratio: "2:3" },
+      { x: 288, y: 416, width: 272, height: 270, ratio: "1:1" },
+      { x: 288, y: 702, width: 712, height: 400.5, ratio: "16:9" },
+      { x: 0, y: 840, width: 272, height: 340, ratio: "4:5" },
+      { x: 0, y: 1196, width: 272, height: 254, ratio: "1:1" },
+      { x: 288, y: 1118.5, width: 440, height: 331.5, ratio: "4:3" },
+      { x: 744, y: 1118.5, width: 256, height: 331.5, ratio: "4:5" },
+    ],
+  },
+} as const
 export const galleryLayout = v.array(
   v.array(
     v.object({
@@ -32,50 +84,27 @@ export const getGalleryLayout = (
   ]
 
 export const galleryEdit = v.union(
-  v.object({ type: v.literal("addColumn") }),
-  v.object({ type: v.literal("removeColumn"), column: v.number() }),
-  v.object({ type: v.literal("addSlot"), column: v.number(), id: v.string(), ratio: aspectRatio }),
-  v.object({ type: v.literal("removeSlot"), id: v.string() }),
-  v.object({ type: v.literal("setImage"), id: v.string(), image: v.id("_storage") }),
-  v.object({ type: v.literal("setRatio"), id: v.string(), ratio: aspectRatio }),
-  v.object({ type: v.literal("moveSlot"), id: v.string(), column: v.number(), index: v.number() }),
+  v.object({ type: v.literal("setImage"), index: v.number(), image: v.id("_storage") }),
+  v.object({ type: v.literal("clearImage"), index: v.number() }),
 )
 
-// Keep the embedded layout bounded: at most three columns and 120 slots.
-export function editGallery(layout: GalleryLayout, edit: Infer<typeof galleryEdit>): GalleryLayout {
-  const columns = layout.map((column) => column.map((slot) => ({ ...slot })))
-  const columnAt = (index: number) => {
-    if (!Number.isInteger(index) || !columns[index]) throw new Error("Column not found")
-    return columns[index]
+export function editGallery(
+  layout: GalleryLayout,
+  edit: Infer<typeof galleryEdit>,
+  templateId: GalleryTemplateId,
+): GalleryLayout {
+  const slots = layout.flat().map((slot) => ({ ...slot }))
+  const galleryTemplate = galleryTemplates[templateId]
+  const count = galleryTemplate.frames.length
+  const capacity = Math.max(count, Math.ceil(slots.length / count) * count)
+  // Both template sizes divide the 126-slot capacity.
+  if (!Number.isInteger(edit.index) || edit.index < 0 || edit.index >= capacity || capacity > 126)
+    throw new Error("Image frame not found")
+  while (slots.length < capacity) {
+    const index = slots.length
+    slots.push({ id: `template-${index}`, ratio: galleryTemplate.frames[index % count].ratio })
   }
-  if (edit.type === "addColumn") {
-    if (columns.length >= 3) throw new Error("A gallery can have up to three columns")
-    columns.push([])
-  } else if (edit.type === "removeColumn") {
-    if (columns.length === 1 || columnAt(edit.column).length)
-      throw new Error("Only empty extra columns can be removed")
-    columns.splice(edit.column, 1)
-  } else if (edit.type === "addSlot") {
-    if (columns.flat().length >= 120) throw new Error("A gallery can have up to 120 images")
-    if (!edit.id || edit.id.length > 100 || columns.flat().some((slot) => slot.id === edit.id))
-      throw new Error("Invalid image slot ID")
-    columnAt(edit.column).push({ id: edit.id, ratio: edit.ratio })
-  } else {
-    const source = columns.find((column) => column.some((slot) => slot.id === edit.id))
-    const index = source?.findIndex((slot) => slot.id === edit.id) ?? -1
-    if (!source || index < 0) throw new Error("Image slot no longer exists")
-    const slot = source[index]
-    if (edit.type === "setImage") slot.image = edit.image
-    if (edit.type === "setRatio") slot.ratio = edit.ratio
-    if (edit.type === "removeSlot") source.splice(index, 1)
-    if (edit.type === "moveSlot") {
-      const target = columnAt(edit.column)
-      const maxIndex = target.length - (source === target ? 1 : 0)
-      if (!Number.isInteger(edit.index) || edit.index < 0 || edit.index > maxIndex)
-        throw new Error("Invalid image position")
-      source.splice(index, 1)
-      target.splice(edit.index, 0, slot)
-    }
-  }
-  return columns
+  if (edit.type === "setImage") slots[edit.index].image = edit.image
+  else delete slots[edit.index].image
+  return [slots]
 }

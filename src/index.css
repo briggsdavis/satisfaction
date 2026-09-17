@@ -603,6 +603,37 @@
   }
 }
 
+.gallery-template {
+  container-type: inline-size;
+}
+
+.gallery-template-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--template-gutter);
+}
+
+.gallery-template-canvas + .gallery-template-canvas {
+  margin-top: var(--template-gutter);
+}
+
+@container (min-width: 700px) {
+  .gallery-template-canvas {
+    --template-unit: calc((100cqw + var(--template-gutter)) / var(--template-width));
+    position: relative;
+    display: block;
+    height: calc(var(--template-unit) * var(--template-height) - var(--template-gutter));
+  }
+
+  .gallery-template-frame {
+    position: absolute;
+    left: calc(var(--template-unit) * var(--frame-x));
+    top: calc(var(--template-unit) * var(--frame-y));
+    width: calc(var(--template-unit) * var(--frame-width) - var(--template-gutter));
+    height: calc(var(--template-unit) * var(--frame-height) - var(--template-gutter));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -1,7 +1,14 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
 import { requireAuth } from "./lib/auth"
-import { editGallery, galleryEdit, getGalleryLayout } from "./lib/gallery"
+import {
+  editGallery,
+  galleryEdit,
+  galleryOrientation,
+  galleryTemplateId,
+  galleryTemplates,
+  getGalleryLayout,
+} from "./lib/gallery"
 import schema from "./schema"
 
 // ── Categories ──────────────────────────────────────────────────────────
@@ -119,12 +126,31 @@ export const updateWebShowcase = mutation({
     id: v.id("webShowcases"),
     media: v.optional(v.id("_storage")),
     mediaType: v.optional(mediaType),
-    supportImages: v.optional(v.array(v.id("_storage"))),
+    supportImages: v.optional(v.array(v.union(v.id("_storage"), v.null()))),
   },
   returns: v.null(),
   handler: async (ctx, { id, ...patch }) => {
     await requireAuth(ctx)
     await ctx.db.patch(id, patch)
+    return null
+  },
+})
+
+export const editWebShowcaseSupport = mutation({
+  args: { id: v.id("webShowcases"), index: v.number(), image: v.optional(v.id("_storage")) },
+  returns: v.null(),
+  handler: async (ctx, { id, index, image }) => {
+    await requireAuth(ctx)
+    const showcase = await ctx.db.get("webShowcases", id)
+    if (!showcase) throw new Error("Website showcase not found")
+    const count = galleryTemplates.short.frames.length
+    const capacity = Math.max(count, Math.ceil(showcase.supportImages.length / count) * count)
+    if (!Number.isInteger(index) || index < 0 || index >= capacity || capacity > 126)
+      throw new Error("Image frame not found")
+    const supportImages = [...showcase.supportImages]
+    while (supportImages.length < capacity) supportImages.push(null)
+    supportImages[index] = image ?? null
+    await ctx.db.patch("webShowcases", id, { supportImages })
     return null
   },
 })
@@ -179,6 +205,13 @@ export const getProjectBySlug = query({
   },
 })
 
+export const getProject = query({
+  args: { id: v.id("projects") },
+  handler: async (ctx, { id }) => {
+    return await ctx.db.get("projects", id)
+  },
+})
+
 export const createProject = mutation({
   args: {
     slug: v.string(),
@@ -209,12 +242,22 @@ export const updateProject = mutation({
     results: v.optional(v.string()),
     coverImage: v.optional(v.id("_storage")),
     gallery: v.optional(v.array(v.id("_storage"))),
+    galleryOrientation: v.optional(galleryOrientation),
+    galleryTemplate: v.optional(galleryTemplateId),
     featured: v.optional(v.boolean()),
     categoryIds: v.optional(v.array(v.id("categories"))),
   },
   handler: async (ctx, args) => {
     await requireAuth(ctx)
     const { id, ...patch } = args
+    if (patch.galleryTemplate) {
+      const project = await ctx.db.get("projects", id)
+      if (!project) throw new Error("Project not found")
+      const slots = getGalleryLayout(project).flat()
+      while (slots.length && !slots[slots.length - 1].image) slots.pop()
+      await ctx.db.patch("projects", id, { ...patch, galleryLayout: [slots] })
+      return
+    }
     await ctx.db.patch(id, patch)
   },
 })
@@ -253,7 +296,7 @@ export const editProjectGallery = mutation({
     await requireAuth(ctx)
     const project = await ctx.db.get("projects", id)
     if (!project) throw new Error("Project not found")
-    const layout = editGallery(getGalleryLayout(project), edit)
+    const layout = editGallery(getGalleryLayout(project), edit, project.galleryTemplate ?? "long")
     await ctx.db.patch("projects", id, { galleryLayout: layout })
     return null
   },

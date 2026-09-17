@@ -1,20 +1,19 @@
 import { useMutation, useQuery } from "convex/react"
-import { ImagePlus, Plus, Trash2, X } from "lucide-react"
+import { ImagePlus, Plus, Trash2 } from "lucide-react"
 import { AnimatePresence, motion, useInView } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import { api } from "../../../convex/_generated/api"
 import type { Doc, Id } from "../../../convex/_generated/dataModel"
+import { WebShowcaseGallery } from "../web-showcase-gallery"
 
 type Category = Doc<"categories">
 type Showcase = Doc<"webShowcases">
 
 const RADIUS = 2400
 const STEP = 22
+const REAR_SLOTS = Array.from({ length: 9 }, (_, index) => index)
 
-const StorageImage = ({ id, className }: { id: Id<"_storage">; className: string }) => {
-  const src = useQuery(api.files.getUrl, { storageId: id })
-  return src ? <img src={src} alt="" className={className} /> : null
-}
+const wrapIndex = (index: number, length: number) => ((index % length) + length) % length
 
 const Screen = ({ item }: { item: Showcase }) => {
   const src = useQuery(api.files.getUrl, { storageId: item.media })
@@ -26,16 +25,26 @@ const Screen = ({ item }: { item: Showcase }) => {
       muted
       loop
       playsInline
-      className="h-full w-full object-cover object-top"
+      className="h-full w-full object-cover object-center"
     />
   ) : (
-    <img src={src} alt="" className="h-full w-full object-cover object-top" />
+    <img src={src} alt="" className="h-full w-full object-cover object-center" />
   )
 }
 
-const IMac = ({ item }: { item?: Showcase }) => (
+const IMac = ({
+  item,
+  onChange,
+  onRemove,
+  onAdd,
+}: {
+  item?: Showcase
+  onChange?: () => void
+  onRemove?: () => void
+  onAdd?: () => void
+}) => (
   <div className="relative aspect-3/2 w-[72vw] max-w-5xl">
-    <div className="absolute top-[7.3%] left-[15.7%] h-[61.2%] w-[68.6%] overflow-hidden bg-neutral-950">
+    <div className="absolute top-[7.3%] left-[15.7%] h-[61.2%] w-[68.6%] scale-[1.04] overflow-hidden bg-neutral-950">
       {item ? <Screen item={item} /> : null}
     </div>
     <img
@@ -44,6 +53,44 @@ const IMac = ({ item }: { item?: Showcase }) => (
       draggable={false}
       className="pointer-events-none absolute inset-0 h-full w-full select-none"
     />
+    {onChange ? (
+      <button
+        type="button"
+        onClick={onChange}
+        aria-label={item ? "Change website screen" : "Add website"}
+        title={item ? "Click to change screen" : "Click to add website"}
+        className="group absolute top-[7.3%] left-[15.7%] z-10 flex h-[61.2%] w-[68.6%] cursor-pointer items-center justify-center bg-transparent transition-colors hover:bg-black/30 focus-visible:bg-black/30 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+      >
+        <span className="flex items-center gap-2 bg-black/80 px-4 py-2 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+          <ImagePlus size={16} /> {item ? "Change screen" : "Add website"}
+        </span>
+      </button>
+    ) : null}
+    {onRemove ? (
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label="Remove website"
+        title="Remove website"
+        className="absolute top-[9%] right-[17%] z-20 flex size-10 items-center justify-center rounded-full border border-white/30 bg-black/80 text-white transition-colors hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+      >
+        <Trash2 size={16} />
+      </button>
+    ) : null}
+    {onAdd
+      ? ["left-[6%]", "right-[6%]"].map((position) => (
+          <button
+            key={position}
+            type="button"
+            onClick={onAdd}
+            aria-label="Add website"
+            title="Add website"
+            className={`absolute top-[38%] z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/80 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white ${position}`}
+          >
+            <Plus size={22} />
+          </button>
+        ))
+      : null}
   </div>
 )
 
@@ -53,6 +100,36 @@ const offsetFrom = (index: number, active: number, length: number) => {
   if (offset < -length / 2) offset += length
   return offset
 }
+
+const RingBack = ({ active }: { active: number }) => (
+  <>
+    {REAR_SLOTS.map((index) => {
+      const offset = offsetFrom(index, wrapIndex(active, REAR_SLOTS.length), REAR_SLOTS.length)
+      return (
+        <div
+          key={index}
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 left-1/2 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(.65,0,.35,1)] motion-reduce:transition-none"
+          style={{
+            opacity: Math.abs(offset) >= 4 ? 0 : 0.65,
+            transform: `translate(-50%, -50%) rotateY(${180 + offset * STEP}deg) translateZ(${RADIUS}px) rotateY(180deg)`,
+          }}
+        >
+          <div className="relative aspect-3/2 w-[72vw] max-w-5xl">
+            <img
+              src="/imac-back.png"
+              alt=""
+              draggable={false}
+              width={636}
+              height={529}
+              className="absolute top-[3%] left-[12.5%] h-auto w-3/4 select-none"
+            />
+          </div>
+        </div>
+      )
+    })}
+  </>
+)
 
 export const WebDevelopmentHero = ({
   category,
@@ -68,18 +145,16 @@ export const WebDevelopmentHero = ({
   const remove = useMutation(api.portfolio.removeWebShowcase)
   const uploadUrl = useMutation(api.files.generateUploadUrl)
   const mediaInput = useRef<HTMLInputElement>(null)
-  const imageInput = useRef<HTMLInputElement>(null)
   const stage = useRef<HTMLElement>(null)
-  const creating = useRef(false)
-  const supportIndex = useRef(0)
+  const mediaTarget = useRef<Id<"webShowcases"> | null>(null)
   const visible = useInView(stage, { amount: 0.35 })
   const [active, setActive] = useState(0)
-  const activeIndex = items.length ? active % items.length : 0
+  const activeIndex = items.length ? wrapIndex(active, items.length) : 0
   const current = items[activeIndex]
 
   useEffect(() => {
     if (editing || !visible || items.length < 2) return
-    const id = setTimeout(() => setActive((i) => (i + 1) % items.length), 4000)
+    const id = setTimeout(() => setActive((i) => i + 1), 4000)
     return () => clearTimeout(id)
   }, [active, editing, items.length, visible])
 
@@ -91,30 +166,23 @@ export const WebDevelopmentHero = ({
     })
     return ((await response.json()) as { storageId: Id<"_storage"> }).storageId
   }
-  const chooseMedia = (add: boolean) => {
-    creating.current = add
+  const chooseMedia = (id: Id<"webShowcases"> | null) => {
+    mediaTarget.current = id
     mediaInput.current?.click()
   }
   const handleMedia = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     event.target.value = ""
     if (!file) return
+    const targetId = mediaTarget.current
     const media = await upload(file)
     const mediaType = file.type.startsWith("video/") ? "video" : "image"
-    if (creating.current) {
+    if (targetId === null) {
       await create({ categoryId: category._id, media, mediaType })
       setActive(items.length)
-    } else if (current) await update({ id: current._id, media, mediaType })
+    } else await update({ id: targetId, media, mediaType })
   }
-  const handleSupport = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    event.target.value = ""
-    if (!file || !current) return
-    const supportImages = [...current.supportImages]
-    supportImages[supportIndex.current] = await upload(file)
-    await update({ id: current._id, supportImages })
-  }
-  const go = (delta: number) => setActive((i) => (i + delta + items.length) % items.length)
+  const go = (delta: number) => setActive((i) => i + delta)
 
   return (
     <section className="overflow-hidden bg-black">
@@ -124,20 +192,27 @@ export const WebDevelopmentHero = ({
             className="relative h-2/3 w-full [transform-style:preserve-3d]"
             style={{ transform: `translateZ(-${RADIUS}px)` }}
           >
+            <RingBack active={active} />
             {items.length ? (
               items.map((item, itemIndex) => {
-                const offset = offsetFrom(itemIndex, active % items.length, items.length)
+                const offset = offsetFrom(itemIndex, activeIndex, items.length)
+                const editable = editing && Math.abs(offset) < 2
                 return (
                   <div
                     key={item._id}
-                    className="absolute top-1/2 left-1/2 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(.65,0,.35,1)] [transform-style:preserve-3d]"
+                    className="absolute top-1/2 left-1/2 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(.65,0,.35,1)] [transform-style:preserve-3d] motion-reduce:transition-none"
                     style={{
-                      opacity: Math.abs(offset) >= 2 ? 0 : 1 - Math.abs(offset) * 0.18,
+                      opacity: Math.abs(offset) >= 2 ? 0 : 1,
                       transform: `translate(-50%, -50%) rotateY(${offset * STEP}deg) translateZ(${RADIUS}px)`,
                       zIndex: 10 - Math.abs(offset),
                     }}
                   >
-                    <IMac item={item} />
+                    <IMac
+                      item={item}
+                      onChange={editable ? () => chooseMedia(item._id) : undefined}
+                      onRemove={editable ? () => void remove({ id: item._id }) : undefined}
+                      onAdd={editing && offset === 0 ? () => chooseMedia(null) : undefined}
+                    />
                   </div>
                 )
               })
@@ -146,7 +221,10 @@ export const WebDevelopmentHero = ({
                 className="absolute top-1/2 left-1/2"
                 style={{ transform: `translate(-50%, -50%) translateZ(${RADIUS}px)` }}
               >
-                <IMac />
+                <IMac
+                  onChange={editing ? () => chooseMedia(null) : undefined}
+                  onAdd={editing ? () => chooseMedia(null) : undefined}
+                />
               </div>
             )}
           </div>
@@ -169,83 +247,19 @@ export const WebDevelopmentHero = ({
             </button>
           </div>
         ) : null}
-
-        {editing ? (
-          <div className="absolute top-28 right-8 z-30 flex gap-2 md:right-16">
-            {current ? (
-              <>
-                <button onClick={() => chooseMedia(false)} className="btn-industrial-sm">
-                  <ImagePlus size={14} /> Change screen
-                </button>
-                <button
-                  onClick={() => remove({ id: current._id })}
-                  aria-label="Remove website"
-                  className="btn-industrial-sm"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </>
-            ) : null}
-            <button onClick={() => chooseMedia(true)} className="btn-industrial-sm">
-              <Plus size={14} /> Add website
-            </button>
-          </div>
-        ) : null}
       </section>
 
       {current ? (
         <AnimatePresence mode="wait">
           <motion.div
             key={current._id}
-            className="mx-auto grid max-w-5xl grid-cols-3 gap-5 px-8 pb-24 md:px-16"
+            className="mx-auto max-w-5xl px-8 pb-24 md:px-16"
             initial={{ opacity: 0, y: 160 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 80 }}
             transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           >
-            {Array.from({ length: editing ? 3 : current.supportImages.length }, (_slot, slot) => {
-              const image = current.supportImages[slot]
-              return (
-                <div
-                  key={image ?? slot}
-                  className="group relative aspect-video overflow-hidden bg-white/5"
-                >
-                  {image ? (
-                    <StorageImage id={image} className="h-full w-full object-cover" />
-                  ) : null}
-                  {editing ? (
-                    <>
-                      <button
-                        onClick={() => {
-                          supportIndex.current = slot
-                          imageInput.current?.click()
-                        }}
-                        disabled={slot > current.supportImages.length}
-                        className="absolute inset-0 flex items-center justify-center gap-2 border border-dashed border-white/30 bg-black/30 text-xs font-bold tracking-wider uppercase opacity-0 transition-opacity enabled:group-hover:opacity-100 disabled:hidden"
-                      >
-                        <ImagePlus size={15} /> {image ? "Change image" : "Add image"}
-                      </button>
-                      {image ? (
-                        <button
-                          onClick={() =>
-                            update({
-                              id: current._id,
-                              supportImages: current.supportImages.filter(
-                                (_imageId, imageIndex) => imageIndex !== slot,
-                              ),
-                            })
-                          }
-                          aria-label="Remove supporting image"
-                          className="absolute top-3 right-3 grid h-8 w-8 place-items-center bg-black/70 opacity-0 transition-opacity group-hover:opacity-100"
-                        >
-                          <X size={14} />
-                        </button>
-                      ) : null}
-                    </>
-                  ) : null}
-                </div>
-              )
-            })}
+            <WebShowcaseGallery item={current} editing={Boolean(editing)} />
           </motion.div>
         </AnimatePresence>
       ) : null}
@@ -258,13 +272,6 @@ export const WebDevelopmentHero = ({
             accept="image/*,video/*"
             className="hidden"
             onChange={handleMedia}
-          />
-          <input
-            ref={imageInput}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleSupport}
           />
         </>
       ) : null}

@@ -1,27 +1,24 @@
 import { useQuery } from "convex/react"
 import { useEffect } from "react"
-import { useNavigate, useParams } from "react-router"
+import { useNavigate, useParams, useSearchParams } from "react-router"
 import { api } from "../../../../convex/_generated/api"
+import { useProject } from "../../../hooks/use-project"
 
 export const ProjectAdmin = () => {
   const { projectSlug } = useParams<{ projectSlug: string }>()
   const navigate = useNavigate()
-  const project = useQuery(
-    api.portfolio.getProjectBySlug,
-    projectSlug ? { slug: projectSlug } : "skip",
-  )
+  const [searchParams] = useSearchParams()
+  const project = useProject(projectSlug, true)
   const categories = useQuery(api.portfolio.listCategories) ?? []
 
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return
-      if (event.data?.type === "project-slug" && typeof event.data.slug === "string") {
-        navigate(`/admin/projects/${event.data.slug}`, { replace: true })
-      }
+    if (project && (project.slug !== projectSlug || searchParams.has("projectId"))) {
+      const nextParams = new URLSearchParams(searchParams)
+      nextParams.delete("projectId")
+      const search = nextParams.size ? `?${nextParams}` : ""
+      navigate(`/admin/projects/${project.slug}${search}`, { replace: true })
     }
-    window.addEventListener("message", handleMessage)
-    return () => window.removeEventListener("message", handleMessage)
-  }, [navigate])
+  }, [navigate, project, projectSlug, searchParams])
 
   if (project === undefined) return null
   if (!project) return <p className="text-white/50">Project not found.</p>

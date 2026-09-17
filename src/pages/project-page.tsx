@@ -4,12 +4,13 @@ import { ImagePlus, Plus, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
-import { Link, useNavigationType, useParams, useSearchParams } from "react-router"
+import { Link, useNavigate, useNavigationType, useParams, useSearchParams } from "react-router"
 import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { FitTitle } from "../components/fit-title"
 import { ProjectGallery } from "../components/project-gallery"
 import { TextReveal } from "../components/text-reveal"
+import { useProject } from "../hooks/use-project"
 
 type Project = Doc<"projects">
 
@@ -271,6 +272,7 @@ export const ProjectPage = () => {
     project: string
   }>()
   const navType = useNavigationType()
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const editing = searchParams.get("edit") === "1"
   const titleDelay = navType === "PUSH" ? 0.75 : 0
@@ -278,16 +280,21 @@ export const ProjectPage = () => {
   const generateUploadUrl = useMutation(api.files.generateUploadUrl)
   const coverFileRef = useRef<HTMLInputElement>(null)
 
-  const project = useQuery(
-    api.portfolio.getProjectBySlug,
-    projectSlug ? { slug: projectSlug } : "skip",
-  )
+  const project = useProject(projectSlug, editing)
   const category = useQuery(
     api.portfolio.getCategoryBySlug,
     categorySlug ? { slug: categorySlug } : "skip",
   )
 
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null)
+
+  useEffect(() => {
+    if (editing && project && (project.slug !== projectSlug || searchParams.has("projectId"))) {
+      const nextParams = new URLSearchParams(searchParams)
+      nextParams.delete("projectId")
+      navigate(`/portfolio/${categorySlug}/${project.slug}?${nextParams}`, { replace: true })
+    }
+  }, [categorySlug, editing, navigate, project, projectSlug, searchParams])
 
   if (project === undefined || category === undefined) return null
 
@@ -348,7 +355,6 @@ export const ProjectPage = () => {
               ? async (title) => {
                   const slug = slugify(title)
                   await updateProject({ id: project._id, title, slug })
-                  window.parent.postMessage({ type: "project-slug", slug }, window.location.origin)
                 }
               : undefined
           }
@@ -441,6 +447,8 @@ export const ProjectPage = () => {
         projectId={project._id}
         title={project.title}
         editing={editing}
+        orientation={project.galleryOrientation ?? "original"}
+        template={project.galleryTemplate ?? "long"}
         onView={(images, index) => setLightbox({ images, index })}
       />
 
