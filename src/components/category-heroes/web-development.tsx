@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "convex/react"
 import { ImagePlus, Plus, Trash2 } from "lucide-react"
 import { AnimatePresence, motion, useInView } from "motion/react"
 import { useEffect, useRef, useState } from "react"
+import type { RefObject } from "react"
 import { api } from "../../../convex/_generated/api"
 import type { Doc, Id } from "../../../convex/_generated/dataModel"
 import { WebShowcaseGallery } from "../web-showcase-gallery"
@@ -15,11 +16,24 @@ const REAR_SLOTS = Array.from({ length: 9 }, (_, index) => index)
 
 const wrapIndex = (index: number, length: number) => ((index % length) + length) % length
 
-const Screen = ({ item }: { item: Showcase }) => {
-  const src = useQuery(api.files.getUrl, { storageId: item.media })
+const Screen = ({
+  src,
+  mediaType,
+  videoRef,
+  canvasRef,
+}: {
+  src: string | null | undefined
+  mediaType?: Showcase["mediaType"]
+  videoRef?: RefObject<HTMLVideoElement | null>
+  canvasRef?: RefObject<HTMLCanvasElement | null>
+}) => {
   if (!src) return null
-  return item.mediaType === "video" ? (
+  if (mediaType === "video" && canvasRef) {
+    return <canvas ref={canvasRef} className="h-full w-full object-cover object-center" />
+  }
+  return mediaType === "video" ? (
     <video
+      ref={videoRef}
       src={src}
       autoPlay
       muted
@@ -42,57 +56,111 @@ const IMac = ({
   onChange?: () => void
   onRemove?: () => void
   onAdd?: () => void
-}) => (
-  <div className="relative aspect-3/2 w-[72vw] max-w-5xl">
-    <div className="absolute top-[7.3%] left-[15.7%] h-[61.2%] w-[68.6%] scale-[1.04] overflow-hidden bg-neutral-950">
-      {item ? <Screen item={item} /> : null}
+}) => {
+  const src = useQuery(api.files.getUrl, item ? { storageId: item.media } : "skip")
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const video = videoRef.current
+    const canvas = canvasRef.current
+    const context = canvas?.getContext("2d")
+    if (!video || !canvas || !context) return
+
+    let frame: number
+    let lastTime = -1
+    const draw = () => {
+      if (video.readyState >= 2 && video.currentTime !== lastTime) {
+        // Copy the playing video so the reflection shares its exact playback position.
+        const width = Math.min(video.videoWidth, 1280)
+        const height = Math.round((width * video.videoHeight) / video.videoWidth)
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width
+          canvas.height = height
+        }
+        context.drawImage(video, 0, 0, width, height)
+        lastTime = video.currentTime
+      }
+      frame = requestAnimationFrame(draw)
+    }
+    frame = requestAnimationFrame(draw)
+    return () => cancelAnimationFrame(frame)
+  }, [src, item?.mediaType])
+
+  const display = (reflected: boolean) => (
+    <>
+      <div className="absolute top-[7.3%] left-[15.7%] h-[61.2%] w-[68.6%] scale-[1.04] overflow-hidden bg-neutral-950">
+        <Screen
+          src={src}
+          mediaType={item?.mediaType}
+          videoRef={reflected ? undefined : videoRef}
+          canvasRef={reflected ? canvasRef : undefined}
+        />
+      </div>
+      <img
+        src="/mock/web/imac-frame.png"
+        alt=""
+        draggable={false}
+        className="pointer-events-none absolute inset-0 h-full w-full select-none"
+      />
+    </>
+  )
+
+  return (
+    <div className="relative aspect-3/2 w-[72vw] max-w-5xl">
+      {display(false)}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-[97%] left-0 h-full w-full"
+        style={{
+          opacity: 0.5,
+          filter: "blur(8px)",
+          maskImage: "linear-gradient(to bottom, black, transparent 65%)",
+        }}
+      >
+        <div className="absolute inset-0 -scale-y-100">{display(true)}</div>
+      </div>
+      {onChange ? (
+        <button
+          type="button"
+          onClick={onChange}
+          aria-label={item ? "Change website screen" : "Add website"}
+          title={item ? "Click to change screen" : "Click to add website"}
+          className="group absolute top-[7.3%] left-[15.7%] z-10 flex h-[61.2%] w-[68.6%] cursor-pointer items-center justify-center bg-transparent transition-colors hover:bg-black/30 focus-visible:bg-black/30 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
+          <span className="flex items-center gap-2 bg-black/80 px-4 py-2 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+            <ImagePlus size={16} /> {item ? "Change screen" : "Add website"}
+          </span>
+        </button>
+      ) : null}
+      {onRemove ? (
+        <button
+          type="button"
+          onClick={onRemove}
+          aria-label="Remove website"
+          title="Remove website"
+          className="absolute top-[9%] right-[17%] z-20 flex size-10 items-center justify-center rounded-full border border-white/30 bg-black/80 text-white transition-colors hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
+          <Trash2 size={16} />
+        </button>
+      ) : null}
+      {onAdd
+        ? ["left-[6%]", "right-[6%]"].map((position) => (
+            <button
+              key={position}
+              type="button"
+              onClick={onAdd}
+              aria-label="Add website"
+              title="Add website"
+              className={`absolute top-[38%] z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/80 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white ${position}`}
+            >
+              <Plus size={22} />
+            </button>
+          ))
+        : null}
     </div>
-    <img
-      src="/mock/web/imac-frame.png"
-      alt=""
-      draggable={false}
-      className="pointer-events-none absolute inset-0 h-full w-full select-none"
-    />
-    {onChange ? (
-      <button
-        type="button"
-        onClick={onChange}
-        aria-label={item ? "Change website screen" : "Add website"}
-        title={item ? "Click to change screen" : "Click to add website"}
-        className="group absolute top-[7.3%] left-[15.7%] z-10 flex h-[61.2%] w-[68.6%] cursor-pointer items-center justify-center bg-transparent transition-colors hover:bg-black/30 focus-visible:bg-black/30 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-      >
-        <span className="flex items-center gap-2 bg-black/80 px-4 py-2 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
-          <ImagePlus size={16} /> {item ? "Change screen" : "Add website"}
-        </span>
-      </button>
-    ) : null}
-    {onRemove ? (
-      <button
-        type="button"
-        onClick={onRemove}
-        aria-label="Remove website"
-        title="Remove website"
-        className="absolute top-[9%] right-[17%] z-20 flex size-10 items-center justify-center rounded-full border border-white/30 bg-black/80 text-white transition-colors hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-      >
-        <Trash2 size={16} />
-      </button>
-    ) : null}
-    {onAdd
-      ? ["left-[6%]", "right-[6%]"].map((position) => (
-          <button
-            key={position}
-            type="button"
-            onClick={onAdd}
-            aria-label="Add website"
-            title="Add website"
-            className={`absolute top-[38%] z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/80 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white ${position}`}
-          >
-            <Plus size={22} />
-          </button>
-        ))
-      : null}
-  </div>
-)
+  )
+}
 
 const offsetFrom = (index: number, active: number, length: number) => {
   let offset = index - active
@@ -185,9 +253,10 @@ export const WebDevelopmentHero = ({
   const go = (delta: number) => setActive((i) => i + delta)
 
   return (
-    <section className="overflow-hidden bg-black">
-      <section ref={stage} className="relative h-screen min-h-[640px] overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center [perspective:1600px]">
+    <section className="relative isolate overflow-hidden bg-black">
+      {/* Keep the scene taller than the hero so reflections can fade behind the gallery. */}
+      <div className="absolute inset-x-0 top-0 h-[calc(max(100vh,640px)+min(48vw,683px)+24px)] overflow-hidden">
+        <div className="absolute inset-x-0 top-0 flex h-screen min-h-[640px] items-center justify-center [perspective:1600px]">
           <div
             className="relative h-2/3 w-full [transform-style:preserve-3d]"
             style={{ transform: `translateZ(-${RADIUS}px)` }}
@@ -229,9 +298,10 @@ export const WebDevelopmentHero = ({
             )}
           </div>
         </div>
-
+      </div>
+      <section ref={stage} className="pointer-events-none relative h-screen min-h-[640px]">
         {items.length > 1 ? (
-          <div className="absolute inset-x-0 bottom-8 z-20 flex items-center justify-center gap-5">
+          <div className="pointer-events-auto absolute inset-x-0 bottom-8 z-20 flex items-center justify-center gap-5">
             <button
               onClick={() => go(-1)}
               aria-label="Previous website"
@@ -253,7 +323,7 @@ export const WebDevelopmentHero = ({
         <AnimatePresence mode="wait">
           <motion.div
             key={current._id}
-            className="mx-auto max-w-5xl px-8 pb-24 md:px-16"
+            className="relative z-10 mx-auto max-w-5xl px-8 pb-24 md:px-16"
             initial={{ opacity: 0, y: 160 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 80 }}
