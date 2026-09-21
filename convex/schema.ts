@@ -62,6 +62,9 @@ export default defineSchema({
     media: v.id("_storage"),
     mediaType: v.union(v.literal("image"), v.literal("video")),
     supportImages: v.array(v.union(v.id("_storage"), v.null())),
+    supportMediaTypes: v.optional(
+      v.array(v.union(v.literal("image"), v.literal("video"), v.null())),
+    ),
     order: v.number(),
   }).index("by_categoryId_and_order", ["categoryId", "order"]),
 

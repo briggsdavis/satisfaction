@@ -7,30 +7,46 @@ import { useStorageUrl } from "../lib/storage"
 import { GalleryTemplateGrid } from "./gallery-template-grid"
 
 const SupportFrame = ({
-  image,
+  media,
+  mediaType,
   index,
   editing,
   busy,
   onChoose,
   onClear,
 }: {
-  image: Id<"_storage"> | null | undefined
+  media: Id<"_storage"> | null | undefined
+  mediaType: "image" | "video"
   index: number
   editing: boolean
   busy: boolean
   onChoose: () => void
   onClear: () => void
 }) => {
-  const url = useStorageUrl(image)
-  if (!editing) {
-    return url ? (
+  const url = useStorageUrl(media)
+  const content = url ? (
+    mediaType === "video" ? (
+      <video
+        src={url}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        className="h-full w-full object-cover"
+      />
+    ) : (
       <img
         src={url}
         alt={`Website detail ${index + 1}`}
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="h-full w-full object-cover"
       />
-    ) : null
+    )
+  ) : null
+
+  if (!editing) {
+    return url ? <div className="absolute inset-0">{content}</div> : null
   }
 
   return (
@@ -39,31 +55,24 @@ const SupportFrame = ({
         type="button"
         disabled={busy}
         onClick={onChoose}
-        aria-label={`${image ? "Replace" : "Upload"} supporting image in frame ${index + 1}`}
-        className={`absolute inset-0 h-full w-full rounded-[16px] text-white/40 focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white disabled:cursor-wait ${image ? "" : "bg-white/5 hover:text-white/70"}`}
+        aria-label={`${media ? "Replace" : "Upload"} supporting media in frame ${index + 1}`}
+        className={`absolute inset-0 h-full w-full rounded-[16px] text-white/40 focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white disabled:cursor-wait ${media ? "" : "bg-white/5 hover:text-white/70"}`}
       >
-        {url ? (
-          <img
-            src={url}
-            alt={`Website detail ${index + 1}`}
-            loading="lazy"
-            className="h-full w-full object-cover"
-          />
-        ) : null}
-        {!image && (
+        {content}
+        {!media && (
           <span
             aria-hidden="true"
             className="pointer-events-none absolute inset-px rounded-[15px] border border-dashed border-white/25 group-hover:border-white/60"
           />
         )}
         <span
-          className={`absolute inset-0 flex flex-col items-center justify-center gap-2 text-xs ${image ? "bg-black/30 text-white opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100" : ""}`}
+          className={`absolute inset-0 flex flex-col items-center justify-center gap-2 text-xs ${media ? "bg-black/30 text-white opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100" : ""}`}
         >
           <ImagePlus size={24} />
-          {image ? "Change image" : "Upload image"}
+          {media ? "Change media" : "Upload media"}
         </span>
       </button>
-      {image && (
+      {media && (
         <button
           type="button"
           disabled={busy}
@@ -124,7 +133,8 @@ export const WebShowcaseGallery = ({
         isFrameVisible={editing ? undefined : (index) => Boolean(item.supportImages[index])}
         renderFrame={(index) => (
           <SupportFrame
-            image={item.supportImages[index]}
+            media={item.supportImages[index]}
+            mediaType={item.supportMediaTypes?.[index] ?? "image"}
             index={index}
             editing={editing}
             busy={busy}
@@ -140,8 +150,8 @@ export const WebShowcaseGallery = ({
         <input
           ref={input}
           type="file"
-          accept="image/*"
-          aria-label="Upload website supporting image"
+          accept="image/*,video/*"
+          aria-label="Upload website supporting media"
           className="hidden"
           onChange={(event) => {
             const file = event.target.files?.[0]
@@ -149,16 +159,19 @@ export const WebShowcaseGallery = ({
             event.target.value = ""
             if (!file || index === null) return
             void run(async () => {
-              if (!file.type.startsWith("image/")) throw new Error("Choose an image file.")
+              const mediaType = file.type.startsWith("video/") ? "video" : "image"
+              if (!file.type.startsWith("image/") && mediaType !== "video") {
+                throw new Error("Choose an image or video file.")
+              }
               const response = await fetch(await generateUploadUrl(), {
                 method: "POST",
                 headers: { "Content-Type": file.type },
                 body: file,
               })
-              if (!response.ok) throw new Error("Image upload failed. Please try again.")
+              if (!response.ok) throw new Error("Media upload failed. Please try again.")
               const result = await response.json()
-              if (typeof result.storageId !== "string") throw new Error("Image upload failed.")
-              await edit({ id: item._id, index, image: result.storageId })
+              if (typeof result.storageId !== "string") throw new Error("Media upload failed.")
+              await edit({ id: item._id, index, media: result.storageId, mediaType })
             })
           }}
         />

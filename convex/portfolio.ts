@@ -127,6 +127,7 @@ export const updateWebShowcase = mutation({
     media: v.optional(v.id("_storage")),
     mediaType: v.optional(mediaType),
     supportImages: v.optional(v.array(v.union(v.id("_storage"), v.null()))),
+    supportMediaTypes: v.optional(v.array(v.union(mediaType, v.null()))),
   },
   returns: v.null(),
   handler: async (ctx, { id, ...patch }) => {
@@ -137,20 +138,28 @@ export const updateWebShowcase = mutation({
 })
 
 export const editWebShowcaseSupport = mutation({
-  args: { id: v.id("webShowcases"), index: v.number(), image: v.optional(v.id("_storage")) },
+  args: {
+    id: v.id("webShowcases"),
+    index: v.number(),
+    media: v.optional(v.id("_storage")),
+    mediaType: v.optional(mediaType),
+  },
   returns: v.null(),
-  handler: async (ctx, { id, index, image }) => {
+  handler: async (ctx, { id, index, media, mediaType: supportMediaType }) => {
     await requireAuth(ctx)
     const showcase = await ctx.db.get("webShowcases", id)
     if (!showcase) throw new Error("Website showcase not found")
     const count = galleryTemplates.short.frames.length
     const capacity = Math.max(count, Math.ceil(showcase.supportImages.length / count) * count)
     if (!Number.isInteger(index) || index < 0 || index >= capacity || capacity > 126)
-      throw new Error("Image frame not found")
+      throw new Error("Media frame not found")
     const supportImages = [...showcase.supportImages]
+    const supportMediaTypes = [...(showcase.supportMediaTypes ?? [])]
     while (supportImages.length < capacity) supportImages.push(null)
-    supportImages[index] = image ?? null
-    await ctx.db.patch("webShowcases", id, { supportImages })
+    while (supportMediaTypes.length < capacity) supportMediaTypes.push(null)
+    supportImages[index] = media ?? null
+    supportMediaTypes[index] = media ? (supportMediaType ?? "image") : null
+    await ctx.db.patch("webShowcases", id, { supportImages, supportMediaTypes })
     return null
   },
 })
