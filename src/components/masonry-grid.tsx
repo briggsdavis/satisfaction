@@ -2,7 +2,7 @@ import { Children, isValidElement, useState, type ReactNode } from "react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 const COLUMNS = { 0: 1, 768: 2, 1280: 3 }
-const GUTTERS = { 0: 16 }
+const GUTTERS = { 0: "16px" }
 const RATIOS = ["aspect-square", "aspect-4/3", "aspect-3/4", "aspect-video"] as const
 
 const ratioFor = (seed: number, index: number) => {
