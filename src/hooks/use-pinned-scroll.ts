@@ -26,7 +26,19 @@ export function usePinnedScroll(
     }
     requestAnimationFrame(measure)
     window.addEventListener("resize", measure)
-    return () => window.removeEventListener("resize", measure)
+    window.addEventListener("load", measure)
+    // Content above this section (images, fonts, Convex data) changes height
+    // after mount; the SmoothScroll spacer in <body> tracks total height, so
+    // re-measure whenever it changes.
+    const observer = new ResizeObserver(() => requestAnimationFrame(measure))
+    observer.observe(document.body)
+    if (wrapperRef.current?.parentElement) observer.observe(wrapperRef.current.parentElement)
+    document.fonts?.ready.then(measure)
+    return () => {
+      window.removeEventListener("resize", measure)
+      window.removeEventListener("load", measure)
+      observer.disconnect()
+    }
   }, [wrapperRef, smoothY])
 
   const pinY = useTransform(activeY, (y: number) => {

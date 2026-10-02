@@ -35,19 +35,19 @@ export const Footer = () => {
               className="h-12 w-auto md:h-14"
             />
           </Link>
-          <p className="max-w-xs text-sm leading-relaxed whitespace-pre-line text-white/40">
+          <p className="max-w-xs text-sm leading-relaxed whitespace-pre-line text-white/60">
             {footer?.description}
           </p>
         </div>
 
         <div className="space-y-6">
-          <h4 className="text-xs font-bold tracking-[0.3em] text-white/40 uppercase">Navigation</h4>
+          <h4 className="text-xs font-bold tracking-[0.3em] text-white/60 uppercase">Navigation</h4>
           <ul className="space-y-4">
             {["About", "Services", "Portfolio", "Contact"].map((item) => (
               <li key={item}>
                 <Link
                   to={`/${item.toLowerCase()}`}
-                  className="text-sm font-light tracking-wide text-white/70 transition-colors hover:text-white"
+                  className="text-sm font-light tracking-wide text-white/85 transition-colors hover:text-white"
                 >
                   {item}
                 </Link>
@@ -57,7 +57,7 @@ export const Footer = () => {
         </div>
 
         <div className="space-y-6">
-          <h4 className="text-xs font-bold tracking-[0.3em] text-white/40 uppercase">Social</h4>
+          <h4 className="text-xs font-bold tracking-[0.3em] text-white/60 uppercase">Social</h4>
           <ul className="space-y-4">
             {social.map((item) => (
               <li key={item.label}>
@@ -65,7 +65,7 @@ export const Footer = () => {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-light tracking-wide text-white/70 transition-colors hover:text-white"
+                  className="text-sm font-light tracking-wide text-white/85 transition-colors hover:text-white"
                 >
                   {item.label}
                 </a>
@@ -75,9 +75,9 @@ export const Footer = () => {
         </div>
 
         <div className="space-y-6">
-          <h4 className="text-xs font-bold tracking-[0.3em] text-white/40 uppercase">Contact</h4>
+          <h4 className="text-xs font-bold tracking-[0.3em] text-white/60 uppercase">Contact</h4>
           {info?.email && (
-            <p className="text-sm font-light tracking-wide text-white/70">{info.email}</p>
+            <p className="text-sm font-light tracking-wide text-white/85">{info.email}</p>
           )}
           <Link to="/contact" className="btn-industrial-sm mt-4 inline-block">
             Start a Project
@@ -86,18 +86,18 @@ export const Footer = () => {
       </div>
 
       <div className="mt-32 flex flex-col justify-between gap-4 pt-8 md:flex-row md:items-center">
-        <p className="text-xs tracking-widest text-white/15 uppercase">
+        <p className="text-xs tracking-widest text-white/50 uppercase">
           {/* oxlint-disable-next-line react/purity */}© {new Date().getFullYear()} Social
           Satisfaction. All Rights Reserved
         </p>
         <div className="flex items-center gap-6">
           <Link
             to="/credits"
-            className="text-xs tracking-widest text-white/15 uppercase transition-colors hover:text-white/40"
+            className="text-xs tracking-widest text-white/50 uppercase transition-colors hover:text-white"
           >
             Credits
           </Link>
-          <p className="text-xs tracking-widest text-white/15 uppercase">
+          <p className="text-xs tracking-widest text-white/50 uppercase">
             Made by{" "}
             <a
               href="https://www.briggsdavis.com"
