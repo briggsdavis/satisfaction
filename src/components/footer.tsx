@@ -87,7 +87,8 @@ export const Footer = () => {
 
       <div className="mt-32 flex flex-col justify-between gap-4 pt-8 md:flex-row md:items-center">
         <p className="text-xs tracking-widest text-white/15 uppercase">
-          © {new Date().getFullYear()} Social Satisfaction. All Rights Reserved
+          {/* oxlint-disable-next-line react/purity */}© {new Date().getFullYear()} Social
+          Satisfaction. All Rights Reserved
         </p>
         <div className="flex items-center gap-6">
           <Link
