@@ -1,6 +1,8 @@
 import { motion, useMotionValue, useTransform } from "motion/react"
-import { useEffect, useState } from "react"
-import { LaptopScene } from "../../components/laptop-scene"
+import { lazy, Suspense, useEffect, useState } from "react"
+const LaptopScene = lazy(() =>
+  import("../../components/laptop-scene").then((module) => ({ default: module.LaptopScene })),
+)
 import { ScatteredImages } from "../../components/scattered-images"
 import { useSmoothScroll } from "../../components/smooth-scroll"
 
@@ -58,7 +60,9 @@ export const HeroCanvas = () => {
       </div>
 
       <div className="pointer-events-none fixed inset-0 z-[5]">
-        <LaptopScene scrollProgress={scrollProgress} />
+        <Suspense fallback={null}>
+          <LaptopScene scrollProgress={scrollProgress} />
+        </Suspense>
       </div>
     </motion.div>
   )

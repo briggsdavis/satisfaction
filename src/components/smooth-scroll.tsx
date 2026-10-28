@@ -7,6 +7,7 @@ import {
   useTransform,
 } from "motion/react"
 import React, { createContext, useCallback, useContext, useLayoutEffect, useRef } from "react"
+import { useMobile } from "../hooks/use-mobile"
 
 const SmoothScrollContext = createContext<MotionValue<number> | null>(null)
 const ScrollResetContext = createContext<(() => void) | null>(null)
@@ -45,6 +46,8 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     skipInitialAnimation: true,
   })
 
+  const mobile = useMobile()
+  const activeY = mobile ? scrollY : smoothY
   const transitionLockRef = useRef(false)
   // Populated by SmoothScroll on mount so we can touch the DOM directly.
   const scrollElRef = useRef<HTMLElement | null>(null)
@@ -81,7 +84,7 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     <ScrollElRefContext.Provider value={scrollElRef}>
       <TransitionLockContext.Provider value={transitionLockRef}>
         <ScrollUnlockContext.Provider value={unlockScroll}>
-          <SmoothScrollContext.Provider value={smoothY}>
+          <SmoothScrollContext.Provider value={activeY}>
             <ScrollResetContext.Provider value={resetScroll}>
               {children}
             </ScrollResetContext.Provider>

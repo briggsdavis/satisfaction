@@ -1,7 +1,7 @@
 import { animate } from "motion/react"
 import { type RefObject, useEffect, useRef } from "react"
 
-const LOGO_SRC = "/logo/satisfaction.png"
+const LOGO_SRC = "/logo/satisfaction-small.webp"
 
 interface SiteLoaderProps {
   navLogoRef: RefObject<HTMLImageElement | null>
@@ -70,6 +70,9 @@ export const SiteLoader = ({ navLogoRef, onNavLogoReady, onDone }: SiteLoaderPro
           ref={logoRef}
           src={logoSrc}
           alt="Social Satisfaction"
+          width={168}
+          height={168}
+          decoding="async"
           className="h-10 w-auto opacity-0 md:h-12"
         />
       </div>

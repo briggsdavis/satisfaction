@@ -194,7 +194,10 @@ export const CategoryPage = () => {
           className="massive-text text-3xl md:text-6xl lg:text-8xl"
           immediate
         />
-        <Link to="/portfolio" className="btn-industrial">
+        <Link
+          to="/portfolio"
+          className="btn-industrial max-md:flex max-md:justify-center max-md:px-3 max-md:text-[10px] max-md:whitespace-nowrap"
+        >
           ← Back to Portfolio
         </Link>
       </div>
@@ -313,11 +316,17 @@ export const CategoryPage = () => {
         </MasonryGrid>
       </div>
 
-      <div className="flex items-center justify-between border-t border-white/10 px-8 py-16 md:px-16">
-        <Link to="/portfolio" className="btn-industrial">
+      <div className="flex flex-col items-stretch justify-between gap-4 border-t border-white/10 px-8 py-16 md:flex-row md:items-center md:px-16">
+        <Link
+          to="/portfolio"
+          className="btn-industrial max-md:flex max-md:justify-center max-md:px-3 max-md:text-[10px] max-md:whitespace-nowrap"
+        >
           ← All Categories
         </Link>
-        <Link to="/contact" className="btn-industrial">
+        <Link
+          to="/contact"
+          className="btn-industrial max-md:flex max-md:justify-center max-md:px-3 max-md:text-[10px] max-md:whitespace-nowrap"
+        >
           Start a Project →
         </Link>
       </div>

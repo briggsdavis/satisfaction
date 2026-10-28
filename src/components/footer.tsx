@@ -30,8 +30,11 @@ export const Footer = () => {
         <div className="space-y-8">
           <Link to="/">
             <img
-              src="/logo/satisfaction.png"
+              src="/logo/satisfaction-small.webp"
               alt="Social Satisfaction"
+              width={168}
+              height={168}
+              decoding="async"
               className="h-12 w-auto md:h-14"
             />
           </Link>

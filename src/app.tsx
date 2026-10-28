@@ -1,9 +1,11 @@
 import { useQuery } from "convex/react"
 import { motion, useMotionValue, useTransform } from "motion/react"
-import React, { useRef, useState } from "react"
+import React, { lazy, Suspense, useRef, useState } from "react"
 import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router"
 import { api } from "../convex/_generated/api"
-import { AdminRoot } from "./admin/admin-root"
+const AdminRoot = lazy(() =>
+  import("./admin/admin-root").then((module) => ({ default: module.AdminRoot })),
+)
 import { ColumnWipe, useColumnWipeLocation, usePendingLocation } from "./components/column-wipe"
 import { CustomCursor } from "./components/custom-cursor"
 import { Footer } from "./components/footer"
@@ -26,10 +28,16 @@ class CanvasErrorBoundary extends React.Component<
 import { AboutModelScene } from "./components/about-model-scene"
 import { Navbar } from "./components/navbar"
 import { SmoothScroll, SmoothScrollProvider, useSmoothScroll } from "./components/smooth-scroll"
-import { About } from "./pages/about"
-import { CategoryPage } from "./pages/category"
-import { Contact } from "./pages/contact"
-import { Credits } from "./pages/credits"
+const About = lazy(() => import("./pages/about").then((module) => ({ default: module.About })))
+const CategoryPage = lazy(() =>
+  import("./pages/category").then((module) => ({ default: module.CategoryPage })),
+)
+const Contact = lazy(() =>
+  import("./pages/contact").then((module) => ({ default: module.Contact })),
+)
+const Credits = lazy(() =>
+  import("./pages/credits").then((module) => ({ default: module.Credits })),
+)
 import { LogosCarousel } from "./pages/home/brands-carousel"
 import { CampaignStatement } from "./pages/home/campaign-statement"
 import { FaqCta } from "./pages/home/faq-cta"
@@ -38,9 +46,15 @@ import { HeroCanvas, Hero } from "./pages/home/hero"
 import { ServicesCarousel } from "./pages/home/services-carousel"
 import { WhatWeDoSection } from "./pages/home/what-we-do"
 import { NotFound } from "./pages/not-found"
-import { Portfolio } from "./pages/portfolio"
-import { ProjectPage } from "./pages/project-page"
-import { Services } from "./pages/services"
+const Portfolio = lazy(() =>
+  import("./pages/portfolio").then((module) => ({ default: module.Portfolio })),
+)
+const ProjectPage = lazy(() =>
+  import("./pages/project-page").then((module) => ({ default: module.ProjectPage })),
+)
+const Services = lazy(() =>
+  import("./pages/services").then((module) => ({ default: module.Services })),
+)
 
 const Home = () => (
   <>
@@ -190,10 +204,12 @@ const SiteRoot = () => {
 export default function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/admin/*" element={<AdminRoot />} />
-        <Route path="/*" element={<SiteRoot />} />
-      </Routes>
+      <Suspense fallback={<div className="min-h-screen bg-black" />}>
+        <Routes>
+          <Route path="/admin/*" element={<AdminRoot />} />
+          <Route path="/*" element={<SiteRoot />} />
+        </Routes>
+      </Suspense>
     </Router>
   )
 }

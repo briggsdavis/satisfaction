@@ -66,7 +66,7 @@ function Laptop({
   videoSrc: string | null
 }) {
   const groupRef = useRef<THREE.Group>(null)
-  const { scene: originalScene } = useGLTF("/imac.glb")
+  const { scene: originalScene } = useGLTF("/imac-optimized.glb")
   const scene = useMemo(() => {
     const clone = originalScene.clone(true)
     clone.traverse((obj) => {
@@ -166,7 +166,7 @@ function Laptop({
 }
 
 // Preload the model
-useGLTF.preload("/imac.glb")
+// Model loads when the hero mounts, rather than on every route.
 
 // ─── Scene ──────────────────────────────────────────────────────────────────
 function Scene({
@@ -204,7 +204,10 @@ function Scene({
 
 // ─── Exported Canvas Wrapper ────────────────────────────────────────────────
 export function LaptopScene({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
-  const dpr = Math.min(window.devicePixelRatio, 2)
+  const dpr = Math.min(
+    window.devicePixelRatio,
+    window.matchMedia("(pointer: coarse)").matches ? 1 : 1.5,
+  )
   // Read the admin-selected video here (outside <Canvas>) — React context such
   // as the Convex provider does not cross the react-three-fiber renderer
   // boundary, so the query must run in the regular tree and pass down as a prop.

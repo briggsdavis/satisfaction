@@ -155,7 +155,7 @@ export const FeaturedCascade = () => {
   }
 
   return (
-    <section className="bg-black pt-12 pb-20">
+    <section className="relative z-10 bg-black pt-12 pb-20 md:z-auto">
       <div className="mb-12 flex items-end justify-between px-8 md:px-16">
         <div>
           <p className="mb-5 text-xs font-bold tracking-[0.4em] text-white/30 uppercase">
@@ -178,7 +178,7 @@ export const FeaturedCascade = () => {
         ref={scrollRef}
         aria-label="Featured projects"
         className="cursor-grab overflow-x-auto px-8 active:cursor-grabbing md:px-16"
-        style={{ touchAction: "pan-x", overflowY: "clip" }}
+        style={{ touchAction: "pan-x pan-y", overflowY: "clip" }}
       >
         <div className="flex gap-4" style={{ width: "max-content", height: "580px" }}>
           {groups.map((g, gi) => (

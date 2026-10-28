@@ -5,6 +5,7 @@ import { Link, useNavigationType } from "react-router"
 import { api } from "../../convex/_generated/api"
 import type { Doc, Id } from "../../convex/_generated/dataModel"
 import { FitTitle } from "../components/fit-title"
+import { useMobile } from "../hooks/use-mobile"
 
 type Service = Doc<"categories">
 
@@ -24,19 +25,26 @@ const ServiceImage = ({
   alt: string
   isHovered: boolean
 }) => {
+  const mobile = useMobile()
   const url = useQuery(api.files.getUrl, storageId ? { storageId } : "skip")
   if (!url) return null
   return (
     <img
       src={url}
       alt={alt}
-      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700"
-      style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
+      loading="lazy"
+      decoding="async"
+      className="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-700"
+      onLoad={(event) => {
+        event.currentTarget.style.opacity = "1"
+      }}
+      style={{ opacity: mobile ? 0 : 1, transform: isHovered ? "scale(1.05)" : "scale(1)" }}
     />
   )
 }
 
 const ServiceCell = ({ service, index }: { service: Service; index: number }) => {
+  const mobile = useMobile()
   const [isHovered, setIsHovered] = useState(false)
 
   return (
@@ -56,7 +64,7 @@ const ServiceCell = ({ service, index }: { service: Service; index: number }) =>
       >
         <motion.div
           className="absolute inset-3 overflow-hidden rounded-[16px]"
-          animate={{ scale: [1, 1.0194, 1] }}
+          animate={{ scale: mobile ? 1 : [1, 1.0194, 1] }}
           transition={{
             duration: 3.5 + (index % 4) * 0.65,
             repeat: Infinity,

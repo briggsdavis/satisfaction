@@ -18,7 +18,7 @@ const TextField = ({
   type?: string
   placeholder: string
 }) => (
-  <div className="border-b border-white/10 py-5">
+  <div className="py-5">
     <label
       htmlFor={name}
       className="mb-2 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase"
@@ -45,7 +45,7 @@ const TextareaField = ({
   name: string
   placeholder: string
 }) => (
-  <div className="border-b border-white/10 py-5">
+  <div className="py-5">
     <label
       htmlFor={name}
       className="mb-2 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase"
@@ -140,7 +140,7 @@ const ServiceSelect = () => {
   const selectedOption = services.find((s) => s.name === selected)
 
   return (
-    <div className="border-b border-white/10 py-5">
+    <div className="py-5">
       <p className="mb-2 block text-xs font-bold tracking-[0.35em] text-white/40 uppercase">
         Service
       </p>

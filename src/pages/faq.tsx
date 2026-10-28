@@ -5,6 +5,7 @@ import { useLocation } from "react-router"
 import { api } from "../../convex/_generated/api"
 import type { Id } from "../../convex/_generated/dataModel"
 import { TextReveal } from "../components/text-reveal"
+import { scrollToSection } from "../lib/scroll-to-section"
 
 const FaqItem = ({
   item,
@@ -124,9 +125,9 @@ export const Faq = () => {
 
   useEffect(() => {
     if (hash !== "#faq") return
-    const timer = setTimeout(() => document.getElementById("faq")?.scrollIntoView(), 400)
+    const timer = setTimeout(() => scrollToSection("faq"), 1800)
     return () => clearTimeout(timer)
-  }, [hash])
+  }, [hash, sections.length])
 
   const toggleFaq = (key: string) => setOpenFaq((current) => (current === key ? null : key))
 

@@ -70,7 +70,7 @@ const ValueCard = ({
   return (
     <motion.div
       ref={containerRef}
-      className={`relative z-[2] flex-1 ${offset} cursor-pointer text-left`}
+      className={`relative z-[2] min-w-0 flex-1 max-md:mt-0 ${offset} cursor-pointer text-left`}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
@@ -144,9 +144,9 @@ const WheelPair = ({
   return (
     <motion.div
       style={{ opacity }}
-      className="absolute inset-0 flex flex-col items-center justify-center gap-10 px-8 pt-24 md:flex-row md:gap-16 md:px-16"
+      className="absolute inset-0 flex flex-col items-center justify-center gap-6 overflow-y-auto px-8 pt-24 pb-8 [overflow-wrap:anywhere] md:flex-row md:gap-10 md:gap-16 md:overflow-visible md:px-16 md:pb-0"
     >
-      <div className="flex-1">
+      <div className="flex-1 max-md:min-w-0">
         <p className="mb-3 text-xs font-bold tracking-[0.4em] text-white/30 uppercase">{number}</p>
         <h3 className="massive-text mb-6 text-4xl leading-tight font-bold uppercase md:text-6xl lg:text-7xl">
           {item.heading}
@@ -361,7 +361,7 @@ export const About = () => {
           <motion.div style={{ y: pinY }} className="flex h-screen flex-col overflow-hidden">
             <div className="flex-shrink-0 px-8 pt-40 pb-[3px] md:px-16">
               <h2 className="text-xs font-bold tracking-widest text-white/40 uppercase">
-                PORTFOLIO
+                TIMELINE
               </h2>
               <h3 className="mt-1 font-display text-3xl font-bold tracking-tight uppercase md:text-5xl">
                 PAST PROJECTS &amp; CLIENTS
@@ -379,9 +379,16 @@ export const About = () => {
             </div>
 
             <div className="ml-8 flex flex-1 items-start overflow-hidden pt-5 md:ml-16">
-              <motion.div ref={horizontalRef} style={{ x }} className="flex gap-24 pr-8 md:pr-16">
+              <motion.div
+                ref={horizontalRef}
+                style={{ x }}
+                className="flex min-h-0 gap-24 pr-8 max-md:h-full md:pr-16"
+              >
                 {(timeline as TimelineItem[]).map((item) => (
-                  <div key={item._id} className="w-[85vw] flex-shrink-0 md:w-[45vw]">
+                  <div
+                    key={item._id}
+                    className="max-h-full w-[85vw] flex-shrink-0 overflow-y-auto pb-10 [overflow-wrap:anywhere] md:max-h-none md:w-[45vw] md:overflow-visible md:pb-0"
+                  >
                     <div>
                       <span className="text-sm font-bold tracking-widest text-white/60">
                         {item.date}
@@ -416,7 +423,7 @@ export const About = () => {
 
         {/* Value cards (fixed 3) */}
         <div className="px-8 pt-[54px] pb-6 md:px-16 md:pt-[82px] md:pb-8">
-          <div className="flex items-start gap-3 md:gap-5">
+          <div className="flex flex-col items-stretch gap-8 md:flex-row md:items-start md:gap-5">
             {[0, 1, 2].map((i) => {
               const v = valueItems[i] ?? { label: "", body: "" }
               return (

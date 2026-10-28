@@ -49,7 +49,7 @@ export function AboutModelScene() {
         style={{
           transformStyle: "preserve-3d",
           willChange: "transform",
-          opacity: 0.3,
+          opacity: 0.08,
         }}
         draggable={false}
       />

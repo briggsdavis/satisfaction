@@ -84,7 +84,7 @@ export const ServicesCarousel = () => {
         ref={scrollRef}
         aria-label="Services"
         className="cursor-grab overflow-x-auto px-8 py-8 select-none active:cursor-grabbing md:px-16"
-        style={{ touchAction: "pan-x", overflowY: "clip" }}
+        style={{ touchAction: "pan-x pan-y", overflowY: "clip" }}
       >
         <div className="flex" style={{ width: "max-content" }}>
           {services.map((service, i) => (

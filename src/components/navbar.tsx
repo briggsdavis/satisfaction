@@ -3,9 +3,9 @@ import { AnimatePresence, motion } from "motion/react"
 import { type RefObject, useState } from "react"
 import { Link } from "react-router"
 
-const LOGO_SRC = "/logo/satisfaction.png"
+const LOGO_SRC = "/logo/satisfaction-small.webp"
 
-const NAV_LINKS = ["About", "Services", "Portfolio"]
+const NAV_LINKS = ["Home", "About", "Services", "Portfolio"]
 
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number]
 
@@ -29,6 +29,9 @@ export const Navbar = ({ logoRef, logoVisible = true }: NavbarProps) => {
             ref={logoRef}
             src={logoSrc}
             alt="Social Satisfaction"
+            width={168}
+            height={168}
+            decoding="async"
             className="h-10 w-auto md:h-12"
             style={{ opacity: logoVisible ? 1 : 0 }}
           />
@@ -36,10 +39,10 @@ export const Navbar = ({ logoRef, logoVisible = true }: NavbarProps) => {
 
         {/* Desktop nav */}
         <div className="hidden items-center justify-center gap-6 md:flex">
-          {NAV_LINKS.map((item) => (
+          {NAV_LINKS.filter((item) => item !== "Home").map((item) => (
             <Link
               key={item}
-              to={`/${item.toLowerCase()}`}
+              to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
               className="w-24 text-center text-xs font-medium tracking-[0.2em] text-white/70 uppercase transition-colors hover:text-white"
             >
               {item}
@@ -82,7 +85,7 @@ export const Navbar = ({ logoRef, logoVisible = true }: NavbarProps) => {
                   transition={{ duration: 0.5, ease, delay: 0.05 + i * 0.06 }}
                 >
                   <Link
-                    to={`/${item.toLowerCase()}`}
+                    to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
                     onClick={handleLinkClick}
                     className="massive-text text-5xl text-white transition-opacity hover:opacity-60"
                   >

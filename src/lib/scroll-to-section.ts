@@ -17,5 +17,5 @@ export function scrollToSection(id: string): void {
     if (window.getComputedStyle(parent).position === "fixed") break
     current = parent
   }
-  window.scrollTo({ top, behavior: "smooth" })
+  window.scrollTo({ top: Math.max(0, top - 112), behavior: "smooth" })
 }

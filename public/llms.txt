@@ -1,0 +1,18 @@
+# Social Satisfaction
+
+> Social Satisfaction is a creative agency specializing in brand identity, creative direction, and commercial production for hospitality and lifestyle brands.
+
+This website presents the agency's services, selected projects, background, and contact information. Portfolio categories link to individual project case studies. Current project details and contact information are maintained on the linked pages.
+
+## Agency
+
+- [Home](https://socialsatisfaction.agency/): Agency overview and featured work.
+- [About](https://socialsatisfaction.agency/about): Background, approach, timeline, and values.
+- [FAQ](https://socialsatisfaction.agency/about#faq): Questions about packages, production, strategy, and workflow.
+- [Services](https://socialsatisfaction.agency/services): Creative and production services.
+- [Portfolio](https://socialsatisfaction.agency/portfolio): Selected work organized by service.
+- [Contact](https://socialsatisfaction.agency/contact): Current contact details and project inquiry form.
+
+## Discovery
+
+- [Resource catalog](https://socialsatisfaction.agency/.well-known/ai-catalog.json): Machine-readable catalog of public resources.

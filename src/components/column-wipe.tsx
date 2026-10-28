@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState } from "react"
 import { flushSync } from "react-dom"
 import { useLocation } from "react-router"
 import type { Location } from "react-router"
+import { scrollToSection } from "../lib/scroll-to-section"
 import { useScrollReset, useScrollUnlock } from "./smooth-scroll"
 
 const COLUMNS = 6
@@ -82,6 +83,10 @@ export const ColumnWipe = ({ children }: { children: React.ReactNode }) => {
                     ? () => {
                         setIsRevealing(false)
                         unlockScroll?.()
+                        if (location.hash)
+                          requestAnimationFrame(() =>
+                            scrollToSection(decodeURIComponent(location.hash.slice(1))),
+                          )
                       }
                     : undefined
                 }

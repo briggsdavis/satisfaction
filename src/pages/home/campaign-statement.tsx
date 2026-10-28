@@ -49,7 +49,7 @@ export const CampaignStatement = () => {
         <motion.img
           src={imageUrl}
           alt=""
-          className="pointer-events-none absolute top-1/2 left-[40%] z-10 h-[34.85rem] w-[34.85rem] -translate-x-1/2 -translate-y-[54%] rounded-lg object-cover shadow-2xl md:h-[52.27rem] md:w-[52.27rem]"
+          className="pointer-events-none absolute top-1/2 left-[40%] z-0 h-[65vw] w-[65vw] -translate-x-1/2 -translate-y-[54%] rounded-lg object-cover opacity-25 shadow-2xl md:z-10 md:h-[52.27rem] md:w-[52.27rem] md:opacity-100"
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-150px" }}
@@ -63,7 +63,7 @@ export const CampaignStatement = () => {
       {CAMPAIGN_WORDS.map((word, i) => {
         const isRight = i % 2 === 1
         return (
-          <div key={word} className="px-8 md:px-16">
+          <div key={word} className="px-8 max-md:relative max-md:z-10 md:px-16">
             <motion.div
               className={`flex items-end ${isRight ? "justify-end" : "justify-start"}`}
               initial={{ opacity: 0, x: isRight ? 40 : -40 }}

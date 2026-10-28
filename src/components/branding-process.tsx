@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
+import { useMobile } from "../hooks/use-mobile"
 
 type Side = "right" | "left"
 
@@ -114,6 +115,7 @@ const WAYPOINTS: Waypoint[] = [
 ]
 
 export const BrandingProcess = () => {
+  const mobile = useMobile()
   const containerRef = useRef<HTMLDivElement>(null)
   const pathRef = useRef<SVGPathElement>(null)
 
@@ -155,7 +157,7 @@ export const BrandingProcess = () => {
         let bestD = Infinity
         for (let i = 0; i <= N; i++) {
           const dx = xs[i] - x
-          const dy = ys[i] - y
+          const dy = ys[i] - (mobile ? y * Y_SCALE : y)
           const d = dx * dx + dy * dy
           if (d < bestD) {
             bestD = d
@@ -193,11 +195,11 @@ export const BrandingProcess = () => {
           Its content height is set by the inner squiggle box (the only flow
           child), so labels using `top: yPct%` resolve to the same vertical
           position as their dot. */}
-      <div className="relative mx-auto w-full max-w-6xl">
+      <div className="relative mx-auto w-full max-w-6xl max-md:min-h-[1200px]">
         {/* Inner squiggle box: width clamps so there's always gutter space for
             labels at every breakpoint. */}
         <div
-          className="relative mx-auto"
+          className="relative mx-auto max-md:h-[1200px] max-md:w-full!"
           style={{
             aspectRatio: `${VIEW_W} / ${VIEW_H_RENDER}`,
             width: "clamp(280px, 60%, 700px)",
@@ -205,7 +207,7 @@ export const BrandingProcess = () => {
         >
           <svg
             viewBox={`0 0 ${VIEW_W} ${VIEW_H_RENDER}`}
-            preserveAspectRatio="xMidYMid meet"
+            preserveAspectRatio={mobile ? "none" : "xMidYMid meet"}
             className="absolute inset-0 h-full w-full overflow-visible"
             fill="none"
           >
@@ -219,7 +221,7 @@ export const BrandingProcess = () => {
             <motion.path
               d={PATH_D}
               stroke="#3B82F6"
-              strokeWidth={2}
+              strokeWidth={mobile ? 4 : 2}
               strokeLinecap="butt"
               style={{ pathLength }}
             />
@@ -242,7 +244,10 @@ export const BrandingProcess = () => {
         className="mt-16 flex justify-center"
         style={{ filter: buttonFilter, opacity: buttonOpacity }}
       >
-        <Link to="/contact" className="btn-industrial inline-flex items-center gap-3">
+        <Link
+          to="/contact"
+          className="btn-industrial inline-flex items-center gap-3 px-4 text-[10px] max-md:whitespace-nowrap md:px-8 md:text-xs"
+        >
           start your project now <span className="text-sm">→</span>
         </Link>
       </motion.div>
@@ -288,7 +293,7 @@ const Label = ({ wp, t, progress }: { wp: Waypoint; t: number; progress: MotionV
     <motion.div
       className={`pointer-events-none absolute -translate-y-1/2 ${
         isRight ? "right-0 text-left" : "left-0 text-right"
-      } w-28 sm:w-36 md:w-48 lg:w-60 xl:w-72`}
+      } w-24 sm:w-36 md:w-48 lg:w-60 xl:w-72`}
       style={{
         top: `${yPct}%`,
         filter,
@@ -299,7 +304,7 @@ const Label = ({ wp, t, progress }: { wp: Waypoint; t: number; progress: MotionV
       <p className="mb-0.5 font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase md:text-xs">
         {wp.tag}
       </p>
-      <h3 className="mb-2 font-display text-3xl leading-tight font-bold tracking-tight text-white lowercase md:text-5xl">
+      <h3 className="mb-2 font-display text-xl leading-tight font-bold tracking-tight text-white lowercase md:text-3xl md:text-5xl">
         {wp.title}
       </h3>
       <p className="text-sm leading-relaxed text-white/55 md:text-base">{wp.body}</p>

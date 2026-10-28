@@ -1,4 +1,5 @@
 import { motion } from "motion/react"
+import { useMobile } from "../hooks/use-mobile"
 import { cn } from "../lib/utils"
 
 interface TextRevealProps {
@@ -23,6 +24,7 @@ export const TextReveal = ({
   slideFrom = "bottom",
 }: TextRevealProps) => {
   // Left-to-right wipes need more stagger so the sweep is actually visible.
+  const mobile = useMobile()
   const effectiveStagger = slideFrom === "left" ? Math.max(stagger, 0.065) : stagger
 
   const container = {
@@ -44,7 +46,7 @@ export const TextReveal = ({
             x: 0,
             transition: {
               type: "spring" as const,
-              damping: 14,
+              damping: mobile ? 24 : slideFrom === "left" ? 14 : 12,
               stiffness: 120,
             },
           },
@@ -53,7 +55,7 @@ export const TextReveal = ({
             x: -24,
             transition: {
               type: "spring" as const,
-              damping: 14,
+              damping: mobile ? 24 : slideFrom === "left" ? 14 : 12,
               stiffness: 120,
             },
           },
@@ -64,7 +66,7 @@ export const TextReveal = ({
             y: 0,
             transition: {
               type: "spring" as const,
-              damping: 12,
+              damping: mobile ? 24 : 12,
               stiffness: 100,
             },
           },
@@ -73,7 +75,7 @@ export const TextReveal = ({
             y: 20,
             transition: {
               type: "spring" as const,
-              damping: 12,
+              damping: mobile ? 24 : 12,
               stiffness: 100,
             },
           },
@@ -96,7 +98,11 @@ export const TextReveal = ({
       {words.map((word, wi) => (
         <span key={wi} className="inline-flex flex-nowrap">
           {word.split("").map((char, ci) => (
-            <motion.span variants={child} key={ci} className="inline-block whitespace-pre">
+            <motion.span
+              variants={child}
+              key={ci}
+              className="inline-block whitespace-pre [backface-visibility:hidden]"
+            >
               {char}
             </motion.span>
           ))}

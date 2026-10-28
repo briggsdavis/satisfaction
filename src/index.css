@@ -186,8 +186,10 @@
     @apply font-display leading-[0.85] font-black tracking-normal uppercase transition-opacity duration-400 ease-in-out;
   }
 
-  .massive-text:hover {
-    opacity: 0.72;
+  @media (hover: hover) and (pointer: fine) {
+    .massive-text:hover {
+      opacity: 0.72;
+    }
   }
 
   .about-glow-text {

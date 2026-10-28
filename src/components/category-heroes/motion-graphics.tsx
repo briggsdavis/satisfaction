@@ -27,7 +27,7 @@ export const MotionGraphicsHero = ({ category }: { category: Category }) => {
       </div>
       <div
         ref={ref}
-        className="relative z-10"
+        className="relative z-10 scale-[1.65] md:scale-100"
         style={{
           aspectRatio: "4500 / 3000",
           width: "min(100%, calc(100vh * 4500 / 3000))",

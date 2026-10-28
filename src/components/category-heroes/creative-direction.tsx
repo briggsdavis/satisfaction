@@ -26,7 +26,7 @@ function shuffled<T>(arr: T[]): T[] {
   return a
 }
 
-export const CreativeDirectionHero = ({ category: _category }: { category: Category }) => {
+export const CreativeDirectionHero = ({ category }: { category: Category }) => {
   const [queue] = useState(() => shuffled(videos))
   const [indices, setIndices] = useState<number[]>([0, 1, 2])
   const nextRef = useRef(frames.length)
@@ -42,8 +42,11 @@ export const CreativeDirectionHero = ({ category: _category }: { category: Categ
 
   return (
     <section className="relative flex h-screen items-center justify-center overflow-hidden bg-black">
+      <h1 className="absolute inset-x-8 top-28 z-20 text-center font-display text-4xl uppercase md:hidden">
+        {category.name}
+      </h1>
       <div
-        className="relative"
+        className="relative w-full shrink-0"
         style={{
           aspectRatio: "4500 / 3000",
           width: "min(100%, calc(100vh * 4500 / 3000))",

@@ -22,13 +22,10 @@ export const FitTitle = ({
     const measure = () => {
       const container = containerRef.current
       if (!container) return
-      const probe = document.createElement("span")
-      probe.style.cssText = `position:absolute;visibility:hidden;white-space:nowrap;font-size:${PROBE}px`
-      probe.className = "massive-text"
-      probe.textContent = text
-      document.body.appendChild(probe)
-      const textWidth = probe.offsetWidth
-      document.body.removeChild(probe)
+      const context = document.createElement("canvas").getContext("2d")
+      if (!context) return
+      context.font = `900 ${PROBE}px "Arian LT"`
+      const textWidth = context.measureText(text).width
       const containerWidth = container.clientWidth
       if (textWidth > 0 && containerWidth > 0) {
         // 0.97 safety margin prevents sub-pixel rounding from triggering wrap

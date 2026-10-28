@@ -67,6 +67,7 @@ const Lightbox = ({
   title: string
   onClose: () => void
 }) => {
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
   const [idx, setIdx] = useState(startIndex)
   const [dir, setDir] = useState(0)
 
@@ -116,18 +117,31 @@ const Lightbox = ({
             className="flex h-9 w-9 items-center justify-center border border-white/20 text-sm text-white/50 transition-colors hover:border-white/60 hover:text-white"
             aria-label="Close"
           >
-            ✕
+            <X size={16} className="block" />
           </button>
         </div>
       </div>
 
-      <div className="relative flex flex-1 items-center justify-center overflow-hidden px-14 pb-6 md:px-24">
+      <div
+        className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-2 pb-2 md:px-24 md:pb-6"
+        onTouchStart={(e) => {
+          touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+        }}
+        onTouchEnd={(e) => {
+          const start = touchStart.current
+          touchStart.current = null
+          if (!start) return
+          const dx = e.changedTouches[0].clientX - start.x
+          const dy = e.changedTouches[0].clientY - start.y
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1)
+        }}
+      >
         <AnimatePresence mode="wait" custom={dir}>
           <motion.img
             key={idx}
             src={images[idx]}
             alt={`${title} — ${idx + 1}`}
-            className="max-h-full max-w-full object-contain"
+            className="h-full w-full object-contain md:h-auto md:max-h-full md:w-auto md:max-w-full"
             custom={dir}
             initial={{ opacity: 0, x: dir * 40 }}
             animate={{ opacity: 1, x: 0 }}
@@ -138,7 +152,7 @@ const Lightbox = ({
 
         <button
           onClick={() => go(-1)}
-          className="absolute top-1/2 left-3 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white md:left-6"
+          className="absolute top-1/2 left-3 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white md:left-6 md:flex"
           aria-label="Previous"
         >
           ←
@@ -146,14 +160,17 @@ const Lightbox = ({
 
         <button
           onClick={() => go(1)}
-          className="absolute top-1/2 right-3 flex h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white md:right-6"
+          className="absolute top-1/2 right-3 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white md:right-6 md:flex"
           aria-label="Next"
         >
           →
         </button>
       </div>
 
-      <div className="flex shrink-0 justify-center gap-2 px-6 pb-6">
+      <p className="pb-3 text-center text-xs tracking-widest text-white/60 uppercase md:hidden">
+        Swipe ↔
+      </p>
+      <div className="hidden shrink-0 justify-center gap-2 px-6 pb-6 md:flex">
         {images.map((src, i) => (
           <button
             key={i}
@@ -306,7 +323,10 @@ export const ProjectPage = () => {
           className="massive-text text-3xl md:text-6xl lg:text-8xl"
           immediate
         />
-        <Link to="/portfolio" className="btn-industrial">
+        <Link
+          to="/portfolio"
+          className="btn-industrial max-md:flex max-md:justify-center max-md:px-3 max-md:text-[10px] max-md:whitespace-nowrap"
+        >
           ← Back to Portfolio
         </Link>
       </div>
@@ -452,11 +472,17 @@ export const ProjectPage = () => {
         onView={(images, index) => setLightbox({ images, index })}
       />
 
-      <div className="flex items-center justify-between border-t border-white/10 px-8 py-16 md:px-16">
-        <Link to={`/portfolio/${category.slug}`} className="btn-industrial">
+      <div className="flex flex-col items-stretch justify-between gap-4 border-t border-white/10 px-8 py-16 md:flex-row md:items-center md:px-16">
+        <Link
+          to={`/portfolio/${category.slug}`}
+          className="btn-industrial max-md:flex max-md:justify-center max-md:px-3 max-md:text-[10px] max-md:whitespace-nowrap"
+        >
           ← {category.name}
         </Link>
-        <Link to="/contact" className="btn-industrial">
+        <Link
+          to="/contact"
+          className="btn-industrial max-md:flex max-md:justify-center max-md:px-3 max-md:text-[10px] max-md:whitespace-nowrap"
+        >
           Start a Project →
         </Link>
       </div>

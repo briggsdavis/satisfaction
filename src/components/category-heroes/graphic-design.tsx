@@ -99,7 +99,7 @@ export const GraphicDesignHero = ({ category }: { category: Category }) => {
         <ScrollingTextHero text={category.name} />
       </div>
       <div
-        className="relative z-10 overflow-hidden"
+        className="relative z-10 scale-[1.35] overflow-hidden md:scale-100"
         style={{
           aspectRatio: `${IMG_W} / ${IMG_H}`,
           width: `min(85%, calc(85vh * ${IMG_W} / ${IMG_H}))`,

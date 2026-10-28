@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import type { RefObject } from "react"
 import { api } from "../../../convex/_generated/api"
 import type { Doc, Id } from "../../../convex/_generated/dataModel"
+import { useMobile } from "../../hooks/use-mobile"
 import { WebShowcaseGallery } from "../web-showcase-gallery"
 
 type Category = Doc<"categories">
@@ -177,7 +178,7 @@ const RingBack = ({ active }: { active: number }) => (
         <div
           key={index}
           aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 left-1/2 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(.65,0,.35,1)] motion-reduce:transition-none"
+          className="pointer-events-none absolute top-1/2 left-1/2 transition-[transform,opacity] duration-300 ease-[cubic-bezier(.65,0,.35,1)] motion-reduce:transition-none md:duration-1000"
           style={{
             opacity: Math.abs(offset) >= 4 ? 0 : 0.65,
             transform: `translate(-50%, -50%) rotateY(${180 + offset * STEP}deg) translateZ(${RADIUS}px) rotateY(180deg)`,
@@ -207,6 +208,8 @@ export const WebDevelopmentHero = ({
   editing?: boolean
   onNameCommit?: (name: string) => void
 }) => {
+  const mobile = useMobile()
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
   const items = useQuery(api.portfolio.listWebShowcases, { categoryId: category._id }) ?? []
   const create = useMutation(api.portfolio.createWebShowcase)
   const update = useMutation(api.portfolio.updateWebShowcase)
@@ -221,10 +224,10 @@ export const WebDevelopmentHero = ({
   const current = items[activeIndex]
 
   useEffect(() => {
-    if (editing || !visible || items.length < 2) return
+    if (mobile || editing || !visible || items.length < 2) return
     const id = setTimeout(() => setActive((i) => i + 1), 4000)
     return () => clearTimeout(id)
-  }, [active, editing, items.length, visible])
+  }, [active, editing, items.length, visible, mobile])
 
   const upload = async (file: File) => {
     const response = await fetch(await uploadUrl(), {
@@ -253,7 +256,23 @@ export const WebDevelopmentHero = ({
   const go = (delta: number) => setActive((i) => i + delta)
 
   return (
-    <section className="relative isolate overflow-hidden bg-black">
+    <section
+      className="relative isolate overflow-hidden bg-black"
+      onTouchStart={(e) => {
+        touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+      }}
+      onTouchEnd={(e) => {
+        const start = touchStart.current
+        touchStart.current = null
+        if (!mobile || !start) return
+        const dx = e.changedTouches[0].clientX - start.x
+        const dy = e.changedTouches[0].clientY - start.y
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1)
+      }}
+    >
+      <h1 className="absolute inset-x-8 top-28 z-20 text-center font-display text-4xl uppercase md:hidden">
+        {category.name}
+      </h1>
       {/* Keep the scene taller than the hero so reflections can fade behind the gallery. */}
       <div className="absolute inset-x-0 top-0 h-[calc(max(100vh,640px)+min(48vw,683px)+24px)] overflow-hidden">
         <div className="absolute inset-x-0 top-0 flex h-screen min-h-[640px] items-center justify-center [perspective:1600px]">
@@ -269,7 +288,7 @@ export const WebDevelopmentHero = ({
                 return (
                   <div
                     key={item._id}
-                    className="absolute top-1/2 left-1/2 transition-[transform,opacity] duration-1000 ease-[cubic-bezier(.65,0,.35,1)] [transform-style:preserve-3d] motion-reduce:transition-none"
+                    className="absolute top-1/2 left-1/2 transition-[transform,opacity] duration-300 ease-[cubic-bezier(.65,0,.35,1)] [transform-style:preserve-3d] motion-reduce:transition-none md:duration-1000"
                     style={{
                       opacity: Math.abs(offset) >= 2 ? 0 : 1,
                       transform: `translate(-50%, -50%) rotateY(${offset * STEP}deg) translateZ(${RADIUS}px)`,
@@ -305,14 +324,19 @@ export const WebDevelopmentHero = ({
             <button
               onClick={() => go(-1)}
               aria-label="Previous website"
-              className="btn-industrial-sm"
+              className="btn-industrial-sm hidden md:block"
             >
               ←
             </button>
             <span className="w-16 text-center font-mono text-xs text-white/50">
+              <span className="mb-2 block md:hidden">Swipe ↔</span>
               {String(activeIndex + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
             </span>
-            <button onClick={() => go(1)} aria-label="Next website" className="btn-industrial-sm">
+            <button
+              onClick={() => go(1)}
+              aria-label="Next website"
+              className="btn-industrial-sm hidden md:block"
+            >
               →
             </button>
           </div>
