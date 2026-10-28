@@ -172,7 +172,7 @@ export const BrandingProcess = () => {
     measure()
     window.addEventListener("resize", measure)
     return () => window.removeEventListener("resize", measure)
-  }, [])
+  }, [mobile])
 
   const buttonBlurPx = useTransform(scrollYProgress, [0.88, 1.0], [12, 0], {
     clamp: true,
