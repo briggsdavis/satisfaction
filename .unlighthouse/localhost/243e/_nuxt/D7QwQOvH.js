@@ -1,1 +1,0 @@
-import{c as e}from"#entry";function t(t,n){let r=n.filter(n=>e(n.url)===t);return r.length?(r.find(e=>e.url.startsWith(`https://`))??r[0]).url:`https://${t}`}function n(e){try{return new URL(e).origin}catch{return null}}export{t as n,n as t};

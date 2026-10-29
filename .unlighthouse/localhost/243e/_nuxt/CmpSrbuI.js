@@ -1,1 +1,0 @@
-function e(e){let t=e.trim();if(!t||/^[a-z][a-z\d+.-]*:\/\//i.test(t)&&!/^https?:\/\//i.test(t))return null;let n=/^https?:\/\//i.test(t)?t:`https://${t}`,r=n.match(/^https?:\/\/([^/?#]*)/i)?.[1];if(!r||/\s/.test(r))return null;try{let e=new URL(n);return e.protocol!==`http:`&&e.protocol!==`https:`||!e.hostname?null:e.toString()}catch{return null}}export{e as t};
