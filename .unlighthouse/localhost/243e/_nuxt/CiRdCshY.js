@@ -1,0 +1,1 @@
+function e(e,t){return`/sites/${e}/scans/${t}/overview`}export{e as t};

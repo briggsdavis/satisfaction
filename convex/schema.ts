@@ -1,148 +1,53 @@
 import { authTables } from "@convex-dev/auth/server"
 import { defineSchema, defineTable } from "convex/server"
 import { v } from "convex/values"
-import { galleryLayout, galleryOrientation, galleryTemplateId } from "./lib/gallery"
+import * as m from "./model"
 
-export default defineSchema({
-  // Convex Auth tables (users, authSessions, authAccounts, etc.)
-  ...authTables,
+// Flip to `false` only for the one-off v1 -> v2 migration deploy (see migrations.ts).
+const schemaValidation = true
 
-  // ── Homepage (singleton) ────────────────────────────────────────────────
-  // All fields optional so the admin can populate the page incrementally.
-  homepage: defineTable({
-    heroImages: v.optional(v.array(v.object({ slot: v.number(), image: v.id("_storage") }))),
-    // The video shown on the 3D iMac screen in the hero. Served (and CDN-cached)
-    // via the /hero-video HTTP route. Unset → the iMac keeps its baked-in GLB
-    // screen texture (no video).
-    heroVideo: v.optional(v.id("_storage")),
-    whatWeDoPanel1Body: v.optional(v.string()),
-    whatWeDoPanel2Col1Label: v.optional(v.string()),
-    whatWeDoPanel2Col1Body: v.optional(v.string()),
-    whatWeDoPanel2Col2Label: v.optional(v.string()),
-    whatWeDoPanel2Col2Body: v.optional(v.string()),
-    campaignImage: v.optional(v.id("_storage")),
-    faqCtaBody: v.optional(v.string()),
-  }),
+// v1 tables, read once by `migrations:v2` and emptied by it. Delete this block
+// (and migrations.ts) after every deployment has been migrated.
+const legacy = Object.fromEntries(
+  [
+    "homepage",
+    "footer",
+    "contactInfo",
+    "about",
+    "aboutWheel",
+    "aboutTimeline",
+    "categories",
+    "webShowcases",
+    "collaborationLogos",
+    "workLogos",
+    "onboardSubmissions",
+  ].map((name) => [name, defineTable(v.any())]),
+)
 
-  // ── Logo carousels (two independent lists) ──────────────────────────────
-  collaborationLogos: defineTable({
-    image: v.id("_storage"),
-    alt: v.string(),
-    order: v.number(),
-  }).index("by_order", ["order"]),
+export default defineSchema(
+  {
+    ...authTables,
+    ...legacy,
 
-  workLogos: defineTable({
-    image: v.id("_storage"),
-    alt: v.string(),
-    order: v.number(),
-  }).index("by_order", ["order"]),
+    site: defineTable(m.site),
 
-  // ── Services (formerly "categories") ────────────────────────────────────
-  // The single unified list. Rendered on /services, /portfolio, the homepage
-  // carousel, and the contact dropdown. Each one has a detail page at
-  // /portfolio/:slug listing the projects assigned to it.
-  // NOTE: `size`/`order` are optional during the services→categories migration
-  // and defaulted in the UI; backfilled to every row by convex/migrate.ts.
-  categories: defineTable({
-    slug: v.string(),
-    name: v.string(),
-    image: v.optional(v.id("_storage")),
-    color: v.string(),
-    bullets: v.array(v.string()),
-    headline: v.string(),
-    description: v.string(),
-    size: v.optional(
-      v.union(v.literal("short"), v.literal("medium"), v.literal("tall"), v.literal("xtall")),
-    ),
-    order: v.optional(v.number()),
-  }).index("by_slug", ["slug"]),
+    services: defineTable(m.service).index("by_slug", ["slug"]).index("by_order", ["order"]),
 
-  webShowcases: defineTable({
-    categoryId: v.id("categories"),
-    media: v.id("_storage"),
-    mediaType: v.union(v.literal("image"), v.literal("video")),
-    supportImages: v.array(v.union(v.id("_storage"), v.null())),
-    supportMediaTypes: v.optional(
-      v.array(v.union(v.literal("image"), v.literal("video"), v.null())),
-    ),
-    order: v.number(),
-  }).index("by_categoryId_and_order", ["categoryId", "order"]),
+    projects: defineTable(m.project).index("by_slug", ["slug"]).index("by_featured", ["featured"]),
 
-  projects: defineTable({
-    slug: v.string(),
-    title: v.string(),
-    description: v.string(),
-    approach: v.string(),
-    execution: v.string(),
-    results: v.string(),
-    coverImage: v.optional(v.id("_storage")),
-    gallery: v.array(v.id("_storage")),
-    galleryLayout: v.optional(galleryLayout),
-    galleryOrientation: v.optional(galleryOrientation),
-    galleryTemplate: v.optional(galleryTemplateId),
-    featured: v.boolean(),
-    // The unified list of services this project is filed under. Also rendered
-    // as the project's chips/tags. (Field name kept as `categoryIds` since the
-    // surviving table is still physically `categories`.)
-    categoryIds: v.array(v.id("categories")),
-  })
-    .index("by_slug", ["slug"])
-    .index("by_featured", ["featured"]),
+    showcases: defineTable(m.showcase).index("by_serviceId_and_order", ["serviceId", "order"]),
 
-  // ── About ───────────────────────────────────────────────────────────────
-  about: defineTable({
-    values: v.array(
-      v.object({
-        image: v.optional(v.id("_storage")),
-        label: v.string(),
-        body: v.string(),
-      }),
-    ),
-  }),
+    logos: defineTable(m.logo).index("by_carousel_and_order", ["carousel", "order"]),
 
-  aboutWheel: defineTable({
-    heading: v.string(),
-    body: v.string(),
-    image: v.optional(v.id("_storage")),
-    order: v.number(),
-  }).index("by_order", ["order"]),
+    wheel: defineTable(m.wheelItem).index("by_order", ["order"]),
 
-  aboutTimeline: defineTable({
-    date: v.string(),
-    client: v.string(), // big header
-    campaign: v.optional(v.string()), // subhead, optional
-    role: v.string(),
-    description: v.string(),
-    order: v.number(),
-  }).index("by_order", ["order"]),
+    timeline: defineTable(m.timelineItem).index("by_order", ["order"]),
 
-  // ── Contact ─────────────────────────────────────────────────────────────
-  // Single source of truth for contact info + all social URLs.
-  // Read by both the contact page sidebar and the footer.
-  contactInfo: defineTable({
-    email: v.optional(v.string()),
-    phone: v.optional(v.string()),
-    location: v.optional(v.string()),
-    instagram: v.optional(v.string()),
-    tiktok: v.optional(v.string()),
-    linkedin: v.optional(v.string()),
-    youtube: v.optional(v.string()),
-  }),
+    faqSections: defineTable(m.faqSection).index("by_order", ["order"]),
 
-  faqSections: defineTable({
-    name: v.string(),
-    order: v.number(),
-  }).index("by_order", ["order"]),
+    faqItems: defineTable(m.faqItem).index("by_sectionId_and_order", ["sectionId", "order"]),
 
-  faqItems: defineTable({
-    sectionId: v.id("faqSections"),
-    question: v.string(),
-    answer: v.string(),
-    order: v.number(),
-  }).index("by_section", ["sectionId", "order"]),
-
-  // ── Footer ──────────────────────────────────────────────────────────────
-  footer: defineTable({
-    description: v.optional(v.string()),
-  }),
-})
+    leads: defineTable(m.lead).index("by_read", ["read"]),
+  },
+  { schemaValidation },
+)

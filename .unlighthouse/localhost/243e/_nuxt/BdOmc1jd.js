@@ -1,0 +1,1 @@
+function e(e,t,n){if(typeof t!=`number`)return Math.min(Math.max(e,0),t.length-1);let r=t;return Math.min(Math.max(e,r),n??r)}export{e as t};

@@ -1,0 +1,1 @@
+import{K as e,c as t,u as n}from"./DU0B_Naf.js";import{t as r}from"./DSRboBSG.js";var i=t(async()=>{let t,i,a=r();try{let[r,o]=([t,i]=e(()=>Promise.all([a[`sites.list`]({}),a[`history.list`]({page:1,pageSize:1})])),t=await t,i(),t);if(r.sites.length===0&&o.total===0)return n(`/onboarding`)}catch{}},1);export{i as default};

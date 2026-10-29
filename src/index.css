@@ -1,8 +1,9 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
 @font-face {
   font-family: "Arian LT";
-  src: url("/fonts/header/arian-lt-demi.ttf") format("truetype");
+  src: url("/fonts/arian-lt/demi.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -10,7 +11,7 @@
 
 @font-face {
   font-family: "Arian LT";
-  src: url("/fonts/header/arian-lt-bold.ttf") format("truetype");
+  src: url("/fonts/arian-lt/bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -18,7 +19,7 @@
 
 @font-face {
   font-family: "Arian LT";
-  src: url("/fonts/header/arian-lt-heavy.ttf") format("truetype");
+  src: url("/fonts/arian-lt/heavy.ttf") format("truetype");
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -26,59 +27,39 @@
 
 @font-face {
   font-family: "Area Normal";
-  src: url("/fonts/body/area-normal-hairline.otf") format("opentype");
+  src: url("/fonts/area-normal/hairline.otf") format("opentype");
   font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Area Normal";
-  src: url("/fonts/body/area-normal-regular.otf") format("opentype");
+  src: url("/fonts/area-normal/regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Area Normal";
-  src: url("/fonts/body/area-normal-regular-italic.otf") format("opentype");
+  src: url("/fonts/area-normal/regular-italic.otf") format("opentype");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: "Area Normal";
-  src: url("/fonts/body/area-normal-bold.otf") format("opentype");
+  src: url("/fonts/area-normal/bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Area Normal";
-  src: url("/fonts/body/area-normal-bold-italic.otf") format("opentype");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Area Normal";
-  src: url("/fonts/body/area-normal-black.otf") format("opentype");
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Area Normal";
-  src: url("/fonts/body/area-normal-black-italic.otf") format("opentype");
-  font-weight: 900;
-  font-style: italic;
   font-display: swap;
 }
 
 @theme {
   --font-sans: "Area Normal", "Inter Variable", system-ui, sans-serif;
   --font-display: "Arian LT", system-ui, sans-serif;
-  --color-bg: #000000;
-  --color-fg: #ffffff;
+  /* Admin theme tokens: utilities like `text-ink/40` follow the active theme. */
+  --color-ink: #ffffff;
+  --color-paper: #000000;
   --text-2xs: 0.625rem;
   --text-2xs--line-height: 1rem;
   --text-10xl: 10rem;
@@ -91,95 +72,57 @@
 
 @layer base {
   body {
-    @apply overflow-x-hidden bg-bg font-sans text-fg transition-[background-color] duration-500 ease-in-out;
+    @apply overflow-x-clip bg-black font-sans text-white;
   }
 
   @media (pointer: fine) {
     body.custom-cursor,
-    body.custom-cursor a,
-    body.custom-cursor button,
-    body.custom-cursor [role="button"] {
+    body.custom-cursor :is(a, button, [role="button"]) {
       cursor: none;
     }
   }
 
-  *,
-  ::-webkit-scrollbar {
+  * {
     scrollbar-width: none;
-    -ms-overflow-style: none;
   }
 
   ::-webkit-scrollbar {
     display: none;
   }
 
-  button,
-  .card,
-  .project-card,
-  .btn,
-  .rounded-full,
-  .rounded-xl,
-  .rounded-2xl {
-    border-radius: 0 !important;
-  }
-
-  h1:hover,
-  h2:hover,
-  h3:hover,
-  h4:hover,
-  h5:hover,
-  h6:hover {
+  :is(h1, h2, h3, h4, h5, h6):hover {
     opacity: 0.72;
   }
 }
 
 @layer components {
-  .rich-text-editor .tiptap {
-    @apply min-h-32 px-3 py-3 text-sm text-white outline-none;
+  .rich-text {
+    & h2 {
+      @apply mt-6 mb-2 text-xl font-bold first:mt-0;
+    }
+    & p {
+      @apply mb-3 last:mb-0;
+    }
+    & ul {
+      @apply mb-3 list-disc pl-5;
+    }
+    & ol {
+      @apply mb-3 list-decimal pl-5;
+    }
+    & blockquote {
+      @apply my-3 border-l-2 border-white/30 pl-4 italic;
+    }
   }
 
-  .rich-text-editor .tiptap p.is-editor-empty:first-child::before {
-    @apply pointer-events-none float-left h-0 text-white/20;
-    content: "Write something…";
-  }
-
-  .rich-text-editor .tiptap h2,
-  .rich-text-content h2 {
-    @apply mt-6 mb-2 text-xl font-bold first:mt-0;
-  }
-
-  .rich-text-editor .tiptap p,
-  .rich-text-content p {
-    @apply mb-3 last:mb-0;
-  }
-
-  .rich-text-editor .tiptap ul,
-  .rich-text-content ul {
-    @apply mb-3 list-disc pl-5;
-  }
-
-  .rich-text-editor .tiptap ol,
-  .rich-text-content ol {
-    @apply mb-3 list-decimal pl-5;
-  }
-
-  .rich-text-editor .tiptap blockquote,
-  .rich-text-content blockquote {
-    @apply my-3 border-l-2 border-white/30 pl-4 italic;
-  }
-}
-
-@layer components {
+  /* Area Normal's cap-height sits high; offset padding by 1px to center labels optically. */
   .btn-industrial {
-    @apply rounded-none border border-white/40 bg-transparent px-8 py-3 text-xs font-bold tracking-[0.3em] uppercase transition-all hover:bg-white hover:text-black;
-  }
-
-  .btn-industrial-active {
-    @apply bg-white text-black;
+    @apply border border-white/40 bg-transparent px-8 text-xs leading-none font-bold tracking-[0.3em] uppercase transition-all hover:bg-white hover:text-black;
+    padding-block: calc(0.75rem + 1px) calc(0.75rem - 1px);
   }
 
   .btn-industrial-sm {
-    @apply rounded-none border border-white/40 bg-transparent px-5 py-2 text-xs font-bold tracking-[0.25em] uppercase transition-all hover:bg-white hover:text-black;
+    @apply border border-white/40 bg-transparent px-5 text-xs leading-none font-bold tracking-[0.25em] uppercase transition-all hover:bg-white hover:text-black;
+    padding-block: calc(0.5rem + 1px) calc(0.5rem - 1px);
   }
 
   .massive-text {
@@ -192,416 +135,36 @@
     }
   }
 
-  .about-glow-text {
-    transition:
-      text-shadow 0.4s ease,
-      color 0.4s ease;
-  }
-
-  .about-glow-text:hover {
-    color: rgba(255, 255, 255, 0.95);
-    text-shadow:
-      0 0 20px rgba(255, 255, 255, 0.25),
-      0 0 40px rgba(255, 255, 255, 0.1);
-  }
-
   .column-line {
     @apply pointer-events-none fixed inset-y-0 z-1 w-px overflow-hidden bg-white/10;
-  }
 
-  .column-line::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 25vh;
-    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.18), transparent);
-    animation: column-sweep 6s ease-in-out infinite;
-    animation-delay: var(--sweep-delay, 0s);
-    top: -25vh;
+    &::after {
+      content: "";
+      position: absolute;
+      top: -25vh;
+      left: 0;
+      width: 100%;
+      height: 25vh;
+      background: linear-gradient(to bottom, transparent, rgb(255 255 255 / 0.18), transparent);
+      animation: column-sweep 6s ease-in-out infinite;
+      animation-delay: var(--sweep-delay, 0s);
+    }
   }
 
   @keyframes column-sweep {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
+    to {
       transform: translateY(500vh);
     }
   }
-
-  /* Horizontal rule divider between stacked headline words */
-  .word-divider {
-    @apply block w-full border-t border-white/20;
-  }
-
-  .de-blur-text {
-    transition:
-      filter 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  /* Marquee ticker */
-  .marquee-track {
-    display: flex;
-    width: max-content;
-    animation: marquee-scroll 20s linear infinite;
-  }
-
-  @keyframes marquee-scroll {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-}
-
-/* Hero heading: base metallic shine + hover glint */
-@keyframes hero-text-shine {
-  0% {
-    background-position: 200% center;
-  }
-  100% {
-    background-position: -200% center;
-  }
-}
-
-/*
- * Area Normal's cap-height sits slightly high inside its line box. Keep the
- * button dimensions unchanged while lowering labels by one optical pixel.
- */
-.btn-industrial {
-  line-height: 1;
-  padding-top: calc(0.75rem + 1px);
-  padding-bottom: calc(0.75rem - 1px);
-}
-
-.btn-industrial-sm {
-  line-height: 1;
-  padding-top: calc(0.5rem + 1px);
-  padding-bottom: calc(0.5rem - 1px);
-}
-
-.hero-shine-text {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.72) 0%,
-    rgba(255, 255, 255, 0.98) 38%,
-    rgba(205, 218, 255, 1) 48%,
-    rgba(255, 255, 255, 0.98) 58%,
-    rgba(255, 255, 255, 0.72) 100%
-  );
-  background-size: 300% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: hero-text-shine 6s linear infinite;
-}
-
-/* Admin-only readability and theme layer. Public-site styling is unaffected. */
-.admin-shell {
-  background: #000;
-  color: #fff;
-  font-size: 1.1rem;
-}
-
-.admin-shell main {
-  padding: 3rem;
-}
-
-/* Give content editors a wider, calmer working column. */
-.admin-shell .max-w-2xl {
-  max-width: 54rem;
-}
-
-.admin-shell .max-w-4xl {
-  max-width: 72rem;
-}
-
-/* Increase the admin type scale by 10%. */
-.admin-shell .text-2xs {
-  font-size: 0.6875rem;
-  line-height: 1.1rem;
-}
-
-.admin-shell .text-xs {
-  font-size: 0.825rem;
-  line-height: 1.1rem;
-}
-
-.admin-shell .text-sm {
-  font-size: 0.9625rem;
-  line-height: 1.375rem;
-}
-
-.admin-shell .text-lg {
-  font-size: 1.2375rem;
-  line-height: 1.925rem;
-}
-
-.admin-shell .text-2xl {
-  font-size: 1.65rem;
-  line-height: 2.2rem;
-}
-
-.admin-shell .text-3xl {
-  font-size: 2.0625rem;
-  line-height: 2.475rem;
-}
-
-/* Make the admin's structural rules easier to follow in both themes. */
-.admin-shell .border {
-  border-width: 1.5px;
-}
-
-.admin-shell .border-t {
-  border-top-width: 1.5px;
-}
-
-.admin-shell .border-r {
-  border-right-width: 1.5px;
-}
-
-.admin-shell .border-b {
-  border-bottom-width: 1.5px;
-}
-
-.admin-shell .border-l {
-  border-left-width: 1.5px;
-}
-
-.admin-shell:not([data-admin-theme="light"]) .border-white\/10 {
-  border-color: rgb(255 255 255 / 0.24);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .border-white\/15 {
-  border-color: rgb(255 255 255 / 0.28);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .border-white\/20 {
-  border-color: rgb(255 255 255 / 0.34);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .border-white\/30 {
-  border-color: rgb(255 255 255 / 0.44);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .border-white\/40 {
-  border-color: rgb(255 255 255 / 0.54);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .border-white\/50 {
-  border-color: rgb(255 255 255 / 0.64);
-}
-
-/* Keep secondary copy grey while lifting it away from the black background. */
-.admin-shell:not([data-admin-theme="light"]) .text-white\/15 {
-  color: rgb(255 255 255 / 0.32);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .text-white\/20 {
-  color: rgb(255 255 255 / 0.36);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .text-white\/25 {
-  color: rgb(255 255 255 / 0.42);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .text-white\/30 {
-  color: rgb(255 255 255 / 0.5);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .text-white\/40 {
-  color: rgb(255 255 255 / 0.62);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .text-white\/50 {
-  color: rgb(255 255 255 / 0.72);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .text-white\/60 {
-  color: rgb(255 255 255 / 0.8);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .text-white\/70 {
-  color: rgb(255 255 255 / 0.86);
-}
-
-.admin-shell:not([data-admin-theme="light"]) .placeholder\:text-white\/15::placeholder {
-  color: rgb(255 255 255 / 0.36);
-}
-
-/* Add breathing room around fields, lists, controls, and major section breaks. */
-.admin-shell .py-4 {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-}
-
-.admin-shell .py-5 {
-  padding-top: 1.75rem;
-  padding-bottom: 1.75rem;
-}
-
-.admin-shell .mb-6 {
-  margin-bottom: 1.75rem;
-}
-
-.admin-shell .mb-8 {
-  margin-bottom: 2.3rem;
-}
-
-.admin-shell .mb-10 {
-  margin-bottom: 2.875rem;
-}
-
-.admin-shell .mb-12 {
-  margin-bottom: 3.45rem;
-}
-
-.admin-shell .space-y-2 > :not(:last-child) {
-  margin-block-end: 0.75rem;
-}
-
-.admin-shell .space-y-3 > :not(:last-child) {
-  margin-block-end: 1.125rem;
-}
-
-/* Light mode remains fully scoped to the admin shell. */
-.admin-shell[data-admin-theme="light"] {
-  background: #f4f3ef;
-  color: #1a1a1a;
-}
-
-.admin-shell[data-admin-theme="light"] .bg-black {
-  background-color: #f4f3ef;
-}
-
-.admin-shell[data-admin-theme="light"] .bg-black\/70 {
-  background-color: rgb(244 243 239 / 0.88);
-}
-
-.admin-shell[data-admin-theme="light"] .bg-white {
-  background-color: #1a1a1a;
-}
-
-.admin-shell[data-admin-theme="light"] .bg-white\/5 {
-  background-color: rgb(26 26 26 / 0.05);
-}
-
-.admin-shell[data-admin-theme="light"] .bg-white\/20 {
-  background-color: rgb(26 26 26 / 0.2);
-}
-
-.admin-shell[data-admin-theme="light"] .text-white {
-  color: #1a1a1a;
-}
-
-.admin-shell[data-admin-theme="light"] .text-black {
-  color: #fff;
-}
-
-.admin-shell[data-admin-theme="light"] .text-white\/15 {
-  color: rgb(26 26 26 / 0.3);
-}
-
-.admin-shell[data-admin-theme="light"] .text-white\/20 {
-  color: rgb(26 26 26 / 0.32);
-}
-
-.admin-shell[data-admin-theme="light"] .text-white\/25 {
-  color: rgb(26 26 26 / 0.38);
-}
-
-.admin-shell[data-admin-theme="light"] .text-white\/30 {
-  color: rgb(26 26 26 / 0.48);
-}
-
-.admin-shell[data-admin-theme="light"] .text-white\/40 {
-  color: rgb(26 26 26 / 0.62);
-}
-
-.admin-shell[data-admin-theme="light"] .text-white\/50 {
-  color: rgb(26 26 26 / 0.7);
-}
-
-.admin-shell[data-admin-theme="light"] .text-white\/60 {
-  color: rgb(26 26 26 / 0.76);
-}
-
-.admin-shell[data-admin-theme="light"] .text-white\/70 {
-  color: rgb(26 26 26 / 0.82);
-}
-
-.admin-shell[data-admin-theme="light"] .border-white {
-  border-color: #1a1a1a;
-}
-
-.admin-shell[data-admin-theme="light"] .border-white\/10 {
-  border-color: rgb(26 26 26 / 0.2);
-}
-
-.admin-shell[data-admin-theme="light"] .border-white\/15 {
-  border-color: rgb(26 26 26 / 0.26);
-}
-
-.admin-shell[data-admin-theme="light"] .border-white\/20 {
-  border-color: rgb(26 26 26 / 0.32);
-}
-
-.admin-shell[data-admin-theme="light"] .border-white\/30 {
-  border-color: rgb(26 26 26 / 0.42);
-}
-
-.admin-shell[data-admin-theme="light"] .border-white\/40 {
-  border-color: rgb(26 26 26 / 0.52);
 }
 
-.admin-shell[data-admin-theme="light"] .border-white\/50 {
-  border-color: rgb(26 26 26 / 0.62);
-}
-
-.admin-shell[data-admin-theme="light"] .placeholder\:text-white\/15::placeholder {
-  color: rgb(26 26 26 / 0.3);
-}
-
-.admin-shell[data-admin-theme="light"] .hover\:bg-white\/5:hover {
-  background-color: rgb(26 26 26 / 0.06);
-}
-
-.admin-shell[data-admin-theme="light"] .hover\:text-white:hover {
-  color: #1a1a1a;
-}
-
-.admin-shell[data-admin-theme="light"] .hover\:text-white\/70:hover {
-  color: rgb(26 26 26 / 0.82);
-}
-
-.admin-shell[data-admin-theme="light"] .hover\:border-white:hover {
-  border-color: #1a1a1a;
-}
-
-.admin-shell[data-admin-theme="light"] .hover\:border-white\/30:hover {
-  border-color: rgb(26 26 26 / 0.32);
-}
-
-.admin-shell[data-admin-theme="light"] .hover\:border-white\/40:hover {
-  border-color: rgb(26 26 26 / 0.42);
-}
-
-.admin-shell[data-admin-theme="light"] .hover\:border-white\/50:hover,
-.admin-shell[data-admin-theme="light"] .focus\:border-white\/50:focus {
-  border-color: rgb(26 26 26 / 0.52);
-}
-
-.admin-shell[data-admin-theme="light"] .admin-brand-logo {
-  filter: invert(1);
-}
+/* Admin light theme: retints every ink/paper utility at once. */
+.admin-shell[data-theme="light"] {
+  --color-ink: #1a1a1a;
+  --color-paper: #f4f3ef;
 
-@media (max-width: 900px) {
-  .admin-shell main {
-    padding: 2rem;
+  & .admin-brand-logo {
+    filter: invert(1);
   }
 }
 
@@ -636,6 +199,148 @@
   }
 }
 
+/*
+ * Route transition: six white columns drop over the old page, then retract
+ * to reveal the new one. Each column's mask height is its own registered
+ * property so the stagger is pure CSS on the view-transition snapshots.
+ */
+@property --c0 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --c1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --c2 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --c3 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --c4 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --c5 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+@keyframes c0 {
+  from {
+    --c0: 100%;
+  }
+  to {
+    --c0: 0%;
+  }
+}
+@keyframes c1 {
+  from {
+    --c1: 100%;
+  }
+  to {
+    --c1: 0%;
+  }
+}
+@keyframes c2 {
+  from {
+    --c2: 100%;
+  }
+  to {
+    --c2: 0%;
+  }
+}
+@keyframes c3 {
+  from {
+    --c3: 100%;
+  }
+  to {
+    --c3: 0%;
+  }
+}
+@keyframes c4 {
+  from {
+    --c4: 100%;
+  }
+  to {
+    --c4: 0%;
+  }
+}
+@keyframes c5 {
+  from {
+    --c5: 100%;
+  }
+  to {
+    --c5: 0%;
+  }
+}
+
+::view-transition {
+  background: #fff;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  --wipe: 0.4462s;
+  --stagger: 0.06s;
+  --wipe-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  mix-blend-mode: normal;
+  mask-repeat: no-repeat;
+  mask-image:
+    linear-gradient(#000 0 0), linear-gradient(#000 0 0), linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0), linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-size:
+    16.8% var(--c0),
+    16.8% var(--c1),
+    16.8% var(--c2),
+    16.8% var(--c3),
+    16.8% var(--c4),
+    16.8% var(--c5);
+  animation-name: c0, c1, c2, c3, c4, c5;
+  animation-duration: var(--wipe);
+  animation-timing-function: var(--wipe-ease);
+  animation-fill-mode: both;
+}
+
+/* Old page: visible area shrinks toward the bottom, so white falls from the top. */
+::view-transition-old(root) {
+  mask-position:
+    0% 100%,
+    20% 100%,
+    40% 100%,
+    60% 100%,
+    80% 100%,
+    100% 100%;
+  animation-delay:
+    0s, var(--stagger), calc(2 * var(--stagger)), calc(3 * var(--stagger)),
+    calc(4 * var(--stagger)), calc(5 * var(--stagger));
+}
+
+/* New page: revealed from the top as the white retracts downward. */
+::view-transition-new(root) {
+  mask-position:
+    0% 0%,
+    20% 0%,
+    40% 0%,
+    60% 0%,
+    80% 0%,
+    100% 0%;
+  animation-direction: reverse;
+  animation-delay:
+    calc(var(--wipe) + 5 * var(--stagger)), calc(var(--wipe) + 6 * var(--stagger)),
+    calc(var(--wipe) + 7 * var(--stagger)), calc(var(--wipe) + 8 * var(--stagger)),
+    calc(var(--wipe) + 9 * var(--stagger)), calc(var(--wipe) + 10 * var(--stagger));
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -644,5 +349,11 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mask: none;
   }
 }

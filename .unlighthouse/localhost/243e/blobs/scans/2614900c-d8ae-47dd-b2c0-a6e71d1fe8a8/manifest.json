@@ -1,0 +1,85 @@
+{
+  "scanId": "2614900c-d8ae-47dd-b2c0-a6e71d1fe8a8",
+  "site": "http://localhost:5173/",
+  "device": "mobile",
+  "status": "complete",
+  "startedAt": "2026-10-29T16:57:05.645Z",
+  "completedAt": "2026-10-29T16:58:11.970Z",
+  "summary": {
+    "routes": 2,
+    "completed": 2,
+    "failed": 0,
+    "scoreAverage": 0.8825,
+    "scoresByCategory": {
+      "performance": 0.6799999999999999,
+      "accessibility": 0.93,
+      "seo": 0.92,
+      "best-practices": 1,
+      "agentic-browsing": 0.98
+    },
+    "categoryScoreDisplayModes": {
+      "performance": "gauge",
+      "accessibility": "gauge",
+      "seo": "gauge",
+      "best-practices": "gauge",
+      "agentic-browsing": "fraction"
+    },
+    "durationMs": 66281,
+    "devices": [
+      "mobile",
+      "desktop"
+    ],
+    "scoresByDevice": {
+      "mobile": {
+        "scoreAverage": 0.885,
+        "scoresByCategory": {
+          "performance": 0.69,
+          "accessibility": 0.93,
+          "seo": 0.92,
+          "best-practices": 1,
+          "agentic-browsing": 0.98
+        },
+        "categoryScoreDisplayModes": {
+          "performance": "gauge",
+          "accessibility": "gauge",
+          "seo": "gauge",
+          "best-practices": "gauge",
+          "agentic-browsing": "fraction"
+        }
+      },
+      "desktop": {
+        "scoreAverage": 0.88,
+        "scoresByCategory": {
+          "performance": 0.67,
+          "accessibility": 0.93,
+          "seo": 0.92,
+          "best-practices": 1,
+          "agentic-browsing": 0.98
+        },
+        "categoryScoreDisplayModes": {
+          "performance": "gauge",
+          "accessibility": "gauge",
+          "seo": "gauge",
+          "best-practices": "gauge",
+          "agentic-browsing": "fraction"
+        }
+      }
+    }
+  },
+  "routes": [
+    {
+      "path": "/",
+      "url": "http://localhost:5173/",
+      "score": 0.69,
+      "lhrBlobKey": "scans/2614900c-d8ae-47dd-b2c0-a6e71d1fe8a8/lhr/e54174a98fc98102-mobile.json.gz",
+      "reportBlobKey": "scans/2614900c-d8ae-47dd-b2c0-a6e71d1fe8a8/reports/e54174a98fc98102-mobile.json"
+    },
+    {
+      "path": "/",
+      "url": "http://localhost:5173/",
+      "score": 0.67,
+      "lhrBlobKey": "scans/2614900c-d8ae-47dd-b2c0-a6e71d1fe8a8/lhr/e54174a98fc98102-desktop.json.gz",
+      "reportBlobKey": "scans/2614900c-d8ae-47dd-b2c0-a6e71d1fe8a8/reports/e54174a98fc98102-desktop.json"
+    }
+  ]
+}

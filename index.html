@@ -43,24 +43,18 @@
     <link rel="ard" href="/.well-known/ard.json" type="application/ai-catalog+json" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/logo/satisfaction-favicon.png" />
+    <link rel="icon" type="image/png" href="/brand/favicon.png" />
 
-    <!-- Fonts -->
-    <link rel="preload" as="image" href="/logo/satisfaction-small.webp" fetchpriority="high" />
+    <!-- Logo (LCP) -->
+    <link rel="preload" as="image" href="/brand/logo-small.webp" fetchpriority="high" />
 
     <!-- Theme -->
     <meta name="theme-color" content="#000000" />
 
-    <!-- Prevent browser scroll-restoration before React mounts. Module scripts
-         are deferred, so setting this in main.tsx runs too late. An inline
-         script in <head> executes immediately, before any restoration happens. -->
-    <script>
-      history.scrollRestoration = "manual"
-    </script>
   </head>
 
   <body>
     <div id="root"></div>
-    <script src="src/main.tsx" type="module"></script>
+    <script src="/src/main.tsx" type="module"></script>
   </body>
 </html>

@@ -1,0 +1,1 @@
+import{I as e}from"./DU0B_Naf.js";function t(){return e().$api}export{t};

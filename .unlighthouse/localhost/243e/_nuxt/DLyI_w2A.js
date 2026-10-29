@@ -1,0 +1,1 @@
+import{f as e,u as t}from"./DU0B_Naf.js";import{Kt as n,b as r,k as i,mt as a}from"./B8D2lM98.js";import{g as o}from"#entry";import{t as s}from"./CiRdCshY.js";var c=i({__name:`index`,async setup(i){let c,l,u=e(),d=u.params.siteId,f=u.params.scanId;return o(`Opening Scan`),[c,l]=n(()=>t(s(d,f),{replace:!0})),await c,l(),(e,t)=>(a(),r(`div`))}});export{c as default};

@@ -8,17 +8,25 @@
  * @module
  */
 
-import type * as about from "../about.js";
 import type * as auth from "../auth.js";
-import type * as contact from "../contact.js";
+import type * as faq from "../faq.js";
 import type * as files from "../files.js";
-import type * as footer from "../footer.js";
-import type * as homepage from "../homepage.js";
 import type * as http from "../http.js";
+import type * as leads from "../leads.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as lib_crud from "../lib/crud.js";
+import type * as lib_files from "../lib/files.js";
 import type * as lib_gallery from "../lib/gallery.js";
+import type * as lib_slug from "../lib/slug.js";
 import type * as logos from "../logos.js";
-import type * as portfolio from "../portfolio.js";
+import type * as migrations from "../migrations.js";
+import type * as model from "../model.js";
+import type * as projects from "../projects.js";
+import type * as services from "../services.js";
+import type * as showcases from "../showcases.js";
+import type * as site from "../site.js";
+import type * as timeline from "../timeline.js";
+import type * as wheel from "../wheel.js";
 
 import type {
   ApiFromModules,
@@ -27,17 +35,25 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  about: typeof about;
   auth: typeof auth;
-  contact: typeof contact;
+  faq: typeof faq;
   files: typeof files;
-  footer: typeof footer;
-  homepage: typeof homepage;
   http: typeof http;
+  leads: typeof leads;
   "lib/auth": typeof lib_auth;
+  "lib/crud": typeof lib_crud;
+  "lib/files": typeof lib_files;
   "lib/gallery": typeof lib_gallery;
+  "lib/slug": typeof lib_slug;
   logos: typeof logos;
-  portfolio: typeof portfolio;
+  migrations: typeof migrations;
+  model: typeof model;
+  projects: typeof projects;
+  services: typeof services;
+  showcases: typeof showcases;
+  site: typeof site;
+  timeline: typeof timeline;
+  wheel: typeof wheel;
 }>;
 
 /**

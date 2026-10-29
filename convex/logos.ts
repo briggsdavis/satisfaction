@@ -1,53 +1,35 @@
 import { v } from "convex/values"
-import { mutation, query } from "./_generated/server"
-import { requireAuth } from "./lib/auth"
-
-const carousel = v.union(v.literal("collaboration"), v.literal("work"))
-const tableFor = (c: "collaboration" | "work") =>
-  c === "collaboration" ? "collaborationLogos" : "workLogos"
+import { query } from "./_generated/server"
+import { adminMutation } from "./lib/auth"
+import { crud, nextOrder } from "./lib/crud"
+import { url } from "./lib/files"
+import { carousel, logo } from "./model"
 
 export const list = query({
   args: { carousel },
-  handler: async (ctx, args) => {
-    return await ctx.db.query(tableFor(args.carousel)).withIndex("by_order").take(500)
+  handler: async (ctx, { carousel }) => {
+    const docs = await ctx.db
+      .query("logos")
+      .withIndex("by_carousel_and_order", (q) => q.eq("carousel", carousel))
+      .take(200)
+    return await Promise.all(docs.map(async (doc) => ({ ...doc, url: await url(ctx, doc.image) })))
   },
 })
 
-export const add = mutation({
-  args: {
-    carousel,
-    image: v.id("_storage"),
-    alt: v.string(),
-    order: v.number(),
-  },
-  handler: async (ctx, args) => {
-    await requireAuth(ctx)
-    const { carousel: c, ...data } = args
-    return await ctx.db.insert(tableFor(c), data)
-  },
-})
-
-export const update = mutation({
-  args: {
-    carousel,
-    id: v.union(v.id("collaborationLogos"), v.id("workLogos")),
-    image: v.optional(v.id("_storage")),
-    alt: v.optional(v.string()),
-    order: v.optional(v.number()),
-  },
-  handler: async (ctx, args) => {
-    await requireAuth(ctx)
-    const { carousel: _, id, ...patch } = args
-    await ctx.db.patch(id, patch)
+export const add = adminMutation({
+  args: { carousel, logos: v.array(logo.pick("image", "alt")) },
+  returns: v.null(),
+  handler: async (ctx, { carousel, logos }) => {
+    const last = await ctx.db
+      .query("logos")
+      .withIndex("by_carousel_and_order", (q) => q.eq("carousel", carousel))
+      .order("desc")
+      .first()
+    const start = nextOrder(last)
+    for (const [i, entry] of logos.entries())
+      await ctx.db.insert("logos", { carousel, ...entry, order: start + i })
+    return null
   },
 })
 
-export const remove = mutation({
-  args: {
-    id: v.union(v.id("collaborationLogos"), v.id("workLogos")),
-  },
-  handler: async (ctx, args) => {
-    await requireAuth(ctx)
-    await ctx.db.delete(args.id)
-  },
-})
+export const { update, remove, reorder } = crud("logos", logo.pick("image", "alt"))
