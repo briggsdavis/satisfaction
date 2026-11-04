@@ -8,12 +8,12 @@ export const NotFound = ({ title = "Page Not Found" }: { title?: string }) => (
     <Meta title={title} />
     <TextReveal
       text="404"
-      className="massive-text text-8xl leading-none text-white md:text-10xl lg:text-12xl"
+      className="massive-text justify-center text-8xl leading-none text-white md:text-10xl lg:text-12xl"
       immediate
     />
     <TextReveal
       text={title}
-      className="massive-text mt-4 text-4xl md:text-6xl"
+      className="massive-text mt-4 justify-center text-center text-4xl md:text-6xl"
       delay={0.3}
       immediate
     />

@@ -1,5 +1,5 @@
 import { useGLTF } from "@react-three/drei"
-import { Canvas, useFrame } from "@react-three/fiber"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { useQuery } from "convex/react"
 import { MotionValue } from "motion/react"
 import { Suspense, useEffect, useMemo, useRef } from "react"
@@ -66,6 +66,11 @@ function Laptop({
   videoSrc: string | null
 }) {
   const groupRef = useRef<THREE.Group>(null)
+  // Narrow (portrait) viewports see less width at the same vertical FOV, so
+  // shrink the model until it fits ~85% of the width at its closest point.
+  const aspect = useThree((state) => state.size.width / state.size.height)
+  const visibleHeight = 2 * (5 - 2.415) * Math.tan(THREE.MathUtils.degToRad(45 / 2))
+  const fit = Math.min(1, (visibleHeight * aspect * 0.85) / 2)
   const { scene: originalScene } = useGLTF("/models/imac.glb")
   const scene = useMemo(() => {
     const clone = originalScene.clone(true)
@@ -157,7 +162,7 @@ function Laptop({
   })
 
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} scale={fit}>
       <group scale={scale} position={offset}>
         <primitive object={scene} />
       </group>

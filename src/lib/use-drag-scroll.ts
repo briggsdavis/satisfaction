@@ -33,6 +33,7 @@ export const useDragScroll = (
       window.removeEventListener("mouseup", stop)
     }
     const onDown = (e: MouseEvent) => {
+      // oxlint-disable-next-line react/immutability -- effect-local
       hasDragged = false
       startX = e.pageX - el.offsetLeft
       scrollLeftStart = el.scrollLeft

@@ -1,6 +1,6 @@
 import { useQuery } from "convex/react"
 import { AnimatePresence, motion } from "motion/react"
-import { useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 import { api } from "../../../convex/_generated/api"
 import { preload } from "../../lib/convex"
 import { useMobile } from "../../lib/hooks"
@@ -14,11 +14,54 @@ export const loader = async () => {
   return null
 }
 
+/** Shrinks the title on mobile so its longest word fits the card width. */
+const FitTitle = ({ name }: { name: string }) => {
+  const mobile = useMobile()
+  const ref = useRef<HTMLSpanElement>(null)
+
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (!mobile) {
+      el.style.fontSize = ""
+      return
+    }
+    const fit = () => {
+      const max = 24
+      el.style.fontSize = `${max}px`
+      const words = Array.from(el.querySelectorAll<HTMLElement>("[data-word]"))
+      const widest = Math.max(...words.map((w) => w.offsetWidth))
+      const available = el.clientWidth
+      if (widest > available) el.style.fontSize = `${Math.floor(max * (available / widest) * 100) / 100}px`
+    }
+    fit()
+    const observer = new ResizeObserver(fit)
+    observer.observe(el)
+    document.fonts?.ready.then(fit)
+    return () => observer.disconnect()
+  }, [mobile, name])
+
+  return (
+    <span
+      ref={ref}
+      className="block text-center font-display text-2xl leading-[0.85] text-white uppercase md:text-left md:text-4xl"
+    >
+      {name.split(/(\s+)/).map((part, i) =>
+        /\s/.test(part) ? part : (
+          <span key={i} data-word className="inline-block whitespace-nowrap">
+            {part}
+          </span>
+        ),
+      )}
+    </span>
+  )
+}
+
 const SIZE_HEIGHTS: Record<Service["size"], string> = {
-  short: "min-h-[360px]",
-  medium: "min-h-[420px]",
-  tall: "min-h-[480px]",
-  xtall: "min-h-[540px]",
+  short: "min-h-[190px] md:min-h-[360px]",
+  medium: "min-h-[225px] md:min-h-[420px]",
+  tall: "min-h-[260px] md:min-h-[480px]",
+  xtall: "min-h-[295px] md:min-h-[540px]",
 }
 
 const ServiceImage = ({
@@ -65,7 +108,7 @@ const ServiceCell = ({ service, index }: { service: Service; index: number }) =>
         }}
       >
         <motion.div
-          className="absolute inset-3 overflow-hidden rounded-[16px]"
+          className="absolute inset-2 overflow-hidden rounded-[12px] md:inset-3 md:rounded-[16px]"
           animate={{ scale: mobile ? 1 : [1, 1.0194, 1] }}
           transition={{
             duration: 3.5 + (index % 4) * 0.65,
@@ -85,8 +128,8 @@ const ServiceCell = ({ service, index }: { service: Service; index: number }) =>
             transition={{ duration: 0.35 }}
           />
 
-          <div className="absolute inset-0 flex flex-col p-5 md:p-6">
-            <div className="flex flex-1 flex-col justify-end">
+          <div className="absolute inset-0 flex flex-col p-4 md:p-6">
+            <div className="flex min-w-0 flex-1 flex-col justify-end">
               <AnimatePresence>
                 {isHovered && (
                   <motion.div
@@ -121,9 +164,7 @@ const ServiceCell = ({ service, index }: { service: Service; index: number }) =>
                 )}
               </AnimatePresence>
 
-              <span className="block font-display text-3xl leading-[0.85] text-white uppercase md:text-4xl">
-                {service.name}
-              </span>
+              <FitTitle name={service.name} />
             </div>
           </div>
         </motion.div>
@@ -134,17 +175,18 @@ const ServiceCell = ({ service, index }: { service: Service; index: number }) =>
 
 export const Component = () => {
   const services = useQuery(api.services.list) ?? []
+  const cols = useMobile() ? 2 : 3
 
   return (
     <div className="pt-32">
       <PageHeader title="SERVICES" eyebrow="What We Do" rule="border-b-2 border-white/15" />
-      <div className="flex flex-col divide-y-2 divide-white/15 md:flex-row md:divide-x-2 md:divide-y-0">
-        {[0, 1, 2].map((col) => (
-          <div key={col} className="flex flex-1 flex-col">
+      <div className="flex flex-row divide-x-2 divide-white/15">
+        {Array.from({ length: cols }, (_, col) => (
+          <div key={col} className="flex min-w-0 flex-1 flex-col">
             {services
-              .filter((_, i) => i % 3 === col)
+              .filter((_, i) => i % cols === col)
               .map((service, row) => (
-                <ServiceCell key={service._id} service={service} index={col + row * 3} />
+                <ServiceCell key={service._id} service={service} index={col + row * cols} />
               ))}
           </div>
         ))}

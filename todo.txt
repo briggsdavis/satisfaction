@@ -1,0 +1,8 @@
+make sure section doesn't render when removed
+featurd projects make sure can see more
+make view all projects button white
+grid view of sevices like desktop
+make sure all like heros are scaled well
+make project items a grid on mobile too
+
+add a restaurant page (like portfolio, with just projects, displayed the same as potfolio, and make a tag on admin site for it). add restaurant to navbar and ham manu

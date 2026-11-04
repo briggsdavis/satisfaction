@@ -26,7 +26,7 @@ const Panel = ({ title, children }: { title: string; children: ReactNode }) => (
     </div>
     <div className="flex flex-1 flex-col justify-center gap-6 px-8 pt-4 pb-16 md:px-16 md:py-12">
       {children}
-      <Link to="/about" className="btn-industrial-sm inline-block self-start">
+      <Link to="/about" className="btn-industrial-sm inline-block self-start border-white bg-white text-black">
         About Us →
       </Link>
     </div>

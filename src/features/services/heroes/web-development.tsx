@@ -81,6 +81,7 @@ const IMac = ({
           canvas.height = height
         }
         context.drawImage(video, 0, 0, width, height)
+        // oxlint-disable-next-line react/immutability -- effect-local
         lastTime = video.currentTime
       }
       frame = requestAnimationFrame(draw)

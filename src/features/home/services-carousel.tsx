@@ -23,7 +23,7 @@ const ServicesGridCard = ({
       className="relative aspect-[3/4] overflow-hidden ring-1 ring-white/20"
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-150px" }}
+      viewport={{ once: true, margin: "-150px 0px" }}
       transition={{ duration: 0.65, delay, ease }}
     >
       {service.imageUrl && (
@@ -34,13 +34,13 @@ const ServicesGridCard = ({
           className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out select-none group-hover:scale-110"
         />
       )}
-      <div className="absolute inset-0 bg-black/65 transition-opacity duration-500 group-hover:bg-black/50" />
+      <div className="absolute inset-0 bg-black/50 transition-opacity duration-500 group-hover:bg-black/35" />
 
-      <div className="relative z-10 flex h-full flex-col justify-between p-5 text-white md:p-7">
+      <div className="relative z-10 flex h-full flex-col justify-between p-3 text-white md:p-7">
         <span className="block h-4" aria-hidden />
         <div>
           <div className="mb-3 h-px w-full bg-white/25" />
-          <p className="text-center font-display text-xl leading-tight uppercase md:text-2xl">
+          <p className="text-center font-display text-base leading-tight uppercase md:text-2xl">
             {service.name}
           </p>
         </div>
@@ -75,7 +75,7 @@ export const ServicesCarousel = () => {
           {services.map((service, i) => (
             <div
               key={service._id}
-              className="relative w-[72vw] shrink-0 md:w-[26vw]"
+              className="relative w-[42vw] shrink-0 md:w-[26vw]"
               style={{ marginLeft: i === 0 ? 0 : "-40px", zIndex: i + 1 }}
             >
               <ServicesGridCard service={service} rotate={cardRotate(i)} delay={i * 0.08} />

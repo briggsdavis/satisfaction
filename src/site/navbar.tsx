@@ -36,7 +36,7 @@ export const Navbar = ({
             width={168}
             height={168}
             decoding="async"
-            className="h-10 w-auto md:h-12"
+            className="h-12 w-auto md:h-14"
             style={{ opacity: logoVisible ? 1 : 0 }}
           />
         </Link>

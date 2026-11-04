@@ -23,11 +23,14 @@ export const Component = () => (
   <>
     <Meta />
     <ColumnLines />
-    <Hero />
-    <LogosCarousel
-      carousel="collaboration"
-      eyebrow="Collaborations"
-      heading="Brands & creative teams we've worked with:"
+    <Hero
+      below={
+        <LogosCarousel
+          carousel="collaboration"
+          eyebrow="Collaborations"
+          heading="Brands & creative teams we've worked with:"
+        />
+      }
     />
     <ServicesCarousel />
     <LogosCarousel carousel="work" />

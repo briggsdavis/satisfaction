@@ -110,14 +110,14 @@ const LogoBrand = ({
 }) => (
   <>
     <motion.div
-      className="flex h-full w-[220px] shrink-0 items-center justify-center bg-white"
+      className="flex h-full w-[110px] shrink-0 items-center justify-center bg-white md:w-[220px]"
       style={{ transform: skew }}
     >
       {logo.url && (
         <motion.img
           src={logo.url}
           alt={logo.alt}
-          className="max-h-14 max-w-[160px] object-contain"
+          className="max-h-8 max-w-[80px] object-contain md:max-h-14 md:max-w-[160px]"
           style={{ transform: counterSkew }}
         />
       )}
@@ -146,7 +146,7 @@ export const LogosCarousel = ({
         <h2 className="text-2xl leading-[1.25] font-light text-white md:text-3xl">{heading}</h2>
       </div>
 
-      <div className="h-40 overflow-hidden border-b border-white/10 bg-white">
+      <div className="h-24 overflow-hidden border-b border-white/10 bg-white md:h-40">
         {/* Three copies: the middle one is measured; the outer two hide the wrap seam. */}
         <motion.div style={{ x: baseX }} className="flex h-full w-max">
           {[0, 1, 2].map((copy) => (

@@ -9,7 +9,10 @@ const frames = [
 ]
 
 const VIDEO_COUNT = 25
-const videos = Array.from({ length: VIDEO_COUNT }, (_, i) => `/heroes/creative-direction/clips/${i + 1}.mp4`)
+const videos = Array.from(
+  { length: VIDEO_COUNT },
+  (_, i) => `/heroes/creative-direction/clips/${i + 1}.mp4`,
+)
 
 const REFLECTION_OPACITY = 0.7
 const REFLECTION_BLUR_PX = 8

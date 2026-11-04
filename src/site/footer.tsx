@@ -8,17 +8,17 @@ const NAV = ["About", "Services", "Portfolio", "Contact"]
 const YEAR = new Date().getFullYear()
 
 const heading = "text-xs font-bold tracking-[0.3em] text-white/60 uppercase"
-const item = "text-sm font-light tracking-wide text-white/85 transition-colors hover:text-white"
+const item = "text-sm font-bold tracking-wide text-white/85 uppercase transition-colors hover:text-white"
 const fine = "text-xs tracking-widest text-white/50 uppercase"
 
 export const Footer = () => {
   const site = useQuery(api.site.get)
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-black px-8 pt-32 pb-12 md:px-16">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-black px-8 pt-20 pb-12 md:px-16">
       <div className="relative z-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 lg:grid-cols-4 lg:gap-16">
-        <div className="space-y-8">
-          <Link to="/">
+        <div>
+          <Link to="/" className="mb-6 block w-fit">
             <img
               src={LOGO_SRC}
               alt="Social Satisfaction"

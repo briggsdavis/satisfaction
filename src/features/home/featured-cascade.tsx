@@ -99,7 +99,7 @@ export const FeaturedCascade = () => {
       </section>
 
       <div className="mt-10 flex justify-center px-8 md:hidden">
-        <Link to="/portfolio" className="btn-industrial inline-flex items-center gap-3">
+        <Link to="/portfolio" className="btn-industrial inline-flex items-center gap-3 border-white bg-white text-black">
           View All Projects <span className="text-sm">→</span>
         </Link>
       </div>

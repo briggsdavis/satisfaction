@@ -38,11 +38,7 @@ export const Login = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-black px-4 text-white">
       <div className="w-full max-w-sm">
-        <img
-          src="/brand/logo.png"
-          alt="Social Satisfaction"
-          className="mx-auto mb-8 h-9 w-auto"
-        />
+        <img src="/brand/logo.png" alt="Social Satisfaction" className="mx-auto mb-8 h-9 w-auto" />
         <h1 className="mb-1 text-center text-lg font-bold tracking-[0.2em] uppercase">
           {signingIn ? "Admin Sign In" : "Admin Sign Up"}
         </h1>
