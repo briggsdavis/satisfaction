@@ -30,7 +30,7 @@ export const Component = () => {
   return service ? <ServicePage service={service} /> : null
 }
 
-const Card = ({ project, index }: { project: ProjectCard; index: number }) => (
+export const ProjectCardLink = ({ project, index }: { project: ProjectCard; index: number }) => (
   <Link to={`/work/${project.slug}`} className="block h-full w-full min-w-0">
     <motion.div
       className="group relative h-full w-full overflow-hidden rounded-[16px]"
@@ -51,7 +51,7 @@ const Card = ({ project, index }: { project: ProjectCard; index: number }) => (
       )}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-linear-to-t from-black/95 via-black/50 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/20" />
-      <span className="absolute bottom-6 left-6 flex items-center gap-1.5 bg-black/85 px-2.5 py-1 text-xs font-bold tracking-[0.22em] text-white uppercase backdrop-blur-sm md:bottom-8 md:left-8">
+      <span className="absolute right-3 bottom-3 left-3 flex w-fit items-center gap-1.5 bg-black/85 px-2 py-1 text-[10px] font-bold tracking-[0.15em] text-white uppercase backdrop-blur-sm md:right-auto md:bottom-8 md:left-8 md:px-2.5 md:text-xs md:tracking-[0.22em]">
         <span className="h-1.5 w-1.5 shrink-0 bg-white/80" />
         {project.title}
       </span>
@@ -114,9 +114,9 @@ export const ServicePage = ({ service }: { service: Service }) => {
       {service.hero === "branding" && <BrandingProcess />}
 
       <div className="px-8 py-8 md:px-16">
-        <MasonryGrid key={service._id}>
+        <MasonryGrid key={service._id} columns={{ 0: 2, 1280: 3 }}>
           {projects.map((project, index) => (
-            <Card key={project._id} project={project} index={index} />
+            <ProjectCardLink key={project._id} project={project} index={index} />
           ))}
         </MasonryGrid>
       </div>

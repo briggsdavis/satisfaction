@@ -43,10 +43,12 @@ export const screenHero = (config: {
   /** Screen corners as % of the image, TL TR BR BL. */
   corners: Point[]
   label: string
+  /** Scale applied below md, to enlarge the device on narrow screens. */
+  mobileScale?: number
 }) =>
   function ScreenHero({ service }: HeroProps) {
     const [ref, size] = useSize<HTMLDivElement>()
-    const { image, video, width, height, corners, label } = config
+    const { image, video, width, height, corners, label, mobileScale = 1 } = config
     return (
       <section className="relative flex h-screen items-center justify-center overflow-hidden bg-black">
         <div className="absolute inset-0 z-0">
@@ -54,11 +56,14 @@ export const screenHero = (config: {
         </div>
         <div
           ref={ref}
-          className="relative z-10"
-          style={{
-            aspectRatio: `${width} / ${height}`,
-            width: `min(100%, calc(100vh * ${width} / ${height}))`,
-          }}
+          className="relative z-10 scale-(--hero-scale) md:scale-100"
+          style={
+            {
+              aspectRatio: `${width} / ${height}`,
+              width: `min(100%, calc(100vh * ${width} / ${height}))`,
+              "--hero-scale": mobileScale,
+            } as React.CSSProperties
+          }
         >
           <img
             src={image}
@@ -97,6 +102,7 @@ export const PhotographyHero = screenHero({
     { x: 19.76, y: 71.08 },
   ],
   label: "Photography example",
+  mobileScale: 1.3,
 })
 
 export const VideographyHero = screenHero({
@@ -111,4 +117,5 @@ export const VideographyHero = screenHero({
     { x: 30.14, y: 63.75 },
   ],
   label: "Videography example",
+  mobileScale: 1.45,
 })

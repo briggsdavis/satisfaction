@@ -42,6 +42,7 @@ const ServiceChips = ({ project }: { project: Project }) => {
   const setServices = (serviceIds: Project["serviceIds"]) =>
     update({ id: project._id, patch: { serviceIds } })
   const chips = services.filter((s) => project.serviceIds.includes(s._id))
+  const setRestaurant = (restaurant: boolean) => update({ id: project._id, patch: { restaurant } })
 
   return (
     <div className="relative flex flex-wrap gap-3">
@@ -69,6 +70,27 @@ const ServiceChips = ({ project }: { project: Project }) => {
           )}
         </div>
       ))}
+      {project.restaurant && (
+        <div className="group relative">
+          <Link
+            to="/restaurants"
+            className="flex items-center gap-2 border border-white/20 px-3 py-1 text-xs font-bold tracking-[0.3em] text-white/70 uppercase transition-all duration-300 hover:border-white/50 hover:bg-white/5 hover:text-white"
+          >
+            <span className="h-1.5 w-1.5 shrink-0 bg-white transition-transform duration-300 group-hover:scale-150" />
+            <span className="translate-y-0.25">Restaurants</span>
+          </Link>
+          {editing && (
+            <button
+              type="button"
+              aria-label="Remove Restaurants"
+              onClick={() => setRestaurant(false)}
+              className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center bg-white text-black opacity-0 transition-opacity group-hover:opacity-100"
+            >
+              <X size={11} />
+            </button>
+          )}
+        </div>
+      )}
       {editing && (
         <button
           type="button"
@@ -97,6 +119,18 @@ const ServiceChips = ({ project }: { project: Project }) => {
                 {s.name}
               </button>
             ))}
+          {!project.restaurant && (
+            <button
+              type="button"
+              onClick={() => {
+                void setRestaurant(true)
+                setAdding(false)
+              }}
+              className="block w-full border-t border-white/10 px-3 py-2 text-left text-xs font-bold tracking-wider text-white/60 uppercase hover:bg-white hover:text-black"
+            >
+              Restaurants
+            </button>
+          )}
         </div>
       )}
     </div>

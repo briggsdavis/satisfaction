@@ -11,6 +11,7 @@ const LINKS = [
   { to: "/about", label: "About" },
   { to: "/services", label: "Services" },
   { to: "/portfolio", label: "Portfolio" },
+  { to: "/restaurants", label: "Restaurants" },
 ]
 const MENU = [{ to: "/", label: "Home" }, ...LINKS, { to: "/contact", label: "Contact" }]
 
@@ -46,7 +47,7 @@ export const Navbar = ({
             <Link
               key={to}
               to={to}
-              className="w-24 text-center text-xs font-medium tracking-[0.2em] text-white/70 uppercase transition-colors hover:text-white"
+              className="min-w-24 text-center text-xs font-medium tracking-[0.2em] text-white/70 uppercase transition-colors hover:text-white"
             >
               {label}
             </Link>
@@ -88,7 +89,7 @@ export const Navbar = ({
                   <Link
                     to={to}
                     onClick={close}
-                    className="massive-text text-5xl text-white transition-opacity hover:opacity-60"
+                    className="massive-text text-4xl text-white transition-opacity hover:opacity-60"
                   >
                     {label}
                   </Link>

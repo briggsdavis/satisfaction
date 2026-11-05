@@ -25,10 +25,12 @@ export const MotionGraphicsHero = ({ service }: HeroProps) => {
       </div>
       <div
         ref={ref}
-        className="relative z-10 scale-[1.65] md:scale-100"
+        className="relative z-10 [--hero-scale:1.6] md:[--hero-scale:1]"
         style={{
           aspectRatio: "4500 / 3000",
           width: "min(100%, calc(100vh * 4500 / 3000))",
+          // Devices art sits right of center in the PNG (x 28.7%-86.4%), so shift it back to center
+          transform: "scale(var(--hero-scale)) translateX(-7.53%)",
         }}
       >
         <img

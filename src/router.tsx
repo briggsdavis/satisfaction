@@ -24,6 +24,7 @@ export const router = createBrowserRouter([
           { path: "about", lazy: () => import("./features/about/about") },
           { path: "services", lazy: () => import("./features/services/services") },
           { path: "portfolio", lazy: () => import("./features/portfolio/portfolio") },
+          { path: "restaurants", lazy: () => import("./features/restaurants/restaurants") },
           { path: "portfolio/:slug", lazy: () => import("./features/services/service") },
           { path: "work/:slug", lazy: () => import("./features/work/project") },
           // v1 project URLs nested a (non-canonical) category.

@@ -55,6 +55,16 @@ export const byService = query({
     ),
 })
 
+// Same scan as byService; restaurant projects are few.
+export const restaurants = query({
+  args: {},
+  handler: async (ctx) =>
+    await cards(
+      ctx,
+      (await ctx.db.query("projects").order("desc").take(500)).filter((p) => p.restaurant),
+    ),
+})
+
 export const bySlug = query({
   args: { slug: v.string() },
   handler: async (ctx, { slug }) => {

@@ -14,16 +14,19 @@ const ratioFor = (seed: number, index: number) => {
 export const MasonryGrid = ({
   children,
   className,
+  columns = COLUMNS,
 }: {
   children: ReactNode
   className?: string
+  /** Min viewport width => column count. */
+  columns?: Record<number, number>
 }) => {
   const [seed] = useState(() => Math.floor(Math.random() * 0x7fffffff))
 
   return (
     <ResponsiveMasonry
       className={className}
-      columnsCountBreakPoints={COLUMNS}
+      columnsCountBreakPoints={columns}
       gutterBreakPoints={GUTTERS}
     >
       <Masonry>

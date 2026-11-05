@@ -96,8 +96,9 @@ export const GraphicDesignHero = ({ service }: HeroProps) => {
       <div className="absolute inset-0 z-0">
         <ScrollingTextHero text={service.name} />
       </div>
+      {/* On mobile, clip to the first three frames (end at x 60.4%) and recenter them. */}
       <div
-        className="relative z-10 scale-[1.35] overflow-hidden md:scale-100"
+        className="relative z-10 translate-x-[34.65%] scale-[1.75] overflow-hidden [clip-path:inset(0_39.6%_0_0)] md:translate-x-0 md:scale-100 md:[clip-path:none]"
         style={{
           aspectRatio: `${IMG_W} / ${IMG_H}`,
           width: `min(85%, calc(85vh * ${IMG_W} / ${IMG_H}))`,

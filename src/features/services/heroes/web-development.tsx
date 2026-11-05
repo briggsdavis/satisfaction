@@ -110,7 +110,7 @@ const IMac = ({
   )
 
   return (
-    <div className="relative aspect-3/2 w-[72vw] max-w-5xl">
+    <div className="relative aspect-3/2 w-[115vw] max-w-5xl md:w-[72vw]">
       {display(false)}
       <div
         aria-hidden="true"
@@ -186,7 +186,7 @@ const RingBack = ({ active }: { active: number }) => (
             transform: `translate(-50%, -50%) rotateY(${180 + offset * STEP}deg) translateZ(${RADIUS}px) rotateY(180deg)`,
           }}
         >
-          <div className="relative aspect-3/2 w-[72vw] max-w-5xl">
+          <div className="relative aspect-3/2 w-[115vw] max-w-5xl md:w-[72vw]">
             <img
               src="/heroes/web-development/imac-back.png"
               alt=""
@@ -218,10 +218,10 @@ export const WebDevelopmentHero = ({ service }: HeroProps) => {
   const current = items[activeIndex]
 
   useEffect(() => {
-    if (mobile || editing || !visible || items.length < 2) return
+    if (editing || !visible || items.length < 2) return
     const id = setTimeout(() => setActive((i) => i + 1), 4000)
     return () => clearTimeout(id)
-  }, [active, editing, items.length, visible, mobile])
+  }, [active, editing, items.length, visible])
 
   // `target` null = add a new website; otherwise replace that screen.
   const picker = useFilePicker<Id<"showcases"> | null>(

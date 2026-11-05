@@ -4,7 +4,7 @@ import type { GalleryOrientation, GalleryTemplate } from "../../convex/model"
 
 /**
  * Lays out `slotCount` slots as repeating template batches. Below 700px of
- * container width frames stack; above it they're absolutely placed (see CSS).
+ * container width frames flow into two columns; above it they're absolutely placed (see CSS).
  * `isVisible` hides frames (and trims batch height) on the public site.
  */
 export const GalleryGrid = ({

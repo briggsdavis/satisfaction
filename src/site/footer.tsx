@@ -4,11 +4,12 @@ import { Link } from "../ui/link"
 import { LOGO_SRC } from "./navbar"
 import { socials } from "./socials"
 
-const NAV = ["About", "Services", "Portfolio", "Contact"]
+const NAV = ["About", "Services", "Portfolio", "Restaurants", "Contact"]
 const YEAR = new Date().getFullYear()
 
 const heading = "text-xs font-bold tracking-[0.3em] text-white/60 uppercase"
-const item = "text-sm font-bold tracking-wide text-white/85 uppercase transition-colors hover:text-white"
+const item =
+  "text-sm font-bold tracking-wide text-white/85 uppercase transition-colors hover:text-white"
 const fine = "text-xs tracking-widest text-white/50 uppercase"
 
 export const Footer = () => {

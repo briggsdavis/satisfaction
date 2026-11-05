@@ -124,6 +124,8 @@ export const project = v.object({
   cover: v.optional(file),
   serviceIds: v.array(v.id("services")),
   featured: v.boolean(),
+  // Listed on /restaurants. Independent of services.
+  restaurant: v.optional(v.boolean()),
   gallery,
 })
 

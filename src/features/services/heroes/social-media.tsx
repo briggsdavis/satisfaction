@@ -7,7 +7,7 @@ export const SocialMediaHero = ({ service }: HeroProps) => (
       <img
         src="/heroes/social-media/back.png"
         alt=""
-        className="h-[80%] w-auto max-w-none select-none"
+        className="h-[80%] w-[92%] object-contain select-none"
         draggable={false}
       />
     </div>
@@ -20,7 +20,7 @@ export const SocialMediaHero = ({ service }: HeroProps) => (
       <img
         src="/heroes/social-media/front.png"
         alt=""
-        className="h-[80%] w-auto max-w-none select-none"
+        className="h-[80%] w-[92%] object-contain select-none"
         draggable={false}
       />
     </div>

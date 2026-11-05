@@ -173,13 +173,18 @@
 }
 
 .gallery-template-canvas {
-  display: flex;
-  flex-direction: column;
-  gap: var(--template-gutter);
+  /* Narrow screens: two balanced columns of varying-height frames. */
+  columns: 2;
+  column-gap: calc(var(--template-gutter) / 2);
+}
+
+.gallery-template-frame {
+  break-inside: avoid;
+  margin-bottom: calc(var(--template-gutter) / 2);
 }
 
 .gallery-template-canvas + .gallery-template-canvas {
-  margin-top: var(--template-gutter);
+  margin-top: 0;
 }
 
 @container (min-width: 700px) {
@@ -187,11 +192,17 @@
     --template-unit: calc((100cqw + var(--template-gutter)) / var(--template-width));
     position: relative;
     display: block;
+    columns: auto;
     height: calc(var(--template-unit) * var(--template-height) - var(--template-gutter));
+  }
+
+  .gallery-template-canvas + .gallery-template-canvas {
+    margin-top: var(--template-gutter);
   }
 
   .gallery-template-frame {
     position: absolute;
+    margin-bottom: 0;
     left: calc(var(--template-unit) * var(--frame-x));
     top: calc(var(--template-unit) * var(--frame-y));
     width: calc(var(--template-unit) * var(--frame-width) - var(--template-gutter));

@@ -32,7 +32,8 @@ const FitTitle = ({ name }: { name: string }) => {
       const words = Array.from(el.querySelectorAll<HTMLElement>("[data-word]"))
       const widest = Math.max(...words.map((w) => w.offsetWidth))
       const available = el.clientWidth
-      if (widest > available) el.style.fontSize = `${Math.floor(max * (available / widest) * 100) / 100}px`
+      if (widest > available)
+        el.style.fontSize = `${Math.floor(max * (available / widest) * 100) / 100}px`
     }
     fit()
     const observer = new ResizeObserver(fit)
@@ -47,7 +48,9 @@ const FitTitle = ({ name }: { name: string }) => {
       className="block text-center font-display text-2xl leading-[0.85] text-white uppercase md:text-left md:text-4xl"
     >
       {name.split(/(\s+)/).map((part, i) =>
-        /\s/.test(part) ? part : (
+        /\s/.test(part) ? (
+          part
+        ) : (
           <span key={i} data-word className="inline-block whitespace-nowrap">
             {part}
           </span>

@@ -25,7 +25,8 @@ export const FitTitle = ({
       const context = document.createElement("canvas").getContext("2d")
       if (!context) return
       context.font = `900 ${PROBE}px "Arian LT"`
-      const textWidth = context.measureText(text).width
+      // .massive-text renders uppercase, so measure what's actually shown
+      const textWidth = context.measureText(text.toUpperCase()).width
       const containerWidth = container.clientWidth
       if (textWidth > 0 && containerWidth > 0) {
         // 0.97 safety margin prevents sub-pixel rounding from triggering wrap

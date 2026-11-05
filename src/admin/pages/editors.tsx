@@ -188,6 +188,14 @@ export const ProjectEditor = () => {
               onChange={(e) => patch({ featured: e.target.checked })}
             />
           </label>
+          <label className="flex items-center justify-between border-b border-ink/10 py-5">
+            <span className={label}>Restaurants</span>
+            <input
+              type="checkbox"
+              checked={project.restaurant ?? false}
+              onChange={(e) => patch({ restaurant: e.target.checked })}
+            />
+          </label>
           <button
             type="button"
             onClick={async () => {
