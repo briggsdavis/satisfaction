@@ -1,10 +1,11 @@
 import type { Id } from "../_generated/dataModel"
 import type { MutationCtx, QueryCtx } from "../_generated/server"
+import { mediaUrl } from "../mediaUrl"
 
 type Ctx = Pick<QueryCtx, "storage">
 
 export const url = async (ctx: Ctx, id: Id<"_storage"> | null | undefined) =>
-  id ? await ctx.storage.getUrl(id) : null
+  id ? await mediaUrl(ctx, id) : null
 
 export const urls = (ctx: Ctx, ids: readonly (Id<"_storage"> | null | undefined)[]) =>
   Promise.all(ids.map((id) => url(ctx, id)))

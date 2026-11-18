@@ -19,6 +19,7 @@ import type * as lib_files from "../lib/files.js";
 import type * as lib_gallery from "../lib/gallery.js";
 import type * as lib_slug from "../lib/slug.js";
 import type * as logos from "../logos.js";
+import type * as mediaUrl from "../mediaUrl.js";
 import type * as migrations from "../migrations.js";
 import type * as model from "../model.js";
 import type * as projects from "../projects.js";
@@ -46,6 +47,7 @@ declare const fullApi: ApiFromModules<{
   "lib/gallery": typeof lib_gallery;
   "lib/slug": typeof lib_slug;
   logos: typeof logos;
+  mediaUrl: typeof mediaUrl;
   migrations: typeof migrations;
   model: typeof model;
   projects: typeof projects;
