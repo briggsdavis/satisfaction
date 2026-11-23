@@ -9,14 +9,16 @@ const pad = (n: number) => String(n).padStart(2, "0")
 const navButton =
   "absolute top-1/2 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white md:flex"
 
-/** Full-screen image viewer: arrows, swipe, Escape, thumbnails. */
+type Item = { url: string; type: "image" | "video" }
+
+/** Full-screen media viewer: arrows, swipe, Escape, thumbnails. */
 export const Lightbox = ({
-  images,
+  items,
   index: start,
   title,
   onClose,
 }: {
-  images: string[]
+  items: Item[]
   index: number
   title: string
   onClose: () => void
@@ -26,8 +28,8 @@ export const Lightbox = ({
   useScrollLock(true)
 
   const go = useCallback(
-    (delta: number) => setState(([i]) => [(i + delta + images.length) % images.length, delta]),
-    [images.length],
+    (delta: number) => setState(([i]) => [(i + delta + items.length) % items.length, delta]),
+    [items.length],
   )
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export const Lightbox = ({
         </span>
         <div className="flex items-center gap-6">
           <span className="font-mono text-xs text-white/30">
-            {pad(index + 1)} / {pad(images.length)}
+            {pad(index + 1)} / {pad(items.length)}
           </span>
           <button
             onClick={onClose}
@@ -83,16 +85,31 @@ export const Lightbox = ({
         }}
       >
         <AnimatePresence mode="wait" custom={dir}>
-          <motion.img
+          <motion.div
             key={index}
-            src={images[index]}
-            alt={`${title}, ${index + 1}`}
-            className="h-full w-full object-contain md:h-auto md:max-h-full md:w-auto md:max-w-full"
+            className="flex h-full w-full items-center justify-center"
             initial={{ opacity: 0, x: dir * 40 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: dir * -40 }}
             transition={{ duration: 0.3, ease }}
-          />
+          >
+            {items[index].type === "video" ? (
+              <video
+                src={items[index].url}
+                autoPlay
+                loop
+                controls
+                playsInline
+                className="max-h-full max-w-full object-contain"
+              />
+            ) : (
+              <img
+                src={items[index].url}
+                alt={`${title}, ${index + 1}`}
+                className="h-full w-full object-contain md:h-auto md:max-h-full md:w-auto md:max-w-full"
+              />
+            )}
+          </motion.div>
         </AnimatePresence>
         <button
           onClick={() => go(-1)}
@@ -114,15 +131,24 @@ export const Lightbox = ({
         Swipe ↔
       </p>
       <div className="hidden shrink-0 justify-center gap-2 px-6 pb-6 md:flex">
-        {images.map((src, i) => (
+        {items.map((item, i) => (
           <button
             key={i}
             onClick={() => setState([i, i > index ? 1 : -1])}
-            aria-label={`Show image ${i + 1}`}
+            aria-label={`Show item ${i + 1}`}
             aria-current={i === index}
             className="h-14 w-14 shrink-0 overflow-hidden opacity-35 outline-offset-2 transition-[opacity,outline] aria-current:opacity-100 aria-current:outline-1 aria-current:outline-white/60"
           >
-            <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
+            {item.type === "video" ? (
+              <video
+                src={item.url}
+                muted
+                preload="metadata"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <img src={item.url} alt="" className="h-full w-full object-cover" loading="lazy" />
+            )}
           </button>
         ))}
       </div>

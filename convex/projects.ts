@@ -3,10 +3,10 @@ import type { Doc, Id } from "./_generated/dataModel"
 import { query, type MutationCtx, type QueryCtx } from "./_generated/server"
 import { adminMutation } from "./lib/auth"
 import { patchDoc, removeDoc } from "./lib/crud"
-import { url, urls } from "./lib/files"
+import { url } from "./lib/files"
 import { setSlot, trimSlots } from "./lib/gallery"
 import { slugify } from "./lib/slug"
-import { project } from "./model"
+import { project, type Media } from "./model"
 
 // Card-sized projection for grids and carousels.
 const card = async (ctx: QueryCtx, doc: Doc<"projects">) => ({
@@ -18,10 +18,21 @@ const card = async (ctx: QueryCtx, doc: Doc<"projects">) => ({
   coverUrl: await url(ctx, doc.cover),
 })
 
+const galleryMedia = (ctx: QueryCtx, slots: Doc<"projects">["gallery"]["slots"]) =>
+  Promise.all(
+    slots.map(async (id) => {
+      if (!id) return null
+      const [src, file] = await Promise.all([url(ctx, id), ctx.db.system.get("_storage", id)])
+      if (!src) return null
+      const type: Media["type"] = file?.contentType?.startsWith("video/") ? "video" : "image"
+      return { url: src, type }
+    }),
+  )
+
 const full = async (ctx: QueryCtx, doc: Doc<"projects">) => ({
   ...doc,
   coverUrl: await url(ctx, doc.cover),
-  galleryUrls: await urls(ctx, doc.gallery.slots),
+  galleryMedia: await galleryMedia(ctx, doc.gallery.slots),
 })
 
 const cards = (ctx: QueryCtx, docs: Doc<"projects">[]) =>

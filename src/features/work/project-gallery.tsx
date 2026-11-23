@@ -7,7 +7,7 @@ import type { GalleryOrientation, GalleryTemplate } from "../../../convex/model"
 import { useEditing } from "../../edit/edit-mode"
 import { useTask } from "../../lib/hooks"
 import type { Project } from "../../lib/types"
-import { useFilePicker, useUpload } from "../../lib/upload"
+import { mediaTypeOf, useFilePicker, useUpload } from "../../lib/upload"
 import { GalleryGrid, readingOrder } from "../../ui/gallery-grid"
 import { Lightbox } from "../../ui/lightbox"
 
@@ -20,10 +20,27 @@ const ORIENTATIONS: { value: GalleryOrientation; label: string }[] = [
 const select =
   "rounded border border-white/25 bg-black px-3 py-2 text-white focus-visible:outline-2 focus-visible:outline-white disabled:opacity-40"
 
+type Item = NonNullable<Project["galleryMedia"][number]>
+
+const Media = ({ item, alt = "" }: { item: Item; alt?: string }) =>
+  item.type === "video" ? (
+    <video
+      src={item.url}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <img src={item.url} alt={alt} loading="lazy" className="h-full w-full object-cover" />
+  )
+
 export const ProjectGallery = ({ project }: { project: Project }) => {
   const editing = useEditing()
   const { template, orientation, slots } = project.gallery
-  const urls = project.galleryUrls
+  const media = project.galleryMedia
   const setSlot = useMutation(api.projects.setGallerySlot)
   const setLayout = useMutation(api.projects.setGalleryLayout)
   const upload = useUpload()
@@ -32,22 +49,25 @@ export const ProjectGallery = ({ project }: { project: Project }) => {
   const picker = useFilePicker<number>(
     ([file], index) =>
       void run(async () => {
-        if (!file.type.startsWith("image/")) throw new Error("Choose an image file.")
+        if (!mediaTypeOf(file)) throw new Error("Choose an image or video file.")
         await setSlot({ id: project._id, index, image: await upload(file) })
       }),
+    { accept: "image/*,video/*" },
   )
 
-  if (!editing && !urls.some(Boolean)) return null
+  if (!editing && !media.some(Boolean)) return null
 
-  // Lightbox walks images in visual order, skipping empty frames.
-  const sequence = readingOrder(template, orientation, slots.length).filter((i) => urls[i])
-  const images = sequence.map((i) => urls[i]!)
+  // Lightbox walks media in visual order, skipping empty frames.
+  const sequence = readingOrder(template, orientation, slots.length).filter((i) => media[i])
+  const items = sequence.map((i) => media[i]!)
 
   return (
     <section aria-label="Project gallery" className="px-8 py-8 md:px-16">
       {editing && (
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-          <p className="text-sm text-white/60">Click a frame to upload. Images crop to fit.</p>
+          <p className="text-sm text-white/60">
+            Click a frame to upload an image or video. Media crops to fit.
+          </p>
           <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
             <label className="flex items-center gap-3">
               Template
@@ -106,26 +126,21 @@ export const ProjectGallery = ({ project }: { project: Project }) => {
         orientation={orientation}
         slotCount={editing ? slotCapacity(slots, template) : slots.length}
         busy={busy}
-        isVisible={editing ? undefined : (i) => Boolean(urls[i])}
+        isVisible={editing ? undefined : (i) => Boolean(media[i])}
         renderFrame={(index) => {
-          const url = urls[index]
+          const item = media[index]
           if (!editing)
             return (
-              url && (
+              item && (
                 <button
                   type="button"
-                  aria-label={`View ${project.title} image ${sequence.indexOf(index) + 1}`}
+                  aria-label={`View ${project.title} media ${sequence.indexOf(index) + 1}`}
                   onClick={() => setViewing(sequence.indexOf(index))}
                   className="absolute inset-0 h-full w-full focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white"
                 >
-                  <img
-                    src={url}
-                    alt={`${project.title}, ${index + 1}`}
-                    loading="lazy"
-                    className="h-full w-full object-cover"
-                  />
+                  <Media item={item} alt={`${project.title}, ${index + 1}`} />
                   <span className="absolute inset-0 flex items-center justify-center bg-black/30 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100">
-                    View image
+                    {item.type === "video" ? "View video" : "View image"}
                   </span>
                 </button>
               )
@@ -135,15 +150,15 @@ export const ProjectGallery = ({ project }: { project: Project }) => {
               <button
                 type="button"
                 disabled={busy}
-                aria-label={`${url ? "Replace" : "Upload"} image in frame ${index + 1}`}
+                aria-label={`${item ? "Replace" : "Upload"} media in frame ${index + 1}`}
                 onClick={() => picker.pick(index)}
-                className={`absolute inset-0 h-full w-full disabled:cursor-wait ${url ? "" : "bg-white/5 text-white/40 hover:text-white/70"}`}
+                className={`absolute inset-0 h-full w-full disabled:cursor-wait ${item ? "" : "bg-white/5 text-white/40 hover:text-white/70"}`}
               >
-                {url ? (
+                {item ? (
                   <>
-                    <img src={url} alt="" className="h-full w-full object-cover" />
+                    <Media item={item} />
                     <span className="absolute inset-0 flex items-center justify-center bg-black/30 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100">
-                      Change image
+                      Change media
                     </span>
                   </>
                 ) : (
@@ -151,7 +166,7 @@ export const ProjectGallery = ({ project }: { project: Project }) => {
                     <span className="pointer-events-none absolute inset-px rounded-[15px] border border-dashed border-white/25 group-hover:border-white/60" />
                     <span className="flex h-full flex-col items-center justify-center gap-2">
                       <ImagePlus size={24} />
-                      <span className="text-xs">Upload image</span>
+                      <span className="text-xs">Upload media</span>
                     </span>
                   </>
                 )}
@@ -174,7 +189,7 @@ export const ProjectGallery = ({ project }: { project: Project }) => {
       {editing && picker.input}
       {viewing !== null && (
         <Lightbox
-          images={images}
+          items={items}
           index={viewing}
           title={project.title}
           onClose={() => setViewing(null)}
